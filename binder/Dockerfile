@@ -12,6 +12,7 @@ RUN adduser --disabled-password \
     ${NB_USER}
 
 COPY . ${HOME}
+COPY binder/noop.sh /opt/docker/bin/entrypoint_source
 USER root
 RUN chown -R ${NB_UID} ${HOME}
 
