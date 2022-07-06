@@ -1,4 +1,4 @@
-FROM rapidsai/rapidsai-core:22.06-cuda11.5-runtime-ubuntu20.04-py3.9
+FROM rapidsai/rapidsai-core:22.06-cuda11.4-runtime-ubuntu20.04-py3.9
 
 ARG NB_USER=jovyan
 ARG NB_UID=1000
