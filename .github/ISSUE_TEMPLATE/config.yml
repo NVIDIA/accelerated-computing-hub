@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Question
+    url: https://github.com/NVIDIA/accelerated-computing-hub/discussions
+    about: Check out our Discussions page to ask and answer questions.
+  - name: NVIDIA Developer Discord
+    url: https://discord.gg/nvidiadeveloper
+    about: Come chat about learning CUDA with us!

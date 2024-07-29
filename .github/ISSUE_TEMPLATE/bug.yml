@@ -1,0 +1,72 @@
+name: Bug Report
+description: Report a bug in content on the Accelerated Computing Hub. 
+title: '[BUG]: '
+labels: ['bug']
+
+body:
+  - type: checkboxes
+    id: check-duplicates
+    attributes:
+      label: Is this a duplicate?
+      description: Check for duplicate issues.
+      options:
+        - label: I confirmed there appear to be no [duplicate issues](https://github.com/NVIDIA/accelerated-computing-hub/issues) for this bug and that I agree to the [Code of Conduct](CODE_OF_CONDUCT.md)
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: "Example: The Jupyter notebook example_code.ipynb throws an error when running cell 3."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. Scroll down to '....'
+        4. Run cell 'X' in notebook 'Y'
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: "Example: The code should execute without throwing an error."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: A clear and concise description of what actually happened.
+      placeholder: "Example: Instead of executing successfully, the code threw a TypeError."
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Details about your environment (e.g., OS, Python version, CUDA version).
+      placeholder: "Example: Ubuntu 20.04, Python 3.8, CUDA 11.2"
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.
+      placeholder: "Example: The error may be related to the numpy version."
+    validations:
+      required: false

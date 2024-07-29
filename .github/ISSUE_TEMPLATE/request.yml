@@ -1,0 +1,42 @@
+name: Enhancement Request
+description: Suggest an enhancement or new educational material for the Accelerated Computing Hub
+title: '[ENHANCEMENT]: '
+labels: ['enhancement']
+
+body:
+  - type: checkboxes
+    id: check-duplicates
+    attributes:
+      label: Is this a duplicate?
+      description: Check for duplicate issues.
+      options:
+        - label: I confirmed there appear to be no [duplicate issues](https://github.com/NVIDIA/accelerated-computing-hub/issues) for this enhancement and that I agree to the [Code of Conduct](CODE_OF_CONDUCT.md)
+          required: true
+
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: Describe the enhancement or new material
+      description: Describe the enhancement or new material you would like to see.
+      placeholder: "I would love to see a Jupyter notebook demonstrating the use of CUDA streams in Python for overlapping computation and data transfer."
+    validations:
+      required: true
+
+  - type: textarea
+    id: existing-materials
+    attributes:
+      label: Were any of the existing materials helpful?
+      description: Let us know if you reviewed any existing materials and how they did or did not meet your needs.
+      placeholder: "I looked at the basic CUDA examples, but they don't cover using multiple streams and complex dependencies in detail."
+    validations:
+      required: false
+
+    - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context or information about your request.
+      placeholder: "This new example would help people learn how to effectively utilize CUDA streams to overlap data transfer and computation."
+    validations:
+      required: false
+
