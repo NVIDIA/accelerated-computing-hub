@@ -38,19 +38,19 @@ To do this you need to:
 
 | Notebook      | Link |
 | ----------- | ----------- |
-| 0.0 Welcome | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/gpu-python-tutorial/gpu-python-tutorial/0.0_Welcome.ipynb)|
-| 1.0 CPU GPU Comparison | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/1.0%20CPU%20GPU%20Comparison.ipynb)|
-| 2.0 Numba | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/2.0%20Numba.ipynb)|
-| 2.1 Numba Lab | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/2.1%20Numba%20lab.ipynb)|
-| 2.2 Numba Lab (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/2.2%20Numba%20lab%20(solution).ipynb)|
-| 3.0 Numba Gauss | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/3.0%20Numba%20gauss.ipynb)|
-| 3.1 Numba Lab 2 | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/3.1%20Numba%20lab%202.ipynb)|
-| 3.2 Numba Lab 2 (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/3.2%20Numba%20lab%202%20(solution).ipynb)|
-| 4.0 pyNVML | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/4.0%20pyNVML.ipynb)|
-| 4.1 CUDA Array Interface | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/4.1%20CUDA%20Array%20Interface.ipynb)|
-| 5.0 Cupy | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/5.0%20Cupy.ipynb)|
-| 5.1 Cupy Lab | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/5.1%20Cupy%20Lab.ipynb)|
-| 5.2 Cupy Lab (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/5.2%20Cupy%20Lab%20(solution).ipynb)|
-| 6.0 cuDF | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/6.0%20cuDF.ipynb)|
-| 7.0 cuML | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/7.0%20cuML.ipynb)|
-| 8.0 Multi-GPU with Dask | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/8.0%20Multi-GPU%20with%20Dask.ipynb)|
+| 0.0 Welcome | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/0.0_Welcome.ipynb)|
+| 1.0 CPU GPU Comparison | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/1.0_CPU_GPU_Comparison.ipynb)|
+| 2.0 Numba | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/2.0_20Numba.ipynb)|
+| 2.1 Numba Lab | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/2.1_Numba_lab.ipynb)|
+| 2.2 Numba Lab (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/2.2_Numba_lab_(solution).ipynb)|
+| 3.0 Numba Gauss | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/3.0_Numba_gauss.ipynb)|
+| 3.1 Numba Lab 2 | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/3.1_Numba_lab_2.ipynb)|
+| 3.2 Numba Lab 2 (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/3.2_Numba_lab_2_(solution).ipynb)|
+| 4.0 pyNVML | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/4.0_pyNVML.ipynb)|
+| 4.1 CUDA Array Interface | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/4.1_CUDA_Array_Interface.ipynb)|
+| 5.0 Cupy | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/5.0_Cupy.ipynb)|
+| 5.1 Cupy Lab | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/5.1_Cupy_Lab.ipynb)|
+| 5.2 Cupy Lab (solution) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/5.2_Cupy_Lab_(solution).ipynb)|
+| 6.0 cuDF | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/6.0_cuDF.ipynb)|
+| 7.0 cuML | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/7.0_cuML.ipynb)|
+| 8.0 Multi-GPU with Dask | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/main/gpu-python-tutorial/8.0_Multi-GPU_with_Dask.ipynb)|
