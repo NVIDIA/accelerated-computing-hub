@@ -34,11 +34,11 @@ To do this you need to:
 
 ![](images/colab-t4.png)
 
-## Notebooks [NEED TO ADJUST LINKS FOR UPDATED GITHUB REPO]
+## Notebooks 
 
 | Notebook      | Link |
 | ----------- | ----------- |
-| 0.0 Welcome | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/0.0%20Welcome.ipynb)|
+| 0.0 Welcome | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jnbntz/accelerated-computing-hub/blob/gpu-python-tutorial/gpu-python-tutorial/0.0_Welcome.ipynb)|
 | 1.0 CPU GPU Comparison | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/1.0%20CPU%20GPU%20Comparison.ipynb)|
 | 2.0 Numba | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/2.0%20Numba.ipynb)|
 | 2.1 Numba Lab | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/jacobtomlinson/gpu-python-tutorial/blob/main/2.1%20Numba%20lab.ipynb)|
