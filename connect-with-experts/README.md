@@ -21,7 +21,7 @@ CUDA and Python developers of all levels and backgrounds.
 
 Where? 
 
-Join us on NVIDIA’s Microsoft Teams Instance [link coming soon]()
+Join us on NVIDIA’s Microsoft Teams Instance [here](https://teams.microsoft.com/l/meetup-join/19%3ameeting_N2Q0Y2NkYjktNzlmMC00Nzk0LWIxNDgtNjllODRlZDY2Yjdk%40thread.v2/0?context=%7b%22Tid%22%3a%2243083d15-7273-40c1-b7db-39efd9ccc17a%22%2c%22Oid%22%3a%227fc58be8-ade9-4d61-ab4b-6bb2486e9ce2%22%7d)
 
 
 
