@@ -12,7 +12,7 @@ In this tutorial we will cover:
 - Managing memory.
 - Understanding what your GPU is doing with pyNVML (memory usage, utilization, etc).
 - RAPIDS: A suite of GPU accelerated data science libraries.
-- Working with Numpy style arrays on the GPU.
+- Working with NumPy style arrays on the GPU.
 - Working with Pandas style dataframes on the GPU.
 - Performing some scikit-learn style machine learning on the GPU.
 
@@ -34,7 +34,7 @@ To do this you need to:
 
 ![](images/colab-t4.png)
 
-## Notebooks 
+## Notebooks
 
 | Notebook      | Link |
 | ----------- | ----------- |
