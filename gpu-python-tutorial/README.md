@@ -34,7 +34,7 @@ To do this you need to:
 
 ![](images/colab-t4.png)
 
-## Notebooks
+## Notebooks [NEED TO ADJUST LINKS FOR UPDATED GITHUB REPO]
 
 | Notebook      | Link |
 | ----------- | ----------- |
