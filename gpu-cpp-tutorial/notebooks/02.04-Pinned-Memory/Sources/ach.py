@@ -16,7 +16,7 @@ def run(filename):
 
     # Execute commands above
     result = subprocess.run(
-        ['nvcc', '--extended-lambda', '-o', '/tmp/a.out', filename])
+        ['nvcc', '-arch=native', '--extended-lambda', '-o', '/tmp/a.out', filename])
     if result.returncode != 0:
         print(result.stdout)
         print(result.stderr)
