@@ -21,7 +21,7 @@ def run(filename, only_show=False):
 
         # Compile and run
         result = subprocess.run(
-            ['nvcc', '-arch=native', '--extended-lambda',
+            ['nvcc', '-x', 'cu', '-arch=native', '--extended-lambda',
                 '-o', '/tmp/a.out', filename]
         )
         if result.returncode != 0:
