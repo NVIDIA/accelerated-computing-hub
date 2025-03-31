@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(green_contexts LANGUAGES C CXX CUDA)
+set(CMAKE_CUDA_ARCHITECTURES 90)
+
+add_executable(streams_gc_example streams_and_green_contexts_example.cu)
+target_include_directories(streams_gc_example PRIVATE ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+target_compile_features(streams_gc_example PRIVATE cxx_std_17)
+target_link_libraries(streams_gc_example PRIVATE cuda)
+set_property(TARGET streams_gc_example PROPERTY POSITION_INDEPENDENT_CODE ON)
