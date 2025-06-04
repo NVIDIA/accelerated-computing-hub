@@ -1,9 +1,11 @@
 #include "ach.h"
 
-int main() {
+int main()
+{
   int height = 4096;
-  int width = 4096;
+  int width  = 4096;
 
+  // TODO: Use explicit memory space containers
   thrust::universal_vector<float> prev = ach::init(height, width);
   thrust::universal_vector<float> next(height * width);
 
