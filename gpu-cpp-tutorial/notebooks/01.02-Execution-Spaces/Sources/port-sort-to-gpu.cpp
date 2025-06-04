@@ -2,6 +2,7 @@
 
 float median(thrust::universal_vector<float> vec) 
 {
+    // TODO: Make the below code execute on the GPU
     std::sort(vec.begin(), vec.end());
     return vec[vec.size() / 2];
 }

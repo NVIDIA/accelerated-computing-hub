@@ -1,8 +1,8 @@
 #include "ach.h"
 
 float variance(const thrust::universal_vector<float> &x, float mean) {
-  // update the following line so that dereferencing `squared_differences`
-  // returns `(xi - mean) * (xi - mean)`
+  // TODO: Update the following line so that dereferencing
+  // `squared_differences` returns `(xi - mean) * (xi - mean)`
   auto squared_differences = ...;
 
   return thrust::reduce(thrust::device, squared_differences,

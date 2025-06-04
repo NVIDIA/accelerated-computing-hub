@@ -9,6 +9,7 @@ void simulate(int height, int width,
               const thrust::universal_vector<float> &in,
                     thrust::universal_vector<float> &out)
 {
+  // TODO: Replace the following code to instead use `cuda::std::mdspan`
   const float *in_ptr = thrust::raw_pointer_cast(in.data());
 
   thrust::tabulate(
