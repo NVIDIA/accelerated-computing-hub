@@ -1,13 +1,13 @@
 #include "ach.h"
 
-float median(thrust::universal_vector<float> vec) 
+float median(thrust::universal_vector<float> vec)
 {
-    // TODO: Make the below code execute on the GPU
+    // TODO: Make the code below execute on the GPU
     std::sort(vec.begin(), vec.end());
     return vec[vec.size() / 2];
 }
 
-int main() 
+int main()
 {
     float k = 0.5;
     float ambient_temp = 20;
