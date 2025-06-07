@@ -1,6 +1,7 @@
 #include "ach.h"
 
-int main() {
+int main()
+{
   int height = 2048;
   int width = 8192;
 
@@ -14,12 +15,13 @@ int main() {
   thrust::device_vector<float> d_next(height * width);
   thrust::device_vector<float> d_buffer(height * width);
 
-  // 1. Change code below to allocate host vector in pinned memory
+  // TODO: Change code below to allocate host vector in pinned memory
   thrust::host_vector<float> h_prev(height * width);
 
   const int compute_steps = 750;
   const int write_steps = 3;
-  for (int write_step = 0; write_step < write_steps; write_step++) {
+  for (int write_step = 0; write_step < write_steps; write_step++)
+  {
     cudaMemcpy(thrust::raw_pointer_cast(d_buffer.data()),
                thrust::raw_pointer_cast(d_prev.data()),
                height * width * sizeof(float), cudaMemcpyDeviceToDevice);
@@ -28,7 +30,8 @@ int main() {
                     height * width * sizeof(float), cudaMemcpyDeviceToHost,
                     copy_stream);
 
-    for (int compute_step = 0; compute_step < compute_steps; compute_step++) {
+    for (int compute_step = 0; compute_step < compute_steps; compute_step++)
+    {
       ach::simulate(width, height, d_prev, d_next, compute_stream);
       d_prev.swap(d_next);
     }

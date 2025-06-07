@@ -14,30 +14,32 @@ thrust::universal_vector<float> row_temperatures(
 {
     thrust::universal_vector<float> means(height);
 
-    // use `transform_output_iterator` instead of `means.begin()`
-    auto means_output = means.begin(); 
+    // TODO: Replace `means.begin()` by a `transform_output_iterator` using
+    // the provided `mean_functor` functor
+    auto means_output = means.begin();
 
     auto row_ids_begin = thrust::make_transform_iterator(
-        thrust::make_counting_iterator(0), 
+        thrust::make_counting_iterator(0),
         [=]__host__ __device__(int i) {
             return i / width;
         });
     auto row_ids_end = row_ids_begin + temp.size();
 
-    thrust::reduce_by_key(thrust::device, 
-                          row_ids_begin, 
-                          row_ids_end, 
-                          temp.begin(), 
-                          thrust::make_discard_iterator(), 
+    thrust::reduce_by_key(thrust::device,
+                          row_ids_begin,
+                          row_ids_end,
+                          temp.begin(),
+                          thrust::make_discard_iterator(),
                           means_output);
 
     auto transform_op = mean_functor{width};
 
-    // remove this `transform` call
-    thrust::transform(thrust::device, 
-                      means.begin(), 
-                      means.end(), 
-                      means.begin(), 
+    // TODO: remove this `transform` call after adding the
+    // `transform_output_iterator`
+    thrust::transform(thrust::device,
+                      means.begin(),
+                      means.end(),
+                      means.begin(),
                       transform_op);
 
     return means;

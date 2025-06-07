@@ -1,6 +1,7 @@
 #include "ach.h"
 
 int main() {
+  // TODO: Replace ??? with CPU or GPU
   ach::where_am_I("???");
 
   thrust::universal_vector<int> vec{1};

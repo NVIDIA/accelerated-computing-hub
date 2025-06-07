@@ -9,10 +9,11 @@ void simulate(int height, int width,
               const thrust::universal_vector<float> &in,
                     thrust::universal_vector<float> &out)
 {
+  // TODO: Modify the following code to use `cuda::std::mdspan`
   const float *in_ptr = thrust::raw_pointer_cast(in.data());
 
   thrust::tabulate(
-    thrust::device, out.begin(), out.end(), 
+    thrust::device, out.begin(), out.end(),
     [in_ptr, height, width] __host__ __device__(int id) {
       auto [row, column] = row_col(id, width);
 
