@@ -142,3 +142,5 @@ cython_debug/
 
 # Mac
 .DS_Store
+
+.cursor
