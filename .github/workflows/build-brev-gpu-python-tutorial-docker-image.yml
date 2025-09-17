@@ -3,7 +3,6 @@ name: Build and Push Brev GPU Python Tutorial Docker Image
 on:
   push:
     branches:
-      - main
       - 2025-09-ndc-techtown
 
 jobs:
