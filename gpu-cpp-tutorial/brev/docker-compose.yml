@@ -1,8 +1,8 @@
 services:
   jupyter:
     build:
-      context: .
-      dockerfile: dockerfile
+      context: ../..
+      dockerfile: gpu-cpp-tutorial/brev/dockerfile
     image: ghcr.io/brycelelbach/accelerated-computing-hub/gpu-cpp-tutorial:latest
     pull_policy: always
     privileged: true
