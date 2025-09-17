@@ -6,7 +6,8 @@ WORKDIR /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore
 
-RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+RUN pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-cpp-tutorial/brev/requirements.txt \
+ && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
  && git config --global --add safe.directory "/accelerated-computing-hub" \
  && mkdir -p ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight \
  && mkdir -p ~/.local/state/._bash_history \
