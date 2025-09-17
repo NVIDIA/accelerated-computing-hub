@@ -1,0 +1,16 @@
+FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
+
+COPY . /accelerated-computing-hub
+
+WORKDIR /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
+
+ENV PIP_ROOT_USER_ACTION=ignore
+
+RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+ && git config --global --add safe.directory "/accelerated-computing-hub" \
+ && mkdir -p ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight \
+ && mkdir -p ~/.local/state/._bash_history \
+ && ln -fs /accelerated-computing-hub/brev/jupyter_server_config.py ~/.jupyter/jupyter_server_config.py \
+ && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
