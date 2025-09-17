@@ -3,7 +3,7 @@ services:
     build:
       context: ../../..
       dockerfile: gpu-python-tutorial/v3/brev/dockerfile
-    image: ghcr.io/brycelelbach/accelerated-computing-hub/gpu-python-tutorial:latest
+    image: ghcr.io/brycelelbach/gpu-python-tutorial:latest
     pull_policy: always
     privileged: true
     ulimits:

@@ -3,7 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: gpu-cpp-tutorial/brev/dockerfile
-    image: ghcr.io/brycelelbach/accelerated-computing-hub/gpu-cpp-tutorial:latest
+    image: ghcr.io/brycelelbach/gpu-cpp-tutorial:latest
     pull_policy: always
     privileged: true
     ulimits:
