@@ -1,0 +1,20 @@
+numpy
+
+# Scientific/numeric
+scipy
+matplotlib
+opencv-python-headless
+
+# Jupyter
+jupyter
+jupyterlab-nvidia-nsight
+
+# CUDA
+cuda-python == 12.9.1 # cuda.{core, bindings, cooperative, parallel}, numba.cuda
+nvmath-python[cu12]
+cupy-cuda12x
+numba-cuda
+
+# NVIDIA devtools
+nvtx
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
