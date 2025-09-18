@@ -29,7 +29,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image with Compose
-        run: docker compose -f gpu-python-tutorial/v3/brev/docker-compose.yml build
+        run: docker compose -f gpu-python-tutorial/brev/docker-compose.yml build
 
       - name: Tag Docker images
         run: |
