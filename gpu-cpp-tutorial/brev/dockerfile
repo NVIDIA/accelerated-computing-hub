@@ -1,5 +1,8 @@
 FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
 
+ARG GIT_BRANCH_NAME
+ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
+
 COPY . /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
