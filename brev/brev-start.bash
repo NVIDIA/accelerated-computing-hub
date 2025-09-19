@@ -15,14 +15,14 @@ set -e
 cd ~
 curl -sSL https://astral.sh/uv/install.sh | sh
 ~/.local/bin/uv python install 3.13 --default --preview-features python-install-default
-~/.local/bin/uv venv --seed ~/pyhpc-tutorial/.venv
-printf "VIRTUAL_ENV_DISABLE_PROMPT=1 source ~/pyhpc-tutorial/.venv/bin/activate\n" >> ~/.bashrc
-source ~/pyhpc-tutorial/.venv/bin/activate
-pip install -r ~/pyhpc-tutorial/build/requirements.txt
+~/.local/bin/uv venv --seed ~/accelerated-computing-hub/.venv
+printf "VIRTUAL_ENV_DISABLE_PROMPT=1 source ~/accelerated-computing-hub/.venv/bin/activate\n" >> ~/.bashrc
+source ~/accelerated-computing-hub/.venv/bin/activate
+pip install -r ~/accelerated-computing-hub/brev/requirements.txt
 
 mkdir -p ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight
-ln -fs ~/pyhpc-tutorial/build/jupyter_server_config.py ~/.jupyter/jupyter_server_config.py
-ln -fs ~/pyhpc-tutorial/build/jupyter_nsight_plugin_settings.json ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight/plugin.jupyterlab-settings
+ln -fs ~/accelerated-computing-hub/brev/jupyter_server_config.py ~/.jupyter/jupyter_server_config.py
+ln -fs ~/accelerated-computing-hub/brev/jupyter_nsight_plugin_settings.json ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight/plugin.jupyterlab-settings
 '
 
 # Create the Jupyter service
