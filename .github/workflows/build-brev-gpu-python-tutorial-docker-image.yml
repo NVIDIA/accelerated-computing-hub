@@ -37,11 +37,10 @@ jobs:
 
       - name: Tag Docker images
         run: |
-          docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest"
-          docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GITHUB_SHA::7}"
+          docker tag "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest"
+          docker tag "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GITHUB_SHA::7}"
 
       - name: Push Docker images
         run: |
-          docker push "${IMAGE_NAME}:latest"
           docker push "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest"
           docker push "${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GITHUB_SHA::7}"
