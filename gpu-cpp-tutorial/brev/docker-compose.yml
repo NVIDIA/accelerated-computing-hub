@@ -1,5 +1,5 @@
 services:
-  jupyter:
+  base:
     build:
       context: ../..
       dockerfile: gpu-cpp-tutorial/brev/dockerfile
@@ -7,6 +7,19 @@ services:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
     image: ghcr.io/brycelelbach/gpu-cpp-tutorial:2025-09-ndc-techtown-latest
     pull_policy: always
+    volumes:
+      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+    environment:
+      - BREV_ENV_ID
+    user: root
+    working_dir: /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
+    command: ["/update-git-branch.bash"]
+    restart: no
+  jupyter:
+    image: ghcr.io/brycelelbach/gpu-cpp-tutorial:2025-09-ndc-techtown-latest
+    depends_on:
+      base:
+        condition: service_completed_successfully
     privileged: true
     ulimits:
       memlock: -1
@@ -31,7 +44,8 @@ services:
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     depends_on:
-      - jupyter
+      base:
+        condition: service_completed_successfully
     pull_policy: always
     ulimits:
       memlock: -1
