@@ -30,6 +30,8 @@ services:
     restart: unless-stopped
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    depends_on:
+      - jupyter
     pull_policy: always
     ulimits:
       memlock: -1
@@ -51,5 +53,5 @@ services:
       - BREV_ENV_ID
     user: root
     working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
-    entrypoint: ["/entrypoint.bash", "/accelerated-computing-hub/brev/nsight-start.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
     restart: unless-stopped
