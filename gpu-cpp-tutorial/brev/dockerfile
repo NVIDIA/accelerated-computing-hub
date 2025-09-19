@@ -5,6 +5,8 @@ ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
 
 COPY . /accelerated-computing-hub
 
+COPY brev/entrypoint.bash /entrypoint.bash
+
 WORKDIR /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore
@@ -16,5 +18,7 @@ RUN pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-cpp-
  && mkdir -p ~/.local/state/._bash_history \
  && ln -fs /accelerated-computing-hub/brev/jupyter_server_config.py ~/.jupyter/jupyter_server_config.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+ENTRYPOINT ["/entrypoint.bash"]
 
 CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
