@@ -4,7 +4,7 @@ services:
       context: ../..
       dockerfile: gpu-cpp-tutorial/brev/dockerfile
       args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME}
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
     image: ghcr.io/brycelelbach/gpu-cpp-tutorial:2025-09-ndc-techtown-latest
     pull_policy: always
     privileged: true
@@ -51,5 +51,5 @@ services:
       - BREV_ENV_ID
     user: root
     working_dir: /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+    entrypoint: ["/entrypoint.bash", "/accelerated-computing-hub/brev/nsight-start.bash"]
     restart: unless-stopped
