@@ -3,7 +3,9 @@ services:
     build:
       context: ../..
       dockerfile: gpu-python-tutorial/brev/dockerfile
-    image: ghcr.io/brycelelbach/gpu-python-tutorial:latest
+      args:
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
+    image: ghcr.io/brycelelbach/gpu-python-tutorial:2025-09-ndc-techtown-latest
     pull_policy: always
     privileged: true
     ulimits:
