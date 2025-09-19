@@ -70,7 +70,7 @@ c.Application.logging_config = {
         "file": {
             "class": "logging.FileHandler",
             "level": "INFO",
-            "filename": "/pyhpc-tutorial/build/jupyter-server.log",
+            "filename": "/accelerated-computing-hub/brev/jupyter-server.log",
             "formatter": "console"
         }
     },
