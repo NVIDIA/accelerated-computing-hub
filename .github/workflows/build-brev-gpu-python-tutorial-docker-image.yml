@@ -18,6 +18,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Get branch name
+        id: git-branch-name
+        uses: EthanSK/git-branch-name-action@v1
+
       - name: Lowercase the image name
         run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
 
@@ -33,10 +37,11 @@ jobs:
 
       - name: Tag Docker images
         run: |
-          docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:latest"
-          docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:git-${GITHUB_SHA::7}"
+          docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest"
+          docker tag "${IMAGE_NAME}:latest" "${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GITHUB_SHA::7}"
 
       - name: Push Docker images
         run: |
-          docker push "$IMAGE_NAME:latest"
-          docker push "$IMAGE_NAME:git-${GITHUB_SHA::7}"
+          docker push "${IMAGE_NAME}:latest"
+          docker push "${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest"
+          docker push "${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GITHUB_SHA::7}"
