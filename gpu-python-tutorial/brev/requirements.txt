@@ -10,9 +10,10 @@ jupyter
 jupyterlab-nvidia-nsight
 
 # CUDA
-cuda-python == 12.9.1 # cuda.{core, bindings, cooperative, parallel}, numba.cuda
+cuda-python == 12.9.1 # cuda.{core, bindings}, numba.cuda
 nvmath-python[cu12]
 cupy-cuda12x
+cuda-cccl[test-cu12]
 numba-cuda
 
 # NVIDIA devtools
