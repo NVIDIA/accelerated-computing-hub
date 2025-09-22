@@ -22,7 +22,8 @@ def run(filename, only_show=False):
         # Compile and run
         result = subprocess.run(
             ['nvcc', '-x', 'cu', '-arch=native', '--extended-lambda',
-                '-o', '/tmp/a.out', filename]
+                '-o', '/tmp/a.out', filename],
+            capture_output=True, text=True
         )
         if result.returncode != 0:
             print(result.stdout)
