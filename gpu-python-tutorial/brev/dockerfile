@@ -21,4 +21,18 @@ RUN pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-pyth
  && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
+# ---------- cuDF venv & kernel (non-default) ----------
+# Create an isolated Python env with cuDF, and register it as a Jupyter kernel
+ENV CUDF_VENV=/opt/venvs/cudf
+RUN python -m venv ${CUDF_VENV} \
+ && ${CUDF_VENV}/bin/python -m pip install --upgrade pip \
+ && ${CUDF_VENV}/bin/pip install \
+      --extra-index-url=https://pypi.nvidia.com \
+      "cudf-cu12==25.8.*" \
+      ipykernel \
+ && ${CUDF_VENV}/bin/python -m ipykernel install \
+      --name=cudf-cu12-25.8 \
+      --display-name="Python (cuDF 25.8)" \
+      --prefix=/usr/local
+
  CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
