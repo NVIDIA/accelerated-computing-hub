@@ -12,11 +12,14 @@ WORKDIR /accelerated-computing-hub/gpu-cpp-tutorial/notebooks
 ENV PIP_ROOT_USER_ACTION=ignore
 
 RUN pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-cpp-tutorial/brev/requirements.txt \
+ && apt-get update && sudo apt-get install -y ffmpeg \
  && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
  && git config --global --add safe.directory "/accelerated-computing-hub" \
  && mkdir -p ~/.local/state/._bash_history \
  && mkdir -p ~/.jupyter \
- && ln -fs /accelerated-computing-hub/brev/jupyter_server_config.py ~/.jupyter/jupyter_server_config.py \
+ && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
+ && mkdir ~/.ipython/profile_default/startup \
+ && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
