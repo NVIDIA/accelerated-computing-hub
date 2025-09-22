@@ -17,7 +17,7 @@ RUN pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-pyth
  && mkdir -p ~/.local/state/._bash_history \
  && mkdir -p ~/.jupyter \
  && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
- && mkdir ~/.ipython/profile_default/startup \
+ && mkdir -p ~/.ipython/profile_default/startup \
  && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
