@@ -20,8 +20,8 @@ done
 
 # Workaround: The Nsight Streamer container isn't restartable because it unconditionally creates
 # a symlink every time its start, which fails if the symlink already exists.
-if test -h "/usr/local/cuda-12.8/targets/x86_64-linux/lib/libnvrtc.so.12"; then
-  rm /usr/local/cuda-12.8/targets/x86_64-linux/lib/libnvrtc.so.12
+if test -h /usr/lib/x86_64-linux-gnu/libnvrtc.so; then
+  rm /usr/lib/x86_64-linux-gnu/libnvrtc.so
 fi
 
 source /setup/entrypoint.sh "$@"
