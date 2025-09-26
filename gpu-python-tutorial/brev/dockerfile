@@ -14,7 +14,7 @@ ENV PIP_ROOT_USER_ACTION=ignore \
 
 RUN \
 # Install packages
- && pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-python-tutorial/brev/requirements.txt \
+    pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-python-tutorial/brev/requirements.txt \
 # Setup Git
  && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
  && git config --global --add safe.directory "/accelerated-computing-hub" \
