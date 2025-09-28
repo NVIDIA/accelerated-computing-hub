@@ -3,7 +3,7 @@ name: Build and Push Brev GPU C++ Tutorial Docker Image
 on:
   push:
     branches:
-      - 2025-09-flatiron-cuda-python
+      - 2025-09-flatiron-institute-cuda-python
 
 jobs:
   build-and-push-brev-gpu-cpp-tutorial-docker-image:
