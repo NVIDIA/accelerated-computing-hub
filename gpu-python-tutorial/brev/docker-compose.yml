@@ -5,7 +5,7 @@ services:
       dockerfile: gpu-python-tutorial/brev/dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
-    image: ghcr.io/nvidia/gpu-python-tutorial:2025-09-flatiron-institute-cuda-python-latest
+    image: ghcr.io/nvidia/gpu-python-tutorial:2025-10-cpp-under-the-sea-latest
     pull_policy: always
     volumes:
       - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
@@ -16,7 +16,7 @@ services:
     command: ["/update-git-branch.bash"]
     restart: no
   jupyter:
-    image: ghcr.io/nvidia/gpu-python-tutorial:2025-09-flatiron-institute-cuda-python-latest
+    image: ghcr.io/nvidia/gpu-python-tutorial:2025-10-cpp-under-the-sea-latest
     depends_on:
       base:
         condition: service_completed_successfully
