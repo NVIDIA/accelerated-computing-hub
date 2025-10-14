@@ -1,0 +1,20 @@
+# Arrays
+numpy
+
+# Dataframes
+pandas
+
+# Visualization
+matplotlib
+seaborn
+
+# Downloading
+gdown
+conan
+
+# Jupyter
+jupyter
+jupyterlab-nvidia-nsight
+
+# NVIDIA devtools
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
