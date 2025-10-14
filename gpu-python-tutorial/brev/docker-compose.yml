@@ -5,7 +5,7 @@ services:
       dockerfile: gpu-python-tutorial/brev/dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
-    image: ghcr.io/nvidia/gpu-python-tutorial:2025-09-flatiron-institute-cuda-python-latest
+    image: ghcr.io/nvidia/gpu-python-tutorial:brev-reorg-latest
     pull_policy: always
     volumes:
       - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
@@ -14,9 +14,9 @@ services:
     user: root
     working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
     command: ["/update-git-branch.bash"]
-    restart: no
+    restart: "no"
   jupyter:
-    image: ghcr.io/nvidia/gpu-python-tutorial:2025-09-flatiron-institute-cuda-python-latest
+    image: ghcr.io/nvidia/gpu-python-tutorial:brev-reorg-latest
     depends_on:
       base:
         condition: service_completed_successfully
@@ -40,7 +40,7 @@ services:
       - BREV_ENV_ID
     user: root
     working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
-    restart: unless-stopped
+    restart: "unless-stopped"
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     depends_on:
@@ -68,4 +68,4 @@ services:
     user: root
     working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
-    restart: unless-stopped
+    restart: "unless-stopped"
