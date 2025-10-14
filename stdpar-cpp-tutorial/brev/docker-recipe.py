@@ -4,14 +4,7 @@ https://github.com/NVIDIA/hpc-container-maker/
 """
 
 import platform
-import hpccm
 from hpccm.primitives import raw
-from hpccm import Stage
-from hpccm.building_blocks import baseimage, boost, cmake, gnu, llvm
-from hpccm.primitives import copy, workdir, packages, shell, environment
-
-# Initialize Stage0
-Stage0 = Stage()
 
 ubuntu_ver = '22.04'
 nvhpc_ver = '25.9'
@@ -150,17 +143,6 @@ Stage0 += environment(variables={
 
 	# Workaround nvfortran limit of 64k thread blocks
 	'NVCOMPILER_ACC_GANGLIMIT': '67108864', # (1 << 26)
-})
-
-# Install AdaptiveCpp stdpar:
-
-Stage0 += shell(commands=[
-    'set -ex',
-
-])
-Stage0 += environment(variables={
-
-
 })
 
 Stage0 += raw(docker='CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
