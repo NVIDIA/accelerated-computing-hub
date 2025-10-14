@@ -4,16 +4,15 @@ ARG GIT_BRANCH_NAME
 ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
 
 COPY . /accelerated-computing-hub
-
 COPY brev/update-git-branch.bash /update-git-branch.bash
 
 WORKDIR /accelerated-computing-hub/gpu-python-tutorial/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore \
-    CUDF_VENV=/opt/venvs/cudf
+    CUDF_VENV=/accelerated-computing-hub/venvs/cudf
 
-RUN `# Install packages` \
-      && pip install --root-user-action ignore -r /accelerated-computing-hub/gpu-python-tutorial/brev/requirements.txt \
+RUN `# Install Python packages` \
+      && pip install --root-user-action=ignore -r /accelerated-computing-hub/gpu-python-tutorial/brev/requirements.txt \
  && `# Setup Git` \
       && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
       && git config --global --add safe.directory "/accelerated-computing-hub" \
@@ -25,7 +24,7 @@ RUN `# Install packages` \
       && mkdir -p ~/.ipython/profile_default/startup \
       && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
       && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
- && `# Create an isolated Python venv with cuDF, and register it as a Jupyter kernel` \
+ && `# Create an isolated Python venv with cuDF and register it as a Jupyter kernel` \
       && python -m venv ${CUDF_VENV} \
       && ${CUDF_VENV}/bin/python -m pip install --upgrade pip \
       && ${CUDF_VENV}/bin/pip install \
