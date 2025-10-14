@@ -1,0 +1,76 @@
+x-config:
+  dockerfile: &dockerfile stdpar-cpp-tutorial/brev/dockerfile
+  image: &image ghcr.io/nvidia/stdpar-cpp-tutorial:brev-reorg-latest
+  working-dir: &working-dir /accelerated-computing-hub/stdpar-cpp-tutorial/notebooks
+
+services:
+  base:
+    build:
+      context: ../..
+      dockerfile: *dockerfile
+      args:
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
+    image: *image
+    pull_policy: always
+    volumes:
+      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+    environment:
+      - BREV_ENV_ID
+    user: root
+    working_dir: *working-dir
+    command: ["/update-git-branch.bash"]
+    restart: "no"
+  jupyter:
+    image: *image
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    privileged: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "0.0.0.0:8888:8888" # JupyterLab
+    volumes:
+      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+    environment:
+      - BREV_ENV_ID
+    user: root
+    working_dir: *working-dir
+    restart: unless-stopped
+  nsight:
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    pull_policy: always
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "0.0.0.0:8080:8080" # HTTP
+      - "0.0.0.0:3478:3478" # TURN
+    volumes:
+      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+    environment:
+      - BREV_ENV_ID
+    user: root
+    working_dir: *working-dir
+    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+    restart: unless-stopped
