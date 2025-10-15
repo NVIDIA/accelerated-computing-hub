@@ -4,13 +4,13 @@ on:
   push:
 
 jobs:
-  build-and-push-brev-stdpar-cpp-tutorial-docker-image:
+  build-and-push-brev-stdpar-tutorial-docker-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/stdpar-cpp-tutorial
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/stdpar-tutorial
 
     steps:
       - name: Checkout repository
@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Dockerfile from HPCCM recipe
         run: |
-          hpccm --recipe stdpar-cpp-tutorial/brev/docker-recipe.py --format docker > stdpar-cpp-tutorial/brev/dockerfile
+          hpccm --recipe stdpar-tutorial/brev/docker-recipe.py --format docker > stdpar-tutorial/brev/dockerfile
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image with Compose
-        run: docker compose -f stdpar-cpp-tutorial/brev/docker-compose.yml build
+        run: docker compose -f stdpar-tutorial/brev/docker-compose.yml build
 
       - name: Tag Docker images
         run: |
