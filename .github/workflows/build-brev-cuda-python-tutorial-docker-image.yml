@@ -6,13 +6,13 @@ on:
       - brev-reorg
 
 jobs:
-  build-and-push-brev-gpu-python-tutorial-docker-image:
+  build-and-push-brev-cuda-python-tutorial-docker-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     env:
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/gpu-python-tutorial
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/cuda-python-tutorial
 
     steps:
       - name: Checkout repository
@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image with Compose
-        run: docker compose -f gpu-python-tutorial/brev/docker-compose.yml build
+        run: docker compose -f cuda-python-tutorial/brev/docker-compose.yml build
 
       - name: Tag Docker images
         run: |
