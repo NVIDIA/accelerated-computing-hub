@@ -1,7 +1,7 @@
 x-config:
-  dockerfile: &dockerfile stdpar-cpp-tutorial/brev/dockerfile
-  image: &image ghcr.io/nvidia/stdpar-cpp-tutorial:brev-reorg-latest
-  working-dir: &working-dir /accelerated-computing-hub/stdpar-cpp-tutorial/notebooks
+  dockerfile: &dockerfile stdpar-tutorial/brev/dockerfile
+  image: &image ghcr.io/nvidia/stdpar-tutorial:brev-reorg-latest
+  working-dir: &working-dir /accelerated-computing-hub/stdpar-tutorial/notebooks
 
 services:
   base:
