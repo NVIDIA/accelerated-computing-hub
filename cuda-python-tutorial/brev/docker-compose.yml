@@ -2,21 +2,21 @@ services:
   base:
     build:
       context: ../..
-      dockerfile: gpu-python-tutorial/brev/dockerfile
+      dockerfile: cuda-python-tutorial/brev/dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
-    image: ghcr.io/nvidia/gpu-python-tutorial:brev-reorg-latest
+    image: ghcr.io/nvidia/cuda-python-tutorial:brev-reorg-latest
     pull_policy: always
     volumes:
       - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
     user: root
-    working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
+    working_dir: /accelerated-computing-hub/cuda-python-tutorial/notebooks
     command: ["/update-git-branch.bash"]
     restart: "no"
   jupyter:
-    image: ghcr.io/nvidia/gpu-python-tutorial:brev-reorg-latest
+    image: ghcr.io/nvidia/cuda-python-tutorial:brev-reorg-latest
     depends_on:
       base:
         condition: service_completed_successfully
@@ -39,7 +39,7 @@ services:
     environment:
       - BREV_ENV_ID
     user: root
-    working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
+    working_dir: /accelerated-computing-hub/cuda-python-tutorial/notebooks
     restart: "unless-stopped"
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
@@ -66,6 +66,6 @@ services:
     environment:
       - BREV_ENV_ID
     user: root
-    working_dir: /accelerated-computing-hub/gpu-python-tutorial/notebooks
+    working_dir: /accelerated-computing-hub/cuda-python-tutorial/notebooks
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
     restart: "unless-stopped"
