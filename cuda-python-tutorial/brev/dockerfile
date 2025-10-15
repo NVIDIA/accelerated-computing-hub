@@ -6,13 +6,13 @@ ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
 COPY . /accelerated-computing-hub
 COPY brev/update-git-branch.bash /update-git-branch.bash
 
-WORKDIR /accelerated-computing-hub/gpu-python-tutorial/notebooks
+WORKDIR /accelerated-computing-hub/cuda-python-tutorial/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore \
     CUDF_VENV=/accelerated-computing-hub/venvs/cudf
 
 RUN `# Install Python packages` \
-      && pip install --root-user-action=ignore -r /accelerated-computing-hub/gpu-python-tutorial/brev/requirements.txt \
+      && pip install --root-user-action=ignore -r /accelerated-computing-hub/cuda-python-tutorial/brev/requirements.txt \
  && `# Setup Git` \
       && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
       && git config --global --add safe.directory "/accelerated-computing-hub" \
