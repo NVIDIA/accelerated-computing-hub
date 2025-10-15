@@ -14,14 +14,13 @@ llvm_ver = '18'
 cmake_ver = '3.27.2'
 boost_ver = '1.75.0'
 arch = platform.machine()
-tutorial = 'cpp'
 
 Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver}-ubuntu{ubuntu_ver}')
 
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 Stage0 += copy(src='brev/update-git-branch.bash', dest='/update-git-branch.bash')
 
-Stage0 += workdir(directory=f'/accelerated-computing-hub/stdpar-{tutorial}-tutorial/notebooks')
+Stage0 += workdir(directory=f'/accelerated-computing-hub/stdpar-tutorial/notebooks')
 
 Stage0 += packages(ospackages=[
   'libtbb-dev',  # Required for GCC C++ parallel algorithms
@@ -50,7 +49,7 @@ Stage0 += shell(commands=[
 
   # Install python packages
   'pip install --upgrade pip',
-	f'pip install --root-user-action=ignore -r /accelerated-computing-hub/stdpar-{tutorial}-tutorial/brev/requirements.txt',
+	f'pip install --root-user-action=ignore -r /accelerated-computing-hub/stdpar-tutorial/brev/requirements.txt',
 
 	# Build and install AdaptiveCpp
 	'git clone --depth=1 --shallow-submodules --recurse-submodules -b develop https://github.com/AdaptiveCpp/AdaptiveCpp',
@@ -81,7 +80,7 @@ Stage0 += shell(commands=[
 	f'ln -sf /opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/include/experimental/__p0009_bits /usr/include/__p0009_bits',
 
 	# Put the include directory in the systemwide path:
-	f'ln -sf /accelerated-computing-hub/stdpar-{tutorial}-tutorial/include/ach /usr/include/ach',
+	f'ln -sf /accelerated-computing-hub/stdpar-tutorial/include/ach /usr/include/ach',
 
 	# Don't send GitHub actions CI token when using Git
   'git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; }',
