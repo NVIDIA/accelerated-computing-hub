@@ -1,3 +1,12 @@
+x-config:
+  # Relative paths are resolved from the directory of the Docker Compose file.
+  # If we're not on Brev, the Docker Compose file is in the Git repository.
+  # If we're on Brev, the Docker Compose file is in /home/ubuntu/workspace, and the Git
+  # repository is in /home/ubuntu/accelerated-computing-hub.
+  # Thus on Brev, ../.. resolves to /home, and we need to add accelerated-computing-hub/ to get
+  # to the Git repository.
+  ach-volume: &ach-volume ../..${BREV_ENV_ID:+/accelerated-computing-hub}:/accelerated-computing-hub
+
 services:
   base:
     build:
@@ -8,7 +17,7 @@ services:
     image: ghcr.io/nvidia/cuda-python-tutorial:brev-reorg-latest
     pull_policy: always
     volumes:
-      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+      - *ach-volume
     environment:
       - BREV_ENV_ID
     user: root
@@ -35,7 +44,7 @@ services:
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
     volumes:
-      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+      - *ach-volume
     environment:
       - BREV_ENV_ID
     user: root
@@ -62,7 +71,7 @@ services:
       - "0.0.0.0:8080:8080" # HTTP
       - "0.0.0.0:3478:3478" # TURN
     volumes:
-      - /home/ubuntu/accelerated-computing-hub:/accelerated-computing-hub
+      - *ach-volume
     environment:
       - BREV_ENV_ID
     user: root
