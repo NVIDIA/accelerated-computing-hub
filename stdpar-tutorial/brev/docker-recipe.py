@@ -7,8 +7,8 @@ import platform
 from hpccm.primitives import raw
 
 ubuntu_ver = '22.04'
-nvhpc_ver = '25.9'
-cuda_ver = '13.0'
+nvhpc_ver = '24.3'
+cuda_ver = '12.3'
 gcc_ver = '13'
 llvm_ver = '18'
 cmake_ver = '3.27.2'
