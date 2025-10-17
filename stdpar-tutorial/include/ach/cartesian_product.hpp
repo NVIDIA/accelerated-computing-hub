@@ -1,6 +1,6 @@
 #pragma once
 //#define DISABLE_CART_PROD_IOTA_SPEC
-/* 
+/*
 Adapted from TartanLlama/ranges: https://github.com/TartanLlama/ranges
 Original version License CC0 1.0 Universal (see below)
 
@@ -543,7 +543,7 @@ namespace tl {
       friend constexpr decltype(auto) iter_move(const basic_iterator& i)
 #if !defined(__NVCOMPILER)
 	noexcept(noexcept(i.cursor().indirect_move()))
-#endif	
+#endif
          requires cursor::indirect_move<C> {
          return i.cursor().indirect_move();
       }
@@ -552,7 +552,7 @@ namespace tl {
       requires cursor::indirect_swap<C, O>
          friend constexpr void iter_swap(
             const basic_iterator& x, const basic_iterator<O>& y)
-#if !defined(__NVCOMPILER)	
+#if !defined(__NVCOMPILER)
          noexcept(noexcept((void)x.indirect_swap(y)))
 #endif
      {
@@ -693,7 +693,7 @@ namespace tl {
       }
       friend constexpr bool operator==(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)	
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(x.cursor().equal(y.cursor())))
          requires cursor::sentinel_for<C, C>
 #endif
@@ -702,16 +702,16 @@ namespace tl {
       }
       friend constexpr bool operator!=(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)		
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(!(x == y)))
          requires cursor::sentinel_for<C, C>
 #endif
-      {	
+      {
          return !(x == y);
       }
       friend constexpr bool operator<(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)			
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(y - x))
 #endif
          requires cursor::sized_sentinel_for<C, C> {
@@ -719,25 +719,25 @@ namespace tl {
       }
       friend constexpr bool operator>(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)				
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(y - x))
-#endif	
+#endif
          requires cursor::sized_sentinel_for<C, C> {
          return 0 > (y - x);
       }
       friend constexpr bool operator<=(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)					
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(y - x))
-#endif	
+#endif
          requires cursor::sized_sentinel_for<C, C> {
          return 0 <= (y - x);
       }
       friend constexpr bool operator>=(
          const basic_iterator& x, const basic_iterator& y)
-#if !defined(__NVCOMPILER)						
+#if !defined(__NVCOMPILER)
          noexcept(noexcept(y - x))
-#endif	
+#endif
          requires cursor::sized_sentinel_for<C, C> {
          return 0 >= (y - x);
       }
@@ -988,7 +988,7 @@ namespace tl {
    template <class F, class... Args>
    constexpr auto bind_back(F&& f, Args&&... args) {
       return[f_ = std::forward<F>(f), ...args_ = std::forward<Args>(args)]
-      (auto&&... other_args) 
+      (auto&&... other_args)
       requires std::invocable<F&, decltype(other_args)..., Args&...> {
          return std::invoke(f_, std::forward<decltype(other_args)>(other_args)..., args_...);
       };
@@ -1109,8 +1109,8 @@ namespace tl  {
       }
       template <class F, class V, class Arg, class... Args>
       constexpr auto tuple_fold_impl(F f, V v, Arg arg, Args&&... args) {
-         return tl::detail::tuple_fold_impl(f, 
-            std::invoke(f, std::move(v), std::move(arg)), 
+         return tl::detail::tuple_fold_impl(f,
+            std::invoke(f, std::move(v), std::move(arg)),
             std::forward<Args>(args)...);
       }
    }
@@ -1203,7 +1203,7 @@ namespace tl  {
 	 // Instead of storing a pointer to the views, we'll store the sentinels:
 	 // constify<std::tuple<Vs...>>* bases_;
          std::tuple<std::ranges::iterator_t<constify<Vs>>...> currents_{};
-	 std::tuple<std::ranges::iterator_t<constify<Vs>>...> begins_{}; 
+	 std::tuple<std::ranges::iterator_t<constify<Vs>>...> begins_{};
 	 std::tuple<std::ranges::sentinel_t<constify<Vs>>...> ends_{};
 	 std::tuple<intify<Vs>...> counts_{};
 	 std::int64_t idx_;
@@ -1263,7 +1263,7 @@ namespace tl  {
 	      update<N-1>(idx);
 	    }
 	 }
-	
+
          //Increment the iterator at std::get<N>(currents_)
          //If that iterator hits its end, recurse to std::get<N-1>
          void next() {
@@ -1282,9 +1282,9 @@ namespace tl  {
          }
 
          constexpr bool equal(const cursor& rhs) const
-#if !defined(__NVCOMPILER)	   
+#if !defined(__NVCOMPILER)
             requires (std::equality_comparable<std::ranges::iterator_t<constify<Vs>>> && ...)
-#endif	   
+#endif
 	 {
             return currents_ == rhs.currents_;
          }
@@ -1303,7 +1303,7 @@ namespace tl  {
                auto distance = distance_to<N - 1>(other);
                auto scale = std::ranges::distance(std::get<N>(begins_), std::get<N>(ends_));
                auto diff = std::ranges::distance(std::get<N>(currents_), std::get<N>(other.currents_));
-#if !defined(__NVCOMPILER)	       
+#if !defined(__NVCOMPILER)
                return difference_type{ distance * scale + diff };
 #else
 	       return static_cast<difference_type>(distance * scale + diff);
@@ -1361,7 +1361,7 @@ namespace tl  {
   template <typename W, typename B>
   requires std::is_integral_v<W> && std::is_integral_v<B>
    class cartesian_product_view<
-        std::ranges::iota_view<W, B>, 
+        std::ranges::iota_view<W, B>,
         std::ranges::iota_view<W, B>,
         std::ranges::iota_view<W, B>
     >
@@ -1402,23 +1402,23 @@ namespace tl  {
              W x,
              W y,
 	     W z,
-             B nx, 
+             B nx,
              B ny,
-	     B nz) 
-        : 
+	     B nz)
+        :
             x_i(x),
             y_i(y),
 	    z_i(z),
             x_0(x),
             y_0(y),
 	    z_0(z),
-            nx(nx), 
+            nx(nx),
             ny(ny),
 	    nz(nz)
         {}
 
         constexpr decltype(auto) read() const {
-	  return std::make_tuple<W const&, W const&, W const&>(x_i, y_i, z_i); 
+	  return std::make_tuple<W const&, W const&, W const&>(x_i, y_i, z_i);
         }
 	constexpr auto linear() const {
 	  return (z_i - z_0) + nz * (y_i - y_0) + nz * ny * (x_i - x_0);
@@ -1470,7 +1470,7 @@ namespace tl  {
 	, z_b(*std::ranges::begin(zs))
         , nx(std::ranges::size(xs))
         , ny(std::ranges::size(ys))
-	, nz(std::ranges::size(zs))	  
+	, nz(std::ranges::size(zs))
     {}
 
       constexpr auto begin() {
@@ -1496,22 +1496,22 @@ namespace tl  {
 	 return begin() + size();
       }
    };
-  
+
   template <typename W, typename B>
   requires std::is_integral_v<W> && std::is_integral_v<B>
    class cartesian_product_view<
-        std::ranges::iota_view<W, B>, 
+        std::ranges::iota_view<W, B>,
         std::ranges::iota_view<W, B>
     >
       : public std::ranges::view_interface<
             cartesian_product_view<
-                std::ranges::iota_view<W, B>, 
+                std::ranges::iota_view<W, B>,
                 std::ranges::iota_view<W, B>
             >
         > {
 
     using self = cartesian_product_view<
-            std::ranges::iota_view<W, B>, 
+            std::ranges::iota_view<W, B>,
             std::ranges::iota_view<W, B>
     >;
    public:
@@ -1537,19 +1537,19 @@ namespace tl  {
          constexpr explicit cursor(
              W x,
              W y,
-             B nx, 
-             B ny) 
-        : 
+             B nx,
+             B ny)
+        :
             x_i(x),
             y_i(y),
             x_0(x),
             y_0(y),
-            nx(nx), 
+            nx(nx),
             ny(ny)
         {}
 
         constexpr decltype(auto) read() const {
-            return std::make_tuple<W const&, W const&>(x_i, y_i); 
+            return std::make_tuple<W const&, W const&>(x_i, y_i);
         }
 	constexpr auto linear() const {
 	  return (y_i - y_0) + ny * (x_i - x_0);
@@ -1579,7 +1579,7 @@ namespace tl  {
          constexpr auto distance_to(cursor const& other) const {
 	   auto idx = linear();
 	   auto oidx = other.linear();
-	   return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);	   
+	   return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);
          }
 
          friend class cursor<!Const>;
@@ -1618,7 +1618,7 @@ namespace tl  {
       constexpr auto end() const {
 	 return begin() + size();
       }
-     
+
    };
 
   template <typename W, typename B>
@@ -1649,14 +1649,14 @@ namespace tl  {
 
          cursor() = default;
          constexpr explicit cursor(
-             int x, int x_e) 
-        : 
+             int x, int x_e)
+        :
             x_i(x),
             x_e(x_e)
         {}
 
         constexpr decltype(auto) read() const {
-            return std::make_tuple<int const&>(x_i); 
+            return std::make_tuple<int const&>(x_i);
         }
         void advance(difference_type n) {
 	  x_i += n;
@@ -1711,7 +1711,7 @@ namespace tl  {
       }
    };
 #endif // DISABLE_CART_PROD_IOTA_SPEC
-  
+
    template <class... Rs>
    cartesian_product_view(Rs&&...)->cartesian_product_view<std::views::all_t<Rs>...>;
 
@@ -1734,7 +1734,7 @@ namespace tl  {
 
  	    template <typename W, typename B>
             constexpr auto operator()(
-                std::ranges::iota_view<W, B> xs, 
+                std::ranges::iota_view<W, B> xs,
                 std::ranges::iota_view<W, B> ys
             ) const {
                return tl::cartesian_product_view<
@@ -1744,18 +1744,18 @@ namespace tl  {
             }
  	    template <typename W, typename B>
             constexpr auto operator()(
-                std::ranges::iota_view<W, B> xs, 
+                std::ranges::iota_view<W, B> xs,
                 std::ranges::iota_view<W, B> ys,
-                std::ranges::iota_view<W, B> zs		
+                std::ranges::iota_view<W, B> zs
             ) const {
                return tl::cartesian_product_view<
                 std::ranges::iota_view<W, B>,
-		std::ranges::iota_view<W, B>,		 
+		std::ranges::iota_view<W, B>,
                 std::ranges::iota_view<W, B>
                >{ std::move(xs), std::move(ys), std::move(zs) };
             }
-	   
-#endif	   
+
+#endif
             template <std::ranges::viewable_range... V>
             requires ((std::ranges::forward_range<V> && ...) && (sizeof...(V) != 0))
                constexpr auto operator()(V&&... vs) const {
@@ -1880,7 +1880,7 @@ template <std::ranges::forward_range V>
 
          constexpr void next() {
             auto delta = std::ranges::advance(current_, stride_size_, end_);
-            //This will track the amount we actually moved by last advance, 
+            //This will track the amount we actually moved by last advance,
             //which will be less than the stride size if range_size % stride_size != 0
             this->set_offset(delta);
          }
@@ -1916,7 +1916,7 @@ template <std::ranges::forward_range V>
 	 constexpr auto distance_to(cursor const& other) const
 	   // am_distanceable<V>:
 	   requires (std::sized_sentinel_for<std::ranges::iterator_t<V>, std::ranges::iterator_t<V>>)
-	     && std::ranges::sized_range<V>	 
+	     && std::ranges::sized_range<V>
 	 {
 	   auto delta = std::ranges::distance(this->current_, other.current_);
 	   if (delta < 0)
