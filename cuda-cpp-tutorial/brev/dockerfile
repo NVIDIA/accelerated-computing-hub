@@ -14,7 +14,7 @@ RUN `# Install Pythonpackages` \
      && pip install --root-user-action=ignore -r /accelerated-computing-hub/cuda-cpp-tutorial/brev/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
-     && apt-get install -y --no-install-recommends ffmpeg \
+     && apt-get install -y --no-install-recommends ffmpeg git-lfs \
      && apt-get clean -y \
      && rm -rf /var/lib/apt/lists/* \
  && `# Setup Git` \
