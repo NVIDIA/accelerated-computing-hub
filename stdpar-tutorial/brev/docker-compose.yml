@@ -5,7 +5,7 @@ x-config:
   # repository is in /home/ubuntu/accelerated-computing-hub.
   # Thus on Brev, ../.. resolves to /home, and we need to add accelerated-computing-hub/ to get
   # to the Git repository.
-  ach-volume: &ach-volume ../..${BREV_ENV_ID:+/accelerated-computing-hub}:/accelerated-computing-hub
+  ach-volume: &ach-volume ../..${BREV_ENV_ID:+/ubuntu/accelerated-computing-hub}:/accelerated-computing-hub
   dockerfile: &dockerfile stdpar-tutorial/brev/dockerfile
   image: &image ghcr.io/nvidia/stdpar-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/stdpar-tutorial/notebooks
