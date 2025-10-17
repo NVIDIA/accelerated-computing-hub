@@ -20,12 +20,17 @@ Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 Stage0 += copy(src='brev/update-git-branch.bash', dest='/update-git-branch.bash')
 
+# Patch libstdc++ to use our modified cartesian_product view that doesn't require HMM/ATS and copies
+# the underlying range iterators instead of accessing them through host memory.
+Stage0 += copy(src='stdpar-tutorial/include/cartesian_product.hpp', dest='/usr/include/cartesian_product.hpp')
+Stage0 += copy(src='stdpar-tutorial/include/ranges', dest=f'/usr/include/c++/{gcc_ver}/ranges')
+
 Stage0 += workdir(directory=f'/accelerated-computing-hub/stdpar-tutorial/notebooks')
 
 Stage0 += packages(ospackages=[
   'libtbb-dev',  # Required for GCC C++ parallel algorithms
   'python3', 'python3-pip', 'python-is-python3', 'python3-setuptools', 'python3-dev',
-  'make', 'build-essential', 'git',
+  'make', 'build-essential', 'git', 'git-lfs',
   'curl', 'wget', 'zip', 'bc',
   'nginx', 'openssh-client',
   'libnuma1',  'numactl',
