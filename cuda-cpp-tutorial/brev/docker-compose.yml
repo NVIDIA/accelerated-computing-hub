@@ -13,7 +13,7 @@ services:
       context: ../..
       dockerfile: cuda-cpp-tutorial/brev/dockerfile
       args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
     image: ghcr.io/nvidia/cuda-cpp-tutorial:brev-reorg-latest
     pull_policy: always
     volumes:
