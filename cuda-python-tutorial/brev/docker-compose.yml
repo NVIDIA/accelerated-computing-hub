@@ -15,7 +15,7 @@ services:
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
     image: ghcr.io/nvidia/cuda-python-tutorial:brev-reorg-latest
-    pull_policy: always
+    pull_policy: ${BREV_ENV_ID:+always}${BREV_ENV_ID:-build}
     volumes:
       - *ach-volume
     environment:
