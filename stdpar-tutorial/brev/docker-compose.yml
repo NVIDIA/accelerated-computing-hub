@@ -16,7 +16,7 @@ services:
       context: ../..
       dockerfile: *dockerfile
       args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-main}
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
     image: *image
     pull_policy: always
     volumes:
