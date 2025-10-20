@@ -8919,6 +8919,107 @@ namespace views::__adaptor
     return (lhs - rhs) >= 0;
   }
 
+  // 1D specialization
+  template <typename W, typename B>
+  requires is_integral_v<W> && is_integral_v<B>
+  class cartesian_product_view<iota_view<W, B>>
+    : public view_interface<cartesian_product_view<iota_view<W, B>>>
+  {
+
+    using self = cartesian_product_view<iota_view<W, B>>;
+  public:
+    W x_b;
+    B nx;
+  private:
+
+    template <bool Const>
+    class cursor;
+
+    template <bool Const>
+    class cursor {
+      W x_i, x_0;
+      B nx;
+
+    public:
+      using reference = tuple<W const&>;
+      using value_type = tuple<W>;
+
+      using difference_type = ptrdiff_t;
+
+      cursor() = default;
+      constexpr explicit cursor(
+        W x,
+        B nx)
+      :
+        x_i(x),
+        x_0(x),
+        nx(nx)
+      {}
+
+      constexpr decltype(auto) read() const {
+        return make_tuple<W const&>(x_i);
+      }
+      constexpr auto linear() const {
+        return (x_i - x_0);
+      }
+
+      void advance(difference_type n) {
+        auto idx = linear() + n;
+        x_i = idx + x_0;
+      }
+      void next() {
+        ++x_i;
+      }
+      void prev(){
+        advance(-1);
+      }
+
+      constexpr bool equal(const cursor& rhs) const {
+        return x_i == rhs.x_i;
+      }
+
+      constexpr auto distance_to(cursor const& other) const {
+        auto idx = linear();
+        auto oidx = other.linear();
+        return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);
+      }
+
+      friend class cursor<!Const>;
+    };
+
+  public:
+    cartesian_product_view() = default;
+    constexpr explicit cartesian_product_view(
+      iota_view<W, B> xs
+    ) : x_b(*::std::ranges::begin(xs))
+      , nx(::std::ranges::size(xs))
+    {}
+
+    constexpr auto begin() {
+      return basic_iterator{ cursor<false>(x_b, nx) };
+    }
+    constexpr auto begin() const {
+      return basic_iterator{ cursor<true>(x_b, nx) };
+    }
+
+    constexpr auto size() {
+      return nx;
+    }
+
+    constexpr auto size() const {
+      return nx;
+    }
+
+    constexpr auto end() {
+      return begin() + size();
+    }
+
+    constexpr auto end() const {
+      return begin() + size();
+    }
+  };
+
+  // 2D specialization
   template <typename W, typename B>
   requires is_integral_v<W> && is_integral_v<B>
   class cartesian_product_view<iota_view<W, B>, iota_view<W, B>>
@@ -9020,6 +9121,429 @@ namespace views::__adaptor
 
     constexpr auto size() const {
       return nx * ny;
+    }
+
+    constexpr auto end() {
+      return begin() + size();
+    }
+
+    constexpr auto end() const {
+      return begin() + size();
+    }
+  };
+
+  // 3D specialization
+  template <typename W, typename B>
+  requires is_integral_v<W> && is_integral_v<B>
+  class cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>
+    : public view_interface<cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>>
+  {
+
+    using self = cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>;
+  public:
+    W x_b, y_b, z_b;
+    B nx, ny, nz;
+  private:
+
+    template <bool Const>
+    class cursor;
+
+    template <bool Const>
+    class cursor {
+      W x_i, y_i, z_i, x_0, y_0, z_0;
+      B nx, ny, nz;
+
+    public:
+      using reference = tuple<W const&, W const&, W const&>;
+      using value_type = tuple<W, W, W>;
+
+      using difference_type = ptrdiff_t;
+
+      cursor() = default;
+      constexpr explicit cursor(
+        W x,
+        W y,
+        W z,
+        B nx,
+        B ny,
+        B nz)
+      :
+        x_i(x),
+        y_i(y),
+        z_i(z),
+        x_0(x),
+        y_0(y),
+        z_0(z),
+        nx(nx),
+        ny(ny),
+        nz(nz)
+      {}
+
+      constexpr decltype(auto) read() const {
+        return make_tuple<W const&, W const&, W const&>(x_i, y_i, z_i);
+      }
+      constexpr auto linear() const {
+        return (z_i - z_0) + nz * ((y_i - y_0) + ny * (x_i - x_0));
+      }
+
+      void advance(difference_type n) {
+        auto idx = linear() + n;
+        auto temp = idx / nz;
+        z_i = idx % nz + z_0;
+        x_i = temp / ny + x_0;
+        y_i = temp % ny + y_0;
+      }
+      void next() {
+        ++z_i;
+        if (z_i == (z_0 + nz)) {
+          z_i = z_0;
+          ++y_i;
+          if (y_i == (y_0 + ny)) {
+            y_i = y_0;
+            ++x_i;
+          }
+        }
+      }
+      void prev(){
+        advance(-1);
+      }
+
+      constexpr bool equal(const cursor& rhs) const {
+        return x_i == rhs.x_i && y_i == rhs.y_i && z_i == rhs.z_i;
+      }
+
+      constexpr auto distance_to(cursor const& other) const {
+        auto idx = linear();
+        auto oidx = other.linear();
+        return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);
+      }
+
+      friend class cursor<!Const>;
+    };
+
+  public:
+    cartesian_product_view() = default;
+    constexpr explicit cartesian_product_view(
+      iota_view<W, B> xs,
+      iota_view<W, B> ys,
+      iota_view<W, B> zs
+    ) : x_b(*::std::ranges::begin(xs))
+      , y_b(*::std::ranges::begin(ys))
+      , z_b(*::std::ranges::begin(zs))
+      , nx(::std::ranges::size(xs))
+      , ny(::std::ranges::size(ys))
+      , nz(::std::ranges::size(zs))
+    {}
+
+    constexpr auto begin() {
+      return basic_iterator{ cursor<false>(x_b, y_b, z_b, nx, ny, nz) };
+    }
+    constexpr auto begin() const {
+      return basic_iterator{ cursor<true>(x_b, y_b, z_b, nx, ny, nz) };
+    }
+
+    constexpr auto size() {
+      return nx * ny * nz;
+    }
+
+    constexpr auto size() const {
+      return nx * ny * nz;
+    }
+
+    constexpr auto end() {
+      return begin() + size();
+    }
+
+    constexpr auto end() const {
+      return begin() + size();
+    }
+  };
+
+  // 4D specialization
+  template <typename W, typename B>
+  requires is_integral_v<W> && is_integral_v<B>
+  class cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>
+    : public view_interface<cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>>
+  {
+
+    using self = cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>;
+  public:
+    W x_b, y_b, z_b, w_b;
+    B nx, ny, nz, nw;
+  private:
+
+    template <bool Const>
+    class cursor;
+
+    template <bool Const>
+    class cursor {
+      W x_i, y_i, z_i, w_i, x_0, y_0, z_0, w_0;
+      B nx, ny, nz, nw;
+
+    public:
+      using reference = tuple<W const&, W const&, W const&, W const&>;
+      using value_type = tuple<W, W, W, W>;
+
+      using difference_type = ptrdiff_t;
+
+      cursor() = default;
+      constexpr explicit cursor(
+        W x,
+        W y,
+        W z,
+        W w,
+        B nx,
+        B ny,
+        B nz,
+        B nw)
+      :
+        x_i(x),
+        y_i(y),
+        z_i(z),
+        w_i(w),
+        x_0(x),
+        y_0(y),
+        z_0(z),
+        w_0(w),
+        nx(nx),
+        ny(ny),
+        nz(nz),
+        nw(nw)
+      {}
+
+      constexpr decltype(auto) read() const {
+        return make_tuple<W const&, W const&, W const&, W const&>(x_i, y_i, z_i, w_i);
+      }
+      constexpr auto linear() const {
+        return (w_i - w_0) + nw * ((z_i - z_0) + nz * ((y_i - y_0) + ny * (x_i - x_0)));
+      }
+
+      void advance(difference_type n) {
+        auto idx = linear() + n;
+        auto temp1 = idx / nw;
+        w_i = idx % nw + w_0;
+        auto temp2 = temp1 / nz;
+        z_i = temp1 % nz + z_0;
+        x_i = temp2 / ny + x_0;
+        y_i = temp2 % ny + y_0;
+      }
+      void next() {
+        ++w_i;
+        if (w_i == (w_0 + nw)) {
+          w_i = w_0;
+          ++z_i;
+          if (z_i == (z_0 + nz)) {
+            z_i = z_0;
+            ++y_i;
+            if (y_i == (y_0 + ny)) {
+              y_i = y_0;
+              ++x_i;
+            }
+          }
+        }
+      }
+      void prev(){
+        advance(-1);
+      }
+
+      constexpr bool equal(const cursor& rhs) const {
+        return x_i == rhs.x_i && y_i == rhs.y_i && z_i == rhs.z_i && w_i == rhs.w_i;
+      }
+
+      constexpr auto distance_to(cursor const& other) const {
+        auto idx = linear();
+        auto oidx = other.linear();
+        return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);
+      }
+
+      friend class cursor<!Const>;
+    };
+
+  public:
+    cartesian_product_view() = default;
+    constexpr explicit cartesian_product_view(
+      iota_view<W, B> xs,
+      iota_view<W, B> ys,
+      iota_view<W, B> zs,
+      iota_view<W, B> ws
+    ) : x_b(*::std::ranges::begin(xs))
+      , y_b(*::std::ranges::begin(ys))
+      , z_b(*::std::ranges::begin(zs))
+      , w_b(*::std::ranges::begin(ws))
+      , nx(::std::ranges::size(xs))
+      , ny(::std::ranges::size(ys))
+      , nz(::std::ranges::size(zs))
+      , nw(::std::ranges::size(ws))
+    {}
+
+    constexpr auto begin() {
+      return basic_iterator{ cursor<false>(x_b, y_b, z_b, w_b, nx, ny, nz, nw) };
+    }
+    constexpr auto begin() const {
+      return basic_iterator{ cursor<true>(x_b, y_b, z_b, w_b, nx, ny, nz, nw) };
+    }
+
+    constexpr auto size() {
+      return nx * ny * nz * nw;
+    }
+
+    constexpr auto size() const {
+      return nx * ny * nz * nw;
+    }
+
+    constexpr auto end() {
+      return begin() + size();
+    }
+
+    constexpr auto end() const {
+      return begin() + size();
+    }
+  };
+
+  // 5D specialization
+  template <typename W, typename B>
+  requires is_integral_v<W> && is_integral_v<B>
+  class cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>
+    : public view_interface<cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>>
+  {
+
+    using self = cartesian_product_view<iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>, iota_view<W, B>>;
+  public:
+    W x_b, y_b, z_b, w_b, v_b;
+    B nx, ny, nz, nw, nv;
+  private:
+
+    template <bool Const>
+    class cursor;
+
+    template <bool Const>
+    class cursor {
+      W x_i, y_i, z_i, w_i, v_i, x_0, y_0, z_0, w_0, v_0;
+      B nx, ny, nz, nw, nv;
+
+    public:
+      using reference = tuple<W const&, W const&, W const&, W const&, W const&>;
+      using value_type = tuple<W, W, W, W, W>;
+
+      using difference_type = ptrdiff_t;
+
+      cursor() = default;
+      constexpr explicit cursor(
+        W x,
+        W y,
+        W z,
+        W w,
+        W v,
+        B nx,
+        B ny,
+        B nz,
+        B nw,
+        B nv)
+      :
+        x_i(x),
+        y_i(y),
+        z_i(z),
+        w_i(w),
+        v_i(v),
+        x_0(x),
+        y_0(y),
+        z_0(z),
+        w_0(w),
+        v_0(v),
+        nx(nx),
+        ny(ny),
+        nz(nz),
+        nw(nw),
+        nv(nv)
+      {}
+
+      constexpr decltype(auto) read() const {
+        return make_tuple<W const&, W const&, W const&, W const&, W const&>(x_i, y_i, z_i, w_i, v_i);
+      }
+      constexpr auto linear() const {
+        return (v_i - v_0) + nv * ((w_i - w_0) + nw * ((z_i - z_0) + nz * ((y_i - y_0) + ny * (x_i - x_0))));
+      }
+
+      void advance(difference_type n) {
+        auto idx = linear() + n;
+        auto temp1 = idx / nv;
+        v_i = idx % nv + v_0;
+        auto temp2 = temp1 / nw;
+        w_i = temp1 % nw + w_0;
+        auto temp3 = temp2 / nz;
+        z_i = temp2 % nz + z_0;
+        x_i = temp3 / ny + x_0;
+        y_i = temp3 % ny + y_0;
+      }
+      void next() {
+        ++v_i;
+        if (v_i == (v_0 + nv)) {
+          v_i = v_0;
+          ++w_i;
+          if (w_i == (w_0 + nw)) {
+            w_i = w_0;
+            ++z_i;
+            if (z_i == (z_0 + nz)) {
+              z_i = z_0;
+              ++y_i;
+              if (y_i == (y_0 + ny)) {
+                y_i = y_0;
+                ++x_i;
+              }
+            }
+          }
+        }
+      }
+      void prev(){
+        advance(-1);
+      }
+
+      constexpr bool equal(const cursor& rhs) const {
+        return x_i == rhs.x_i && y_i == rhs.y_i && z_i == rhs.z_i && w_i == rhs.w_i && v_i == rhs.v_i;
+      }
+
+      constexpr auto distance_to(cursor const& other) const {
+        auto idx = linear();
+        auto oidx = other.linear();
+        return static_cast<difference_type>(oidx) - static_cast<difference_type>(idx);
+      }
+
+      friend class cursor<!Const>;
+    };
+
+  public:
+    cartesian_product_view() = default;
+    constexpr explicit cartesian_product_view(
+      iota_view<W, B> xs,
+      iota_view<W, B> ys,
+      iota_view<W, B> zs,
+      iota_view<W, B> ws,
+      iota_view<W, B> vs
+    ) : x_b(*::std::ranges::begin(xs))
+      , y_b(*::std::ranges::begin(ys))
+      , z_b(*::std::ranges::begin(zs))
+      , w_b(*::std::ranges::begin(ws))
+      , v_b(*::std::ranges::begin(vs))
+      , nx(::std::ranges::size(xs))
+      , ny(::std::ranges::size(ys))
+      , nz(::std::ranges::size(zs))
+      , nw(::std::ranges::size(ws))
+      , nv(::std::ranges::size(vs))
+    {}
+
+    constexpr auto begin() {
+      return basic_iterator{ cursor<false>(x_b, y_b, z_b, w_b, v_b, nx, ny, nz, nw, nv) };
+    }
+    constexpr auto begin() const {
+      return basic_iterator{ cursor<true>(x_b, y_b, z_b, w_b, v_b, nx, ny, nz, nw, nv) };
+    }
+
+    constexpr auto size() {
+      return nx * ny * nz * nw * nv;
+    }
+
+    constexpr auto size() const {
+      return nx * ny * nz * nw * nv;
     }
 
     constexpr auto end() {
