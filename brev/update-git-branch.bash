@@ -2,4 +2,6 @@
 
 cd /accelerated-computing-hub
 
-git checkout ${GIT_BRANCH_NAME:-main}
+if [ -n "${GIT_BRANCH_NAME}" ]; then
+  git checkout ${GIT_BRANCH_NAME}
+fi
