@@ -44,9 +44,9 @@ void initialize(std::vector<double> &x, std::vector<double> &y) {
 /// 2D DAXPY: AX + Y: parallel algorithm version
 void daxpy(double a, std::vector<double> &x, std::vector<double> &y, int ncols = 1) {
   assert(x.size() == y.size());
-  if (x.size() % ncols != 0) { 
-      std::cerr << "ERROR: size " << x.size() << " not divisible by " << ncols << std::endl; 
-      std::abort(); 
+  if (x.size() % ncols != 0) {
+      std::cerr << "ERROR: size " << x.size() << " not divisible by " << ncols << std::endl;
+      std::abort();
   }
   int nrows = x.size() / ncols;
 
@@ -79,13 +79,15 @@ int main(int argc, char *argv[]) {
   // Read length of vector elements
   long long n = std::stoll(argv[1]);
 
+  long long ncols = 10;
+
   // Allocate the vector
   std::vector<double> x(n, 0.), y(n, 0.);
   double a = 2.0;
 
   initialize(x, y);
 
-  daxpy(a, x, y);
+  daxpy(a, x, y, 10);
 
   if (!check(a, y)) {
     std::cerr << "ERROR!" << std::endl;
