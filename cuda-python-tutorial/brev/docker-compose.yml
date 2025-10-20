@@ -15,7 +15,7 @@ services:
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
     image: ghcr.io/nvidia/cuda-python-tutorial:brev-reorg-latest
-    pull_policy: ${BREV_ENV_ID:+always}${BREV_ENV_ID:-build}
+    pull_policy: missing
     volumes:
       - *ach-volume
     environment:
@@ -55,7 +55,7 @@ services:
     depends_on:
       base:
         condition: service_completed_successfully
-    pull_policy: always
+    pull_policy: missing
     ulimits:
       memlock: -1
       stack: 67108864
