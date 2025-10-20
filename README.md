@@ -1,6 +1,6 @@
 # NVIDIA Accelerated Computing Hub
 
-This repository is a home for open learning materials related to GPU computing.  You will find user guides, tutorials, and other works freely available for all learners interested in GPU Computing.
+This repository is a home for open learning materials related to GPU computing.  You will find user guides, tutorials, and other works freely available for all learners interested in GPU computing.
 
 The intention is to create a living project where documents, examples, best practices, optimizations, and new features can become both visible and accessible to users quickly and easily.
 
