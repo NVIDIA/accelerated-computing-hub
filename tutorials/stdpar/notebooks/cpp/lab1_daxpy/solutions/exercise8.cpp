@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 
   initialize(x, y);
 
-  daxpy(a, x, y, 10);
+  daxpy(a, x, y, ncols);
 
   if (!check(a, y)) {
     std::cerr << "ERROR!" << std::endl;
