@@ -20,11 +20,6 @@ Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 Stage0 += copy(src='brev/update-git-branch.bash', dest='/update-git-branch.bash')
 
-# Patch libstdc++ to use our modified cartesian_product view that doesn't require HMM/ATS and copies
-# the underlying range iterators instead of accessing them through host memory.
-Stage0 += copy(src='stdpar-tutorial/include/ach/cartesian_product.hpp', dest='/usr/include/ach/cartesian_product.hpp')
-Stage0 += copy(src='stdpar-tutorial/include/ranges', dest=f'/usr/include/c++/{gcc_ver}/ranges')
-
 Stage0 += workdir(directory=f'/accelerated-computing-hub/stdpar-tutorial/notebooks')
 
 Stage0 += packages(ospackages=[
@@ -40,6 +35,12 @@ Stage0 += boost(version=boost_ver) # Required for AdaptiveCpp
 # Install GNU and LLVM toolchains
 Stage0 += gnu(version=gcc_ver, extra_repository=True)
 Stage0 += llvm(version=llvm_ver, upstream=True, extra_tools=True, toolset=True, _trunk_version='19')
+
+# Patch libstdc++ to use our modified cartesian_product view that doesn't require HMM/ATS and copies
+# the underlying range iterators instead of accessing them through host memory. This must be done
+# after GCC is installed.
+Stage0 += copy(src='stdpar-tutorial/include/ach/cartesian_product.hpp', dest='/usr/include/ach/cartesian_product.hpp')
+Stage0 += copy(src='stdpar-tutorial/include/ranges', dest=f'/usr/include/c++/{gcc_ver}/ranges')
 
 # Install CMake
 Stage0 += cmake(eula=True, version=cmake_ver)
