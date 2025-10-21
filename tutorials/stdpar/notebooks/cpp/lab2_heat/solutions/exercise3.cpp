@@ -65,13 +65,13 @@ double next (double* u_new, double* u_old, parameters p);
 
 stde::sender auto iteration_step(stde::scheduler auto&& sch, parameters& p, long& it, std::vector<double>& u_new, std::vector<double>& u_old) {
     // DONE: create task for prev, next, inner
-    auto prev_task = stde::just() | exec::on(sch, stde::then([&] {
+    auto prev_task = stde::just() | stde::on(sch, stde::then([&] {
       return prev(u_new.data(), u_old.data(), p);
     }));
-    auto next_task = stde::just() | exec::on(sch, stde::then([&] {
+    auto next_task = stde::just() | stde::on(sch, stde::then([&] {
       return next(u_new.data(), u_old.data(), p);
     }));
-    auto inner_task = stde::just() | exec::on(sch, stde::then([&] {
+    auto inner_task = stde::just() | stde::on(sch, stde::then([&] {
       return inner(u_new.data(), u_old.data(), p);
     }));
 
