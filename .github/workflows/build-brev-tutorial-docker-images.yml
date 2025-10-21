@@ -17,7 +17,7 @@ jobs:
       - name: Find tutorial directories
         id: find-tutorials
         run: |
-          tutorials=$(find . -maxdepth 1 -type d -name '*-tutorial' -printf '%f\n' | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          tutorials=$(find tutorials -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
           echo "Found tutorials: ${tutorials}"
 
@@ -42,7 +42,7 @@ jobs:
       - name: Set image name
         id: set-image
         run: |
-          image_name="ghcr.io/${{ github.repository_owner }}/${{ matrix.tutorial }}"
+          image_name="ghcr.io/${{ github.repository_owner }}/$(basename ${{ matrix.tutorial }})-tutorial"
           echo "image_name=${image_name,,}" >> $GITHUB_OUTPUT
 
       - name: Check for HPCCM recipe
