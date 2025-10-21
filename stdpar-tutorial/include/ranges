@@ -31,6 +31,8 @@
 #ifndef _GLIBCXX_RANGES
 #define _GLIBCXX_RANGES 1
 
+#define _GLIBCXX_RANGES_FROM_ACH
+
 #if __cplusplus > 201703L
 
 #pragma GCC system_header
