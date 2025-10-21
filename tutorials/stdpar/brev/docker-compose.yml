@@ -13,7 +13,7 @@ x-config:
 services:
   base:
     build:
-      context: ../..
+      context: ../../..
       dockerfile: *dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
