@@ -1,0 +1,32 @@
+FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
+
+ARG GIT_BRANCH_NAME
+ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
+
+COPY . /accelerated-computing-hub
+COPY brev/update-git-branch.bash /update-git-branch.bash
+
+WORKDIR /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
+
+ENV PIP_ROOT_USER_ACTION=ignore
+
+RUN `# Install Pythonpackages` \
+     && pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/cuda-cpp/brev/requirements.txt \
+ && `# Install system packages` \
+     && apt-get update -y \
+     && apt-get install -y --no-install-recommends ffmpeg git-lfs \
+     && apt-get clean -y \
+     && rm -rf /var/lib/apt/lists/* \
+ && `# Setup Git` \
+     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+     && git config --global --add safe.directory "/accelerated-computing-hub" \
+ && `# Setup Bash` \
+     && mkdir -p ~/.local/state/._bash_history \
+ && `# Setup JupyterLab` \
+     && mkdir -p ~/.jupyter \
+     && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
+     && mkdir -p ~/.ipython/profile_default/startup \
+     && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
+     && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
