@@ -150,4 +150,4 @@ Stage0 += environment(variables={
   'NVCOMPILER_ACC_GANGLIMIT': '67108864', # (1 << 26)
 })
 
-Stage0 += raw(docker='CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
+Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
