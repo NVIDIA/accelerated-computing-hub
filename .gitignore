@@ -137,5 +137,8 @@ cython_debug/
 # Brev Git branch update lockfile
 .git-checkout-done
 
+# Container logs
+logs/
+
 # HPCCM generated Dockerfiles
 stdpar-tutorial/brev/dockerfile
