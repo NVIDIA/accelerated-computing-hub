@@ -1,11 +1,11 @@
 services:
   base:
     build:
-      context: ../../..
+      #context: ../../..
       #dockerfile: *dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
-    #image: *image
+    image: *image
     pull_policy: missing
     environment:
       - BREV_ENV_ID
