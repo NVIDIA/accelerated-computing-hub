@@ -9,6 +9,7 @@ x-config:
   dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
   image: &image ghcr.io/nvidia/accelerated-python-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
+  default-jupyter-url: &default-jupyter-url
 
 services:
   base:
@@ -25,8 +26,8 @@ services:
       - BREV_ENV_ID
     user: root
     working_dir: *working-dir
-    command: ["/update-git-branch.bash"]
     restart: "no"
+    command: ["/update-git-branch.bash"]
   jupyter:
     image: *image
     depends_on:
@@ -53,6 +54,7 @@ services:
     user: root
     working_dir: *working-dir
     restart: "unless-stopped"
+    command: [*default-jupyter-url]
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     depends_on:
@@ -79,5 +81,5 @@ services:
       - BREV_ENV_ID
     user: root
     working_dir: *working-dir
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
     restart: "unless-stopped"
+    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
