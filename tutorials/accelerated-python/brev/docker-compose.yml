@@ -54,7 +54,7 @@ services:
     user: root
     working_dir: *working-dir
     restart: "unless-stopped"
-    command: [*default-jupyter-url]
+    command: *default-jupyter-url
   nsight:
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     depends_on:
