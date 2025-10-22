@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Process syllabi files and create modified docker-compose files for GitHub Pages.
+Process syllabus files and create modified docker-compose files for GitHub Pages.
 
-For each syllabi file in tutorials/*/notebooks/syllabi/*.ipynb, this script:
+For each syllabus file in tutorials/*/notebooks/syllabi/*.ipynb, this script:
 1. Copies the corresponding tutorials/*/brev/docker-compose.yml file
-2. Modifies it by setting the default-jupyter-url to the syllabi file path
+2. Modifies it by setting the default-jupyter-url to the syllabus file path
 3. Outputs the modified file to _site/{tutorial}/{syllabi-name}/docker-compose.yml
 4. Creates an index.html listing all processed files
 """
