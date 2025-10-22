@@ -41,4 +41,4 @@ RUN `# Install system packages` \
            --display-name="Python 3 (cuDF 25.8)" \
            --prefix=/usr/local
 
- CMD ["/accelerated-computing-hub/brev/jupyter-start.bash"]
+ ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
