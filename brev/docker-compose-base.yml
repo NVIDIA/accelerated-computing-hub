@@ -1,16 +1,12 @@
 services:
   base:
     build:
-      #context: ../../..
-      #dockerfile: *dockerfile
       args:
         GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
-    image: *image
     pull_policy: missing
     environment:
       - BREV_ENV_ID
     user: root
-    #working_dir: *working-dir
     command: ["/update-git-branch.bash"]
     restart: "no"
   jupyter:
