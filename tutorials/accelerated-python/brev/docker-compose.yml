@@ -6,6 +6,7 @@ x-config:
   # Thus on Brev, ../.. resolves to /home, and we need to add accelerated-computing-hub/ to get
   # to the Git repository.
   ach-volume: &ach-volume ../..${BREV_ENV_ID:+/ubuntu/accelerated-computing-hub}:/accelerated-computing-hub
+  docker-compose-base: &docker-compose-base https://github.com/NVIDIA/accelerated-computing-hub.git#brev-reorg:brev/docker-compose-base.yml
   dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
   image: &image ghcr.io/nvidia/accelerated-python-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
@@ -15,69 +16,22 @@ services:
     build:
       context: ../../..
       dockerfile: *dockerfile
-      args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
     image: *image
-    pull_policy: missing
     volumes:
       - *ach-volume
-    environment:
-      - BREV_ENV_ID
-    user: root
     working_dir: *working-dir
-    command: ["/update-git-branch.bash"]
-    restart: "no"
   jupyter:
+    extends:
+      file: *docker-compose-base
+      service: jupyter
     image: *image
-    depends_on:
-      base:
-        condition: service_completed_successfully
-    privileged: true
-    ulimits:
-      memlock: -1
-      stack: 67108864
-    shm_size: 1g
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    ports:
-      - "0.0.0.0:8888:8888" # JupyterLab
     volumes:
       - *ach-volume
-    environment:
-      - BREV_ENV_ID
-    user: root
     working_dir: *working-dir
-    restart: "unless-stopped"
   nsight:
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
-    depends_on:
-      base:
-        condition: service_completed_successfully
-    pull_policy: missing
-    ulimits:
-      memlock: -1
-      stack: 67108864
-    shm_size: 1g
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
+    extends:
+      file: *docker-compose-base
+      service: nsight
     volumes:
       - *ach-volume
-    environment:
-      - BREV_ENV_ID
-    user: root
     working_dir: *working-dir
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
-    restart: "unless-stopped"
