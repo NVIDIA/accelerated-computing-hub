@@ -10,7 +10,7 @@ WORKDIR /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore
 
-RUN `# Install Pythonpackages` \
+RUN `# Install Python packages` \
      && pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/cuda-cpp/brev/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
@@ -27,6 +27,8 @@ RUN `# Install Pythonpackages` \
      && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
      && mkdir -p ~/.ipython/profile_default/startup \
      && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
-     && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+     && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+ && `# Create logs directory` \
+     && mkdir -p /accelerated-computing-hub/logs
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
