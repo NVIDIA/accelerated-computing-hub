@@ -1,0 +1,39 @@
+name: Generate Syllabi Docker Compose Files
+
+on:
+  push:
+    branches:
+      - brev-reorg
+
+permissions:
+  contents: write
+
+jobs:
+  generate-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Process syllabi and create modified docker-compose files
+        run: python3 brev/process-syllabi-docker-compose.py
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit and push to generated branch
+        run: |
+          git checkout -B generated
+          git add tutorials/**/notebooks/syllabi/*-docker-compose.yml
+          git commit -m "[Automated] Generate Docker compose files from syllabi."
+          git push origin generated --force
