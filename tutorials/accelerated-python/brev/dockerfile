@@ -9,7 +9,7 @@ COPY brev/update-git-branch.bash /update-git-branch.bash
 WORKDIR /accelerated-computing-hub/tutorials/accelerated-python/notebooks
 
 ENV PIP_ROOT_USER_ACTION=ignore \
-    CUDF_VENV=/accelerated-computing-hub/venvs/cudf
+    CUDF_VENV=/opt/venvs/cudf
 
 RUN `# Install Python packages` \
       && pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/accelerated-python/brev/requirements.txt \
