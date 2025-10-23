@@ -2,4 +2,6 @@
 
 /accelerated-computing-hub/brev/jupyter-generate-settings.bash
 
-exec python -m jupyter lab --NotebookApp.default_url="${1}"
+mkdir -p /accelerated-computing-hub/logs
+
+exec python -m jupyter lab --ServerApp.default_url="${1}"

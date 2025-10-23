@@ -107,9 +107,6 @@ Stage0 += shell(commands=[
 
   # Silence JupyterLab announcements
   'python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"',
-
-  # Create logs directory
-  'mkdir -p /accelerated-computing-hub/logs',
 ])
 
 Stage0 += raw(docker='ARG GIT_BRANCH_NAME')
