@@ -19,9 +19,13 @@ for VAR in "${VARS[@]}"; do
 done
 
 # Workaround: The Nsight Streamer container isn't restartable because it unconditionally creates
-# a symlink every time its start, which fails if the symlink already exists.
+# symlinks every time its start, which fails if the symlinks already exists.
 if test -h /usr/lib/x86_64-linux-gnu/libnvrtc.so; then
   rm /usr/lib/x86_64-linux-gnu/libnvrtc.so
+fi
+
+if test -d /mnt/persist/home/host; then
+  rm /mnt/persist/home/host
 fi
 
 source /setup/entrypoint.sh "$@"
