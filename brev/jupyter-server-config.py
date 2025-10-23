@@ -6,6 +6,7 @@ c.ServerApp.open_browser = False
 
 c.ServerApp.allow_root = True
 c.ServerApp.password = ''
+c.IdentityProvider.token = ''
 
 c.ServerApp.terminado_settings = { 'shell_command': ['/bin/bash'] }
 
