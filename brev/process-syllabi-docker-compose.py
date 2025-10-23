@@ -5,7 +5,7 @@ Process syllabus files and create modified docker-compose files.
 For each syllabus file in tutorials/*/notebooks/syllabi/*.ipynb, this script:
 1. Copies the corresponding tutorials/*/brev/docker-compose.yml file
 2. Modifies it by setting the default-jupyter-url to the syllabus file path
-3. Outputs the modified file to tutorials/*/notebooks/syllabi/{syllabi-name}__docker_compose.yml
+3. Outputs the modified file to tutorials/*/notebooks/syllabi/{syllabus-name}__docker_compose.yml
 """
 
 import re
@@ -44,7 +44,7 @@ def modify_docker_compose(content: str, jupyter_url: str) -> str:
         Modified docker-compose.yml content
     """
     modified = re.sub(
-        r'(default-jupyter-url:\s*&default-jupyter-url)\s*$',
+        r'(default-jupyter-url:\s*&default-jupyter-url)(\s+\[.*?\])?(\s*)$',
         f'\\1 ["{jupyter_url}"]',
         content,
         flags=re.MULTILINE
@@ -61,7 +61,7 @@ def main():
         print(f"❌ Error: {tutorials_base} directory not found")
         return 1
 
-    processed_files = []
+    processed_count = 0
 
     for tutorial_dir in tutorials_base.iterdir():
         if not tutorial_dir.is_dir():
@@ -91,36 +91,28 @@ def main():
             print(f"⚠️  Warning: Could not extract working-dir from {docker_compose_src}")
             continue
 
-        # Process each syllabi file
-        for syllabi_file in syllabi_dir.glob('*.ipynb'):
-            # Calculate the relative path from working-dir to syllabi file
-            # The working_dir in docker-compose is /accelerated-computing-hub/tutorials/{tutorial}/notebooks
-            # The syllabi file is at tutorials/{tutorial}/notebooks/syllabi/{file}.ipynb
-            # So the relative path is: syllabi/{file}.ipynb
+        # Process each syllabus file
+        for syllabus_file in syllabi_dir.glob('*.ipynb'):
             # JupyterLab requires the "lab/tree/" prefix to open notebooks
             # We also append ?file-browser-path={working-dir} to set the file browser location
-            syllabi_relative_path = f"/lab/tree/syllabi/{syllabi_file.name}?file-browser-path={working_dir}"
+            syllabus_url = f"/lab/tree{working_dir}/syllabi/{syllabus_file.name}?file-browser-path={working_dir}"
 
-            print(f"  ✓ Processing: {syllabi_file.name}")
-            print(f"    Jupyter URL: {syllabi_relative_path}")
+            print(f"  ✓ Processing: {syllabus_file.name}")
+            print(f"    Jupyter URL: {syllabus_url}")
 
             # Modify the default-jupyter-url anchor
-            modified_content = modify_docker_compose(compose_content, syllabi_relative_path)
+            modified_content = modify_docker_compose(compose_content, syllabus_url)
 
-            # Write modified docker-compose file next to the syllabi file
+            # Write modified docker-compose file next to the syllabus file
             # Pattern: /path/to/X.ipynb -> /path/to/X__docker_compose.yml
-            syllabi_name = syllabi_file.stem # Filename without extension
-            output_file = syllabi_dir / f"{syllabi_name}__docker_compose.yml"
+            syllabus_name = syllabus_file.stem # Filename without extension
+            output_file = syllabi_dir / f"{syllabus_name}__docker_compose.yml"
             with open(output_file, 'w') as f:
                 f.write(modified_content)
 
-            processed_files.append({
-                'tutorial': tutorial_name,
-                'syllabi': syllabi_name,
-                'path': str(output_file)
-            })
+            processed_count += 1
 
-    print(f"\n✅ Successfully processed {len(processed_files)} syllabi files")
+    print(f"\n✅ Successfully processed {processed_count} syllabi files")
 
     return 0
 

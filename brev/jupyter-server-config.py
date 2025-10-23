@@ -8,6 +8,8 @@ c.ServerApp.allow_root = True
 c.ServerApp.password = ''
 c.IdentityProvider.token = ''
 
+c.ServerApp.root_dir = '/'
+
 c.ServerApp.terminado_settings = { 'shell_command': ['/bin/bash'] }
 
 c.Application.log_level = 'INFO'
