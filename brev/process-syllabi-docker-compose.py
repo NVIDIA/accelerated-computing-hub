@@ -25,7 +25,7 @@ def modify_docker_compose(content: str, jupyter_url: str) -> str:
     """
     modified = re.sub(
         r'(default-jupyter-url:\s*&default-jupyter-url)\s*$',
-        f'\\1 {jupyter_url}',
+        f'\\1 ["{jupyter_url}"]',
         content,
         flags=re.MULTILINE
     )
@@ -72,7 +72,7 @@ def main():
             # The syllabi file is at tutorials/{tutorial}/notebooks/syllabi/{file}.ipynb
             # So the relative path is: syllabi/{file}.ipynb
             # JupyterLab requires the "lab/tree/" prefix to open notebooks
-            syllabi_relative_path = f"lab/tree/syllabi/{syllabi_file.name}"
+            syllabi_relative_path = f"/lab/tree/syllabi/{syllabi_file.name}"
 
             print(f"  ✓ Processing: {syllabi_file.name}")
             print(f"    Jupyter URL: {syllabi_relative_path}")
