@@ -4,4 +4,9 @@
 
 mkdir -p /accelerated-computing-hub/logs
 
-exec python -m jupyter lab --LabApp.default_url="${1}"
+ARGS=""
+if [ -n "${1}" ]; then
+  ARGS="--LabApp.default_url=${1}"
+fi
+
+exec python -m jupyter lab ${ARGS}
