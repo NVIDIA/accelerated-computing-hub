@@ -3,9 +3,9 @@ x-config:
   # If we're not on Brev, the Docker Compose file is in the Git repository.
   # If we're on Brev, the Docker Compose file is in /home/ubuntu/workspace, and the Git
   # repository is in /home/ubuntu/accelerated-computing-hub.
-  # Thus on Brev, ../.. resolves to /home, and we need to add accelerated-computing-hub/ to get
+  # Thus on Brev, ../../.. resolves to /, and we need to add /home/ubuntuaccelerated-computing-hub/ to get
   # to the Git repository.
-  ach-volume: &ach-volume ../..${BREV_ENV_ID:+/ubuntu/accelerated-computing-hub}:/accelerated-computing-hub
+  ach-volume: &ach-volume ../../..${BREV_ENV_ID:+/home/ubuntu/accelerated-computing-hub}:/accelerated-computing-hub
   dockerfile: &dockerfile tutorials/stdpar/brev/dockerfile
   image: &image ghcr.io/nvidia/stdpar-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/stdpar/notebooks
