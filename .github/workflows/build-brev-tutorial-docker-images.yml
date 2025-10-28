@@ -27,6 +27,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      actions: write
     strategy:
       matrix:
         tutorial: ${{ fromJson(needs.discover-tutorials.outputs.tutorials) }}
@@ -109,11 +110,23 @@ jobs:
 
       - name: Trigger test workflow
         run: |
-          curl -X POST \
+          echo "Triggering test for tutorial: ${{ steps.set-image.outputs.tutorial_name }}"
+          response=$(curl -s -w "\n%{http_code}" -X POST \
             -H "Accept: application/vnd.github.v3+json" \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             https://api.github.com/repos/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml/dispatches \
-            -d '{"ref":"${{ github.ref_name }}","inputs":{"tutorial":"${{ steps.set-image.outputs.tutorial_name }}"}}'
+            -d '{"ref":"${{ github.ref_name }}","inputs":{"tutorial":"${{ steps.set-image.outputs.tutorial_name }}"}}')
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n-1)
+
+          echo "HTTP Status: $http_code"
+          if [ "$http_code" != "204" ]; then
+            echo "Failed to trigger test workflow"
+            echo "Response: $body"
+            exit 1
+          fi
+          echo "Test workflow triggered successfully"
 
       - name: Check disk space after build
         if: always()
