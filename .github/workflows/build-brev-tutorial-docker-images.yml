@@ -38,20 +38,10 @@ jobs:
 
       - name: Free up disk space
         run: |
-          echo "Disk space before cleanup:"
-          df -h
-
-          # Remove unnecessary tools and files to free up space
-          sudo rm -rf /usr/share/dotnet
-          sudo rm -rf /usr/local/lib/android
-          sudo rm -rf /opt/ghc
-          sudo rm -rf /opt/hostedtoolcache/CodeQL
-
-          # Clean up Docker
-          docker system prune -af --volumes
-
-          echo "Disk space after cleanup:"
-          df -h
+          sudo rm -rf /usr/local/lib/android &
+          sudo rm -rf /opt/hostedtoolcache/CodeQL &
+          docker system prune -af --volumes &
+          wait
 
       - name: Get branch name and short SHA
         run: |
@@ -104,13 +94,13 @@ jobs:
         uses: nick-fields/retry@v3
         env:
           DOCKER_BUILDKIT: 1
-          BUILDX_BAKE_ENTITLEMENTS_FS: 0
         with:
           timeout_minutes: 60
           max_attempts: 3
           retry_wait_seconds: 30
           command: |
             docker buildx bake \
+              --allow=fs.read=/home/runner \
               --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
               --set "base.output=type=registry" \
               --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
