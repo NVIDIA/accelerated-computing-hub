@@ -1,11 +1,4 @@
 x-config:
-  # Relative paths are resolved from the directory of the Docker Compose file.
-  # If we're not on Brev, the Docker Compose file is in the Git repository.
-  # If we're on Brev, the Docker Compose file is in /home/ubuntu/workspace, and the Git
-  # repository is in /home/ubuntu/accelerated-computing-hub.
-  # Thus on Brev, ../../.. resolves to /, and we need to add /home/ubuntuaccelerated-computing-hub/ to get
-  # to the Git repository.
-  ach-volume: &ach-volume ../../..${BREV_ENV_ID:+/home/ubuntu/accelerated-computing-hub}:/accelerated-computing-hub
   dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
   image: &image ghcr.io/nvidia/accelerated-python-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
@@ -21,7 +14,7 @@ services:
     image: *image
     pull_policy: missing
     volumes:
-      - *ach-volume
+      - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
     user: root
@@ -47,8 +40,8 @@ services:
               capabilities: [gpu]
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
-    volumes:
-      - *ach-volume
+    volumes_from:
+      - base
     environment:
       - BREV_ENV_ID
     user: root
@@ -75,11 +68,14 @@ services:
     ports:
       - "0.0.0.0:8080:8080" # HTTP
       - "0.0.0.0:3478:3478" # TURN
-    volumes:
-      - *ach-volume
+    volumes_from:
+      - base
     environment:
       - BREV_ENV_ID
     user: root
     working_dir: *working-dir
     restart: "unless-stopped"
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+
+volumes:
+  accelerated-computing-hub:
