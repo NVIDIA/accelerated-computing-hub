@@ -36,13 +36,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Free up disk space
-        run: |
-          sudo rm -rf /usr/local/lib/android &
-          sudo rm -rf /opt/hostedtoolcache/CodeQL &
-          docker system prune -af --volumes &
-          wait
-
       - name: Get branch name and short SHA
         run: |
           echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
@@ -106,8 +99,8 @@ jobs:
               --set "base.output=type=registry" \
               --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
               --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}" \
-              --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
-              --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
+              --set "base.cache-from=type=gha,scope=${{ matrix.tutorial }}" \
+              --set "base.cache-to=type=gha,scope=${{ matrix.tutorial }},mode=max" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
