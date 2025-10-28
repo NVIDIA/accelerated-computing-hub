@@ -1,0 +1,26 @@
+name: Test Brev Tutorial Docker Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      tutorial:
+        description: 'Tutorial name to test'
+        required: true
+        type: string
+
+jobs:
+  test-tutorial:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Test Docker Compose
+        run: ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
