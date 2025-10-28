@@ -17,7 +17,7 @@ jobs:
       - name: Find tutorial directories
         id: find-tutorials
         run: |
-          tutorials=$(find tutorials -mindepth 1 -maxdepth 1 -type d | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          tutorials=$(brev/discover-tutorials.bash | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
           echo "Found tutorials: ${tutorials}"
 
@@ -36,26 +36,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-#      - name: Free up disk space
-#        run: |
-#          # Delete large pre-installed software in parallel for speed
-#          sudo rm -rf /usr/local/lib/android &
-#          sudo rm -rf /opt/hostedtoolcache/CodeQL &
-#          sudo rm -rf /usr/share/dotnet &
-#          wait
-#          echo "Disk space after cleanup:"
-#          df -h /
-
       - name: Get branch name and short SHA
         run: |
           echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
           echo "GIT_SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
 
-      - name: Set image name
+      - name: Set image name and tutorial name
         id: set-image
         run: |
-          image_name="ghcr.io/${{ github.repository_owner }}/$(basename ${{ matrix.tutorial }})-tutorial"
+          tutorial_name=$(basename ${{ matrix.tutorial }})
+          image_name="ghcr.io/${{ github.repository_owner }}/${tutorial_name}-tutorial"
           echo "image_name=${image_name,,}" >> $GITHUB_OUTPUT
+          echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
 
       - name: Check for HPCCM recipe
         id: check-hpccm
@@ -114,6 +106,19 @@ jobs:
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
+
+      - name: Mark build as successful
+        run: |
+          mkdir -p build-success
+          echo "${{ steps.set-image.outputs.tutorial_name }}" > build-success/${{ steps.set-image.outputs.tutorial_name }}.txt
+          echo "Build successful for ${{ steps.set-image.outputs.tutorial_name }}"
+
+      - name: Upload build success marker
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-success-${{ steps.set-image.outputs.tutorial_name }}
+          path: build-success/
+          retention-days: 1
 
       - name: Check disk space after build
         if: always()

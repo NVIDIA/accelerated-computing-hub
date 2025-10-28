@@ -1,6 +1,7 @@
 name: Test Brev Tutorial Docker Images
 
 on:
+<<<<<<< HEAD
   workflow_dispatch:
     inputs:
       tutorial:
@@ -25,6 +26,69 @@ jobs:
           echo "Runner arch: ${{ runner.arch }}"
           echo "Runner uname: $(uname -a)"
 
+=======
+  workflow_run:
+    workflows: ["Build and Push Brev Tutorial Docker Images"]
+    types:
+      - completed
+    branches:
+      - brev-reorg
+
+jobs:
+  discover-successful-builds:
+    runs-on: ubuntu-latest
+    # Only run if the build workflow completed (not cancelled)
+    if: ${{ github.event.workflow_run.conclusion != 'cancelled' }}
+    outputs:
+      tutorials: ${{ steps.find-successful.outputs.tutorials }}
+    steps:
+      - name: Download all build success artifacts
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          workflow: build-brev-tutorial-docker-images.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          path: build-success-artifacts
+          name_is_regexp: true
+          name: build-success-.*
+
+      - name: Find successful builds
+        id: find-successful
+        run: |
+          # Collect all tutorial names from successful builds
+          successful=()
+          if [ -d "build-success-artifacts" ]; then
+            # Find all .txt files containing tutorial names
+            while IFS= read -r file; do
+              if [ -f "$file" ]; then
+                tutorial=$(cat "$file")
+                successful+=("$tutorial")
+                echo "Found successful build: $tutorial"
+              fi
+            done < <(find build-success-artifacts -name "*.txt" -type f)
+          fi
+
+          # Convert to JSON array
+          if [ ${#successful[@]} -eq 0 ]; then
+            echo "tutorials=[]" >> $GITHUB_OUTPUT
+            echo "No successful builds found"
+          else
+            tutorials_json=$(printf '%s\n' "${successful[@]}" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            echo "tutorials=${tutorials_json}" >> $GITHUB_OUTPUT
+            echo "Successful builds to test: ${tutorials_json}"
+          fi
+
+  test-images:
+    needs: [discover-successful-builds]
+    # Only run if there are successful builds to test
+    if: fromJson(needs.discover-successful-builds.outputs.tutorials)[0] != null
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tutorial: ${{ fromJson(needs.discover-successful-builds.outputs.tutorials) }}
+      fail-fast: false
+
+    steps:
+>>>>>>> 1fd3cbb (CI: Test that images start successfully after they are built.)
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -36,6 +100,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Docker Compose
+<<<<<<< HEAD
         id: test
         run: |
           cd /home/runner/_work/accelerated-computing-hub/accelerated-computing-hub
@@ -68,3 +133,6 @@ jobs:
             -f context='test / ${{ inputs.tutorial }}'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+=======
+        run: ./brev/test-docker-compose.bash "tutorials/${{ matrix.tutorial }}/brev/docker-compose.yml"
+>>>>>>> 1fd3cbb (CI: Test that images start successfully after they are built.)
