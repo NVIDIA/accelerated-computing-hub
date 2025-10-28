@@ -36,6 +36,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Free up disk space
+        run: docker system prune -af --volumes
+
       - name: Get branch name and short SHA
         run: |
           echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
