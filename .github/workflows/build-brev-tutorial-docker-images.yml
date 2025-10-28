@@ -37,7 +37,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Free up disk space
-        run: docker system prune -af --volumes
+        run: |
+          # Delete large pre-installed software in parallel for speed
+          sudo rm -rf /usr/local/lib/android &
+          sudo rm -rf /opt/hostedtoolcache/CodeQL &
+          sudo rm -rf /usr/share/dotnet &
+          wait
+          echo "Disk space after cleanup:"
+          df -h /
 
       - name: Get branch name and short SHA
         run: |
@@ -107,3 +114,13 @@ jobs:
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
+
+      - name: Check disk space after build
+        if: always()
+        run: |
+          echo "Disk space after build:"
+          df -h /
+          echo ""
+          echo "Disk usage by directory:"
+          du -sh /var/lib/docker/* 2>/dev/null || true
+          du -sh /var/lib/buildkit/* 2>/dev/null || true
