@@ -35,6 +35,5 @@ jobs:
         run: |
           git checkout -B generated
           git add tutorials/**/notebooks/syllabi/*__docker_compose.yml
-          git add tutorials/**/notebooks/syllabi/syllabi.md
-          git commit -m "[Automated] Generate Docker compose files and syllabi.md from syllabi."
+          git commit -m "[Automated] Generate Docker compose files from syllabi."
           git push origin generated --force
