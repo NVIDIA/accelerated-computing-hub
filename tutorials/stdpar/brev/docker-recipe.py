@@ -93,9 +93,9 @@ Stage0 += shell(commands=[
   'makelocalrc -d . -x .',
   'cd -',
 
-  # Install python packages
-  'pip install --upgrade pip',
-  f'pip install --root-user-action=ignore -r /opt/requirements.txt',
+  # Install Python packages
+  'pip install --no-cache-dir --upgrade pip',
+  'pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt',
 
   # Build and install AdaptiveCpp
   'git clone --depth=1 --shallow-submodules --recurse-submodules -b develop https://github.com/AdaptiveCpp/AdaptiveCpp',
@@ -128,12 +128,6 @@ Stage0 += shell(commands=[
   # Put the include directory in the systemwide path:
   f'ln -sf /accelerated-computing-hub/tutorials/stdpar/include/ach /usr/include/ach',
 
-  # Don't send GitHub actions CI token when using Git
-  'git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; }',
-
-  # Configure Git to not complain about file ownership
-  'git config --global --add safe.directory "/accelerated-computing-hub"',
-
   # Make sure bash history directory exists
   'mkdir -p ~/.local/state/._bash_history',
 
@@ -153,5 +147,15 @@ Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 Stage0 += copy(src='brev/update-git-branch.bash', dest='/opt/update-git-branch.bash')
 
 Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')
+
+Stage0 += shell(commands=[
+  'set -ex',  # Exit on first error and debug output
+
+  # Don't send GitHub actions CI token when using Git
+  'git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; }',
+
+  # Configure Git to not complain about file ownership
+  'git config --global --add safe.directory "/accelerated-computing-hub"',
+])
 
 Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
