@@ -1,6 +1,15 @@
 # Fundamentals of Accelerated Computing with Modern CUDA C++
 
-## CUDA Made Easy: Accelerating Applications with Parallel Algorithms
+This tutorial teaches you the fundamentals of GPU programming and modern CUDA C++. You'll find the
+following content:
+
+- [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
+- [Slides](./slides) containing the lecture content for the lessons.
+- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/cuda-cpp-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables.
+
+## Notebooks
+
+### CUDA Made Easy: Accelerating Applications with Parallel Algorithms
 
 | Notebook                                | Link                                                                                                                                                                                       |
 |-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -21,7 +30,7 @@
 | 01.07.01 Summary                       | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/cuda-cpp/notebooks/01.07-Summary/01.07.01-Summary.ipynb) |
 | 01.08.01 Advanced                      | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/cuda-cpp/notebooks/01.08-Advanced/01.08.01-Advanced.ipynb) |
 
-## Unlocking the GPU’s Full Potential: Asynchrony and CUDA Streams
+### Unlocking the GPU’s Full Potential: Asynchrony and CUDA Streams
 
 | Notebook                                | Link                                                                                                                                                                                       |
 |-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -35,7 +44,7 @@
 | 02.04.01 Pinned                        | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/cuda-cpp/notebooks/02.04-Pinned-Memory/02.04.01-Pinned.ipynb) |
 | 02.04.02 Exercise Copy Overlap          | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/cuda-cpp/notebooks/02.04-Pinned-Memory/02.04.02-Exercise-Copy-Overlap.ipynb) |
 
-## Implementing New Algorithms with CUDA Kernels
+### Implementing New Algorithms with CUDA Kernels
 
 | Notebook                                | Link                                                                                                                                                                                       |
 |-----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
