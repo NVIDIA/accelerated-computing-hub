@@ -4,21 +4,19 @@ ARG GIT_BRANCH_NAME
 
 ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
     PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=accelerated-python
+    ACH_TUTORIAL=cuda-cpp
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-RUN `# Install Python packages` \
-     && pip install --root-user-action=ignore -r /opt/requirements.txt \
+RUN set -ex \
+ && `# Install Python packages` \
+     && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
      && apt-get install -y --no-install-recommends ffmpeg git-lfs \
      && apt-get clean -y \
      && rm -rf /var/lib/apt/lists/* \
- && `# Setup Git` \
-     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
-     && git config --global --add safe.directory "/accelerated-computing-hub" \
  && `# Setup Bash` \
      && mkdir -p ~/.local/state/._bash_history \
  && `# Setup JupyterLab` \
@@ -32,5 +30,9 @@ COPY . /accelerated-computing-hub
 COPY brev/update-git-branch.bash /opt/update-git-branch.bash
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
+
+RUN `# Setup Git` \
+     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+     && git config --global --add safe.directory "/accelerated-computing-hub"
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
