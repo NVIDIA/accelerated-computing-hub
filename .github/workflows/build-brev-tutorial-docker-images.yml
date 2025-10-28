@@ -104,6 +104,7 @@ jobs:
         uses: nick-fields/retry@v3
         env:
           DOCKER_BUILDKIT: 1
+          BUILDX_BAKE_ENTITLEMENTS_FS: 0
         with:
           timeout_minutes: 60
           max_attempts: 3
