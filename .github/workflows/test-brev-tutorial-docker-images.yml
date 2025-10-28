@@ -29,4 +29,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Docker Compose
-        run: ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
+        run: |
+          cd /home/runner/_work/accelerated-computing-hub/accelerated-computing-hub
+          ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
