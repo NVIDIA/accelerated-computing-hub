@@ -10,7 +10,7 @@ on:
 
 jobs:
   test-tutorial:
-    runs-on: ubuntu-latest
+    runs-on: [nv-gpu-t4, linux]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
