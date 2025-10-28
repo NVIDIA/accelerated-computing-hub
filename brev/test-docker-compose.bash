@@ -3,9 +3,10 @@
 # This script tests a single Docker Compose file by starting and stopping containers.
 #
 # Usage:
-#   ./test-docker-compose.bash <docker-compose-file>
+#   ./test-docker-compose.bash <tutorial-name|docker-compose-file>
 #
-# Example:
+# Examples:
+#   ./test-docker-compose.bash accelerated-python
 #   ./test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
 
 set -euo pipefail
@@ -15,17 +16,38 @@ REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
 # Check argument
 if [ $# -ne 1 ]; then
-    echo "Error: Docker Compose file path is required"
-    echo "Usage: $0 <docker-compose-file>"
-    echo "Example: $0 tutorials/accelerated-python/brev/docker-compose.yml"
+    echo "Error: Tutorial name or Docker Compose file path is required"
+    echo "Usage: $0 <tutorial-name|docker-compose-file>"
+    echo "Examples:"
+    echo "  $0 accelerated-python"
+    echo "  $0 tutorials/accelerated-python/brev/docker-compose.yml"
     exit 1
 fi
 
-COMPOSE_FILE=$1
+ARG=$1
+COMPOSE_FILE=""
 
-# Convert to absolute path if relative
-if [[ "${COMPOSE_FILE}" != /* ]]; then
-    COMPOSE_FILE="${REPO_ROOT}/${COMPOSE_FILE}"
+# Check if the argument is a file path (contains / or is an absolute path)
+if [[ "${ARG}" == *"/"* ]]; then
+    # Treat as a file path
+    COMPOSE_FILE="${ARG}"
+
+    # Convert to absolute path if relative
+    if [[ "${COMPOSE_FILE}" != /* ]]; then
+        COMPOSE_FILE="${REPO_ROOT}/${COMPOSE_FILE}"
+    fi
+else
+    # Treat as a tutorial name
+    TUTORIAL_NAME="${ARG}"
+    TUTORIAL_PATH="${REPO_ROOT}/tutorials/${TUTORIAL_NAME}"
+
+    # Check if tutorial directory exists
+    if [ ! -d "${TUTORIAL_PATH}" ]; then
+        echo "❌ Error: Tutorial directory not found: ${TUTORIAL_PATH}"
+        exit 1
+    fi
+
+    COMPOSE_FILE="${TUTORIAL_PATH}/brev/docker-compose.yml"
 fi
 
 # Validate docker-compose file exists
