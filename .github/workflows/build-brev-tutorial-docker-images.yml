@@ -100,42 +100,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata from Docker Compose
-        id: compose-config
-        run: |
-          # This uses jq which is pre-installed on GitHub Actions runners
-          COMPOSE_DIR="${{ matrix.tutorial }}/brev"
-          cd "$COMPOSE_DIR"
-
-          # `docker compose config` outputs the resolved configuration
-          # Extract context and dockerfile for the 'base' service
-          CONTEXT=$(docker compose config --format json | jq -r '.services.base.build.context // "."')
-          DOCKERFILE=$(docker compose config --format json | jq -r '.services.base.build.dockerfile // "Dockerfile"')
-
-          # Resolve paths relative to the docker-compose.yml location
-          # Then convert to paths relative to the repo root
-          CONTEXT_ABS=$(realpath -m "$CONTEXT")
-          CONTEXT_REL=$(realpath -m --relative-to="${GITHUB_WORKSPACE}" "$CONTEXT_ABS")
-
-          # Dockerfile path is relative to the context in docker-compose
-          # For build-push-action, it should be relative to the repo root
-          DOCKERFILE_ABS=$(realpath -m "$CONTEXT/$DOCKERFILE")
-          DOCKERFILE_REL=$(realpath -m --relative-to="${GITHUB_WORKSPACE}" "$DOCKERFILE_ABS")
-
-          echo "context=${CONTEXT_REL}" >> $GITHUB_OUTPUT
-          echo "dockerfile=${DOCKERFILE_REL}" >> $GITHUB_OUTPUT
-          echo "Using context: ${CONTEXT_REL}, dockerfile: ${DOCKERFILE_REL}"
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      - name: Build and push Docker image (with retry)
+        uses: nick-fields/retry@v3
+        env:
+          DOCKER_BUILDKIT: 1
         with:
-          context: ${{ steps.compose-config.outputs.context }}
-          file: ${{ steps.compose-config.outputs.dockerfile }}
-          build-args: |
-            GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}
-          tags: |
-            ${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest
-            ${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}
-          push: true
-          cache-from: type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache
-          cache-to: type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            docker buildx bake \
+              --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
+              --set "base.output=type=registry" \
+              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
+              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}" \
+              --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
+              --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
+              --set "base.platform=linux/amd64" \
+              -f ${{ matrix.tutorial }}/brev/docker-compose.yml \
+              base
