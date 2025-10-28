@@ -13,6 +13,7 @@ COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 RUN set -ex \
  && `# Install Python packages` \
       && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+      && rm -f /opt/requirements.txt \
  && `# Install system packages` \
       && apt-get update -y \
       && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs \
