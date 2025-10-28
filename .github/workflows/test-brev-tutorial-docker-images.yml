@@ -10,11 +10,14 @@ on:
 
 jobs:
   test-tutorial:
-    runs-on:
-      - self-hosted
-      - linux
-      - nv-gpu-t4
+    runs-on: linux-amd64-gpu-t4-latest-1
     steps:
+      - name: Show runner info
+        run: |
+          echo "Runner name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner arch: ${{ runner.arch }}"
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
