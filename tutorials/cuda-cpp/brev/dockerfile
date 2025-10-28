@@ -1,17 +1,16 @@
 FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
 
 ARG GIT_BRANCH_NAME
-ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
 
-COPY . /accelerated-computing-hub
-COPY brev/update-git-branch.bash /update-git-branch.bash
+ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
+    PIP_ROOT_USER_ACTION=ignore \
+    ACH_TUTORIAL=accelerated-python
 
-WORKDIR /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
-
-ENV PIP_ROOT_USER_ACTION=ignore
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
 RUN `# Install Python packages` \
-     && pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/cuda-cpp/brev/requirements.txt \
+     && pip install --root-user-action=ignore -r /opt/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
      && apt-get install -y --no-install-recommends ffmpeg git-lfs \
@@ -28,5 +27,10 @@ RUN `# Install Python packages` \
      && mkdir -p ~/.ipython/profile_default/startup \
      && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+COPY . /accelerated-computing-hub
+COPY brev/update-git-branch.bash /opt/update-git-branch.bash
+
+WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]

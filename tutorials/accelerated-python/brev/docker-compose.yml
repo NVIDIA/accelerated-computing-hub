@@ -27,7 +27,7 @@ services:
     user: root
     working_dir: *working-dir
     restart: "no"
-    entrypoint: ["/update-git-branch.bash"]
+    entrypoint: ["/opt/update-git-branch.bash"]
   jupyter:
     image: *image
     depends_on:

@@ -1,18 +1,17 @@
 FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
 
 ARG GIT_BRANCH_NAME
-ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME}
 
-COPY . /accelerated-computing-hub
-COPY brev/update-git-branch.bash /update-git-branch.bash
+ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
+    PIP_ROOT_USER_ACTION=ignore \
+    CUDF_VENV=/opt/venvs/cudf \
+    ACH_TUTORIAL=accelerated-python
 
-WORKDIR /accelerated-computing-hub/tutorials/accelerated-python/notebooks
-
-ENV PIP_ROOT_USER_ACTION=ignore \
-    CUDF_VENV=/opt/venvs/cudf
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
 RUN `# Install Python packages` \
-      && pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/accelerated-python/brev/requirements.txt \
+      && pip install --root-user-action=ignore -r /opt/requirements.txt \
  && `# Install system packages` \
       && apt-get update -y \
       && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs \
@@ -41,4 +40,9 @@ RUN `# Install Python packages` \
            --display-name="Python 3 (cuDF 25.8)" \
            --prefix=/usr/local
 
- ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
+COPY . /accelerated-computing-hub
+COPY brev/update-git-branch.bash /opt/update-git-branch.bash
+
+WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
+
+ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
