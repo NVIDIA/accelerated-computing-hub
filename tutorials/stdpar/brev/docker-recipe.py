@@ -6,6 +6,7 @@ https://github.com/NVIDIA/hpc-container-maker/
 import platform
 from hpccm.primitives import raw
 
+tutorial = 'stdpar'
 ubuntu_ver = '22.04'
 nvhpc_ver = '24.3'
 cuda_ver = '12.3'
@@ -17,10 +18,46 @@ arch = platform.machine()
 
 Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver}-ubuntu{ubuntu_ver}')
 
-Stage0 += copy(src='.', dest='/accelerated-computing-hub')
-Stage0 += copy(src='brev/update-git-branch.bash', dest='/update-git-branch.bash')
+Stage0 += raw(docker='ARG GIT_BRANCH_NAME')
 
-Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/stdpar/notebooks')
+Stage0 += environment(variables={
+  'GIT_BRANCH_NAME': '${GIT_BRANCH_NAME}',
+
+  'ACH_STDPAR_NVHPC_VERSION': nvhpc_ver,
+  'ACH_STDPAR_CUDA_VERSION': cuda_ver,
+  'ACH_STDPAR_ARCH': arch,
+
+  'ACPP_APPDB_DIR': '/accelerated-computing-hub/',
+
+  'PATH':            '$PATH:/opt/adaptivecpp/bin',
+  'LD_LIBRARY_PATH': f'/usr/lib/llvm-{llvm_ver}/lib:$LD_LIBRARY_PATH',
+  'LIBRARY_PATH':    f'/usr/lib/llvm-{llvm_ver}/lib:$LIBRARY_PATH',
+
+  # Silence pip warnings about running as root
+  'PIP_ROOT_USER_ACTION': 'ignore',
+
+  # Simplify running HPC-X on systems without InfiniBand
+  'OMPI_MCA_coll_hcoll_enable': '0',
+
+  # We do not need VFS for the exercises, and using it from a container in a 'generic' way is not trivial:
+  'UCX_VFS_ENABLE': 'n',
+
+  # Allow HPC-X to oversubscribe the CPU with more ranks than cores without using mpirun --oversubscribe
+  'OMPI_MCA_rmaps_base_oversubscribe' : 'true',
+
+  # Select matplotdir config directory to silence warning
+  'MPLCONFIGDIR': '/tmp/matplotlib',
+
+  # Allow OpenMPI to run as root:
+  'OMPI_ALLOW_RUN_AS_ROOT': '1',
+  'OMPI_ALLOW_RUN_AS_ROOT_CONFIRM': '1',
+
+  # Workaround hwloc binding:
+  'OMPI_MCA_hwloc_base_binding_policy': 'none',
+
+  # Workaround nvfortran limit of 64k thread blocks
+  'NVCOMPILER_ACC_GANGLIMIT': '67108864', # (1 << 26)
+})
 
 Stage0 += packages(ospackages=[
   'libtbb-dev',  # Required for GCC C++ parallel algorithms
@@ -45,6 +82,9 @@ Stage0 += copy(src='tutorials/stdpar/include/ranges', dest=f'/usr/include/c++/{g
 # Install CMake
 Stage0 += cmake(eula=True, version=cmake_ver)
 
+# Copy only requirements.txt first for better Docker layer caching.
+Stage0 += copy(src=f'tutorials/{tutorial}/brev/requirements.txt', dest='/opt/requirements.txt')
+
 Stage0 += shell(commands=[
   'set -ex',  # Exit on first error and debug output
 
@@ -55,7 +95,7 @@ Stage0 += shell(commands=[
 
   # Install python packages
   'pip install --upgrade pip',
-  f'pip install --root-user-action=ignore -r /accelerated-computing-hub/tutorials/stdpar/brev/requirements.txt',
+  f'pip install --root-user-action=ignore -r /opt/requirements.txt',
 
   # Build and install AdaptiveCpp
   'git clone --depth=1 --shallow-submodules --recurse-submodules -b develop https://github.com/AdaptiveCpp/AdaptiveCpp',
@@ -109,45 +149,9 @@ Stage0 += shell(commands=[
   'python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"',
 ])
 
-Stage0 += raw(docker='ARG GIT_BRANCH_NAME')
+Stage0 += copy(src='.', dest='/accelerated-computing-hub')
+Stage0 += copy(src='brev/update-git-branch.bash', dest='/opt/update-git-branch.bash')
 
-Stage0 += environment(variables={
-  'GIT_BRANCH_NAME': '${GIT_BRANCH_NAME}',
-
-  'ACH_STDPAR_NVHPC_VERSION': nvhpc_ver,
-  'ACH_STDPAR_CUDA_VERSION': cuda_ver,
-  'ACH_STDPAR_ARCH': arch,
-
-  'ACPP_APPDB_DIR': '/accelerated-computing-hub/',
-
-  'PATH':            '$PATH:/opt/adaptivecpp/bin',
-  'LD_LIBRARY_PATH': f'/usr/lib/llvm-{llvm_ver}/lib:$LD_LIBRARY_PATH',
-  'LIBRARY_PATH':    f'/usr/lib/llvm-{llvm_ver}/lib:$LIBRARY_PATH',
-
-  # Silence pip warnings about running as root
-  'PIP_ROOT_USER_ACTION': 'ignore',
-
-  # Simplify running HPC-X on systems without InfiniBand
-  'OMPI_MCA_coll_hcoll_enable': '0',
-
-  # We do not need VFS for the exercises, and using it from a container in a 'generic' way is not trivial:
-  'UCX_VFS_ENABLE': 'n',
-
-  # Allow HPC-X to oversubscribe the CPU with more ranks than cores without using mpirun --oversubscribe
-  'OMPI_MCA_rmaps_base_oversubscribe' : 'true',
-
-  # Select matplotdir config directory to silence warning
-  'MPLCONFIGDIR': '/tmp/matplotlib',
-
-  # Allow OpenMPI to run as root:
-  'OMPI_ALLOW_RUN_AS_ROOT': '1',
-  'OMPI_ALLOW_RUN_AS_ROOT_CONFIRM': '1',
-
-  # Workaround hwloc binding:
-  'OMPI_MCA_hwloc_base_binding_policy': 'none',
-
-  # Workaround nvfortran limit of 64k thread blocks
-  'NVCOMPILER_ACC_GANGLIMIT': '67108864', # (1 << 26)
-})
+Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')
 
 Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
