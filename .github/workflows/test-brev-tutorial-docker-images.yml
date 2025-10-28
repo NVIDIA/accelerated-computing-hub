@@ -10,7 +10,10 @@ on:
 
 jobs:
   test-tutorial:
-    runs-on: [nv-gpu-t4, linux]
+    runs-on:
+      - self-hosted
+      - linux
+      - nv-gpu-t4
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
