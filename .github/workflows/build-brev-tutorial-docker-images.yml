@@ -110,6 +110,7 @@ jobs:
       - name: Trigger test workflow
         run: |
           gh workflow run test-brev-tutorial-docker-images.yml \
+            --ref ${{ github.ref_name }} \
             -f tutorial=${{ steps.set-image.outputs.tutorial_name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
