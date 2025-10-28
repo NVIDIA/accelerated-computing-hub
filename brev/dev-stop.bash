@@ -1,12 +1,12 @@
 #! /bin/bash
 
-# This script starts Docker containers for a tutorial.
+# This script stops Docker containers for a tutorial.
 #
 # Usage:
-#   ./dev-start-containers.bash <tutorial-name>
+#   ./dev-stop.bash <tutorial-name>
 #
 # Example:
-#   ./dev-start-containers.bash accelerated-python
+#   ./dev-stop.bash accelerated-python
 
 set -euo pipefail
 
@@ -38,22 +38,15 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
     exit 1
 fi
 
-sudo mkdir -p ${MOUNT}
-sudo bindfs --force-user=$(id -u) --force-group=$(id -g) \
-            --create-for-user=$(id -u) --create-for-group=$(id -g) \
-            ${REPO_ROOT} ${MOUNT}
-
-# Create the accelerated-computing-hub volume as a bind mount to the repository
-# Remove existing volume if it exists to ensure it points to the correct location
-docker volume rm accelerated-computing-hub 2>/dev/null || true
-docker volume create --driver local \
-  --opt type=none \
-  --opt o=bind \
-  --opt device=${MOUNT} \
-  accelerated-computing-hub
-
-echo "Starting tutorial: ${TUTORIAL_NAME}"
+echo "Stopping tutorial: ${TUTORIAL_NAME}"
 cd ${MOUNT}
-docker compose -f ${DOCKER_COMPOSE} up -d
+docker compose -f ${DOCKER_COMPOSE} down
 
-echo "Tutorial ${TUTORIAL_NAME} started successfully!"
+# Remove the Docker volume
+docker volume rm accelerated-computing-hub 2>/dev/null || true
+
+cd / # We've got to be somewhere that isn't the mount to unmount it.
+sudo umount ${MOUNT}
+sudo rmdir ${MOUNT} 2>/dev/null || true
+
+echo "Tutorial ${TUTORIAL_NAME} stopped successfully!"
