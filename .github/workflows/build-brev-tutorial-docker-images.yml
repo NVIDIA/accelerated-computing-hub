@@ -99,6 +99,7 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 30
           command: |
+            cd ${{ matrix.tutorial }}/brev
             docker buildx bake \
               --allow=fs.read=/home/runner \
               --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
@@ -108,5 +109,5 @@ jobs:
               --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
               --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
               --set "base.platform=linux/amd64" \
-              -f ${{ matrix.tutorial }}/brev/docker-compose.yml \
+              -f docker-compose.yml \
               base
