@@ -107,18 +107,12 @@ jobs:
               -f docker-compose.yml \
               base
 
-      - name: Mark build as successful
+      - name: Trigger test workflow
         run: |
-          mkdir -p build-success
-          echo "${{ steps.set-image.outputs.tutorial_name }}" > build-success/${{ steps.set-image.outputs.tutorial_name }}.txt
-          echo "Build successful for ${{ steps.set-image.outputs.tutorial_name }}"
-
-      - name: Upload build success marker
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-success-${{ steps.set-image.outputs.tutorial_name }}
-          path: build-success/
-          retention-days: 1
+          gh workflow run test-brev-tutorial-docker-images.yml \
+            -f tutorial=${{ steps.set-image.outputs.tutorial_name }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check disk space after build
         if: always()
