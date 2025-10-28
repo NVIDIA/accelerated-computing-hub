@@ -96,6 +96,7 @@ Stage0 += shell(commands=[
   # Install Python packages
   'pip install --no-cache-dir --upgrade pip',
   'pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt',
+  'rm -f /opt/requirements.txt',
 
   # Build and install AdaptiveCpp
   'git clone --depth=1 --shallow-submodules --recurse-submodules -b develop https://github.com/AdaptiveCpp/AdaptiveCpp',
