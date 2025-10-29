@@ -7,16 +7,23 @@ on:
         description: 'Tutorial name to test'
         required: true
         type: string
+      commit_sha:
+        description: 'Commit SHA to update status for'
+        required: true
+        type: string
 
 jobs:
   test-tutorial:
     runs-on: linux-amd64-gpu-t4-latest-1
+    permissions:
+      statuses: write
     steps:
       - name: Show runner info
         run: |
           echo "Runner name: ${{ runner.name }}"
           echo "Runner OS: ${{ runner.os }}"
           echo "Runner arch: ${{ runner.arch }}"
+          echo "Runner uname: $(uname -a)"
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -29,6 +36,35 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Docker Compose
+        id: test
         run: |
           cd /home/runner/_work/accelerated-computing-hub/accelerated-computing-hub
           ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
+
+      - name: Update commit status to success
+        if: success()
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/statuses/${{ inputs.commit_sha }} \
+            -f state='success' \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            -f description='Tests passed' \
+            -f context='test / ${{ inputs.tutorial }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update commit status to failure
+        if: failure()
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/statuses/${{ inputs.commit_sha }} \
+            -f state='failure' \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            -f description='Tests failed' \
+            -f context='test / ${{ inputs.tutorial }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
