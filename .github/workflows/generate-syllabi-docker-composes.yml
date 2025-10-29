@@ -1,4 +1,4 @@
-name: Generate Syllabi Docker Compose Files
+name: Generate Syllabi Docker Composes
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
           python-version: '3.11'
 
       - name: Process syllabi and create modified docker-compose files
-        run: python3 brev/process-syllabi-docker-compose.py
+        run: python3 brev/generate-syllabi-docker-composes.py
 
       - name: Configure Git
         run: |
