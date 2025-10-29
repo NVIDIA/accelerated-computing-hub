@@ -28,6 +28,7 @@ jobs:
       contents: read
       packages: write
       actions: write
+      statuses: write
     strategy:
       matrix:
         tutorial: ${{ fromJson(needs.discover-tutorials.outputs.tutorials) }}
