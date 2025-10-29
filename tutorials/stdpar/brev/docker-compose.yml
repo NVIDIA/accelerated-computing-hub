@@ -17,6 +17,7 @@ services:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
+      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     entrypoint: ["/opt/update-git-branch.bash"]
@@ -44,6 +45,7 @@ services:
       - base
     environment:
       - BREV_ENV_ID
+      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     restart: unless-stopped
@@ -71,6 +73,7 @@ services:
       - base
     environment:
       - BREV_ENV_ID
+      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
