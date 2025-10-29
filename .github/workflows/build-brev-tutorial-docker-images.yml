@@ -1,0 +1,167 @@
+name: Build and Push Brev Tutorial Docker Images
+
+on:
+  push:
+    branches:
+      - brev-reorg
+
+jobs:
+  discover-tutorials:
+    runs-on: ubuntu-latest
+    outputs:
+      tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Find tutorial directories
+        id: find-tutorials
+        run: |
+          tutorials=$(brev/discover-tutorials.bash | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
+          echo "Found tutorials: ${tutorials}"
+
+  build-and-push:
+    needs: discover-tutorials
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+      statuses: write
+    strategy:
+      matrix:
+        tutorial: ${{ fromJson(needs.discover-tutorials.outputs.tutorials) }}
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get branch name and short SHA
+        run: |
+          echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+          echo "GIT_SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
+      - name: Set image name and tutorial name
+        id: set-image
+        run: |
+          tutorial_name=$(basename ${{ matrix.tutorial }})
+          image_name="ghcr.io/${{ github.repository_owner }}/${tutorial_name}-tutorial"
+          echo "image_name=${image_name,,}" >> $GITHUB_OUTPUT
+          echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
+
+      - name: Check if build is large
+        id: check-large
+        run: |
+          # Check if 'large: &large true' or 'large: true' exists in x-config section
+          if grep -A 10 '^x-config:' "${{ matrix.tutorial }}/brev/docker-compose.yml" | grep -q 'large:.*true'; then
+            is_large="true"
+          else
+            is_large="false"
+          fi
+          echo "is_large=${is_large}" >> $GITHUB_OUTPUT
+
+      - name: Free up disk space
+        if: steps.check-large.outputs.is_large == 'true'
+        run: |
+          echo "Disk space before cleanup:"
+          df -h /
+          sudo rm -rf /usr/local/lib/android &
+          sudo rm -rf /opt/hostedtoolcache/CodeQL &
+          sudo rm -rf /usr/share/dotnet &
+          wait
+          echo "Disk space after cleanup:"
+          df -h /
+
+      - name: Check for HPCCM recipe
+        id: check-hpccm
+        run: |
+          if [ -f "${{ matrix.tutorial }}/brev/docker-recipe.py" ]; then
+            echo "has_hpccm=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_hpccm=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Python (for HPCCM)
+        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install HPCCM
+        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          pip install hpccm
+
+      - name: Generate Dockerfile from HPCCM recipe
+        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        run: |
+          hpccm --recipe ${{ matrix.tutorial }}/brev/docker-recipe.py --format docker > ${{ matrix.tutorial }}/brev/dockerfile
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image (with retry)
+        uses: nick-fields/retry@v3
+        env:
+          DOCKER_BUILDKIT: 1
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.tutorial }}/brev
+            docker buildx bake \
+              --allow=fs.read=/home/runner \
+              --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
+              --set "base.output=type=registry" \
+              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
+              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}" \
+              --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
+              --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
+              --set "base.platform=linux/amd64" \
+              -f docker-compose.yml \
+              base
+
+      - name: Create pending commit status for test
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            -f state='pending' \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
+            -f description='Test started' \
+            -f context='test / ${{ steps.set-image.outputs.tutorial_name }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger test workflow
+        run: |
+          echo "Triggering test for tutorial: ${{ steps.set-image.outputs.tutorial_name }}"
+          gh workflow run test-brev-tutorial-docker-images.yml \
+            --ref ${{ github.ref_name }} \
+            -f tutorial=${{ steps.set-image.outputs.tutorial_name }} \
+            -f commit_sha=${{ github.sha }}
+          echo "Test workflow triggered successfully"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check disk space after build
+        if: always()
+        run: |
+          echo "Disk space after build:"
+          df -h /
+          echo ""
+          echo "Disk usage by directory:"
+          du -sh /var/lib/docker/* 2>/dev/null || true
+          du -sh /var/lib/buildkit/* 2>/dev/null || true

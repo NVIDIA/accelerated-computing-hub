@@ -1,0 +1,9 @@
+# Visualization
+matplotlib
+
+# Jupyter
+jupyter
+jupyterlab-nvidia-nsight
+
+# NVIDIA devtools
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
