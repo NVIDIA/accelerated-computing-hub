@@ -50,6 +50,29 @@ jobs:
           echo "image_name=${image_name,,}" >> $GITHUB_OUTPUT
           echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
 
+      - name: Check if build is large
+        id: check-large
+        run: |
+          # Check if 'large: &large true' or 'large: true' exists in x-config section
+          if grep -A 10 '^x-config:' "${{ matrix.tutorial }}/brev/docker-compose.yml" | grep -q 'large:.*true'; then
+            is_large="true"
+          else
+            is_large="false"
+          fi
+          echo "is_large=${is_large}" >> $GITHUB_OUTPUT
+
+      - name: Free up disk space
+        if: steps.check-large.outputs.is_large == 'true'
+        run: |
+          echo "Disk space before cleanup:"
+          df -h /
+          sudo rm -rf /usr/local/lib/android &
+          sudo rm -rf /opt/hostedtoolcache/CodeQL &
+          sudo rm -rf /usr/share/dotnet &
+          wait
+          echo "Disk space after cleanup:"
+          df -h /
+
       - name: Check for HPCCM recipe
         id: check-hpccm
         run: |
@@ -108,12 +131,26 @@ jobs:
               -f docker-compose.yml \
               base
 
+      - name: Create pending commit status for test
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            -f state='pending' \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
+            -f description='Test started' \
+            -f context='test / ${{ steps.set-image.outputs.tutorial_name }}'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Trigger test workflow
         run: |
           echo "Triggering test for tutorial: ${{ steps.set-image.outputs.tutorial_name }}"
           gh workflow run test-brev-tutorial-docker-images.yml \
             --ref ${{ github.ref_name }} \
-            -f tutorial=${{ steps.set-image.outputs.tutorial_name }}
+            -f tutorial=${{ steps.set-image.outputs.tutorial_name }} \
+            -f commit_sha=${{ github.sha }}
           echo "Test workflow triggered successfully"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
