@@ -139,7 +139,7 @@ cython_debug/
 
 # VS Code
 .devcontainer
-
+.vscode
 # Mac
 .DS_Store
 
