@@ -24,6 +24,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 3. [Stateful API and Autotuning (`03_stateful_api.ipynb`)](#03-stateful-api-and-autotuning-03_stateful_apiipynb)
 4. [FFT Callbacks (`04_callbacks.ipynb`)](#04-fft-callbacks-04_callbacksipynb)
 5. [Device API (`05_device_api.ipynb`)](#05-device-api-05_device_apiipynb)
+6. [Direct Sparse Solver (`06_sparse_solver.ipynb`)](#06-direct-sparse-solver-06_sparse_solveripynb)
 
 ---
 
@@ -111,6 +112,21 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 - Philox4_32_10 generator returns 4 random variates at once, enabling vectorized consumption
 - Device-level APIs enable fine-grained control for compute-intensive workloads
 - Critical for applications where each thread handles complex calculations
+
+---
+
+### 06. Direct Sparse Solver ([`06_sparse_solver.ipynb`](06_sparse_solver.ipynb))
+
+**Key Topics:**
+- Direct sparse solver for large linear systems with sparse matrices
+- Solving linear equations of the form A·X = B using nvmath-python
+- Working with CSR (Compressed Sparse Row) format matrices
+- GPU and hybrid execution modes for the solver
+
+**Key Insights:**
+- nvmath-python provides high-performance sparse solver backed by NVIDIA cuDSS library
+- Direct methods are suitable for sparse linear systems with specific matrix structures
+- CSR format efficiently stores and manipulates sparse matrices on GPU
 
 ---
 
