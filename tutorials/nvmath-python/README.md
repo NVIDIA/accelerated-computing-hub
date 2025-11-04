@@ -130,9 +130,4 @@ For detailed profiling, notebooks demonstrate using NVIDIA Nsight Systems and th
 - [NVIDIA CUDA-X Libraries](https://developer.nvidia.com/gpu-accelerated-libraries)
 - [NVIDIA Nsight Tools](https://developer.nvidia.com/nsight-systems)
 
-## License
-
-Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES
-
-SPDX-License-Identifier: BSD-3-Clause
 
