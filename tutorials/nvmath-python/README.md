@@ -145,5 +145,3 @@ For detailed profiling, notebooks demonstrate using NVIDIA Nsight Systems and th
 - [nvmath-python Documentation](https://docs.nvidia.com/cuda/nvmath-python/)
 - [NVIDIA CUDA-X Libraries](https://developer.nvidia.com/gpu-accelerated-libraries)
 - [NVIDIA Nsight Tools](https://developer.nvidia.com/nsight-systems)
-
-
