@@ -1,0 +1,29 @@
+# Pin NVIDIA library versions to match PyTorch requirements
+nvidia-cublas-cu12==12.8.4.1
+nvidia-nvshmem-cu12==3.3.20
+nvidia-cuda-nvcc-cu12==12.8.*
+nvidia-cuda-nvrtc-cu12==12.8.*
+
+# CUDA
+cuda-python == 12.9.1 # cuda.{core, bindings}, numba.cuda
+
+# Scientific
+numpy
+scipy
+ssgetpy
+cupy-cuda12x
+
+nvmath-python[cu12,dx,cpu,cu12-distributed]
+
+# Visualization
+matplotlib
+
+# Jupyter
+jupyterlab
+jupyterlab-nvidia-nsight
+ipywidgets
+ipykernel
+
+# MPI
+mpi4py
+
