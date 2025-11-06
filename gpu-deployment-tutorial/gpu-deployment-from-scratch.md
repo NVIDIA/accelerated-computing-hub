@@ -110,7 +110,6 @@ Now that we have our CUDA libraries we can install Python libraries with corresp
 > The reason CUDA packages are so large is because GPU machine code varies between models in a way that doesn't happen with CPUs. To work around this CUDA builds for all common GPUs and bundles them together. Further improvements in packaging could help with this in the future.
 
 NOTE: we don't need extra index any more
-maybe try cuda 13?
 
 ```bash
 pip install --extra-index-url=https://pypi.nvidia.com cudf-cu12
