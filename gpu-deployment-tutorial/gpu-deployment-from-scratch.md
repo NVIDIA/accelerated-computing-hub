@@ -173,7 +173,7 @@ Now if we try to run our snippet of code again, we see:
 >>> x2
 array([1, 4, 9])
 ```
-**INstalling more packages**
+**Installing more packages**
 
 Now that we have our CUDA libraries we can install Python libraries with corresponding versions.
 
