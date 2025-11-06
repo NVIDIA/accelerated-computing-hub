@@ -11,7 +11,8 @@ Guide Adapted from:[**EuroSciPy 2025**](https://euroscipy.org/schedule/) | [Shar
 
 ## Deployment
 
-The second half of the tutorial will discuss how to get your own GPUs on the cloud in more general terms. In order to dig into some of the things we will be learning we will be launching a VM through the [NVIDIA Brev](https://brev.nvidia.com) portal. 
+This tutorial will discuss how to get your own GPUs on the cloud in more general terms. In order to dig into some of the 
+things we will be learning, we will launch a VM through the [NVIDIA Brev](https://brev.nvidia.com) portal. 
 
 ### Getting set up with Brev
 
@@ -35,8 +36,12 @@ The second half of the tutorial will discuss how to get your own GPUs on the clo
 
 #### Connecting to your VM
 
+Once your VM is deployed, follow the Brev access instructions provided for your instance. The connection instructions will vary depending on your operating system. For example, on macOS you would:
+
 - Install the `brev` CLI
-  - `brew install brevdev/homebrew-brev/brev && brev login`
+  - `brew install brevdev/homebrew-brev/brev 
+- Login to your account (copy from access page)
+  - `brev login --token ****`
 - Connect via SSH
   - `brev shell <your vm name>`
 
