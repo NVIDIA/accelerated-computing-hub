@@ -81,19 +81,78 @@ $ nvidia-smi
 +-----------------------------------------------------------------------------------------+
 ```
 
-Next we need the core CUDA libraries in order to run any CUDA code. Often these will be installed at the system level in `/usr/local/cuda`.
+### Let's install something 
+
+```console
+$which pip
+/usr/bin/pip
+```
+
+If you have pip, we can try to install something like `cupy` 
+
+```console
+pip install cupy-cuda12x
+```
+
+```console
+$python3
+>>> import cupy as cp
+>>> x_gpu = cp.array([1, 2, 3])
+>>> x2 = x_gpu**2
+Traceback (most recent call last):
+  File "cupy_backends/cuda/_softlink.pyx", line 25, in cupy_backends.cuda._softlink.SoftLink.__init__
+  File "/usr/lib/python3.10/ctypes/__init__.py", line 374, in __init__
+    self._handle = _dlopen(self._name, mode)
+OSError: libnvrtc.so.12: cannot open shared object file: No such file or directory
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "cupy/_core/core.pyx", line 1448, in cupy._core.core._ndarray_base.__pow__
+  File "cupy/_core/core.pyx", line 1799, in cupy._core.core._ndarray_base.__array_ufunc__
+  File "cupy/_core/_kernel.pyx", line 1374, in cupy._core._kernel.ufunc.__call__
+  File "cupy/_core/_kernel.pyx", line 1401, in cupy._core._kernel.ufunc._get_ufunc_kernel
+  File "cupy/_core/_kernel.pyx", line 1082, in cupy._core._kernel._get_ufunc_kernel
+  File "cupy/_core/_kernel.pyx", line 94, in cupy._core._kernel._get_simple_elementwise_kernel
+  File "cupy/_core/_kernel.pyx", line 82, in cupy._core._kernel._get_simple_elementwise_kernel_from_code
+  File "cupy/_core/core.pyx", line 2375, in cupy._core.core.compile_with_cache
+  File "cupy/_core/core.pyx", line 2320, in cupy._core.core.assemble_cupy_compiler_options
+  File "cupy_backends/cuda/libs/nvrtc.pyx", line 57, in cupy_backends.cuda.libs.nvrtc.getVersion
+  File "cupy_backends/cuda/libs/_cnvrtc.pxi", line 72, in cupy_backends.cuda.libs.nvrtc.initialize
+  File "cupy_backends/cuda/libs/_cnvrtc.pxi", line 75, in cupy_backends.cuda.libs.nvrtc._initialize
+  File "cupy_backends/cuda/libs/_cnvrtc.pxi", line 153, in cupy_backends.cuda.libs.nvrtc._get_softlink
+  File "cupy_backends/cuda/_softlink.pyx", line 32, in cupy_backends.cuda._softlink.SoftLink.__init__
+RuntimeError: CuPy failed to load libnvrtc.so.12: OSError: libnvrtc.so.12: cannot open shared object file: No such file or directory
+```
+
+**What does this error mean?**
+
+This error indicates that CuPy cannot find the CUDA runtime libraries it needs to work.  It's looking for `libnvrtc.so.12` (the NVIDIA Runtime Compiler library for CUDA 12), but it's not installed or not in the system's library path.
+
+we need the core CUDA libraries in order to run any CUDA code. Often these will be installed at the system level in `/usr/local/cuda`. Let's check that:
 
 ```bash
 ls -ld /usr/local/cuda*
 ```
 
-If these are missing we need to decide how to get those dependencies. The way we do this is different depending on whether we want to use `pip`/`uv` or `conda`/`pixi` for our Python package manager.
+If these are missing we need to decide how to get those dependencies. The way we do this is different depending on whether we want to use `pip`/`uv` or `conda`/`pixi` for our Python package manager. 
+
 
 ### Python Software environments
 
+At the moment, when you install CuPy with pip, the wheel only contains the Python code, not the underlying CUDA libraries. CuPy expects to find CUDA libraries already installed on your system at `/usr/local/cuda` or in the system library path. This is why we need to install the CUDA Toolkit separately.
+
+Note: For `cupy` this will change in the upcoming release. For `cudf` and `cuml`this is not an issue. Here we are illustrating how to troubleshoot in case you run into this type of errors. 
+
 #### Pip
 
-If we want to install our packages with `pip` we need to install the CUDA core libraries at the system level, we can do this on Ubuntu with `apt`.
+If we want to install our packages with `pip` we need to install the CUDA core libraries at the system level to be safe. We can do this on Ubuntu with `apt`.
+
+Make sure to select the appropriate package that matches your system architecture (x86_64, ARM64, etc.) and
+your specific OS distribution and version. The example below shows the installation for Ubuntu 22.04 on
+`x86_64` (what we have in our brev instance). For other distributions and architectures, consult the [NVIDIA
+CUDA Installation Guide for Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/#ubuntu).
 
 ```bash
 # Add the NVIDIA repos
@@ -101,9 +160,20 @@ wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
 
-# Install all of CUDA Toolkit (you need to specify the CUDA version that matches your driver)
+# Install the CUDA Toolkit (specify the CUDA version that matches your driver - check nvidia-smi)
 sudo apt-get -y install cuda-toolkit-12-8
 ```
+
+Now if we try to run our snippet of code again, we see: 
+
+```python
+>>> import cupy as cp
+>>> x_gpu = cp.array([1, 2, 3])
+>>> x2 = x_gpu**2
+>>> x2
+array([1, 4, 9])
+```
+**INstalling more packages**
 
 Now that we have our CUDA libraries we can install Python libraries with corresponding versions.
 
@@ -111,15 +181,15 @@ Now that we have our CUDA libraries we can install Python libraries with corresp
 > We need to include the CUDA version in the package name due to limitations in the Python packaging spec, see the [wheelnext](https://wheelnext.dev/) project for plans to solve this in the long term. There is an experimental build of [uv](https://astral.sh/blog/wheel-variants) that supports wheel variants today.
 
 > [!NOTE]
-> We also need to use a custom index because the RAPIDS packages tend to be too large for uploading to PyPI. While we can work with them to increase those limits we can run our own index and handle the cost of serving those packages.
+> For some packages we need to use a custom index because the RAPIDS packages tend to be too large for uploading to PyPI. While we can work with them to increase those limits we can run our own index and handle the cost of serving those packages. You can check the [RAPIDS installation selector](https://docs.rapids.ai/install/) to see if which package needs the extra index.
 > The reason CUDA packages are so large is because GPU machine code varies between models in a way that doesn't happen with CPUs. To work around this CUDA builds for all common GPUs and bundles them together. Further improvements in packaging could help with this in the future.
 
-NOTE: we don't need extra index any more
+As of the 25.10 release neither cuDF nor cuML need the extra index. Let's install `cudf` and do a simple operation. 
 
 ```bash
-pip install --extra-index-url=https://pypi.nvidia.com cudf-cu12
+pip install cudf-cu12
 
-python  # Start Python interpreter
+python3  # Start Python interpreter
 ```
 
 Then we can import `cudf` and allocate some GPU memory
@@ -127,7 +197,15 @@ Then we can import `cudf` and allocate some GPU memory
 ```python
 import cudf
 s = cudf.Series([1, 2, 3, None, 4])
+s.apply(lambda x: x+1)
 ```
+
+#### What about uv? 
+
+TODO: Add section on uv 
+- curl astral to get uv 
+- show example of a venv
+- show nightly limitation
 
 #### Conda
 
@@ -158,7 +236,8 @@ Then we can import `cudf` and allocate some GPU memory
 
 ```python
 import cudf
-s = cudf.Series([1, 2, 3, None, 4])
+s = cudf.Series(['a', 'aa', 'b'])
+s.apply(lambda x: len(x))
 ```
 
 ### Monitoring and debugging tools
