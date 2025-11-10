@@ -66,12 +66,12 @@ jobs:
       - name: Test Markdown Links
         id: test-markdown-links
         run: |
-          python ./brev/test_markdown_links.py "${{ matrix.tutorial }}/*/*.md"
+          python ./brev/test_markdown_links.py "${{ matrix.tutorial }}"
 
       - name: Test Notebook Links
         id: test-notebook-links
         run: |
-          python ./brev/test_notebook_links.py "${{ matrix.tutorial }}/*/*.ipynb"
+          python ./brev/test_notebook_links.py "${{ matrix.tutorial }}"
 
       - name: Update commit status to success
         if: success() && (github.event_name == 'workflow_dispatch' && inputs.commit_sha != '')
