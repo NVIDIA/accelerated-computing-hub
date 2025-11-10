@@ -1,5 +1,5 @@
 x-config:
-  dockerfile: &dockerfile tutorials/nvmath-python/brev/dockerfile
+  dockerfile: &dockerfile tutorials/nvmath-python/brev/Dockerfile
   image: &image ghcr.io/nvidia/nvmath-python-tutorial:brev-reorg-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/nvmath-python/notebooks
   large: &large true
