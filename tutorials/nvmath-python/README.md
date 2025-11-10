@@ -28,7 +28,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 01. Kernel Fusion ([`01_kernel_fusion.ipynb`](01_kernel_fusion.ipynb))
+### 01. Kernel Fusion ([`01_kernel_fusion.ipynb`](notebooks/01_kernel_fusion.ipynb))
 
 **Key Topics:**
 - Introduction to nvmath-python and its role in the Python scientific computing ecosystem
@@ -45,7 +45,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 02. Memory and Execution Spaces ([`02_mem_exec_spaces.ipynb`](02_mem_exec_spaces.ipynb))
+### 02. Memory and Execution Spaces ([`02_mem_exec_spaces.ipynb`](notebooks/02_mem_exec_spaces.ipynb))
 
 **Key Topics:**
 - Understanding memory and execution spaces in nvmath-python
@@ -62,7 +62,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 03. Stateful API and Autotuning ([`03_stateful_api.ipynb`](03_stateful_api.ipynb))
+### 03. Stateful API and Autotuning ([`03_stateful_api.ipynb`](notebooks/03_stateful_api.ipynb))
 
 **Key Topics:**
 - Stateless (function-form) vs. stateful (class-form) APIs
@@ -79,7 +79,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 04. FFT Callbacks ([`04_callbacks.ipynb`](04_callbacks.ipynb))
+### 04. FFT Callbacks ([`04_callbacks.ipynb`](notebooks/04_callbacks.ipynb))
 
 **Key Topics:**
 - Custom Python functions as FFT prolog/epilog callbacks
@@ -97,7 +97,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 05. Device API ([`05_device_api.ipynb`](05_device_api.ipynb))
+### 05. Device API ([`05_device_api.ipynb`](notebooks/05_device_api.ipynb))
 
 **Key Topics:**
 - Using nvmath-python's device APIs within custom numba-cuda kernels
@@ -115,7 +115,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 ---
 
-### 06. Direct Sparse Solver ([`06_sparse_solver.ipynb`](06_sparse_solver.ipynb))
+### 06. Direct Sparse Solver ([`06_sparse_solver.ipynb`](notebooks/06_sparse_solver.ipynb))
 
 **Key Topics:**
 - Direct sparse solver for large linear systems with sparse matrices
