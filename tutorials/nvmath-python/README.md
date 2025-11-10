@@ -8,23 +8,26 @@ This repository contains a series of tutorial notebooks demonstrating the capabi
 
 nvmath-python is designed to provide high-performance mathematical operations that complement existing GPU libraries like CuPy and PyTorch. Unlike traditional array libraries, nvmath-python focuses on advanced mathematical operations with features like kernel fusion, flexible APIs, and device-level integration.
 
+These notebooks can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
+
 ## Prerequisites
 
 To use these notebooks, you will need:
 - A computer equipped with an NVIDIA GPU
 - Python environment with required libraries installed
-- (Optional) CUDA Toolkit
 
 Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/nvmath-python/0.2.1/installation.html#install-nvmath-python) for installation instructions.
 
 ## Notebooks
 
-1. [Kernel Fusion (`01_kernel_fusion.ipynb`)](#01-kernel-fusion-01_kernel_fusionipynb)
-2. [Memory and Execution Spaces (`02_mem_exec_spaces.ipynb`)](#02-memory-and-execution-spaces-02_mem_exec_spacesipynb)
-3. [Stateful API and Autotuning (`03_stateful_api.ipynb`)](#03-stateful-api-and-autotuning-03_stateful_apiipynb)
-4. [FFT Callbacks (`04_callbacks.ipynb`)](#04-fft-callbacks-04_callbacksipynb)
-5. [Device API (`05_device_api.ipynb`)](#05-device-api-05_device_apiipynb)
-6. [Direct Sparse Solver (`06_sparse_solver.ipynb`)](#06-direct-sparse-solver-06_sparse_solveripynb)
+| Notebook | Tutorial | Solutions |
+|----------|----------|-----------|
+| 01. Kernel Fusion | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/01_kernel_fusion.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/01_kernel_fusion_SOLUTION.ipynb) |
+| 02. Memory and Execution Spaces | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/02_mem_exec_spaces.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/02_mem_exec_spaces_SOLUTION.ipynb) |
+| 03. Stateful API and Autotuning | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/03_stateful_api.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/03_stateful_api_SOLUTION.ipynb) |
+| 04. FFT Callbacks | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/04_callbacks.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/04_callbacks_SOLUTION.ipynb) |
+| 05. Device API | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/05_device_api.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/05_device_api_SOLUTION.ipynb) |
+| 06. Direct Sparse Solver | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/06_sparse_solver.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/06_sparse_solver_SOLUTION.ipynb) |
 
 ---
 
@@ -39,7 +42,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 - Using NVIDIA Nsight plugin for JupyterLab for performance profiling
 
 **Key Insights:**
-- nvmath-python achieves ~19x speedup over CuPy for GEMM operations through kernel fusion
+- nvmath-python provides performance benefits over CuPy for GEMM operations through kernel fusion
 - Fused kernels eliminate multiple kernel invocation overhead and optimize memory accesses
 - Profiling reveals that CuPy requires multiple kernel launches while nvmath-python uses a single fused kernel
 
@@ -108,7 +111,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 **Key Insights:**
 - Custom kernels eliminate intermediate array allocations and memory transfers
-- nvmath-python device RNG achieves significant speedup over CuPy for GBM simulation
+- nvmath-python device RNG provides performance benefits over CuPy for GBM simulation
 - Philox4_32_10 generator returns 4 random variates at once, enabling vectorized consumption
 - Device-level APIs enable fine-grained control for compute-intensive workloads
 - Critical for applications where each thread handles complex calculations
