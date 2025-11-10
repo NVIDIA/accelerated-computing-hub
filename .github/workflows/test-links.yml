@@ -1,6 +1,9 @@
 name: Test Links
 
 on:
+  push:
+    branches:
+      - '**'
   workflow_dispatch:
     inputs:
       tutorial:
@@ -9,18 +12,46 @@ on:
         type: string
       commit_sha:
         description: 'Commit SHA to update status for'
-        required: true
+        required: false
         type: string
 
 jobs:
-  test-tutorial:
-    name: test-links (${{ inputs.tutorial }})
+  discover-tutorials:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    permissions:
-      statuses: write
+    outputs:
+      tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Find tutorial directories
+        id: find-tutorials
+        run: |
+          tutorials=$(brev/discover-tutorials.bash | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
+          echo "Found tutorials: ${tutorials}"
+
+  test-links:
+    needs: [discover-tutorials]
+    if: always() && !cancelled()
+    runs-on: ubuntu-latest
+    permissions:
+      statuses: write
+    strategy:
+      matrix:
+        tutorial: ${{ github.event_name == 'push' && fromJson(needs.discover-tutorials.outputs.tutorials) || fromJson(format('["{0}"]', format('tutorials/{0}', inputs.tutorial))) }}
+      fail-fast: false
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set tutorial name
+        id: set-tutorial
+        run: |
+          tutorial_name=$(basename ${{ matrix.tutorial }})
+          echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -35,15 +66,15 @@ jobs:
       - name: Test Markdown Links
         id: test-markdown-links
         run: |
-          python ./brev/test_markdown_links.py "tutorials/${{ inputs.tutorial }}/*/*.md"
+          python ./brev/test_markdown_links.py "${{ matrix.tutorial }}/*/*.md"
 
       - name: Test Notebook Links
         id: test-notebook-links
         run: |
-          python ./brev/test_notebook_links.py "tutorials/${{ inputs.tutorial }}/*/*.ipynb"
+          python ./brev/test_notebook_links.py "${{ matrix.tutorial }}/*/*.ipynb"
 
       - name: Update commit status to success
-        if: success()
+        if: success() && (github.event_name == 'workflow_dispatch' && inputs.commit_sha != '')
         run: |
           gh api \
             --method POST \
@@ -52,12 +83,12 @@ jobs:
             -f state='success' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Link tests passed' \
-            -f context='test-links / ${{ inputs.tutorial }}'
+            -f context='test-links / ${{ steps.set-tutorial.outputs.tutorial_name }}'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update commit status to failure
-        if: failure()
+        if: failure() && (github.event_name == 'workflow_dispatch' && inputs.commit_sha != '')
         run: |
           gh api \
             --method POST \
@@ -66,6 +97,6 @@ jobs:
             -f state='failure' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Link tests failed' \
-            -f context='test-links / ${{ inputs.tutorial }}'
+            -f context='test-links / ${{ steps.set-tutorial.outputs.tutorial_name }}'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
