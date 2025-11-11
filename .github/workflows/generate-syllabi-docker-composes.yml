@@ -3,7 +3,7 @@ name: Generate Syllabi Docker Composes
 on:
   push:
     branches:
-      - brev-reorg
+      - main
 
 permissions:
   contents: write
