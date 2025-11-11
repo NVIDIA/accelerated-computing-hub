@@ -119,8 +119,9 @@ jobs:
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
               $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache" \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache,mode=max" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},oci-mediatypes=true" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main,oci-mediatypes=true" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,oci-mediatypes=true,compression=zstd,compression-level=3" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
