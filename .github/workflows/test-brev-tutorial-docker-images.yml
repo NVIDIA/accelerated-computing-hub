@@ -39,9 +39,12 @@ jobs:
       - name: Set Git branch variables
         run: |
           GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          # Sanitize branch name for Docker tags (replace invalid characters with hyphens and convert to lowercase)
+          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
           GIT_SHA=${{ inputs.git_sha }}
           GIT_SHORT_SHA=${GIT_SHA:0:7}
           echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> $GITHUB_ENV
+          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> $GITHUB_ENV
           echo "GIT_SHA=${GIT_SHA}" >> $GITHUB_ENV
           echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> $GITHUB_ENV
 
@@ -50,7 +53,7 @@ jobs:
         with:
           workflow: build-brev-tutorial-docker-images.yml
           run_id: ${{ inputs.workflow_run_id }}
-          name: docker-compose-${{ inputs.tutorial }}-${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}
+          name: docker-compose-${{ inputs.tutorial }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
           path: artifacts/commit-specific/${{ inputs.tutorial }}/
 
       - name: Log in to GitHub Container Registry
