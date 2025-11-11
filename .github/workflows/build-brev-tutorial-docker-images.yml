@@ -1,10 +1,5 @@
 name: Build and Push Brev Tutorial Docker Images
 
-on:
-  push:
-    branches:
-      - brev-reorg
-
 jobs:
   discover-tutorials:
     runs-on: linux-amd64-cpu4
@@ -44,7 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get branch name and short SHA
+      - name: Set Git branch variables
         run: |
           echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
           echo "GIT_SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
@@ -103,12 +98,21 @@ jobs:
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.tutorial }}/brev
+
+            # Tag the image as `latest` if we're on `main`.
+            if [ "${{ env.GIT_BRANCH_NAME }}" = "main" ]; then
+              LATEST_TAG='--set "base.tags=${{ steps.set-image.outputs.image_name }}:latest"'
+            else
+              LATEST_TAG=""
+            fi
+
             docker buildx bake \
               --allow=fs.read=/home/runner \
               --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
               --set "base.output=type=registry" \
               --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
               --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}" \
+              $LATEST_TAG \
               --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
               --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
               --set "base.platform=linux/amd64" \

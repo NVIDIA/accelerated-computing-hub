@@ -1,6 +1,6 @@
 x-config:
   dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/accelerated-python-tutorial:${GIT_BRANCH_NAME:-brev-reorg-}latest
+  image: &image ghcr.io/nvidia/accelerated-python-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
   default-jupyter-url: &default-jupyter-url
 
@@ -10,7 +10,7 @@ services:
       context: ../../..
       dockerfile: *dockerfile
       args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME:-HEAD}
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME}
     image: *image
     pull_policy: missing
     volumes:
