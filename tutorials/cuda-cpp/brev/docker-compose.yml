@@ -1,6 +1,6 @@
 x-config:
   dockerfile: &dockerfile tutorials/cuda-cpp/brev/dockerfile
-  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:brev-reorg-latest
+  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:${GIT_BRANCH_NAME:-brev-reorg-}latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
 
 services:

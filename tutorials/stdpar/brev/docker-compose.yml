@@ -1,6 +1,6 @@
 x-config:
   dockerfile: &dockerfile tutorials/stdpar/brev/dockerfile
-  image: &image ghcr.io/nvidia/stdpar-tutorial:brev-reorg-latest
+  image: &image ghcr.io/nvidia/stdpar-tutorial:${GIT_BRANCH_NAME:-brev-reorg-}latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/stdpar/notebooks
   large: &large true
 
