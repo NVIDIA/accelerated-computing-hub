@@ -109,20 +109,13 @@ jobs:
           command: |
             cd ${{ matrix.tutorial }}/brev
 
-            # Tag the image as `latest` if we're on `main`.
-            if [ "${GIT_BRANCH_NAME}" = "main" ]; then
-              LATEST_TAG='--set "base.tags=${IMAGE_NAME}:latest"'
-            else
-              LATEST_TAG=""
-            fi
-
             docker buildx bake \
               --allow=fs.read=/home/runner \
               --set "base.args.GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" \
               --set "base.output=type=registry" \
               --set "base.tags=${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest" \
               --set "base.tags=${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GIT_SHORT_SHA}" \
-              $LATEST_TAG \
+              $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
               --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache" \
               --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache,mode=max" \
               --set "base.platform=linux/amd64" \
