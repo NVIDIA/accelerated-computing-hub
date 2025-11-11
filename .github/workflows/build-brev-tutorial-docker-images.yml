@@ -7,7 +7,10 @@ on:
 
 jobs:
   discover-tutorials:
-    runs-on: ubuntu-latest
+    runs-on: linux-amd64-cpu4
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/accelerated-computing-hub
     outputs:
       tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
     steps:
@@ -23,7 +26,10 @@ jobs:
 
   build-and-push:
     needs: discover-tutorials
-    runs-on: ubuntu-latest
+    runs-on: linux-amd64-cpu4
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/accelerated-computing-hub
     permissions:
       contents: read
       packages: write

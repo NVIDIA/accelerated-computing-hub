@@ -16,6 +16,9 @@ jobs:
   test-tutorial:
     name: test-tutorial (${{ inputs.tutorial }})
     runs-on: linux-amd64-gpu-t4-latest-1
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}/accelerated-computing-hub
     permissions:
       statuses: write
     steps:
@@ -29,6 +32,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Test Docker Compose
+        id: test
+        run: |
+          ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -39,7 +47,6 @@ jobs:
       - name: Test Docker Compose
         id: test
         run: |
-          cd /home/runner/_work/accelerated-computing-hub/accelerated-computing-hub
           ./brev/test-docker-compose.bash "tutorials/${{ inputs.tutorial }}/brev/docker-compose.yml"
 
       - name: Update commit status to success
