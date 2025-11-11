@@ -33,7 +33,7 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}
     permissions:
-      contents: read
+      contents: write
       packages: write
       actions: write
       statuses: write
@@ -136,19 +136,55 @@ jobs:
             --tutorial "${TUTORIAL_NAME}" \
             --type all
 
-      - name: Upload commit-specific docker-compose artifacts
+      - name: Upload commit-specific Docker Compose artifacts
         uses: actions/upload-artifact@v4
         with:
           name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}
           path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
           retention-days: 30
 
-      - name: Upload branch-latest docker-compose artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.GIT_BRANCH_NAME }}-latest
-          path: artifacts/branch-latest/${{ env.TUTORIAL_NAME }}/
-          retention-days: 30
+      - name: Push branch-latest Docker Compose to generated branch
+        run: |
+          # Configure git
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Fetch the generated branch
+          git fetch origin generated:generated
+          git checkout generated
+
+          # Create directory structure for this branch and tutorial
+          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
+
+          # Remove only this tutorial's old files (if they exist)
+          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+
+          # Copy this tutorial's generated files
+          cp -r artifacts/branch-latest/${TUTORIAL_NAME} "${GIT_BRANCH_NAME}/tutorials/"
+
+          # Stage only this tutorial's directory
+          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit for ${TUTORIAL_NAME}"
+          else
+            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
+
+            # Push with retry logic for concurrent updates
+            for i in {1..5}; do
+              if git push origin generated; then
+                echo "✓ Successfully pushed to generated branch"
+                break
+              else
+                echo "Push failed (attempt $i/5), pulling and retrying..."
+                git pull --rebase origin generated
+                sleep 2
+              fi
+            done
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pending commit status for test
         run: |
