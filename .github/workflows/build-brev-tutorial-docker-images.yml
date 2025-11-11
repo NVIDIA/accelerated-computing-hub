@@ -1,5 +1,12 @@
 name: Build and Push Brev Tutorial Docker Images
 
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
 jobs:
   discover-tutorials:
     runs-on: linux-amd64-cpu4
@@ -41,40 +48,43 @@ jobs:
 
       - name: Set Git branch variables
         run: |
-          echo "GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
-          echo "GIT_SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          GIT_SHA=${{ github.sha }}
+          GIT_SHORT_SHA=${GIT_SHA::7}
+          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> $GITHUB_ENV
+          echo "GIT_SHA=${GIT_SHA}" >> $GITHUB_ENV
+          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> $GITHUB_ENV
 
       - name: Set image name and tutorial name
-        id: set-image
         run: |
-          tutorial_name=$(basename ${{ matrix.tutorial }})
-          image_name="ghcr.io/${{ github.repository_owner }}/${tutorial_name}-tutorial"
-          echo "image_name=${image_name,,}" >> $GITHUB_OUTPUT
-          echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
+          TUTORIAL_NAME=$(basename ${{ matrix.tutorial }})
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${TUTORIAL_NAME}-tutorial"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
+          echo "TUTORIAL_NAME=${TUTORIAL_NAME}" >> $GITHUB_ENV
 
       - name: Check for HPCCM recipe
-        id: check-hpccm
         run: |
           if [ -f "${{ matrix.tutorial }}/brev/docker-recipe.py" ]; then
-            echo "has_hpccm=true" >> $GITHUB_OUTPUT
+            HAS_HPCCM=true
           else
-            echo "has_hpccm=false" >> $GITHUB_OUTPUT
+            HAS_HPCCM=false
           fi
+          echo "HAS_HPCCM=${HAS_HPCCM}" >> $GITHUB_ENV
 
       - name: Set up Python (for HPCCM)
-        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        if: env.HAS_HPCCM == 'true'
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
       - name: Install HPCCM
-        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        if: env.HAS_HPCCM == 'true'
         run: |
           python -m pip install --upgrade pip
           pip install hpccm
 
       - name: Generate Dockerfile from HPCCM recipe
-        if: steps.check-hpccm.outputs.has_hpccm == 'true'
+        if: env.HAS_HPCCM == 'true'
         run: |
           hpccm --recipe ${{ matrix.tutorial }}/brev/docker-recipe.py --format docker > ${{ matrix.tutorial }}/brev/dockerfile
 
@@ -100,45 +110,74 @@ jobs:
             cd ${{ matrix.tutorial }}/brev
 
             # Tag the image as `latest` if we're on `main`.
-            if [ "${{ env.GIT_BRANCH_NAME }}" = "main" ]; then
-              LATEST_TAG='--set "base.tags=${{ steps.set-image.outputs.image_name }}:latest"'
+            if [ "${GIT_BRANCH_NAME}" = "main" ]; then
+              LATEST_TAG='--set "base.tags=${IMAGE_NAME}:latest"'
             else
               LATEST_TAG=""
             fi
 
             docker buildx bake \
               --allow=fs.read=/home/runner \
-              --set "base.args.GIT_BRANCH_NAME=${{ env.GIT_BRANCH_NAME }}" \
+              --set "base.args.GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" \
               --set "base.output=type=registry" \
-              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-latest" \
-              --set "base.tags=${{ steps.set-image.outputs.image_name }}:${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}" \
+              --set "base.tags=${IMAGE_NAME}:${GIT_BRANCH_NAME}-latest" \
+              --set "base.tags=${IMAGE_NAME}:${GIT_BRANCH_NAME}-git-${GIT_SHORT_SHA}" \
               $LATEST_TAG \
-              --set "base.cache-from=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache" \
-              --set "base.cache-to=type=registry,ref=${{ steps.set-image.outputs.image_name }}:buildcache,mode=max" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache,mode=max" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
+
+      - name: Generate Docker Compose files
+        run: |
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "${GIT_BRANCH_NAME}-git-${GIT_SHORT_SHA}" \
+            --output-dir "artifacts/commit-specific" \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type all
+
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "${GIT_BRANCH_NAME}-latest" \
+            --output-dir "artifacts/branch-latest" \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type all
+
+      - name: Upload commit-specific docker-compose artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.GIT_BRANCH_NAME }}-git-${{ env.GIT_SHORT_SHA }}
+          path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
+          retention-days: 30
+
+      - name: Upload branch-latest docker-compose artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.GIT_BRANCH_NAME }}-latest
+          path: artifacts/branch-latest/${{ env.TUTORIAL_NAME }}/
+          retention-days: 30
 
       - name: Create pending commit status for test
         run: |
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/statuses/${{ github.sha }} \
+            /repos/${{ github.repository }}/statuses/${GIT_SHA} \
             -f state='pending' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
             -f description='Test started' \
-            -f context='test / ${{ steps.set-image.outputs.tutorial_name }}'
+            -f context="test / ${TUTORIAL_NAME}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger test workflow
         run: |
-          echo "Triggering test for tutorial: ${{ steps.set-image.outputs.tutorial_name }}"
+          echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
           gh workflow run test-brev-tutorial-docker-images.yml \
             --ref ${{ github.ref_name }} \
-            -f tutorial=${{ steps.set-image.outputs.tutorial_name }} \
-            -f commit_sha=${{ github.sha }}
+            -f tutorial=${TUTORIAL_NAME} \
+            -f git_sha=${GIT_SHA} \
+            -f workflow_run_id=${{ github.run_id }}
           echo "Test workflow triggered successfully"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
