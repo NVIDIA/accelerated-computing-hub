@@ -10,7 +10,7 @@ jobs:
     runs-on: linux-amd64-cpu4
     defaults:
       run:
-        working-directory: ${{ github.workspace }}/accelerated-computing-hub
+        working-directory: ${{ github.workspace }}
     outputs:
       tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
     steps:
@@ -29,7 +29,7 @@ jobs:
     runs-on: linux-amd64-cpu4
     defaults:
       run:
-        working-directory: ${{ github.workspace }}/accelerated-computing-hub
+        working-directory: ${{ github.workspace }}
     permissions:
       contents: read
       packages: write

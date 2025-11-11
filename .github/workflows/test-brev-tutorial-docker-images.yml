@@ -18,7 +18,7 @@ jobs:
     runs-on: linux-amd64-gpu-t4-latest-1
     defaults:
       run:
-        working-directory: ${{ github.workspace }}/accelerated-computing-hub
+        working-directory: ${{ github.workspace }}
     permissions:
       statuses: write
     steps:
