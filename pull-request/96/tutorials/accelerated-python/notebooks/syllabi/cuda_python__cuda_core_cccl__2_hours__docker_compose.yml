@@ -1,0 +1,83 @@
+x-config:
+  dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
+  image: &image ghcr.io/nvidia/accelerated-python-tutorial:pull-request-96-latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/accelerated-python/notebooks"]
+services:
+  base:
+    build:
+      context: ../../..
+      dockerfile: *dockerfile
+      args:
+        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME}
+    image: *image
+    pull_policy: missing
+    volumes:
+      - accelerated-computing-hub:/accelerated-computing-hub
+    environment:
+      - BREV_ENV_ID
+      - GIT_BRANCH_NAME
+    user: root
+    working_dir: *working-dir
+    restart: "no"
+    entrypoint: ["/opt/update-git-branch.bash"]
+  jupyter:
+    image: *image
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    privileged: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "0.0.0.0:8888:8888" # JupyterLab
+    volumes_from:
+      - base
+    environment:
+      - BREV_ENV_ID
+      - GIT_BRANCH_NAME
+    user: root
+    working_dir: *working-dir
+    restart: "unless-stopped"
+    command: *default-jupyter-url
+  nsight:
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    pull_policy: missing
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "0.0.0.0:8080:8080" # HTTP
+      - "0.0.0.0:3478:3478" # TURN
+    volumes_from:
+      - base
+    environment:
+      - BREV_ENV_ID
+      - GIT_BRANCH_NAME
+    user: root
+    working_dir: *working-dir
+    restart: "unless-stopped"
+    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+
+volumes:
+  accelerated-computing-hub:
