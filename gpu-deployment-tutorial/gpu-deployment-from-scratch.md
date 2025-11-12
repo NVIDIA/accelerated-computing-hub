@@ -81,14 +81,14 @@ $ nvidia-smi
 +-----------------------------------------------------------------------------------------+
 ```
 
-### Let's install something 
+### Let's install something
 
 ```console
 $which pip
 /usr/bin/pip
 ```
 
-If you have pip, we can try to install something like `cupy` 
+If you have pip, we can try to install something like `cupy`
 
 ```console
 pip install cupy-cuda12x
@@ -164,7 +164,7 @@ sudo apt-get update
 sudo apt-get -y install cuda-toolkit-12-8
 ```
 
-Now if we try to run our snippet of code again, we see: 
+Now if we try to run our snippet of code again, we see:
 
 ```python
 >>> import cupy as cp
@@ -173,6 +173,7 @@ Now if we try to run our snippet of code again, we see:
 >>> x2
 array([1, 4, 9])
 ```
+
 **Installing more packages**
 
 Now that we have our CUDA libraries we can install Python libraries with corresponding versions.
@@ -200,12 +201,54 @@ s = cudf.Series([1, 2, 3, None, 4])
 s.apply(lambda x: x+1)
 ```
 
-#### What about uv? 
+#### What About uv?
 
-TODO: Add section on uv 
-- curl astral to get uv 
-- show example of a venv
-- show nightly limitation
+**Installation**
+
+Install `uv` following the [Astral documentation](https://docs.astral.sh/uv/getting-started/installation/#installation-methods):
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+**Note:** You'll need to source your `.bashrc` to make `uv` available in your current shell:
+
+```bash
+source ~/.bashrc
+```
+
+**Creating a Test Environment**
+
+Let's create a separate directory to experiment with `uv`. We'll set up a Python 3.12 environment and install `cudf`:
+
+```bash
+mkdir sandbox
+cd sandbox
+uv venv --python 3.12
+source .venv/bin/activate
+uv pip install "cudf-cu12==25.10.*"
+```
+
+**Testing the Installation**
+
+Launch the Python interpreter and test with some cuDF code:
+
+```python
+import cudf
+
+# Create a cuDF DataFrame
+data = {'col1': [1, 2, 3, 4], 'col2': [10, 20, 30, 40]}
+df = cudf.DataFrame(data)
+
+# Perform an operation on a DataFrame column
+df['col3'] = df['col1'] * df['col2']
+df
+```
+
+**Important Limitation**
+
+When installing nightly or pre-release versions of packages, `uv` has an all-or-nothing strategy. It requires more explicit configuration when working with nightlies or pre-releases, and failing to do so can generate version conflicts and installation errors that are less common with `pip`. For more information, see the [uv pre-release compatibility documentation](https://docs.astral.sh/uv/pip/compatibility/#pre-release-compatibility).
+
 
 #### Conda
 
