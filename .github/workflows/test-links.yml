@@ -4,99 +4,35 @@ on:
   push:
     branches:
       - '**'
-  workflow_dispatch:
-    inputs:
-      tutorial:
-        description: 'Tutorial name to test'
-        required: true
-        type: string
-      commit_sha:
-        description: 'Commit SHA to update status for'
-        required: false
-        type: string
 
 jobs:
-  discover-tutorials:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    outputs:
-      tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Find tutorial directories
-        id: find-tutorials
-        run: |
-          tutorials=$(brev/discover-tutorials.bash | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
-          echo "Found tutorials: ${tutorials}"
-
   test-links:
-    needs: [discover-tutorials]
-    if: always() && !cancelled()
     runs-on: ubuntu-latest
-    permissions:
-      statuses: write
-    strategy:
-      matrix:
-        tutorial: ${{ github.event_name == 'push' && fromJson(needs.discover-tutorials.outputs.tutorials) || fromJson(format('["{0}"]', format('tutorials/{0}', inputs.tutorial))) }}
-      fail-fast: false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set tutorial name
-        id: set-tutorial
-        run: |
-          tutorial_name=$(basename ${{ matrix.tutorial }})
-          echo "tutorial_name=${tutorial_name}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
-      - name: Install dependencies
+      - name: Install nbconvert
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install nbconvert
 
-      - name: Test Markdown Links
-        id: test-markdown-links
+      - name: Convert all Notebooks to Markdown
         run: |
-          python ./brev/test_markdown_links.py "${{ matrix.tutorial }}"
+          echo "Converting all Jupyter notebooks to markdown..."
+          find . -name "*.ipynb" -type f | while read notebook; do
+            echo "Converting: $notebook"
+            jupyter nbconvert --to markdown "$notebook"
+          done
 
-      - name: Test Notebook Links
-        id: test-notebook-links
-        run: |
-          python ./brev/test_notebook_links.py "${{ matrix.tutorial }}"
-
-      - name: Update commit status to success
-        if: success() && (github.event_name == 'workflow_dispatch' && inputs.commit_sha != '')
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/statuses/${{ inputs.commit_sha }} \
-            -f state='success' \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            -f description='Link tests passed' \
-            -f context='test-links / ${{ steps.set-tutorial.outputs.tutorial_name }}'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update commit status to failure
-        if: failure() && (github.event_name == 'workflow_dispatch' && inputs.commit_sha != '')
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/statuses/${{ inputs.commit_sha }} \
-            -f state='failure' \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
-            -f description='Link tests failed' \
-            -f context='test-links / ${{ steps.set-tutorial.outputs.tutorial_name }}'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Links with Lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress '.'
+          fail: true

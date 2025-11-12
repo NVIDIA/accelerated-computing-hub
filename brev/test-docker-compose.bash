@@ -1,27 +1,53 @@
-#! /bin/bash
-
-# This script tests a single Docker Compose file by starting and stopping containers.
+#!/usr/bin/env bash
+#
+# Test a Docker Compose file by starting and stopping containers.
+#
+# This script validates Docker Compose configurations by attempting to start,
+# inspect, and cleanly stop containers.
 #
 # Usage:
-#   ./test-docker-compose.bash <tutorial-name|docker-compose-file>
+#   ./brev/test-docker-compose.bash <tutorial-name|docker-compose-file>
 #
 # Examples:
-#   ./test-docker-compose.bash accelerated-python
-#   ./test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
+#   ./brev/test-docker-compose.bash accelerated-python
+#   ./brev/test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
 
 set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
+# Print usage
+usage() {
+    cat << EOF
+Usage: $(basename "$0") <tutorial-name|docker-compose-file>
+
+Test a Docker Compose file by starting and stopping containers.
+
+Arguments:
+  tutorial-name          Name of tutorial (e.g., accelerated-python)
+  docker-compose-file    Path to docker-compose.yml file
+
+Examples:
+  $(basename "$0") accelerated-python
+  $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml
+
+Requirements:
+  - Docker and Docker Compose must be installed
+EOF
+    exit 1
+}
+
 # Check argument
 if [ $# -ne 1 ]; then
-    echo "Error: Tutorial name or Docker Compose file path is required"
-    echo "Usage: $0 <tutorial-name|docker-compose-file>"
-    echo "Examples:"
-    echo "  $0 accelerated-python"
-    echo "  $0 tutorials/accelerated-python/brev/docker-compose.yml"
-    exit 1
+    echo -e "${RED}Error: Tutorial name or Docker Compose file path is required${NC}"
+    usage
 fi
 
 ARG=$1
@@ -43,7 +69,7 @@ else
 
     # Check if tutorial directory exists
     if [ ! -d "${TUTORIAL_PATH}" ]; then
-        echo "❌ Error: Tutorial directory not found: ${TUTORIAL_PATH}"
+        echo -e "${RED}Error: Tutorial directory not found: ${TUTORIAL_PATH}${NC}"
         exit 1
     fi
 
@@ -52,13 +78,13 @@ fi
 
 # Validate docker-compose file exists
 if [ ! -f "${COMPOSE_FILE}" ]; then
-    echo "❌ Error: Docker Compose file not found: ${COMPOSE_FILE}"
+    echo -e "${RED}Error: Docker Compose file not found: ${COMPOSE_FILE}${NC}"
     exit 1
 fi
 
-echo "============================================"
+echo "================================================================================"
 echo "Testing Docker Compose: ${COMPOSE_FILE}"
-echo "============================================"
+echo "================================================================================"
 echo ""
 
 # Start containers
@@ -66,7 +92,7 @@ echo "📦 Starting containers..."
 echo ""
 if docker compose -f "${COMPOSE_FILE}" up -d; then
     echo ""
-    echo "✅ Containers started successfully"
+    echo -e "${GREEN}✅ Containers started successfully${NC}"
     echo ""
 
     # Wait a moment for containers to initialize
@@ -81,32 +107,32 @@ if docker compose -f "${COMPOSE_FILE}" up -d; then
 
     # Capture and display logs
     echo "📋 Container logs:"
-    echo "--------------------------------------------"
+    echo "--------------------------------------------------------------------------------"
     docker compose -f "${COMPOSE_FILE}" logs
-    echo "--------------------------------------------"
+    echo "--------------------------------------------------------------------------------"
     echo ""
 
     # Stop containers
     echo "🛑 Stopping containers..."
     if docker compose -f "${COMPOSE_FILE}" down; then
-        echo "✅ Containers stopped successfully"
+        echo -e "${GREEN}✅ Containers stopped successfully${NC}"
         echo ""
         return_code=0
     else
-        echo "❌ Failed to stop containers"
+        echo -e "${RED}❌ Failed to stop containers${NC}"
         echo ""
         return_code=1
     fi
 else
     echo ""
-    echo "❌ Failed to start containers"
+    echo -e "${RED}❌ Failed to start containers${NC}"
     echo ""
 
     # Try to capture any logs that might be available
     echo "📋 Attempting to capture logs from failed startup:"
-    echo "--------------------------------------------"
+    echo "--------------------------------------------------------------------------------"
     docker compose -f "${COMPOSE_FILE}" logs || true
-    echo "--------------------------------------------"
+    echo "--------------------------------------------------------------------------------"
     echo ""
 
     # Try to clean up
@@ -117,13 +143,13 @@ else
     return_code=1
 fi
 
-echo "============================================"
-if [ ${return_code} -eq 0 ]; then
-    echo "✅ TEST PASSED: ${COMPOSE_FILE}"
-else
-    echo "❌ TEST FAILED: ${COMPOSE_FILE}"
-fi
-echo "============================================"
 echo ""
+echo "================================================================================"
+if [ ${return_code} -eq 0 ]; then
+    echo -e "${GREEN}✅ TEST PASSED: ${COMPOSE_FILE}${NC}"
+else
+    echo -e "${RED}❌ TEST FAILED: ${COMPOSE_FILE}${NC}"
+fi
+echo "================================================================================"
 
 exit ${return_code}
