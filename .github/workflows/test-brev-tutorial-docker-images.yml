@@ -15,20 +15,6 @@ on:
         description: 'Workflow run ID to download artifacts from'
         required: true
         type: string
-  workflow_call:
-    inputs:
-      tutorial:
-        description: 'Tutorial name to test'
-        required: true
-        type: string
-      commit_sha:
-        description: 'Commit SHA to update status for'
-        required: true
-        type: string
-      workflow_run_id:
-        description: 'Workflow run ID to download artifacts from'
-        required: true
-        type: string
 
 jobs:
   test-tutorial:
