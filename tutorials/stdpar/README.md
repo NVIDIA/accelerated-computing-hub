@@ -4,7 +4,11 @@ This tutorial teaches you how to accelerate portable HPC applications with CPUs 
 
 - [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
-- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/stdpar-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables.
+- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/stdpar-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+
+Brev Launchables of this tutorial should use:
+- 4xL4, 2xL4, 2xL40S, or 1x L40S instances.
+- GCP, AWS, or any other with Flexible Ports and Linux 6.1.24+, 6.2.11+, or 6.3+ (for HMM).
 
 ## Notebooks
 

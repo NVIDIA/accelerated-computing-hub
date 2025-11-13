@@ -4,6 +4,17 @@ This repository is a home for open learning materials related to GPU computing. 
 
 The intention is to create a living project where documents, examples, best practices, optimizations, and new features can become both visible and accessible to users quickly and easily.
 
+## Tutorials and Syllabi
+
+| Content | Docker Compose | Brev Instance | Brev Provider |
+|---------|----------------|---------------|---------------|
+| [CUDA C++ Tutorial](tutorials/cuda-cpp/README.md) | [docker-compose.yml](tutorials/cuda-cpp/brev/docker-compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
+| [Standard Parallelism Tutorial](tutorials/stdpar/README.md) | [docker-compose.yml](tutorials/stdpar/brev/docker-compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | GCP, AWS, or any other with Flexible Ports and Linux 6.1.24+, 6.2.11+, or 6.3+ (for HMM) |
+| [Accelerated Python Tutorial](tutorials/accelerated-python/README.md) | [docker-compose.yml](tutorials/accelerated-python/brev/docker-compose.yml) | L40S, L4, or T4; 4xL4 or 2xL4 for distributed | Crusoe or any other with Flexible Ports |
+| [nvmath-python Tutorial](tutorials/nvmath-python/README.md) | [docker-compose.yml](tutorials/nvmath-python/brev/docker-compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | Crusoe or any other with Flexible Ports |
+| [CUDA Python Tutorial - CuPy, cuDF, CCCL, & Kernels - 8 Hours](tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours__docker_compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
+| [CUDA Python Tutorial - cuda.core & CCCL - 2 Hours](tutorials/accelerated-python/notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours__docker_compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
+
 ## License
 
 All written materials (user guides, documentation, presentations) are subject to [Creative Commons CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).

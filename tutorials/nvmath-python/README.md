@@ -10,6 +10,12 @@ nvmath-python is designed to provide high-performance mathematical operations th
 
 These notebooks can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 
+There are [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/nvmath-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+
+Brev Launchables of this tutorial should use:
+- 4xL4, 2xL4, 2xL40S, or 1x L40S instances.
+- Crusoe or any other provider with Flexible Ports.
+
 ## Prerequisites
 
 To use these notebooks, you will need:
@@ -53,13 +59,13 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 **Key Topics:**
 - Understanding memory and execution spaces in nvmath-python
 - Flexibility of working with both CPU and GPU memory
-- Difference between specialized APIs and generic APIs 
+- Difference between specialized APIs and generic APIs
 - Performance implications of data transfers between memory spaces
 - Using nvmath-python's logging mechanism to understand internal operations
 
 **Key Insights:**
 - Memory space (where data is stored) and execution space (where computation happens) may differ
-- Specialized APIs like `matmul` only support GPU execution, triggering expensive automatic data transfers for CPU inputs 
+- Specialized APIs like `matmul` only support GPU execution, triggering expensive automatic data transfers for CPU inputs
 - Generic APIs like FFT adapt to input location, executing on CPU for CPU inputs and GPU for GPU inputs
 - Logging provides visibility into specification, planning, and execution phases
 
@@ -76,8 +82,8 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 
 **Key Insights:**
 - Stateless API is convenient for single operations but repeats specification/planning for each call
-- Stateful API allows specification and planning once, then multiple executions 
-- Autotuning finds optimal kernels when built-in heuristics are suboptimal 
+- Stateful API allows specification and planning once, then multiple executions
+- Autotuning finds optimal kernels when built-in heuristics are suboptimal
 - Critical for scenarios with repeated operations on similar-shaped data
 
 ---
@@ -96,7 +102,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 - Callbacks enable custom element-wise operations fused with FFT kernels
 - JIT compilation overhead is one-time cost that can be amortized
 - For single images, CuPy may be faster due to nvmath-python's compilation overhead
-- For large enough batches amortization makes stateful API a preferred choice 
+- For large enough batches amortization makes stateful API a preferred choice
 
 ---
 
