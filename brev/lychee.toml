@@ -1,0 +1,28 @@
+# Lychee link checker configuration
+# Documentation: https://github.com/lycheeverse/lychee
+
+# General settings
+verbose = "info"
+no_progress = true
+
+# Timeout for requests (in seconds)
+timeout = 20
+
+# Maximum number of retries
+max_retries = 3
+
+# Retry wait time in seconds
+retry_wait_time = 2
+
+# User agent to identify our link checker
+user_agent = "Mozilla/5.0 (compatible; Lychee/LinkChecker)"
+
+# Cache results to speed up repeated checks
+cache = true
+
+# Maximum number of concurrent network requests
+max_concurrency = 32
+
+# Accept status codes (default is 200-299)
+# Note: See .lycheeignore for specific URLs that need to be excluded
+accept = [200, 201, 202, 203, 204, 206, 207, 208, 226, 300, 301, 302, 303, 304, 307, 308, 429]

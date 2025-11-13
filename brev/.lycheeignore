@@ -1,0 +1,10 @@
+# Lychee link checker ignore file
+# Documentation: https://github.com/lycheeverse/lychee
+
+# Academic papers behind paywalls that return 403 for bots but work in browsers
+https://www.sciencedirect.com/science/article/abs/pii/S0010465520302228
+https://dl.acm.org/doi/10.1145/3664475.3664543
+https://dl.acm.org/doi/abs/10.1145/3476117.3483433
+
+# NYC Open Data - has bot protection but works in browsers
+https://opendata.cityofnewyork.us/overview/#termsofuse
