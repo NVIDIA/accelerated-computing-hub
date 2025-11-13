@@ -16,7 +16,10 @@ RUN set -ex \
       && rm -f /opt/requirements.txt \
  && `# Install system packages` \
       && apt-get update -y \
-      && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs \
+      && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+           git-lfs \
+           openmpi-bin \
+           libopenmpi-dev \
       && apt-get clean -y \
       && rm -rf /var/lib/apt/lists/* \
  && `# Setup Bash` \
