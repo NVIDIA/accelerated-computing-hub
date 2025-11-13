@@ -5,7 +5,12 @@ This modular tutorial contains content on all things related to accelerated Pyth
 - [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
 - [Syllabi](./notebooks/syllabi) that select a subset of the notebooks for a particular learning objective.
-- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables.
+- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+
+Brev Launchables of this tutorial should use:
+- L40S, L4, or T4 instances (for non-distributed notebooks).
+- 4xL4 or 2xL4 instances (for distributed notebooks).
+- Crusoe or any other provider with Flexible Ports.
 
 ## Syllabi
 
