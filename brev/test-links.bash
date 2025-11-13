@@ -109,11 +109,27 @@ echo ""
 echo "Running lychee link checker on: $RELATIVE_TARGET"
 echo "================================================================================"
 
+# Reference lychee config files from brev directory
+LYCHEE_CONFIG="$REPO_ROOT/brev/lychee.toml"
+LYCHEE_EXCLUDE_FILE="$REPO_ROOT/brev/.lycheeignore"
+
+# Build lychee command with config options
+LYCHEE_CMD="lychee"
+if [ -f "$LYCHEE_CONFIG" ]; then
+    LYCHEE_CMD="$LYCHEE_CMD --config $LYCHEE_CONFIG"
+    echo "Using lychee.toml configuration from brev/"
+fi
+
+if [ -f "$LYCHEE_EXCLUDE_FILE" ]; then
+    LYCHEE_CMD="$LYCHEE_CMD --exclude-file $LYCHEE_EXCLUDE_FILE"
+    echo "Using .lycheeignore file from brev/"
+fi
+
 # Change to temp repo directory and run lychee on the target path
 # Lychee will recursively find all markdown files
 set +e
 cd "$TEMP_REPO"
-lychee --verbose --no-progress "$RELATIVE_TARGET"
+$LYCHEE_CMD "$RELATIVE_TARGET"
 LYCHEE_EXIT=$?
 cd "$REPO_ROOT"
 set -e
