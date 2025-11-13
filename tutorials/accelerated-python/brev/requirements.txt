@@ -8,14 +8,15 @@ opencv-python-headless
 
 # Jupyter
 jupyter
+jupyterlab
 jupyterlab-nvidia-nsight
 
 # CUDA
-cuda-python == 12.9.1 # cuda.{core, bindings}, numba.cuda
+cuda-python # cuda.{core, bindings}
+numba-cuda
 nvmath-python[cu12]
 cupy-cuda12x
 cuda-cccl[test-cu12]
-numba-cuda
 
 # NVIDIA devtools
 nvtx
