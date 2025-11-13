@@ -1,54 +1,55 @@
-FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
+FROM pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
 
 ARG GIT_BRANCH_NAME
 
 ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
     PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=accelerated-python \
-    ACH_CUDF_VENV=/opt/venvs/cudf
+    ACH_TUTORIAL=accelerated-python
+
+# Install system packages (needed before pip install for git-based packages)
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-RUN set -ex \
- && `# Install Python packages` \
-      && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
-      && rm -f /opt/requirements.txt \
- && `# Install system packages` \
-      && apt-get update -y \
-      && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-           git-lfs \
-           openmpi-bin \
-           libopenmpi-dev \
-      && apt-get clean -y \
-      && rm -rf /var/lib/apt/lists/* \
- && `# Setup Bash` \
-      && mkdir -p ~/.local/state/._bash_history \
- && `# Setup JupyterLab` \
-      && mkdir -p ~/.jupyter \
-      && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
-      && mkdir -p ~/.ipython/profile_default/startup \
-      && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
-      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
- && `# Create an isolated Python venv with cuDF and register it as a Jupyter kernel` \
-      && python -m venv ${ACH_CUDF_VENV} \
-      && ${ACH_CUDF_VENV}/bin/python -m pip install --upgrade pip \
-      && ${ACH_CUDF_VENV}/bin/pip install \
-           --extra-index-url=https://pypi.nvidia.com \
-           "cudf-cu12==25.8.*" \
-           ipykernel \
-      && ${ACH_CUDF_VENV}/bin/python -m ipykernel install \
-           --name=python3-cudf25.8-cu12 \
-           --display-name="Python 3 (cuDF 25.8)" \
-           --prefix=/usr/local
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+ && rm -f /opt/requirements.txt
+
+# Install MPI.
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    openmpi-bin \
+    libopenmpi-dev \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install RAPIDS packages from NVIDIA PyPI.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+    --extra-index-url=https://pypi.nvidia.com \
+    "cudf-cu12==25.10.*" \
+    "cuml-cu12==25.10.*"
+
+# Setup Bash & JupyterLab.
+RUN mkdir -p ~/.local/state/._bash_history \
+ && mkdir -p ~/.jupyter \
+ && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
+ && mkdir -p ~/.ipython/profile_default/startup \
+ && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
+ && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 COPY . /accelerated-computing-hub
 COPY brev/update-git-branch.bash /opt/update-git-branch.bash
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-RUN `# Setup Git` \
-     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
-     && git config --global --add safe.directory "/accelerated-computing-hub"
+# Setup Git.
+RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+ && git config --global --add safe.directory "/accelerated-computing-hub"
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
