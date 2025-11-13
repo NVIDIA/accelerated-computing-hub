@@ -6,6 +6,8 @@ The intention is to create a living project where documents, examples, best prac
 
 ## Tutorials and Syllabi
 
+The following interactive tutorials are available and can be used on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com). See [the documentation](docs/brev.md) for more information on creating and deploying Brev Launchables using this content.
+
 | Content | Docker Compose | Brev Instance | Brev Provider |
 |---------|----------------|---------------|---------------|
 | [CUDA C++ Tutorial](tutorials/cuda-cpp/README.md) | [docker-compose.yml](tutorials/cuda-cpp/brev/docker-compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
