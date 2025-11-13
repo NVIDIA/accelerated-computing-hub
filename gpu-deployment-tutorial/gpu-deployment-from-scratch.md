@@ -128,22 +128,28 @@ RuntimeError: CuPy failed to load libnvrtc.so.12: OSError: libnvrtc.so.12: canno
 
 **What does this error mean?**
 
-This error indicates that CuPy cannot find the CUDA runtime libraries it needs to work.  It's looking for `libnvrtc.so.12` (the NVIDIA Runtime Compiler library for CUDA 12), but it's not installed or not in the system's library path.
+This error indicates that CuPy cannot find the CUDA runtime libraries it needs to work.  It's looking for `libnvrtc.so.12` (the
+NVIDIA Runtime Compiler library for CUDA 12), but it's not installed or not in the system's library path.
 
-we need the core CUDA libraries in order to run any CUDA code. Often these will be installed at the system level in `/usr/local/cuda`. Let's check that:
+NVRTC is used to JIT (just-in-time) compile CUDA code at runtime. When we run `x_gpu**2`, CuPy needs NVRTC to dynamically compile a
+GPU kernel for this operation.
+
+We need the core CUDA libraries in order to run any CUDA code. Often these will be installed at the system level
+in `/usr/local/cuda`. Let's check that:
 
 ```bash
 ls -ld /usr/local/cuda*
 ```
 
-If these are missing we need to decide how to get those dependencies. The way we do this is different depending on whether we want to use `pip`/`uv` or `conda`/`pixi` for our Python package manager. 
+If these are missing we need to decide how to get those dependencies. The way we do this is different depending on whether we want to use `pip`/`uv` or `conda`/`pixi` for our Python package manager.
 
 
 ### Python Software environments
 
 At the moment, when you install CuPy with pip, the wheel only contains the Python code, not the underlying CUDA libraries. CuPy expects to find CUDA libraries already installed on your system at `/usr/local/cuda` or in the system library path. This is why we need to install the CUDA Toolkit separately.
 
-Note: For `cupy` this will change in the upcoming release. For `cudf` and `cuml`this is not an issue. Here we are illustrating how to troubleshoot in case you run into this type of errors. 
+> [!NOTE]
+> For `cupy` this will change in the upcoming release. For `cudf` and `cuml`this is not an issue. Here we are illustrating how to troubleshoot in case you run into this type of errors.
 
 #### Pip
 
@@ -211,7 +217,8 @@ Install `uv` following the [Astral documentation](https://docs.astral.sh/uv/gett
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-**Note:** You'll need to source your `.bashrc` to make `uv` available in your current shell:
+> [!NOTE]
+> You'll need to source your `.bashrc` to make `uv` available in your current shell:
 
 ```bash
 source ~/.bashrc
@@ -299,13 +306,40 @@ nvidia-smi -q
 ```
 
 #### NVML
+
 Below `nvidia-smi` sits NVML, a protocol for querying low level information from the GPU. There are Python bindings if you want to access this data yourselv.
 
 ```bash
 pip install nvidia-ml-py  # Package name doesn't match library name. You import it with `import pynvml`
 ``` 
 
+Here are some simple examples of using `pynvml`:
+
+```python
+import pynvml
+
+# Initialize NVML
+pynvml.nvmlInit()
+
+# Get the number of GPUs
+num_gpus = pynvml.nvmlDeviceGetCount()
+print(f"Number of GPUs: {num_gpus}")
+
+# Get a handle to the first GPU
+gpu = pynvml.nvmlDeviceGetHandleByIndex(0)
+
+# Get the GPU name
+gpu_name = pynvml.nvmlDeviceGetName(gpu)
+print(f"GPU Name: {gpu_name}")
+
+# Get memory information (convert bytes to GB)
+mem_info = pynvml.nvmlDeviceGetMemoryInfo(gpu)
+print(f"Memory Used: {mem_info.used / 1e9:.2f} GB")
+print(f"Memory Free: {mem_info.free / 1e9:.2f} GB")
+```
+
 You can learn more about using the `pynvml` library in [this notebook on the Accelerated Computing Hub](https://github.com/NVIDIA/accelerated-computing-hub/blob/main/gpu-python-tutorial/4.0_pyNVML.ipynb).
+
 
 #### Jupyter Lab NVDashboard
 If you are a fan of Jupyter Lab you can view metrics directly in the interface with [jupyterlab-nvdashboard](https://github.com/rapidsai/jupyterlab-nvdashboard).
@@ -341,25 +375,50 @@ sudo apt install nvtop
 nvtop
 ```
 
+Let's create a simple Python script to keep the GPU busy so we can monitor it with nvtop:
+
+```python
+import cupy as cp
+
+arr = cp.arange(1, 50_000_000)
+
+while True: 
+    _ = arr**2
+```
+
+To monitor this with nvtop:
+
+1. Start running the Python script above
+2. Press `Ctrl+Z` to suspend the process
+3. Type `bg` to send it to the background
+4. Run `nvtop` to monitor GPU activity
+5. Observe the GPU memory usage and utilization percentages in nvtop
+6. Press `q` to quit nvtop
+7. Type `fg` to bring your Python process back to the foreground
+8. Press `Ctrl+C` to stop the Python script
+
+
 #### cudf.pandas profilers
 Some tools and libraries have built in profiling tools. For example the [cudf.pandas](https://github.com/rapidsai-community/tutorial/blob/main/2.cudf_pandas.ipynb) plugin allows you to profile your code from withing Jupyter.
 
 ```python
+%load_ext cudf.pandas
+import pandas as pd
+
 %%cudf.pandas.profile
 
 small_df = pd.DataFrame({"a": ["0", "1", "2"], "b": ["x", "y", "z"]})
 small_df = pd.concat([small_df, small_df])
 
-axis = 0
-for i in range(0, 2):
-    small_df.min(axis=axis)
-    axis = i
+small_df.min(axis=0)
+small_df.min(axis=1)
 
 counts = small_df.groupby("a").b.count()
 ```
 
 Further reading:
 - [cudf.pandas documentation](https://docs.rapids.ai/api/cudf/latest/cudf_pandas/usage/#profiling-cudf-pandas~)
+- [cudf.pandas tutorial - profiling section](https://github.com/rapidsai-community/tutorial/blob/main/2.cudf_pandas.ipynb)
 
 #### NSight Systems and nsys
 
@@ -369,18 +428,48 @@ Typically Python users will run their code with `nsys` to produce a report, and 
 
 Like many debugging tools we need to use `nsys` to call Python initially. This will run your code and then output a tracefile which you can download and explore locally.
 
+Let's create script name `my_script.py`
+
+```python
+import cudf.pandas
+cudf.pandas.install()
+
+import pandas as pd
+
+small_df = pd.DataFrame({"a": ["0", "1", "2"], "b": ["x", "y", "z"]})
+small_df = pd.concat([small_df, small_df])
+
+small_df.min(axis=0)
+small_df.min(axis=1)
+
+counts = small_df.groupby("a").b.count()
+```
+
+Now we run the script with `nsys` 
+
+> [!NOTE]
+> If you are using the python from the `uv venv` use the python from the venv, to do that replace python for 
+>  `/home/ubuntu/sandbox/.venv/bin/python my_script.py`
+
+
 ```bash
-nsys profile \
+sudo nsys profile \
   --trace cuda,osrt,nvtx \
-  --gpu-metrics-device=all \
+  --gpu-metrics-device all \
   --cuda-memory-usage true \
   --force-overwrite true \
   --output profile_run_v1 \
-  python your_script.py
-# Will create profile_your_script.nsys-rep
+  python my_script.py
+# Will create profile_my_script.nsys-rep
 ```
 
+To be able to visualize the file, we can download it an use [nsight-systems](https://developer.nvidia.com/nsight-systems/get-started).
+
 If you are running Jupyter and NSight on the same machine you can also use the [Jupyter Lab Nsight extension](https://pypi.org/project/jupyterlab-nvidia-nsight/)
+
+```bash
+pip install jupyterlab-nvidia-nsight
+```
 
 Further reading:
 - [Nsight Documentation](https://developer.nvidia.com/nsight-systems/get-started)
