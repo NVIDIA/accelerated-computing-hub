@@ -1,0 +1,2 @@
+accelerating_and_scaling_python_for_hpc_tutorial__mpi.pdf filter=lfs diff=lfs merge=lfs -text
+accelerating_and_scaling_python_for_hpc_tutorial__mpi.pptx filter=lfs diff=lfs merge=lfs -text
