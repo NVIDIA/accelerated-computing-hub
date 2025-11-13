@@ -55,9 +55,10 @@ TARGET_ABS="$(cd "$TARGET_PATH" && pwd)" 2>/dev/null || {
 }
 
 # Get relative path from repo root
-RELATIVE_TARGET="${TARGET_ABS#$REPO_ROOT/}"
-if [ "$RELATIVE_TARGET" = "$TARGET_ABS" ]; then
-    # Path is not under repo root
+RELATIVE_TARGET="$(realpath --relative-to="$REPO_ROOT" "$TARGET_ABS")"
+
+# Check if path is outside repo (would start with ../)
+if [[ "$RELATIVE_TARGET" == ../* ]]; then
     echo -e "${RED}Error: Path '$TARGET_PATH' is not within the current repository${NC}"
     exit 1
 fi
