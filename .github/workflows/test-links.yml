@@ -23,7 +23,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install nbconvert
 
-      - name: Convert all Notebooks to Markdown
+      - name: Convert all notebooks to Markdown
         run: |
           echo "Converting all Jupyter notebooks to markdown..."
           find . -name "*.ipynb" -type f | while read notebook; do
@@ -31,7 +31,7 @@ jobs:
             jupyter nbconvert --to markdown "$notebook"
           done
 
-      - name: Check Links with Lychee
+      - name: Check links with Lychee
         uses: lycheeverse/lychee-action@v2
         with:
           args: --verbose --no-progress '.'
