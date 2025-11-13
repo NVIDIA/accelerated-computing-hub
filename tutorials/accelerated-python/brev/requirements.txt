@@ -20,3 +20,6 @@ numba-cuda
 # NVIDIA devtools
 nvtx
 nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
+
+# Distributed computing
+mpi4py
