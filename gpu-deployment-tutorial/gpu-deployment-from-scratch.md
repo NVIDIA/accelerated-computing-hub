@@ -146,7 +146,7 @@ If these are missing we need to decide how to get those dependencies. The way we
 
 ### Python Software environments
 
-At the moment, when you install CuPy with pip, the wheel only contains the Python code, not the underlying CUDA libraries. CuPy expects to find CUDA libraries already installed on your system at `/usr/local/cuda` or in the system library path. This is why we need to install the CUDA Toolkit separately.
+At the moment, when you install CuPy with pip, the package has dependencies on CUDA libraries that aren't available on PyPI. CuPy expects to find these CUDA libraries already installed on your system at `/usr/local/cuda` or in the system library path. This is why we need to install the CUDA Toolkit separately using the system package manager.
 
 > [!NOTE]
 > For `cupy` this will change in the upcoming release. For `cudf` and `cuml`this is not an issue. Here we are illustrating how to troubleshoot in case you run into this type of errors.
@@ -279,8 +279,12 @@ conda activate rapids
 
 > [!NOTE]
 > You may notice this is much simpler than the pip installation. This is for two reasons:
-> - We don't need CUDA toolkit because each individual CUDA library is available as a conda package. So cudf can depend on them directly and install the ones it needs.
+> - We don't need to install the CUDA toolkit at the system level because each individual CUDA library is available as a conda package. So cudf can depend on them directly and install the ones it needs.
 > - Conda supports [virtual packages](https://docs.conda.io/projects/conda/en/stable/user-guide/tasks/manage-virtual.html) which allow the solver to discover additional information about the system such as the CUDA version and then pull in the correct package build for your system.
+>
+> **Why are these CUDA packages available on conda-forge but not PyPI?**
+>
+> Historically, Python could only package source distributions (which compile at install time), but NVIDIA doesn't distribute CUDA Toolkit source code. Conda was created as a binary package manager that can package any compiled code. While Python wheels now support binary distributions for pip, they are relatively new and it takes time for the ecosystem to catch up. Conda also provides quality of life improvements like virtual packages (exposing the driver CUDA version to the dependency solver) and optional package constraints, making it currently more mature for complex GPU dependencies.
 
 Then we can import `cudf` and allocate some GPU memory
 
