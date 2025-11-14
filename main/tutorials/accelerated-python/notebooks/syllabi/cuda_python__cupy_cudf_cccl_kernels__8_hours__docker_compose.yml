@@ -20,7 +20,7 @@ services:
     user: root
     working_dir: *working-dir
     restart: "no"
-    entrypoint: ["/opt/update-git-branch.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
   jupyter:
     image: *image
     depends_on:
