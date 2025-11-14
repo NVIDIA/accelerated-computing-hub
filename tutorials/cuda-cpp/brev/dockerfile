@@ -1,4 +1,4 @@
-FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
+FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.10-cpp-cuda12.9
 
 ENV PIP_ROOT_USER_ACTION=ignore \
     ACH_TUTORIAL=cuda-cpp

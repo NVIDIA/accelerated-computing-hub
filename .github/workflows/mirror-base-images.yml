@@ -1,0 +1,85 @@
+name: Mirror Base Images to GHCR
+
+on:
+  schedule:
+    # Run nightly at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      force_pull:
+        description: 'Force pull even if image exists'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  mirror-images:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+        image:
+          - source: rapidsai/devcontainers:25.10-cpp-cuda12.9
+            target_name: rapidsai-devcontainers-25.10-cpp-cuda12.9
+          - source: pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
+            target_name: pytorch-2.9.0-cuda12.8-cudnn9-runtime
+      fail-fast: false
+
+    steps:
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set target image name
+        run: |
+          TARGET_IMAGE="ghcr.io/${{ github.repository_owner }}/mirrors/${{ matrix.image.target_name }}"
+          echo "TARGET_IMAGE=${TARGET_IMAGE,,}" >> $GITHUB_ENV
+          echo "Will mirror ${{ matrix.image.source }} -> ${TARGET_IMAGE,,}"
+
+      - name: Check if image already exists in GHCR
+        id: check_image
+        continue-on-error: true
+        run: |
+          if docker manifest inspect ${TARGET_IMAGE} > /dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Image already exists in GHCR"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Image does not exist in GHCR"
+          fi
+
+      - name: Pull source image from Docker Hub
+        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
+        run: |
+          echo "Pulling ${{ matrix.image.source }} from Docker Hub..."
+          docker pull ${{ matrix.image.source }}
+
+      - name: Tag image for GHCR
+        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
+        run: |
+          docker tag ${{ matrix.image.source }} ${TARGET_IMAGE}
+
+      - name: Push to GHCR
+        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
+        run: |
+          echo "Pushing ${TARGET_IMAGE} to GHCR..."
+          docker push ${TARGET_IMAGE}
+          echo "✓ Successfully mirrored ${{ matrix.image.source }}"
+
+      - name: Skipped (image exists)
+        if: steps.check_image.outputs.exists == 'true' && github.event.inputs.force_pull != 'true'
+        run: |
+          echo "⊘ Skipping mirror - image already exists in GHCR"
+          echo "Use workflow_dispatch with force_pull=true to update"
+
+      - name: Verify mirrored image
+        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
+        run: |
+          docker pull ${TARGET_IMAGE}
+          docker images ${TARGET_IMAGE}
+          echo "✓ Image verified successfully"
