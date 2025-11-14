@@ -19,7 +19,7 @@ services:
       - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
-    entrypoint: ["/opt/update-git-branch.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
     restart: "no"
   jupyter:
     image: *image
