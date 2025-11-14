@@ -1,8 +1,8 @@
-# How to Create a Brev Launchable from Accelerated Computing Hub Content
+# Create a Brev Launchable from an Accelerated Computing Hub Tutorial or Syllabus
 
 ## Instructions
 
-- Get the GitHub web URL to the Docker Compose file for the Accelerated Computing Hub content from [the README](../README.md).
+- Get the GitHub web URL to the Docker Compose file for the Accelerated Computing Hub tutorial or syllabus from [the README](../README.md).
 - Go to [brev.nvidia.com](https://brev.nvidia.com).
 - Login and select correct organization.
 - Click "Launchables".
