@@ -14,7 +14,6 @@ services:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
-      - ACH_DISABLE_GIT_PULL_ON_START
     user: root
     working_dir: *working-dir
     entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
@@ -42,7 +41,6 @@ services:
       - base
     environment:
       - BREV_ENV_ID
-      - ACH_DISABLE_GIT_PULL_ON_START
     user: root
     working_dir: *working-dir
     restart: unless-stopped
@@ -70,7 +68,6 @@ services:
       - base
     environment:
       - BREV_ENV_ID
-      - ACH_DISABLE_GIT_PULL_ON_START
     user: root
     working_dir: *working-dir
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
