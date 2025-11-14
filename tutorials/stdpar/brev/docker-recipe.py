@@ -145,7 +145,6 @@ Stage0 += shell(commands=[
 ])
 
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
-Stage0 += copy(src='brev/update-git-branch.bash', dest='/opt/update-git-branch.bash')
 
 Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')
 

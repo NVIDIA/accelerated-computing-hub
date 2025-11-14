@@ -44,7 +44,6 @@ RUN mkdir -p ~/.local/state/._bash_history \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 COPY . /accelerated-computing-hub
-COPY brev/update-git-branch.bash /opt/update-git-branch.bash
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 

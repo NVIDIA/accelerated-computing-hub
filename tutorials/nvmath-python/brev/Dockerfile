@@ -29,6 +29,7 @@ RUN set -ex \
 
 COPY . /accelerated-computing-hub
 COPY brev/update-git-branch.bash /opt/update-git-branch.bash
+COPY brev/base-start.bash /opt/base-start.bash
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
