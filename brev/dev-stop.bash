@@ -8,7 +8,7 @@
 # Example:
 #   ./dev-stop.bash accelerated-python
 
-set -euo pipefail
+set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)

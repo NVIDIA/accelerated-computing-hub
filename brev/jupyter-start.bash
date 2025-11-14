@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 
 /accelerated-computing-hub/brev/jupyter-generate-plugin-settings.bash
 

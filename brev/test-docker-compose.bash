@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/bash
 #
 # Test a Docker Compose file by starting and stopping containers.
 #
@@ -12,7 +12,7 @@
 #   ./brev/test-docker-compose.bash accelerated-python
 #   ./brev/test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
 
-set -euo pipefail
+set -eu
 
 # Colors for output
 RED='\033[0;31m'
@@ -90,7 +90,6 @@ echo ""
 # Start containers
 echo "📦 Starting containers..."
 echo ""
-export ACH_DISABLE_GIT_PULL_ON_START=1
 if docker compose -f "${COMPOSE_FILE}" up -d; then
     echo ""
     echo -e "${GREEN}✅ Containers started successfully${NC}"
