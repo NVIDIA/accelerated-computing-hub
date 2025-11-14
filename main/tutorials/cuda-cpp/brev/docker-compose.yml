@@ -8,15 +8,12 @@ services:
     build:
       context: ../../..
       dockerfile: *dockerfile
-      args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME}
     image: *image
     pull_policy: missing
     volumes:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
-      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
@@ -44,7 +41,6 @@ services:
       - base
     environment:
       - BREV_ENV_ID
-      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     restart: "unless-stopped"
@@ -72,7 +68,6 @@ services:
       - base
     environment:
       - BREV_ENV_ID
-      - GIT_BRANCH_NAME
     user: root
     working_dir: *working-dir
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
