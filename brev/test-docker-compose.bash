@@ -90,6 +90,7 @@ echo ""
 # Start containers
 echo "📦 Starting containers..."
 echo ""
+export ACH_DISABLE_GIT_PULL_ON_START=1
 if docker compose -f "${COMPOSE_FILE}" up -d; then
     echo ""
     echo -e "${GREEN}✅ Containers started successfully${NC}"

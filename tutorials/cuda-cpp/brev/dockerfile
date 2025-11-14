@@ -1,9 +1,6 @@
 FROM rapidsai/devcontainers:25.10-cpp-cuda12.9
 
-ARG GIT_BRANCH_NAME
-
-ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
-    PIP_ROOT_USER_ACTION=ignore \
+ENV PIP_ROOT_USER_ACTION=ignore \
     ACH_TUTORIAL=cuda-cpp
 
 # Copy only requirements.txt first for better Docker layer caching.

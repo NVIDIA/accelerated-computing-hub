@@ -18,11 +18,7 @@ arch = platform.machine()
 
 Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver}-ubuntu{ubuntu_ver}')
 
-Stage0 += raw(docker='ARG GIT_BRANCH_NAME')
-
 Stage0 += environment(variables={
-  'GIT_BRANCH_NAME': '${GIT_BRANCH_NAME}',
-
   'ACH_STDPAR_NVHPC_VERSION': nvhpc_ver,
   'ACH_STDPAR_CUDA_VERSION': cuda_ver,
   'ACH_STDPAR_ARCH': arch,

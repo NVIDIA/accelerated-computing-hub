@@ -54,7 +54,7 @@ docker volume create --driver local \
 
 echo "Starting tutorial: ${TUTORIAL_NAME}"
 cd ${MOUNT}
-export GIT_BRANCH_NAME=""
+export ACH_DISABLE_GIT_PULL_ON_START=1
 docker compose -f ${DOCKER_COMPOSE} up -d
 
 echo "Tutorial ${TUTORIAL_NAME} started successfully!"
