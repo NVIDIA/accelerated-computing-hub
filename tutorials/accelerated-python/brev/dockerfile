@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
+FROM ghcr.io/nvidia/mirrors/pytorch-2.9.0-cuda12.8-cudnn9-runtime
 
 ENV PIP_ROOT_USER_ACTION=ignore \
     ACH_TUTORIAL=accelerated-python
