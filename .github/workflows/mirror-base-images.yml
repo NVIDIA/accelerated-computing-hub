@@ -83,3 +83,20 @@ jobs:
           docker pull ${TARGET_IMAGE}
           docker images ${TARGET_IMAGE}
           echo "✓ Image verified successfully"
+
+      - name: Make package public
+        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
+        run: |
+          PACKAGE_NAME="mirrors%2F${{ matrix.image.target_name }}"
+          echo "Setting package ${PACKAGE_NAME} to public visibility..."
+
+          gh api \
+            --method PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/orgs/${{ github.repository_owner }}/packages/container/${PACKAGE_NAME}" \
+            -f visibility='public' \
+          && echo "✓ Package is now public" \
+          || echo "⚠ Failed to set public visibility (may already be public or need org permissions)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
