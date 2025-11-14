@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/bash
 #
 # Test links in markdown files and Jupyter notebooks using lychee.
 #
@@ -10,7 +10,7 @@
 #   ./brev/test-links.bash tutorials/example   # Check specific tutorial
 #   ./brev/test-links.bash .                   # Check entire repo
 
-set -euo pipefail
+set -eu
 
 # Colors for output
 RED='\033[0;31m'

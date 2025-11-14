@@ -8,7 +8,7 @@
 # Example:
 #   ./dev-start.bash accelerated-python
 
-set -euo pipefail
+set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
@@ -54,7 +54,6 @@ docker volume create --driver local \
 
 echo "Starting tutorial: ${TUTORIAL_NAME}"
 cd ${MOUNT}
-export ACH_DISABLE_GIT_PULL_ON_START=1
 docker compose -f ${DOCKER_COMPOSE} up -d
 
 echo "Tutorial ${TUTORIAL_NAME} started successfully!"

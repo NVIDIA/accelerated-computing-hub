@@ -1,4 +1,6 @@
-#!/bin/bash
+#! /bin/bash
+
+set -eu
 
 JUPYTER_HOST="jupyter0-${BREV_ENV_ID}.brevlab.com"
 NSIGHT_HTTP_URL="https://nsight0-${BREV_ENV_ID}.brevlab.com"

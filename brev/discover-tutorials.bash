@@ -3,7 +3,7 @@
 # This script discovers all tutorial directories in the repository.
 # It outputs one tutorial directory path per line (relative to repo root).
 
-set -euo pipefail
+set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
