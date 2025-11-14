@@ -1,9 +1,6 @@
 FROM pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
 
-ARG GIT_BRANCH_NAME
-
-ENV GIT_BRANCH_NAME=${GIT_BRANCH_NAME} \
-    PIP_ROOT_USER_ACTION=ignore \
+ENV PIP_ROOT_USER_ACTION=ignore \
     ACH_TUTORIAL=accelerated-python
 
 # Install system packages (needed before pip install for git-based packages)

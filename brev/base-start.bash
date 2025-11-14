@@ -1,3 +1,3 @@
 #! /bin/bash
 
-/accelerated-computing-hub/brev/update-git-branch.bash
+/accelerated-computing-hub/brev/base-git-pull.bash
