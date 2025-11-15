@@ -52,6 +52,7 @@ fi
 
 ARG=$1
 COMPOSE_FILE=""
+ACH_TUTORIAL=""
 
 # Check if the argument is a file path (contains / or is an absolute path)
 if [[ "${ARG}" == *"/"* ]]; then
@@ -62,18 +63,23 @@ if [[ "${ARG}" == *"/"* ]]; then
     if [[ "${COMPOSE_FILE}" != /* ]]; then
         COMPOSE_FILE="${REPO_ROOT}/${COMPOSE_FILE}"
     fi
+
+    # Extract tutorial name from path: .../tutorials/<tutorial-name>/brev/docker-compose.yml
+    COMPOSE_DIR=$(dirname "${COMPOSE_FILE}")
+    TUTORIAL_DIR=$(dirname "${COMPOSE_DIR}")
+    ACH_TUTORIAL=$(basename "${TUTORIAL_DIR}")
 else
     # Treat as a tutorial name
-    TUTORIAL_NAME="${ARG}"
-    TUTORIAL_PATH="${REPO_ROOT}/tutorials/${TUTORIAL_NAME}"
+    ACH_TUTORIAL="${ARG}"
+    ACH_TUTORIAL_PATH="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
 
     # Check if tutorial directory exists
-    if [ ! -d "${TUTORIAL_PATH}" ]; then
-        echo -e "${RED}Error: Tutorial directory not found: ${TUTORIAL_PATH}${NC}"
+    if [ ! -d "${ACH_TUTORIAL_PATH}" ]; then
+        echo -e "${RED}Error: Tutorial directory not found: ${ACH_TUTORIAL_PATH}${NC}"
         exit 1
     fi
 
-    COMPOSE_FILE="${TUTORIAL_PATH}/brev/docker-compose.yml"
+    COMPOSE_FILE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
 fi
 
 # Validate docker-compose file exists
@@ -86,6 +92,18 @@ echo "==========================================================================
 echo "Testing Docker Compose: ${COMPOSE_FILE}"
 echo "================================================================================"
 echo ""
+
+# Check for and remove existing volume
+VOLUME_NAME="${ACH_TUTORIAL}_accelerated-computing-hub"
+if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
+    echo "🗑️  Removing existing volume: ${VOLUME_NAME}"
+    docker volume rm "${VOLUME_NAME}" &>/dev/null || true
+    echo ""
+fi
+
+# Export environment variables for the container
+export ACH_TUTORIAL
+export ACH_RUN_TESTS=1
 
 # Start containers
 echo "📦 Starting containers..."
@@ -117,11 +135,12 @@ if docker compose -f "${COMPOSE_FILE}" up -d; then
     if docker compose -f "${COMPOSE_FILE}" down; then
         echo -e "${GREEN}✅ Containers stopped successfully${NC}"
         echo ""
-        return_code=0
+
+        RETURN_CODE=0
     else
         echo -e "${RED}❌ Failed to stop containers${NC}"
         echo ""
-        return_code=1
+        RETURN_CODE=1
     fi
 else
     echo ""
@@ -140,16 +159,16 @@ else
     docker compose -f "${COMPOSE_FILE}" down || true
     echo ""
 
-    return_code=1
+    RETURN_CODE=1
 fi
 
 echo ""
 echo "================================================================================"
-if [ ${return_code} -eq 0 ]; then
+if [ ${RETURN_CODE} -eq 0 ]; then
     echo -e "${GREEN}✅ TEST PASSED: ${COMPOSE_FILE}${NC}"
 else
     echo -e "${RED}❌ TEST FAILED: ${COMPOSE_FILE}${NC}"
 fi
 echo "================================================================================"
 
-exit ${return_code}
+exit ${RETURN_CODE}
