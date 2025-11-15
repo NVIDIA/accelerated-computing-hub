@@ -12,11 +12,15 @@ jupyterlab
 jupyterlab-nvidia-nsight
 
 # CUDA
-cuda-python # cuda.{core, bindings}
-numba-cuda
+cuda-python
+numba-cuda == 0.20.*
 nvmath-python[cu12]
 cupy-cuda12x
-cuda-cccl[test-cu12]
+cuda-cccl[test-cu12] == 0.3.1
+nvidia-cuda-runtime-cu12 == 12.8.*
+nvidia-cuda-nvcc-cu12 == 12.8.*
+nvidia-cuda-nvrtc-cu12 == 12.8.*
+nvidia-nvjitlink-cu12 == 12.8.*
 
 # NVIDIA devtools
 nvtx
@@ -24,3 +28,6 @@ nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
 
 # Distributed computing
 mpi4py
+
+# Testing
+pytest

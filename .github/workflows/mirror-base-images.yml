@@ -21,6 +21,8 @@ jobs:
     strategy:
       matrix:
         image:
+          - source: rapidsai/devcontainers:25.08-cpp-cuda12.8
+            target_name: rapidsai-devcontainers-25.08-cpp-cuda12.8
           - source: rapidsai/devcontainers:25.10-cpp-cuda12.9
             target_name: rapidsai-devcontainers-25.10-cpp-cuda12.9
           - source: pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
