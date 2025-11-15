@@ -3,7 +3,7 @@
 # This script builds Docker containers for tutorials.
 #
 # Usage:
-#   ./dev-build.bash [tutorial-name]
+#   ./dev-build.bash <tutorial-name>
 #
 # If a tutorial name is provided (e.g., "accelerated-python"), only that tutorial is built.
 # If no argument is provided, all tutorials are built.
@@ -39,7 +39,7 @@ build_tutorial() {
         echo "Dockerfile generated successfully"
     fi
 
-    docker compose -f "${TUTORIAL_PATH}/brev/docker-compose.yml" build
+    docker compose --progress=plain -f "${TUTORIAL_PATH}/brev/docker-compose.yml" build
 
     echo "Successfully built image for ${TUTORIAL_NAME}"
     echo ""
