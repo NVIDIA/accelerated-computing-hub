@@ -26,4 +26,3 @@ ipykernel
 
 # MPI
 mpi4py
-
