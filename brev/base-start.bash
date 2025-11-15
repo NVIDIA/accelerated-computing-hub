@@ -3,10 +3,10 @@
 set -eu
 
 # Run per-tutorial start tests if they exist.
-if [ -n "${ACH_TUTORIAL}" ]; then
-  TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test-start.bash"
+if [ -n "${ACH_TUTORIAL}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
+  TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
   LOG_DIR="/accelerated-computing-hub/logs"
-  LOG_FILE="${LOG_DIR}/test-start.log"
+  LOG_FILE="${LOG_DIR}/test.log"
 
   # Create logs directory if it doesn't exist
   mkdir -p "${LOG_DIR}"
@@ -45,5 +45,9 @@ if [ -n "${ACH_TUTORIAL}" ]; then
     } | tee -a "${LOG_FILE}"
   fi
 else
-  echo "ACH_TUTORIAL not set, skipping tutorial tests"
+  if [ -n "${ACH_TUTORIAL}" ]; then
+    echo "ACH_RUN_TESTS not set, skipping tutorial tests"
+  else
+    echo "ACH_TUTORIAL not set, skipping tutorial tests"
+  fi
 fi
