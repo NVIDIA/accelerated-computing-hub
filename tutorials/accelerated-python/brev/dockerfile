@@ -1,6 +1,8 @@
-FROM ghcr.io/nvidia/mirrors/pytorch-2.9.0-cuda12.8-cudnn9-runtime
+FROM rapidsai/devcontainers:25.08-cpp-cuda12.8
 
 ENV PIP_ROOT_USER_ACTION=ignore \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    VIRTUAL_ENV_DISABLE_PROMPT=1 \
     ACH_TUTORIAL=accelerated-python
 
 # Install system packages (needed before pip install for git-based packages)
@@ -14,8 +16,9 @@ RUN apt-get update -y \
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# Install Python packages.
-RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+# Remove externally managed flag and install Python packages.
+RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
+ && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
 # Install MPI.
@@ -26,11 +29,10 @@ RUN apt-get update -y \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
-# Install RAPIDS packages from NVIDIA PyPI.
+# Install PyTorch with CUDA 12.8 support.
 RUN pip install --no-cache-dir --root-user-action=ignore \
-    --extra-index-url=https://pypi.nvidia.com \
-    "cudf-cu12==25.10.*" \
-    "cuml-cu12==25.10.*"
+    --index-url https://download.pytorch.org/whl/cu128 \
+    torch
 
 # Setup Bash & JupyterLab.
 RUN mkdir -p ~/.local/state/._bash_history \
@@ -39,6 +41,21 @@ RUN mkdir -p ~/.local/state/._bash_history \
  && mkdir -p ~/.ipython/profile_default/startup \
  && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+# Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel
+ENV ACH_RAPIDS_VENV=/opt/venvs/rapids
+RUN python -m venv ${ACH_RAPIDS_VENV} \
+ && ${ACH_RAPIDS_VENV}/bin/python -m pip install --upgrade pip \
+ && ${ACH_RAPIDS_VENV}/bin/pip install \
+    --extra-index-url=https://pypi.nvidia.com \
+    "cudf-cu12==25.10.*" \
+    "cuml-cu12==25.10.*" \
+    ipykernel \
+    pytest \
+ && ${ACH_RAPIDS_VENV}/bin/python -m ipykernel install \
+    --name=cudf-cu12-25.10 \
+    --display-name="Python (RAPIDS 25.10)" \
+    --prefix=/usr/local
 
 COPY . /accelerated-computing-hub
 
