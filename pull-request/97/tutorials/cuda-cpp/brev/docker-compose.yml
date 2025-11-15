@@ -1,31 +1,10 @@
+name: cuda-cpp
+
 x-config:
   dockerfile: &dockerfile tutorials/cuda-cpp/brev/dockerfile
   image: &image ghcr.io/nvidia/cuda-cpp-tutorial:pull-request-97-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
-
-services:
-  base:
-    build:
-      context: ../../..
-      dockerfile: *dockerfile
-      args:
-        GIT_BRANCH_NAME: ${GIT_BRANCH_NAME}
-    image: *image
-    pull_policy: missing
-    volumes:
-      - accelerated-computing-hub:/accelerated-computing-hub
-    environment:
-      - BREV_ENV_ID
-      - GIT_BRANCH_NAME
-    user: root
-    working_dir: *working-dir
-    entrypoint: ["/opt/update-git-branch.bash"]
-    restart: "no"
-  jupyter:
-    image: *image
-    depends_on:
-      base:
-        condition: service_completed_successfully
+  gpu-config: &gpu-config
     privileged: true
     ulimits:
       memlock: -1
@@ -38,45 +17,43 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-    ports:
-      - "0.0.0.0:8888:8888" # JupyterLab
-    volumes_from:
-      - base
+  common-service: &common-service
+    pull_policy: missing
+    volumes:
+      - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
-      - GIT_BRANCH_NAME
+      - ACH_TUTORIAL
+      - ACH_RUN_TESTS
     user: root
     working_dir: *working-dir
-    restart: "unless-stopped"
-  nsight:
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+  persistent-service: &persistent-service
     depends_on:
       base:
         condition: service_completed_successfully
-    pull_policy: missing
-    ulimits:
-      memlock: -1
-      stack: 67108864
-    shm_size: 1g
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+    restart: unless-stopped
+
+services:
+  base:
+    <<: [*gpu-config, *common-service]
+    image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
+    build:
+      context: ../../..
+      dockerfile: *dockerfile
+    restart: "no"
+  jupyter:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: *image
+    ports:
+      - "0.0.0.0:8888:8888" # JupyterLab
+  nsight:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
     ports:
       - "0.0.0.0:8080:8080" # HTTP
       - "0.0.0.0:3478:3478" # TURN
-    volumes_from:
-      - base
-    environment:
-      - BREV_ENV_ID
-      - GIT_BRANCH_NAME
-    user: root
-    working_dir: *working-dir
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
-    restart: "unless-stopped"
 
 volumes:
   accelerated-computing-hub:
