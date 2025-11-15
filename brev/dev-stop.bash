@@ -22,13 +22,13 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-TUTORIAL_NAME=$1
-TUTORIAL_PATH="${REPO_ROOT}/tutorials/${TUTORIAL_NAME}"
-DOCKER_COMPOSE="${TUTORIAL_PATH}/brev/docker-compose.yml"
+ACH_TUTORIAL=$1
+ACH_TUTORIAL_PATH="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
+DOCKER_COMPOSE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
 
 # Validate tutorial exists
-if [ ! -d "${TUTORIAL_PATH}" ]; then
-    echo "Error: Tutorial directory not found: ${TUTORIAL_PATH}"
+if [ ! -d "${ACH_TUTORIAL_PATH}" ]; then
+    echo "Error: Tutorial directory not found: ${ACH_TUTORIAL_PATH}"
     exit 1
 fi
 
@@ -38,15 +38,12 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
     exit 1
 fi
 
-echo "Stopping tutorial: ${TUTORIAL_NAME}"
+echo "Stopping tutorial: ${ACH_TUTORIAL}"
 cd ${MOUNT}
 docker compose -f ${DOCKER_COMPOSE} down
-
-# Remove the Docker volume
-docker volume rm accelerated-computing-hub 2>/dev/null || true
 
 cd / # We've got to be somewhere that isn't the mount to unmount it.
 sudo umount ${MOUNT}
 sudo rmdir ${MOUNT} 2>/dev/null || true
 
-echo "Tutorial ${TUTORIAL_NAME} stopped successfully!"
+echo "Tutorial ${ACH_TUTORIAL} stopped successfully!"
