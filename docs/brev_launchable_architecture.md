@@ -20,12 +20,12 @@ For each syllabi, a Docker Compose file is automatically generated on the [`gene
 |-----------|--------------|-------------|
 | `base`    | Tutorial     | Performs one-time initialization tasks when a Launchable is deployed, such as updating the Git repository to the latest commit and populating the Docker volume. |
 | `jupyter` | Tutorial     | Runs the JupyterLab server and executes notebook content. |
-| `nsight`  | [NVIDIA NSight Streamer](https://developer.nvidia.com/nsight-streamer) | Runs the [NVIDIA NSight Streamer](https://developer.nvidia.com/nsight-streamer) server that provides devtools. |
+| `nsight`  | [NVIDIA NSight Streamer](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-nsys) | Runs the WebRTC server that provides devtools. |
 
 ## Docker Images
 
 - Tutorial: A tutorial-specific image built and published by the ACH CI. The image is defined by `tutorials/<tutorial-name>/brev/dockerfile` or `tutorials/<tutorial-name>/brev/docker-recipe.py`.
-- [NVIDIA NSight Streamer](https://developer.nvidia.com/nsight-streamer): A pre-built image that serves NSight GUIs over WebRTC.
+- [NVIDIA NSight Streamer](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-nsys): A pre-built image that serves NSight GUIs over WebRTC.
 
 ## Docker Volumes
 
