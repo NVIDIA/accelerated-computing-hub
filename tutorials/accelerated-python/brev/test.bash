@@ -4,24 +4,24 @@ START_TIME=$(date +%s.%N)
 
 nvidia-smi
 
-# Run regular package tests
+# Run regular package tests.
 echo "Running regular package tests..."
 pytest /accelerated-computing-hub/tutorials/accelerated-python/test/test_packages.py
 EXIT_CODE_PACKAGES=$?
 
-# Run RAPIDS tests in the venv
+# Run RAPIDS tests.
 echo ""
 echo "Running RAPIDS package tests in virtual environment..."
 /opt/venvs/rapids/bin/pytest /accelerated-computing-hub/tutorials/accelerated-python/test/test_rapids.py
 EXIT_CODE_RAPIDS=$?
 
-# Test solution notebooks
+# Test solution notebooks.
 echo ""
 echo "Running solution notebook tests..."
 pytest /accelerated-computing-hub/tutorials/accelerated-python/test/test_notebooks.py
 EXIT_CODE_NOTEBOOKS=$?
 
-# Overall exit code is non-zero if any test suite failed
+# Overall exit code is non-zero if any test suite failed.
 EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_RAPIDS || EXIT_CODE_NOTEBOOKS))
 
 END_TIME=$(date +%s.%N)
