@@ -12,7 +12,7 @@ set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
-MOUNT=/tmp/ach-mount
+MOUNT=/tmp/accelerated-computing-hub-mount
 
 # Check argument
 if [ $# -ne 1 ]; then
