@@ -3,6 +3,9 @@ FROM rapidsai/devcontainers:25.08-cpp-cuda12.8
 ENV PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
+    ACH_RAPIDS_VENV=/opt/venvs/rapids \
     ACH_TUTORIAL=accelerated-python
 
 # Install system packages (needed before pip install for git-based packages)
@@ -54,7 +57,6 @@ RUN mkdir -p ~/.local/state/._bash_history \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 # Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel
-ENV ACH_RAPIDS_VENV=/opt/venvs/rapids
 RUN python -m venv ${ACH_RAPIDS_VENV} \
  && ${ACH_RAPIDS_VENV}/bin/pip install --no-cache-dir \
     --extra-index-url=https://pypi.nvidia.com \
