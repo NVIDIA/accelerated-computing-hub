@@ -11,12 +11,18 @@ EXIT_CODE_PACKAGES=$?
 
 # Run RAPIDS tests in the venv
 echo ""
-echo "Running RAPIDS tests in venv..."
+echo "Running RAPIDS package tests in virtual environment..."
 /opt/venvs/rapids/bin/pytest /accelerated-computing-hub/tutorials/accelerated-python/test/test_rapids.py
 EXIT_CODE_RAPIDS=$?
 
-# Overall exit code is non-zero if either test suite failed
-EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_RAPIDS))
+# Test solution notebooks
+echo ""
+echo "Running solution notebook tests..."
+pytest /accelerated-computing-hub/tutorials/accelerated-python/test/test_notebooks.py
+EXIT_CODE_NOTEBOOKS=$?
+
+# Overall exit code is non-zero if any test suite failed
+EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_RAPIDS || EXIT_CODE_NOTEBOOKS))
 
 END_TIME=$(date +%s.%N)
 ELAPSED=$(awk "BEGIN {print $END_TIME - $START_TIME}")
