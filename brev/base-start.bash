@@ -1,6 +1,6 @@
 #! /bin/bash
 
-set -eu
+set -euo pipefail
 
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
