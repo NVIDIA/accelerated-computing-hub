@@ -45,6 +45,26 @@ if [ $# -eq 0 ]; then
     usage
 fi
 
+# Check for required tools
+if ! command -v lychee &> /dev/null; then
+    echo -e "${RED}Error: lychee is not installed or not in PATH${NC}"
+    echo "Please install lychee: https://github.com/lycheeverse/lychee"
+    exit 1
+fi
+
+if ! command -v jupyter &> /dev/null; then
+    echo -e "${RED}Error: jupyter is not installed or not in PATH${NC}"
+    echo "Please install jupyter: pip install jupyter nbconvert"
+    exit 1
+fi
+
+# Verify jupyter nbconvert is available
+if ! jupyter nbconvert --version &> /dev/null; then
+    echo -e "${RED}Error: jupyter nbconvert is not available${NC}"
+    echo "Please install nbconvert: pip install nbconvert"
+    exit 1
+fi
+
 TARGET_PATH="$1"
 
 # Get absolute paths
