@@ -18,7 +18,6 @@ COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
 # Remove externally managed flag and install Python packages.
 RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
- && python -m pip install --no-cache-dir --root-user-action=ignore --upgrade pip \
  && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
@@ -46,7 +45,6 @@ RUN mkdir -p ~/.local/state/._bash_history \
 # Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel
 ENV ACH_RAPIDS_VENV=/opt/venvs/rapids
 RUN python -m venv ${ACH_RAPIDS_VENV} \
- && ${ACH_RAPIDS_VENV}/bin/python -m pip install --no-cache-dir --upgrade pip \
  && ${ACH_RAPIDS_VENV}/bin/pip install --no-cache-dir \
     --extra-index-url=https://pypi.nvidia.com \
     "cudf-cu12==25.10.*" \
