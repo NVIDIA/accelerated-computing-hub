@@ -3,7 +3,7 @@
 set -eu
 
 # Run per-tutorial start tests if they exist.
-if [ -n "${ACH_TUTORIAL}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
+if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
   TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
   LOG_DIR="/accelerated-computing-hub/logs"
   LOG_FILE="${LOG_DIR}/test.log"
@@ -46,7 +46,7 @@ if [ -n "${ACH_TUTORIAL}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
   fi
 else
   if [ -n "${ACH_TUTORIAL}" ]; then
-    echo "ACH_RUN_TESTS not set, skipping tutorial tests"
+    echo "ACH_RUN_TESTS is empty, skipping tutorial tests"
   else
     echo "ACH_TUTORIAL not set, skipping tutorial tests"
   fi
