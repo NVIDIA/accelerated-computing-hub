@@ -16,6 +16,7 @@ Brev Launchables of this tutorial should use:
 
 - [CUDA Python - CuPy, cuDF, CCCL, & Kernels - 8 Hours](./notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb).
 - [CUDA Python - cuda.core & CCCL - 2 Hours](./notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb)
+- [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
 
 ## Notebooks
 

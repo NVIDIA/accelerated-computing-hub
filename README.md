@@ -16,6 +16,7 @@ The following interactive tutorials are available and can be used on [NVIDIA Bre
 | [nvmath-python Tutorial](tutorials/nvmath-python/README.md) | [docker-compose.yml](tutorials/nvmath-python/brev/docker-compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | Crusoe or any other with Flexible Ports |
 | [CUDA Python Tutorial - CuPy, cuDF, CCCL, & Kernels - 8 Hours](tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours__docker_compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
 | [CUDA Python Tutorial - cuda.core & CCCL - 2 Hours](tutorials/accelerated-python/notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours__docker_compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
+| [PyHPC Tutorial - NumPy, CuPy, & mpi4py - 4 Hours](tutorials/accelerated-python/notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours__docker_compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | Crusoe or any other with Flexible Ports |
 
 ## License
 
