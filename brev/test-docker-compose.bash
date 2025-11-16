@@ -93,11 +93,20 @@ echo "Testing Docker Compose: ${COMPOSE_FILE}"
 echo "================================================================================"
 echo ""
 
+# Stop any existing containers first
+echo "🛑 Stopping any existing containers..."
+docker compose -f "${COMPOSE_FILE}" down &>/dev/null || true
+echo ""
+
 # Check for and remove existing volume
 VOLUME_NAME="${ACH_TUTORIAL}_accelerated-computing-hub"
 if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
     echo "🗑️  Removing existing volume: ${VOLUME_NAME}"
-    docker volume rm "${VOLUME_NAME}" &>/dev/null || true
+    if docker volume rm "${VOLUME_NAME}" 2>/dev/null; then
+        echo -e "${GREEN}✅ Volume removed successfully${NC}"
+    else
+        echo -e "${YELLOW}⚠️ Warning: Could not remove volume (may still be in use)${NC}"
+    fi
     echo ""
 fi
 
