@@ -4,13 +4,13 @@
 
 - Get the GitHub web URL to the Docker Compose file for the Accelerated Computing Hub tutorial or syllabus from [the README](../README.md).
 - Go to [brev.nvidia.com](https://brev.nvidia.com).
-- Login and select correct organization.
-- Click "Launchables".
+- [Login or signup to Brev](brev_login_signup.md) and select the correct organization.
+- Click "Launchables" on the navigation bar at the top.
 
 ### Code Page
 
 - Click "I have code files in a git repository".
-- Select "Enter a public repository, notebook file, or markdown file URL" textbox and input "https://github.com/NVIDIA/accelerated-computing-hub".
+- Select "Enter a public repository, notebook file, or markdown file URL" textbox and input the README for the tutorial, the notebook for the syllabus, or "https://github.com/NVIDIA/accelerated-computing-hub". This will appear on the Launchable's description.
 - Click "With container(s)".
 - Click "Next".
 
