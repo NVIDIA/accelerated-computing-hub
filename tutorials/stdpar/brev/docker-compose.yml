@@ -22,9 +22,9 @@ x-config:
     volumes:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
-      - BREV_ENV_ID
-      - ACH_TUTORIAL=*tutorial-name
-      - ACH_RUN_TESTS
+      BREV_ENV_ID: ${BREV_ENV_ID}
+      ACH_TUTORIAL: *tutorial-name
+      ACH_RUN_TESTS: ${ACH_RUN_TESTS}
     user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
