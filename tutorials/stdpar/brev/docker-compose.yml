@@ -23,8 +23,8 @@ x-config:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
+      - ACH_TUTORIAL=*tutorial-name
       - ACH_RUN_TESTS
-      ACH_TUTORIAL: *tutorial-name
     user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
