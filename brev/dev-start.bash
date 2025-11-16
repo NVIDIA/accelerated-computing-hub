@@ -55,7 +55,6 @@ docker volume create --driver local \
   "${ACH_TUTORIAL}_accelerated-computing-hub"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
-export ACH_TUTORIAL
 cd ${MOUNT}
 docker compose -f ${DOCKER_COMPOSE} up -d
 

@@ -101,8 +101,6 @@ if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
     echo ""
 fi
 
-# Export environment variables for the container
-export ACH_TUTORIAL
 export ACH_RUN_TESTS=1
 
 # Start containers

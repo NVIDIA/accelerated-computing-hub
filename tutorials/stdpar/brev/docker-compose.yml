@@ -1,4 +1,4 @@
-name: stdpar
+name: &tutorial-name stdpar
 
 x-config:
   dockerfile: &dockerfile tutorials/stdpar/brev/dockerfile
@@ -23,8 +23,8 @@ x-config:
       - accelerated-computing-hub:/accelerated-computing-hub
     environment:
       - BREV_ENV_ID
-      - ACH_TUTORIAL
       - ACH_RUN_TESTS
+      ACH_TUTORIAL: *tutorial-name
     user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
