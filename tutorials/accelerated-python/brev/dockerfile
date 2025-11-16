@@ -56,7 +56,7 @@ RUN mkdir -p ~/.local/state/._bash_history \
  && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
  && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
-# Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel
+# Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel.
 RUN python -m venv ${ACH_RAPIDS_VENV} \
  && ${ACH_RAPIDS_VENV}/bin/pip install --no-cache-dir \
     --extra-index-url=https://pypi.nvidia.com \
