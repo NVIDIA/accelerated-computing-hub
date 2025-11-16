@@ -123,10 +123,10 @@ if docker compose -f "${COMPOSE_FILE}" up base; then
     echo -e "${GREEN}✅ Base container completed successfully${NC}"
     echo ""
 
-    # Now start remaining services in detached mode
+    # Now start remaining services in detached mode (exclude base)
     echo "📦 Starting remaining services..."
     echo ""
-    docker compose -f "${COMPOSE_FILE}" up -d
+    docker compose -f "${COMPOSE_FILE}" up -d jupyter nsight
     echo ""
 else
     echo "================================================================================"
