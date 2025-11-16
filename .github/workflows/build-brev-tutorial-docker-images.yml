@@ -91,40 +91,6 @@ jobs:
         run: |
           hpccm --recipe ${{ matrix.tutorial }}/brev/docker-recipe.py --format docker > ${{ matrix.tutorial }}/brev/dockerfile
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push Docker image (with retry)
-        uses: nick-fields/retry@v3
-        env:
-          DOCKER_BUILDKIT: 1
-        with:
-          timeout_minutes: 60
-          max_attempts: 3
-          retry_wait_seconds: 30
-          command: |
-            cd ${{ matrix.tutorial }}/brev
-
-            docker buildx bake \
-              --allow=fs.read=/home/runner \
-              --set "base.output=type=registry" \
-              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
-              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
-              $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},oci-mediatypes=true" \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main,oci-mediatypes=true" \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,oci-mediatypes=true,compression=zstd,compression-level=3" \
-              --set "base.platform=linux/amd64" \
-              -f docker-compose.yml \
-              base
-
       - name: Generate Docker Compose files
         run: |
           python3 brev/generate-tagged-docker-composes.py \
@@ -186,8 +152,45 @@ jobs:
               fi
             done
           fi
+
+          # Return to original branch
+          git checkout ${GITHUB_REF#refs/heads/}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image (with retry)
+        uses: nick-fields/retry@v3
+        env:
+          DOCKER_BUILDKIT: 1
+        with:
+          timeout_minutes: 60
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: |
+            cd ${{ matrix.tutorial }}/brev
+
+            docker buildx bake \
+              --allow=fs.read=/home/runner \
+              --set "base.output=type=registry" \
+              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
+              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
+              $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},oci-mediatypes=true" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main,oci-mediatypes=true" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,oci-mediatypes=true,compression=zstd,compression-level=3" \
+              --set "base.platform=linux/amd64" \
+              -f docker-compose.yml \
+              base
 
       - name: Create pending commit status for test
         run: |
