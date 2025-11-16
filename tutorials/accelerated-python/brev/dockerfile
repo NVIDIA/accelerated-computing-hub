@@ -62,7 +62,7 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
     pytest \
  && ${ACH_RAPIDS_VENV}/bin/python -m ipykernel install \
     --name=cudf-cu12-25.10 \
-    --display-name="Python (RAPIDS 25.10)" \
+    --display-name="Python 3 (RAPIDS 25.10)" \
     --prefix=/usr/local
 
 COPY . /accelerated-computing-hub
