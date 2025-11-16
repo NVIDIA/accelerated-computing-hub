@@ -1,11 +1,24 @@
 # Contributing
 
-
 Please use the following guidelines when contributing to this project.
 
 Before contributing signficicant changes, please begin a discussion of the
 desired changes via a GitHub Issue to prevent doing unnecessary or overlapping
 work.
+
+## Development Scripts
+
+You can use the following scripts to help with development:
+
+* **`brev/dev-build.bash [<tutorial-name>]`** - Builds Docker containers for tutorials. If a tutorial name is provided (e.g., `accelerated-python`), builds only that tutorial; if no argument is provided, builds all tutorials. Automatically generates Dockerfiles from HPCCM recipes if present.
+
+* **`brev/dev-start.bash <tutorial-name>`** - Starts Docker containers for a tutorial. Sets up a bindfs mount and creates the necessary Docker volumes before bringing up the containers defined in the tutorial's docker-compose.yml.
+
+* **`brev/dev-stop.bash <tutorial-name>`** - Stops Docker containers for a tutorial and cleans up the bindfs mount.
+
+* **`brev/dev-shell.bash <tutorial-name|docker-compose-file> <service-name>`** - Starts an interactive bash shell in a Docker container for a tutorial. Can accept either a tutorial name or a path to docker-compose.yml file, plus the service name (e.g., `base`, `jupyter`, `nsight`).
+
+* **`brev/dev-test.bash <tutorial-name|docker-compose-file>`** - Tests a Docker Compose file with the local repository mounted. Sets up bindfs mount and calls `test-docker-compose.bash` to run the tutorial's tests.
 
 ## License
 
