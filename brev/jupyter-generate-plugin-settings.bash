@@ -30,3 +30,11 @@ cat << EOF > ~/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight/plugin.jupyte
   }
 }
 EOF
+
+# Execution timing
+mkdir -p ~/.jupyter/lab/user-settings/@jupyterlab/notebook-extension
+cat << EOF > ~/.jupyter/lab/user-settings/@jupyterlab/notebook-extension/tracker.jupyterlab-settings
+{
+  "recordTiming": true
+}
+EOF

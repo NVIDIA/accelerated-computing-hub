@@ -4,6 +4,7 @@ matplotlib
 # Jupyter
 jupyter
 jupyterlab-nvidia-nsight
+jupyterlab-execute-time
 
 # NVIDIA devtools
 nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
