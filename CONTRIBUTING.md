@@ -12,7 +12,7 @@ You can use the following scripts to help with development:
 
 * **`brev/dev-build.bash [<tutorial-name>]`** - Builds Docker containers for tutorials. If a tutorial name is provided (e.g., `accelerated-python`), builds only that tutorial; if no argument is provided, builds all tutorials. Automatically generates Dockerfiles from HPCCM recipes if present.
 
-* **`brev/dev-start.bash <tutorial-name>`** - Starts Docker containers for a tutorial. Sets up a bindfs mount and creates the necessary Docker volumes before bringing up the containers defined in the tutorial's docker-compose.yml.
+* **`brev/dev-start.bash <tutorial-name>`** - Starts Docker containers for a tutorial, mounting your local repository as `/accelerated-computing-hub` in the containers.
 
 * **`brev/dev-stop.bash <tutorial-name>`** - Stops Docker containers for a tutorial and cleans up the bindfs mount.
 
