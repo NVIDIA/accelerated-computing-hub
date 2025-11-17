@@ -29,12 +29,18 @@ def test_solution_notebook_executes(notebook_path):
     with open(notebook_path, 'r', encoding='utf-8') as f:
         nb = nbformat.read(f, as_version=4)
 
+    # Determine which kernel to use
+    # If the notebook specifies a kernel, use it; otherwise use python3
+    kernel_name = 'python3'
+    if 'kernelspec' in nb.metadata and 'name' in nb.metadata.kernelspec:
+        kernel_name = nb.metadata.kernelspec.name
+
     # Create a client to execute the notebook
     # timeout=600 means 10 minutes per cell
     client = NotebookClient(
         nb,
         timeout=600,
-        kernel_name='python3',
+        kernel_name=kernel_name,
         resources={'metadata': {'path': str(notebook_path.parent)}}
     )
 
@@ -43,10 +49,8 @@ def test_solution_notebook_executes(notebook_path):
         client.execute()
     except CellExecutionError as e:
         # Provide detailed error information
-        pytest.fail(
-            f"Notebook execution failed in cell {e.cell_index}:\n"
-            f"{e.traceback}"
-        )
+        # CellExecutionError stores the error message in str(e)
+        pytest.fail(f"Notebook execution failed:\n{str(e)}")
     except Exception as e:
         # Catch any other execution errors
         pytest.fail(f"Notebook execution failed: {str(e)}")
