@@ -32,7 +32,7 @@
 #include <algorithm> // For std::fill_n
 #include <numeric>   // For std::transform_reduce
 #include <execution> // For std::execution::par
-#include <ach/cartesian_product.hpp> // Brings C++23 std::views::cartesian_product to C++20
+#include <ranges>
 // TODO: add C++ standard library includes as necessary
 #include <exec/static_thread_pool.hpp>
 #include <exec/on.hpp>
@@ -51,7 +51,7 @@ struct parameters {
   parameters(int argc, char *argv[]);
 
   long nit() { return ni; }
-  long nout() { return 1000; }
+  long nout() { return ni / 10; }
   long nx_global() { return nx * nranks; }
   long ny_global() { return ny; }
   double gamma() { return alpha() * dt / (dx * dx); }
@@ -64,9 +64,9 @@ double prev (double* u_new, double* u_old, parameters p);
 double next (double* u_new, double* u_old, parameters p);
 
 stde::sender auto iteration_step(stde::scheduler auto&& sch, parameters& p, long& it, std::vector<double>& u_new, std::vector<double>& u_old) {
-    // TODO: create task for prev, next, inner
-    // TODO: use "when_all" to wait on prev, next, and inner
-    // TODO: use "then" to perform the MPI reduction
+  // TODO: create task for prev, next, inner
+  // TODO: use "when_all" to wait on prev, next, and inner
+  // TODO: use "then" to perform the MPI reduction
 }
 
 void initial_condition(double* u_new, double* u_old, long n);
@@ -84,6 +84,26 @@ int main(int argc, char *argv[]) {
   }
   MPI_Comm_size(MPI_COMM_WORLD, &p.nranks);
   MPI_Comm_rank(MPI_COMM_WORLD, &p.rank);
+
+#if defined(_NVHPC_STDPAR_GPU)
+  // Create a communicator for ranks that share a node.
+  MPI_Comm node_comm;
+  MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED,
+                      0, MPI_INFO_NULL, &node_comm);
+
+  int local_rank;
+  MPI_Comm_rank(node_comm, &local_rank);
+
+  int num_devices = 0;
+  cudaGetDeviceCount(&num_devices);  // # of visible GPUs on this node
+
+  int dev = local_rank % num_devices;
+  cudaSetDevice(dev);
+
+  // We use `printf` to serialize the output.
+  printf("global_rank %d local_rank %d using GPU %d\n",
+         p.rank, local_rank, dev);
+#endif
 
   // Allocate memory
   std::vector<double> u_new(p.n()), u_old(p.n());
@@ -113,9 +133,9 @@ int main(int argc, char *argv[]) {
   auto memory_bw = grid_size * static_cast<double>(p.nit()) / time;             // GB/s
   if (p.rank == 0) {
     std::cerr << "Rank " << p.rank << ": local domain " << p.nx << "x" << p.ny << " (" << grid_size << " GB): "
-              << memory_bw << " GB/s" << std::endl;
+              << memory_bw << " GB/s " << time << " s" << std::endl;
     std::cerr << "All ranks: global domain " << p.nx_global() << "x" << p.ny_global() << " (" << (grid_size * p.nranks) << " GB): "
-              << memory_bw * p.nranks << " GB/s" << std::endl;
+              << memory_bw * p.nranks << " GB/s " << time << " s" << std::endl;
   }
 
   // Write output to file
@@ -136,6 +156,10 @@ int main(int argc, char *argv[]) {
   MPI_File_iwrite_at(f, values_offset, u_old.data() + p.ny, values_per_rank, MPI_DOUBLE, &req[0]);
   MPI_Waitall(p.rank == 0 ? 3 : 1, req, MPI_STATUSES_IGNORE);
   MPI_File_close(&f);
+
+#if defined(_NVHPC_STDPAR_GPU)
+  MPI_Comm_free(&node_comm);
+#endif
 
   MPI_Finalize();
   return 0;

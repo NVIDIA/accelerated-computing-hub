@@ -45,7 +45,7 @@ struct parameters {
   parameters(int argc, char *argv[]);
     
   long nit() { return ni; }
-  long nout() { return 1000; }
+  long nout() { return ni / 10; }
   long nx_global() { return nx * nranks; }
   long ny_global() { return ny; }
   double gamma() { return alpha() * dt / (dx * dx); }
@@ -125,10 +125,10 @@ int main(int argc, char *argv[]) {
   auto grid_size = static_cast<double>(p.nx * p.ny * sizeof(double) * 2) * 1e-9; // GB
   auto memory_bw = grid_size * static_cast<double>(p.nit()) / time;             // GB/s
   if (p.rank == 0) {
-    std::cerr << "Rank " << p.rank << ": local domain " << p.nx << "x" << p.ny << " (" << grid_size << " GB): " 
-              << memory_bw << " GB/s" << std::endl;
-    std::cerr << "All ranks: global domain " << p.nx_global() << "x" << p.ny_global() << " (" << (grid_size * p.nranks) << " GB): " 
-              << memory_bw * p.nranks << " GB/s" << std::endl; 
+    std::cerr << "Rank " << p.rank << ": local domain " << p.nx << "x" << p.ny << " (" << grid_size << " GB): "
+              << memory_bw << " GB/s " << time << " s" << std::endl;
+    std::cerr << "All ranks: global domain " << p.nx_global() << "x" << p.ny_global() << " (" << (grid_size * p.nranks) << " GB): "
+              << memory_bw * p.nranks << " GB/s " << time << " s" << std::endl;
   }
 
   // Write output to file

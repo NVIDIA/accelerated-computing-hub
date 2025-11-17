@@ -48,7 +48,7 @@ struct parameters {
   parameters(int argc, char *argv[]);
 
   long nit() { return ni; }
-  long nout() { return 1000; }
+  long nout() { return ni / 10; }
   long nx_global() { return nx * nranks; }
   long ny_global() { return ny; }
   double gamma() { return alpha() * dt / (dx * dx); }
@@ -114,6 +114,26 @@ int main(int argc, char *argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &p.nranks);
   MPI_Comm_rank(MPI_COMM_WORLD, &p.rank);
 
+#if defined(_NVHPC_STDPAR_GPU)
+  // Create a communicator for ranks that share a node.
+  MPI_Comm node_comm;
+  MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED,
+                      0, MPI_INFO_NULL, &node_comm);
+
+  int local_rank;
+  MPI_Comm_rank(node_comm, &local_rank);
+
+  int num_devices = 0;
+  cudaGetDeviceCount(&num_devices);  // # of visible GPUs on this node
+
+  int dev = local_rank % num_devices;
+  cudaSetDevice(dev);
+
+  // We use `printf` to serialize the output.
+  printf("global_rank %d local_rank %d using GPU %d\n",
+         p.rank, local_rank, dev);
+#endif
+
   // Allocate memory
   std::vector<double> u_new_data(p.n()), u_old_data(p.n());
   grid_t u_new{u_new_data.data(), p.nx+2, p.ny};
@@ -144,9 +164,9 @@ int main(int argc, char *argv[]) {
   auto memory_bw = grid_size * static_cast<double>(p.nit()) / time;             // GB/s
   if (p.rank == 0) {
     std::cerr << "Rank " << p.rank << ": local domain " << p.nx << "x" << p.ny << " (" << grid_size << " GB): " 
-              << memory_bw << " GB/s" << std::endl;
-    std::cerr << "All ranks: global domain " << p.nx_global() << "x" << p.ny_global() << " (" << (grid_size * p.nranks) << " GB): " 
-              << memory_bw * p.nranks << " GB/s" << std::endl; 
+              << memory_bw << " GB/s " << time << " s" << std::endl;
+    std::cerr << "All ranks: global domain " << p.nx_global() << "x" << p.ny_global() << " (" << (grid_size * p.nranks) << " GB): "
+              << memory_bw * p.nranks << " GB/s " << time << " s" << std::endl;
   }
 
   // Write output to file
@@ -177,6 +197,10 @@ int main(int argc, char *argv[]) {
   MPI_File_iwrite_at(f, values_offset, u_out.data_handle() + p.ny, values_per_rank, MPI_DOUBLE, &req[0]);
   MPI_Waitall(p.rank == 0 ? 3 : 1, req, MPI_STATUSES_IGNORE);
   MPI_File_close(&f);
+
+#if defined(_NVHPC_STDPAR_GPU)
+  MPI_Comm_free(&node_comm);
+#endif
 
   MPI_Finalize();
   return 0;
