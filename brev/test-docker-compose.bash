@@ -112,49 +112,30 @@ fi
 
 export ACH_RUN_TESTS=1
 
-
-echo "📦 Starting base container..."
+# Start container
+echo "📦 Starting containers..."
 echo ""
-echo "================================================================================"
-# Run base container in foreground to see its output
-if docker compose -f "${COMPOSE_FILE}" up base; then
-    echo "================================================================================"
+if docker compose -f "${COMPOSE_FILE}" up -d; then
     echo ""
-    echo -e "${GREEN}✅ Base container completed successfully${NC}"
-    echo ""
-
-    # Now start remaining services in detached mode (exclude base)
-    echo "📦 Starting remaining services..."
-    echo ""
-    docker compose -f "${COMPOSE_FILE}" up -d jupyter nsight
-    echo ""
-else
-    echo "================================================================================"
-    echo ""
-    echo -e "${RED}❌ Base container failed${NC}"
-    echo ""
-
-    # Try to clean up
-    echo "🛑 Attempting cleanup..."
-    docker compose -f "${COMPOSE_FILE}" down || true
-    echo ""
-
-    RETURN_CODE=1
-fi
-
-if [ ${RETURN_CODE:-0} -eq 0 ] && docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
     echo -e "${GREEN}✅ Containers started successfully${NC}"
     echo ""
 
+    # Wait a moment for containers to initialize
+    echo "⏳ Waiting for containers to initialize..."
+    sleep 5
+    echo ""
+fi
+
+if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
     # Show container status
     echo "📊 Container status:"
     docker compose -f "${COMPOSE_FILE}" ps
     echo ""
 
-    # Capture and display logs (excluding base, which we already saw)
+    # Capture and display logs
     echo "📋 Container logs:"
     echo "--------------------------------------------------------------------------------"
-    docker compose -f "${COMPOSE_FILE}" logs jupyter nsight
+    docker compose -f "${COMPOSE_FILE}" logs
     echo "--------------------------------------------------------------------------------"
     echo ""
 
@@ -184,7 +165,7 @@ if [ ${RETURN_CODE:-0} -eq 0 ] && docker compose -f "${COMPOSE_FILE}" ps | grep 
             # Show logs for troubleshooting
             echo "📋 Container logs after restart:"
             echo "--------------------------------------------------------------------------------"
-            docker compose -f "${COMPOSE_FILE}" logs jupyter nsight
+            docker compose -f "${COMPOSE_FILE}" logs
             echo "--------------------------------------------------------------------------------"
             echo ""
 
@@ -202,7 +183,7 @@ if [ ${RETURN_CODE:-0} -eq 0 ] && docker compose -f "${COMPOSE_FILE}" ps | grep 
         # Show logs for troubleshooting
         echo "📋 Container logs after failed restart:"
         echo "--------------------------------------------------------------------------------"
-        docker compose -f "${COMPOSE_FILE}" logs --tail=50 jupyter nsight
+        docker compose -f "${COMPOSE_FILE}" logs --tail=50
         echo "--------------------------------------------------------------------------------"
         echo ""
 
@@ -233,7 +214,7 @@ else
     # Try to capture any logs that might be available
     echo "📋 Attempting to capture logs from failed startup:"
     echo "--------------------------------------------------------------------------------"
-    docker compose -f "${COMPOSE_FILE}" logs jupyter nsight || true
+    docker compose -f "${COMPOSE_FILE}" logs || true
     echo "--------------------------------------------------------------------------------"
     echo ""
 
