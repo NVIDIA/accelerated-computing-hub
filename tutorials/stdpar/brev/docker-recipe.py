@@ -38,6 +38,9 @@ Stage0 += environment(variables={
   # We do not need VFS for the exercises, and using it from a container in a 'generic' way is not trivial:
   'UCX_VFS_ENABLE': 'n',
 
+  # Suppress warnings about UCX `cuda_copy` failures.
+  'UCX_LOG_LEVEL': 'warn',
+
   # Allow HPC-X to oversubscribe the CPU with more ranks than cores without using mpirun --oversubscribe
   'OMPI_MCA_rmaps_base_oversubscribe' : 'true',
 
