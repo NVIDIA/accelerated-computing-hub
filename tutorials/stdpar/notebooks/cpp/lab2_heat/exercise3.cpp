@@ -86,23 +86,14 @@ int main(int argc, char *argv[]) {
   MPI_Comm_rank(MPI_COMM_WORLD, &p.rank);
 
 #if defined(_NVHPC_STDPAR_GPU)
-  // Create a communicator for ranks that share a node.
-  MPI_Comm node_comm;
-  MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED,
-                      0, MPI_INFO_NULL, &node_comm);
+  int dev = 0;
+  cudaGetDevice(&dev);
 
-  int local_rank;
-  MPI_Comm_rank(node_comm, &local_rank);
-
-  int num_devices = 0;
-  cudaGetDeviceCount(&num_devices);  // # of visible GPUs on this node
-
-  int dev = local_rank % num_devices;
-  cudaSetDevice(dev);
+  char bus_id[64];
+  cudaDeviceGetPCIBusId(bus_id, sizeof(bus_id), dev);
 
   // We use `printf` to serialize the output.
-  printf("global_rank %d local_rank %d using GPU %d\n",
-         p.rank, local_rank, dev);
+  printf("rank %d using GPU %s\n", p.rank, bus_id);
 #endif
 
   // Allocate memory
@@ -156,10 +147,6 @@ int main(int argc, char *argv[]) {
   MPI_File_iwrite_at(f, values_offset, u_old.data() + p.ny, values_per_rank, MPI_DOUBLE, &req[0]);
   MPI_Waitall(p.rank == 0 ? 3 : 1, req, MPI_STATUSES_IGNORE);
   MPI_File_close(&f);
-
-#if defined(_NVHPC_STDPAR_GPU)
-  MPI_Comm_free(&node_comm);
-#endif
 
   MPI_Finalize();
   return 0;

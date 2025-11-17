@@ -96,6 +96,17 @@ int main(int argc, char *argv[]) {
   MPI_Comm_size(MPI_COMM_WORLD, &p.nranks);
   MPI_Comm_rank(MPI_COMM_WORLD, &p.rank);
 
+#if defined(_NVHPC_STDPAR_GPU)
+  int dev = 0;
+  cudaGetDevice(&dev);
+
+  char bus_id[64];
+  cudaDeviceGetPCIBusId(bus_id, sizeof(bus_id), dev);
+
+  // We use `printf` to serialize the output.
+  printf("rank %d using GPU %s\n", p.rank, bus_id);
+#endif
+
   // Allocate memory
   std::vector<double> u_new_data(p.n()), u_old_data(p.n());
   grid_t u_new{u_new_data.data(), p.nx+2, p.ny};
