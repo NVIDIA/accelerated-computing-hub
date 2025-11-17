@@ -50,9 +50,6 @@ void daxpy(double a, std::vector<double> const &x, std::vector<double> &y) {
   // Using:
   // - std::views::iota(0).begin() iterator
   // - std::for_each_n algorithm
-  // std::for_each_n(std::views::iota(0).begin(), x.size(), [&](int i) {
-  //  y[i] += a * x[i];
-  // });
 }
 
 // Check solution
