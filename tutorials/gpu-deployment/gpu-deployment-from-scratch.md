@@ -30,9 +30,11 @@ things we will be learning, we will launch a VM through the [NVIDIA Brev](https:
 
 - Under "GPUs" select "New Instance"
 - Choose a GPU type that costs <$1/hour (e.g an L4) 
-- Choose any provider
+- Choose GCP as the provider
+  - There is a known issue with running this material on AWS instances, other providers are untested
 - Give your VM a name
-- Hit Deploy
+- Press Deploy
+- Wait for the VM to be "Running" and the software environment to finish "Building"
 
 #### Connecting to your VM
 
@@ -43,7 +45,8 @@ Once your VM is deployed, follow the Brev access instructions provided for your 
 - Login to your account (copy from access page)
   - `brev login --token ****`
 - Connect via SSH
-  - `brev shell <your vm name>`
+  - `brev ls` to list your VMs
+  - `brev shell <your vm name>` to connect via SSH
 
 For Linux and Windows instructions check the [brev-cli install documentation](https://docs.nvidia.com/brev/latest/brev-cli.html#installation-instructions)
 
@@ -84,21 +87,25 @@ $ nvidia-smi
 ### Let's install something
 
 ```console
-$which pip
+$ which pip
 /usr/bin/pip
 ```
 
 If you have pip, we can try to install something like `cupy`
 
-```console
+```bash
 pip install cupy-cuda12x
+
+python3   # Start Python interpreter
 ```
 
-```console
-$python3
->>> import cupy as cp
->>> x_gpu = cp.array([1, 2, 3])
->>> x2 = x_gpu**2
+```python
+import cupy as cp
+x_gpu = cp.array([1, 2, 3])
+x2 = x_gpu**2
+```
+
+```pytb
 Traceback (most recent call last):
   File "cupy_backends/cuda/_softlink.pyx", line 25, in cupy_backends.cuda._softlink.SoftLink.__init__
   File "/usr/lib/python3.10/ctypes/__init__.py", line 374, in __init__
@@ -161,7 +168,7 @@ your specific OS distribution and version. The example below shows the installat
 CUDA Installation Guide for Linux](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/#ubuntu).
 
 ```bash
-# Add the NVIDIA repos
+# Add the NVIDIA apt repo
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
 sudo apt-get update
@@ -256,6 +263,12 @@ df
 
 When installing nightly or pre-release versions of packages, `uv` has an all-or-nothing strategy. It requires more explicit configuration when working with nightlies or pre-releases, and failing to do so can generate version conflicts and installation errors that are less common with `pip`. For more information, see the [uv pre-release compatibility documentation](https://docs.astral.sh/uv/pip/compatibility/#pre-release-compatibility).
 
+Let's deactivate this environment and return to our home directory so we can explore some more options
+
+```bash
+deactivate
+cd
+```
 
 #### Conda
 
@@ -266,7 +279,14 @@ If you prefer to use `conda` then we need to install it first.
 ```bash
 curl -L -O "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
-bash Miniforge3-$(uname)-$(uname -m).sh  # Follow the prompts
+bash Miniforge3-$(uname)-$(uname -m).sh  # Follow the prompts and choose yes to update your shell profile to automatically initialize conda
+```
+
+> [!NOTE]
+> You'll need to source your `.bashrc` to make `conda` available in your current shell:
+
+```bash
+source ~/.bashrc
 ```
 
 Then we can create a new conda environment with `python` and `cudf`.
@@ -355,7 +375,8 @@ If you are a fan of Jupyter Lab you can view metrics directly in the interface w
 
 ```bash
 # Ensure we are using the base Python
-conda deactivate  # If you installed conda deactivate it
+conda deactivate  # If you installed conda deactivate it (you may need to run this more than once)
+deactivate 
 which python3  # Should be /usr/bin/python3
 
 # Install NVDashboard
@@ -365,6 +386,13 @@ pip install jupyterlab_nvdashboard
 # Restart jupyter
 sudo systemctl restart jupyter
 ```
+
+Head back to the Brev dashboard in your browser and click the "Open Notebook" button in the top right corner. You will be asked to authenticate with Brev again to access your notebook.
+
+> [!NOTE]
+> We've created a few additional Python environments with `uv` and `conda`. As a stretch exercise see if you can use `ipykernel` to register them in Jupyter.
+> 
+> _Hint:_ You will need to follow the [Kernels for different environments](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments) instructions
 
 #### nvtop
 There also also many great third-party tools out there for inspecting your GPU. One such project is [nvtop](https://github.com/Syllo/nvtop), a CLI tool for viewing GPU stats.
