@@ -1,4 +1,4 @@
-FROM rapidsai/devcontainers:25.08-cpp-cuda12.8
+FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.08-cpp-cuda12.8
 
 ENV PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -13,18 +13,16 @@ RUN apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     git \
     git-lfs \
- && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
-
-# Install Docker
-RUN apt-get update -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     apt-transport-https \
     ca-certificates \
     curl \
     gnupg \
     lsb-release \
- && mkdir -p /etc/apt/keyrings \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install Docker
+RUN mkdir -p /etc/apt/keyrings \
  && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
  && apt-get update -y \
