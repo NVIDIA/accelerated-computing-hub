@@ -1,0 +1,31 @@
+name: cutile-python-tutorial
+
+x-config:
+  dockerfile: &dockerfile tutorials/cutile-python/brev/dockerfile
+  image: &image ghcr.io/nvidia/accelerated-python-tutorial:pull-request-108-latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/cutile-python/notebooks
+
+services:
+  jupyter:
+    image: *image
+    build:
+      context: ../../..
+      dockerfile: *dockerfile
+    pull_policy: missing
+    privileged: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    ports:
+      - "0.0.0.0:8888:8888"
+    user: root
+    working_dir: *working-dir
+    restart: unless-stopped
