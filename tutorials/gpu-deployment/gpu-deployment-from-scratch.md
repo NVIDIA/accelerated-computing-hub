@@ -480,18 +480,19 @@ counts = small_df.groupby("a").b.count()
 Now we run the script with `nsys` 
 
 > [!NOTE]
-> If you are using the python from the `uv venv` use the python from the venv, to do that replace python for 
->  `/home/ubuntu/sandbox/.venv/bin/python my_script.py`
+> You will need to run this command with `sudo` in order to access low level GPU metrics. However, this 
+> can disrupt which Python environment you have activated. We recommend you run this with either the `uv` or `conda`
+> environment activated and use the full path to `python` in your environment. You can find this easily with `which python`.
 
 
 ```bash
 sudo nsys profile \
   --trace cuda,osrt,nvtx \
-  --gpu-metrics-device all \
+  --gpu-metrics-devices all \
   --cuda-memory-usage true \
   --force-overwrite true \
   --output profile_run_v1 \
-  python my_script.py
+  $(which python) my_script.py
 # Will create profile_my_script.nsys-rep
 ```
 
