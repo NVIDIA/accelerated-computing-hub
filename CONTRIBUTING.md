@@ -53,6 +53,31 @@ A module should have the following directory structure:
 * Each lab translation and programming language combination should have a
   `solutions` directory containing correct solutions.
 
+## Reviewing PRs from forks
+
+Due to security challenges of running CI on self-hosted GitHub Actions runners workflows on PRs from forks will not trigger automatically.
+
+To work around this a maintainer needs to inspect the PR to ensure there are no concerns with running it, then push a copy of the PR to a branch on the upstream repo. This will trigger the CI to run. The results of the workflow will be reported back on the PR due to the matching SHAs of each commit.
+
+```bash
+# Use the GitHub CLI to check out the PR
+gh pr checkout 123
+
+# Push to a PR branch on the upstream
+git push upstream pull-request/123
+```
+
+If the contributor makes further changes these will also need to be pulled/pushed to trigger the CI again.
+
+```bash
+# Check out the PR branch again
+gh pr checkout 123  
+# Or just `git checkout <name of branch> && git pull` if you already have it
+
+# Push to upstream PR branch 
+git push upstream pull-request/123  # You may need --force id the contributor has rewritten their history
+```
+
 ## Attribution
 
 Portions adopted from [https://github.com/OpenACC/openacc-training-materials/blob/master/CONTRIBUTING.md](https://github.com/OpenACC/openacc-training-materials/blob/master/CONTRIBUTING.md)
