@@ -78,6 +78,8 @@ gh pr checkout 123
 git push upstream pull-request/123  # You may need --force id the contributor has rewritten their history
 ```
 
+See the [GitHub Actions NVIDIA Runners documentation for more information](https://docs.gha-runners.nvidia.com/platform/onboarding/pull-request-testing/).
+
 ## Attribution
 
 Portions adopted from [https://github.com/OpenACC/openacc-training-materials/blob/master/CONTRIBUTING.md](https://github.com/OpenACC/openacc-training-materials/blob/master/CONTRIBUTING.md)
