@@ -1,4 +1,4 @@
-# GPU Deployment Guide 
+# GPU Deployment Guide
 
 ## Agenda
 - Deployment
@@ -10,8 +10,8 @@
 
 ## Deployment
 
-This tutorial will discuss how to get your own GPUs on the cloud in more general terms. In order to dig into some of the 
-things we will be learning, we will launch a VM through the [NVIDIA Brev](https://brev.nvidia.com) portal. 
+This tutorial will discuss how to get your own GPUs on the cloud in more general terms. In order to dig into some of the
+things we will be learning, we will launch a VM through the [NVIDIA Brev](https://brev.nvidia.com) portal.
 
 ### Getting set up with Brev
 
@@ -28,7 +28,7 @@ things we will be learning, we will launch a VM through the [NVIDIA Brev](https:
 #### Launching a Brev VM
 
 - Under "GPUs" select "New Instance"
-- Choose a GPU type that costs <$1/hour (e.g an L4) 
+- Choose a GPU type that costs <$1/hour (e.g an L4)
 - Choose GCP as the provider
   - There is a known issue with running this material on AWS instances, other providers are untested
 - Give your VM a name
@@ -40,7 +40,7 @@ things we will be learning, we will launch a VM through the [NVIDIA Brev](https:
 Once your VM is deployed, follow the Brev access instructions provided for your instance. The connection instructions will vary depending on your operating system. For example, on macOS you would:
 
 - Install the `brev` CLI
-  - `brew install brevdev/homebrew-brev/brev 
+  - `brew install brevdev/homebrew-brev/brev
 - Login to your account (copy from access page)
   - `brev login --token ****`
 - Connect via SSH
@@ -197,7 +197,7 @@ Now that we have our CUDA libraries we can install Python libraries with corresp
 > For some packages we need to use a custom index because the RAPIDS packages tend to be too large for uploading to PyPI. While we can work with them to increase those limits we can run our own index and handle the cost of serving those packages. You can check the [RAPIDS installation selector](https://docs.rapids.ai/install/) to see if which package needs the extra index.
 > The reason CUDA packages are so large is because GPU machine code varies between models in a way that doesn't happen with CPUs. To work around this CUDA builds for all common GPUs and bundles them together. Further improvements in packaging could help with this in the future.
 
-As of the 25.10 release neither cuDF nor cuML need the extra index. Let's install `cudf` and do a simple operation. 
+As of the 25.10 release neither cuDF nor cuML need the extra index. Let's install `cudf` and do a simple operation.
 
 ```bash
 pip install cudf-cu12
@@ -334,7 +334,7 @@ Below `nvidia-smi` sits NVML, a protocol for querying low level information from
 
 ```bash
 pip install nvidia-ml-py  # Package name doesn't match library name. You import it with `import pynvml`
-``` 
+```
 
 Here are some simple examples of using `pynvml`:
 
@@ -361,7 +361,7 @@ print(f"Memory Used: {mem_info.used / 1e9:.2f} GB")
 print(f"Memory Free: {mem_info.free / 1e9:.2f} GB")
 ```
 
-You can learn more about using the `pynvml` library in [this notebook on the Accelerated Computing Hub](https://github.com/NVIDIA/accelerated-computing-hub/blob/main/gpu-python-tutorial/4.0_pyNVML.ipynb).
+You can learn more about using the `pynvml` library in [this notebook on the Accelerated Computing Hub](https://github.com/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/libraries/28__pynvml.ipynb).
 
 
 #### Jupyter Lab NVDashboard
@@ -375,7 +375,7 @@ If you are a fan of Jupyter Lab you can view metrics directly in the interface w
 ```bash
 # Ensure we are using the base Python
 conda deactivate  # If you installed conda deactivate it (you may need to run this more than once)
-deactivate 
+deactivate
 which python3  # Should be /usr/bin/python3
 
 # Install NVDashboard
@@ -390,7 +390,7 @@ Head back to the Brev dashboard in your browser and click the "Open Notebook" bu
 
 > [!NOTE]
 > We've created a few additional Python environments with `uv` and `conda`. As a stretch exercise see if you can use `ipykernel` to register them in Jupyter.
-> 
+>
 > _Hint:_ You will need to follow the [Kernels for different environments](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments) instructions
 
 #### nvtop
@@ -413,7 +413,7 @@ import cupy as cp
 
 arr = cp.arange(1, 50_000_000)
 
-while True: 
+while True:
     _ = arr**2
 ```
 
@@ -476,10 +476,10 @@ small_df.min(axis=1)
 counts = small_df.groupby("a").b.count()
 ```
 
-Now we run the script with `nsys` 
+Now we run the script with `nsys`
 
 > [!NOTE]
-> You will need to run this command with `sudo` in order to access low level GPU metrics. However, this 
+> You will need to run this command with `sudo` in order to access low level GPU metrics. However, this
 > can disrupt which Python environment you have activated. We recommend you run this with either the `uv` or `conda`
 > environment activated and use the full path to `python` in your environment. You can find this easily with `which python`.
 
@@ -510,7 +510,7 @@ Now that we've experimented with all of these tools, libraries and debuggers on 
 
 However you get access to GPUs it inevitably falls to you to close the gap between the software provided and the software you need. In our Brev example we got Ubuntu with the NVIDIA driver, but nothing else. On platforms like Snowflake you will get some version of CUDA Toolkit and a few libraries out of the box, but you'll need to figure out how to add the additional things you need.
 
-In [RAPIDS we endeavour to document the most commonly used platforms](https://docs.rapids.ai/deployment/stable/) and how to get from their out of the box offering to a fully functional RAPIDS environment. 
+In [RAPIDS we endeavour to document the most commonly used platforms](https://docs.rapids.ai/deployment/stable/) and how to get from their out of the box offering to a fully functional RAPIDS environment.
 
 If you're using something that we haven't documented then you can walk through the various levels we've covered and figure out what you have, and what you need and hopefully you now have the ability to get started anywhere. If you think you're using a platform that we should document then [open an issue](https://github.com/rapidsai/deployment/issues/new).`
 
