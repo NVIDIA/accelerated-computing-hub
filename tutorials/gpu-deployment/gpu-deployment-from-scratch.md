@@ -2,7 +2,7 @@
 Guide Adapted from:[**EuroSciPy 2025**](https://euroscipy.org/schedule/) | [Share Link](https://jacobtomlinson.dev/links/euroscipy-2025)
 
 ## Agenda
-- Deployment (40 mins)
+- Deployment
   - NVIDIA Brev
   - GPU Software Environment Fundamentals
   - Python packages that use CUDA
