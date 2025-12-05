@@ -53,7 +53,7 @@ A module should have the following directory structure:
 * Each lab translation and programming language combination should have a
   `solutions` directory containing correct solutions.
 
-## Reviewing PRs from forks
+## Reviewing PRs From Forks
 
 Due to security challenges of running CI on self-hosted GitHub Actions runners workflows on PRs from forks will not trigger automatically.
 
