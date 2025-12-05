@@ -27,6 +27,8 @@ jobs:
             target_name: rapidsai-devcontainers-25.10-cpp-cuda12.9
           - source: pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
             target_name: pytorch-2.9.0-cuda12.8-cudnn9-runtime
+          - source: nvidia/cuda:13.0.2-base-ubuntu22.04
+            target_name: nvidia-cuda-13.0.2-base-ubuntu22.04
       fail-fast: false
 
     steps:
