@@ -13,11 +13,11 @@ jupyterlab-nvidia-nsight
 jupyterlab-execute-time
 
 # CUDA
-cuda-python == 12.9.*
-numba-cuda == 0.20.*
+cuda-python
+numba-cuda
 nvmath-python[cu12]
 cupy-cuda12x
-cuda-cccl[test-cu12] == 0.3.1
+cuda-cccl[test-cu12]
 
 # NVIDIA devtools
 nvtx
