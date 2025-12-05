@@ -1,5 +1,4 @@
 # GPU Deployment Guide 
-Guide Adapted from:[**EuroSciPy 2025**](https://euroscipy.org/schedule/) | [Share Link](https://jacobtomlinson.dev/links/euroscipy-2025)
 
 ## Agenda
 - Deployment
@@ -24,7 +23,7 @@ things we will be learning, we will launch a VM through the [NVIDIA Brev](https:
   - Navigate to Billing
   - Select "Redeem Code" <UPDATE IN HERE>
 
-<img width="1398" height="594" alt="Screenshot 2025-08-13 at 15 16 09" src="https://gist.github.com/user-attachments/assets/45f9b71a-eb5f-471f-93fa-2503cf8f4714" />
+<img width="1398" height="594" alt="Screenshot 2025-08-13 at 15 16 09" src="images/brev-setup.png" />
 
 #### Launching a Brev VM
 
@@ -368,7 +367,7 @@ You can learn more about using the `pynvml` library in [this notebook on the Acc
 #### Jupyter Lab NVDashboard
 If you are a fan of Jupyter Lab you can view metrics directly in the interface with [jupyterlab-nvdashboard](https://github.com/rapidsai/jupyterlab-nvdashboard).
 
-<img width="1834" height="1010" alt="image" src="https://gist.github.com/user-attachments/assets/463d1a9f-0888-4390-9945-55a6ec58288b" />
+<img width="1834" height="1010" alt="image" src="images/nvdashboard.png" />
 
 > [!NOTE]
 > Our Brev VM has Jupyter running for us in the system python environment via systemd. We can install NVDashboard in here but we need to ensure we are installing it into the right Python.
@@ -397,7 +396,7 @@ Head back to the Brev dashboard in your browser and click the "Open Notebook" bu
 #### nvtop
 There also also many great third-party tools out there for inspecting your GPU. One such project is [nvtop](https://github.com/Syllo/nvtop), a CLI tool for viewing GPU stats.
 
-<img width="1402" height="542" alt="image" src="https://gist.github.com/user-attachments/assets/4b8794ca-bdb0-4946-8c82-17eefd751da2" />
+<img width="1402" height="542" alt="image" src="images/nvtop.png" />
 
 ```bash
 # Install with apt
@@ -498,15 +497,12 @@ sudo nsys profile \
 
 To be able to visualize the file, we can download it an use [nsight-systems](https://developer.nvidia.com/nsight-systems/get-started).
 
-If you are running Jupyter and NSight on the same machine you can also use the [Jupyter Lab Nsight extension](https://pypi.org/project/jupyterlab-nvidia-nsight/)
-
-```bash
-pip install jupyterlab-nvidia-nsight
-```
 
 Further reading:
 - [Nsight Documentation](https://developer.nvidia.com/nsight-systems/get-started)
+- [Jupyter Lab Nsight extension](https://pypi.org/project/jupyterlab-nvidia-nsight/)
 - [Towards Data Science community guide](https://medium.com/data-science/profiling-cuda-using-nsight-systems-a-numba-example-fc65003f8c52)
+
 
 ### How do I do all this on "foo" platform?
 Now that we've experimented with all of these tools, libraries and debuggers on a Ubuntu VM the next thing most folks need to figure out is how to apply this to your world. It's likely that you have some opinionated set of hardware/software/platform that you need to use. Perhaps your employer provides you with access to [Databricks](https://docs.rapids.ai/deployment/stable/platforms/databricks/), [Coiled](https://docs.rapids.ai/deployment/stable/platforms/coiled/) or [Snowflake](https://docs.rapids.ai/deployment/stable/platforms/snowflake/). Or maybe you have cloud access and you use services such as [AWS SageMaker](https://docs.rapids.ai/deployment/stable/cloud/aws/sagemaker/), [Azure Machine Learning](https://docs.rapids.ai/deployment/stable/cloud/azure/azureml/) or [Google Cloud Vertex AI](https://docs.rapids.ai/deployment/stable/cloud/gcp/vertex-ai/). Or maybe you have an existing machine or cluster somewhere.
@@ -516,3 +512,7 @@ However you get access to GPUs it inevitably falls to you to close the gap betwe
 In [RAPIDS we endeavour to document the most commonly used platforms](https://docs.rapids.ai/deployment/stable/) and how to get from their out of the box offering to a fully functional RAPIDS environment. 
 
 If you're using something that we haven't documented then you can walk through the various levels we've covered and figure out what you have, and what you need and hopefully you now have the ability to get started anywhere. If you think you're using a platform that we should document then [open an issue](https://github.com/rapidsai/deployment/issues/new).`
+
+### Previous iterations of this tutorial:
+
+This guide was adapted from:[**EuroSciPy 2025**](https://euroscipy.org/schedule/) | [Share Link](https://jacobtomlinson.dev/links/euroscipy-2025)
