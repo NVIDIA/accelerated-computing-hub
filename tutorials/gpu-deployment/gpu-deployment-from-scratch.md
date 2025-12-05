@@ -497,6 +497,7 @@ sudo nsys profile \
 
 To be able to visualize the file, we can download it an use [nsight-systems](https://developer.nvidia.com/nsight-systems/get-started).
 
+<img width="1834" height="1010" alt="Nsight Systems profiling view" src="images/nsight-view.png" />
 
 Further reading:
 - [Nsight Documentation](https://developer.nvidia.com/nsight-systems/get-started)
