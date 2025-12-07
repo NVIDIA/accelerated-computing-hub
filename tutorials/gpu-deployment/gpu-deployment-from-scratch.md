@@ -40,7 +40,7 @@ things we will be learning, we will launch a VM through the [NVIDIA Brev](https:
 Once your VM is deployed, follow the Brev access instructions provided for your instance. The connection instructions will vary depending on your operating system. For example, on macOS you would:
 
 - Install the `brev` CLI
-  - `brew install brevdev/homebrew-brev/brev
+  - `brew install brevdev/homebrew-brev/brev`
 - Login to your account (copy from access page)
   - `brev login --token ****`
 - Connect via SSH
