@@ -11,3 +11,6 @@ https://opendata.cityofnewyork.us/overview/#termsofuse
 
 # Medium.com - returns 403 for automated requests but works in browsers
 https://medium.com/.*
+
+# RAPIDS documentation - has aggressive bot protection that resets connections
+https://docs.rapids.ai/.*
