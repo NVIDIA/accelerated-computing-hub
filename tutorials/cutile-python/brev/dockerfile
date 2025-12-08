@@ -1,4 +1,4 @@
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda:13.0.2-base-ubuntu22.04
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.0.2-base-ubuntu22.04
 
 ENV PYTHON_VERSION=3.12 \
     PIP_ROOT_USER_ACTION=ignore \
