@@ -1,7 +1,8 @@
 # Fundamentals of Accelerated Computing with Modern CUDA C++
 
-This tutorial teaches you the fundamentals of GPU programming and modern CUDA C++. You'll find the
-following content:
+This tutorial teaches you the fundamentals of GPU programming and modern CUDA C++. You can watch
+lectures corresponding to this course on [YouTube](https://www.youtube.com/playlist?list=PL5B692fm6--vWLhYPqLcEu6RF3hXjEyJr).
+You'll find the following content:
 
 - [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
