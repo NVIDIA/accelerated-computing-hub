@@ -176,7 +176,7 @@ jobs:
         uses: nick-fields/retry@v3
         env:
           DOCKER_BUILDKIT: 1
-          BUILDKIT_PROGRESS: quiet
+          BUILDKIT_PROGRESS: plain
         with:
           timeout_minutes: 60
           max_attempts: 3
@@ -191,7 +191,7 @@ jobs:
             docker manifest inspect "${IMAGE_NAME}:buildcache-main" > /dev/null 2>&1 && echo "✓ Main cache exists" || echo "✗ Main cache not found"
 
             docker buildx bake \
-              --progress=quiet \
+              --progress=plain \
               --allow=fs.read=/home/runner \
               --set "base.output=type=registry" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
