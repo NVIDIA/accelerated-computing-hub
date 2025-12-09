@@ -174,6 +174,7 @@ jobs:
         uses: nick-fields/retry@v3
         env:
           DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
         with:
           timeout_minutes: 60
           max_attempts: 3

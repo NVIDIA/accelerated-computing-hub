@@ -115,7 +115,7 @@ export ACH_RUN_TESTS=1
 # Start container
 echo "📦 Starting containers..."
 echo ""
-if docker compose -f "${COMPOSE_FILE}" up -d; then
+if docker compose -f "${COMPOSE_FILE}" up -d --quiet-pull; then
     echo ""
     echo -e "${GREEN}✅ Containers started successfully${NC}"
     echo ""
