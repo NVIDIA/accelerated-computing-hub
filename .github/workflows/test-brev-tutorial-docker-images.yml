@@ -63,6 +63,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Stop DCGM to allow NCU profiling
+        run: |
+          # DCGM (Data Center GPU Manager) locks the GPU and prevents NCU from profiling.
+          # Stop it before running the container tests.
+          echo "Stopping DCGM services..."
+          sudo systemctl stop nvidia-dcgm || echo "nvidia-dcgm service not found or already stopped"
+          sudo systemctl stop dcgm || echo "dcgm service not found or already stopped"
+          # Also try nv-hostengine which DCGM uses
+          sudo systemctl stop nv-hostengine || echo "nv-hostengine service not found or already stopped"
+          # Kill any remaining dcgm processes
+          sudo pkill -9 nv-hostengine || echo "No nv-hostengine processes found"
+          sudo pkill -9 dcgm || echo "No dcgm processes found"
+          echo "DCGM services stopped."
+
       - name: Test Docker Compose
         id: test
         run: |
