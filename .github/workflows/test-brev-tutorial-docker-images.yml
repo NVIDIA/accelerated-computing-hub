@@ -71,14 +71,28 @@ jobs:
           # DCGM (Data Center GPU Manager) locks the GPU and prevents NCU from profiling.
           # Stop it before running the container tests.
           echo "Stopping DCGM services..."
+
+          # Stop the dcgm-exporter Docker container (this is how it runs on GitHub runners)
+          echo "Stopping dcgm-exporter Docker container..."
+          docker stop dcgm-exporter 2>/dev/null && echo "Stopped dcgm-exporter container" || echo "dcgm-exporter container not running"
+          docker rm -f dcgm-exporter 2>/dev/null || echo "dcgm-exporter container already removed"
+
+          # Stop systemd services
+          sudo systemctl stop dcgm-exporter || echo "dcgm-exporter service not found or already stopped"
           sudo systemctl stop nvidia-dcgm || echo "nvidia-dcgm service not found or already stopped"
           sudo systemctl stop dcgm || echo "dcgm service not found or already stopped"
-          # Also try nv-hostengine which DCGM uses
           sudo systemctl stop nv-hostengine || echo "nv-hostengine service not found or already stopped"
+
           # Kill any remaining dcgm processes
           sudo pkill -9 nv-hostengine || echo "No nv-hostengine processes found"
           sudo pkill -9 dcgm || echo "No dcgm processes found"
-          echo "DCGM services stopped."
+
+          # Relax profiling permissions (perf_event_paranoid=4 is very restrictive)
+          echo "Relaxing profiling permissions..."
+          sudo sysctl -w kernel.perf_event_paranoid=2 || echo "Could not set perf_event_paranoid"
+          sudo sysctl -w kernel.kptr_restrict=0 || echo "Could not set kptr_restrict"
+
+          echo "DCGM services stopped and profiling permissions relaxed."
 
       - name: Debug GPU and NCU configuration
         run: |
