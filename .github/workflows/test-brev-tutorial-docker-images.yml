@@ -130,7 +130,13 @@ jobs:
           COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
 
           # Extract the image name from the compose file
-          IMAGE=$(grep -A5 "base:" "$COMPOSE_FILE" | grep "image:" | head -1 | awk '{print $2}')
+          # The image is defined with a YAML anchor like: image: &image ghcr.io/...
+          # We need to extract the actual URL, not the anchor reference
+          IMAGE=$(grep "image: &image" "$COMPOSE_FILE" | sed 's/.*image: &image //')
+          if [ -z "$IMAGE" ]; then
+            # Fallback: try to find any ghcr.io image reference
+            IMAGE=$(grep -o 'ghcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
+          fi
           echo "Testing with image: $IMAGE"
 
           # Create a simple test script
