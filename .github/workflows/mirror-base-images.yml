@@ -60,7 +60,7 @@ jobs:
       - name: Pull source image from Docker Hub
         if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
         env:
-          BUILDKIT_PROGRESS: plain
+          BUILDKIT_PROGRESS: quiet
         run: |
           echo "Pulling ${{ matrix.image.source }} from Docker Hub..."
           docker pull --quiet ${{ matrix.image.source }}

@@ -26,7 +26,7 @@ jobs:
     permissions:
       statuses: write
     env:
-      BUILDKIT_PROGRESS: plain
+      BUILDKIT_PROGRESS: quiet
       DOCKER_CLI_HINTS: false
     steps:
       - name: Show runner info
