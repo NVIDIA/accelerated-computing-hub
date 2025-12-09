@@ -18,6 +18,28 @@ solution_notebooks = sorted(NOTEBOOKS_DIR.rglob('*SOLUTION*.ipynb'))
 notebook_ids = [nb.relative_to(NOTEBOOKS_DIR).as_posix() for nb in solution_notebooks]
 
 
+def extract_cell_outputs(nb):
+    """Extract stdout/stderr from all executed cells for debugging."""
+    outputs = []
+    for i, cell in enumerate(nb.cells):
+        if cell.cell_type != 'code':
+            continue
+        cell_outputs = []
+        for output in cell.get('outputs', []):
+            if output.get('output_type') == 'stream':
+                stream_name = output.get('name', 'stdout')
+                text = output.get('text', '')
+                cell_outputs.append(f"[{stream_name}] {text}")
+            elif output.get('output_type') == 'error':
+                ename = output.get('ename', 'Error')
+                evalue = output.get('evalue', '')
+                cell_outputs.append(f"[error] {ename}: {evalue}")
+        if cell_outputs:
+            source_preview = cell.source[:100].replace('\n', ' ')
+            outputs.append(f"--- Cell {i}: {source_preview}... ---\n" + ''.join(cell_outputs))
+    return '\n'.join(outputs)
+
+
 @pytest.mark.parametrize('notebook_path', solution_notebooks, ids=notebook_ids)
 def test_solution_notebook_executes(notebook_path):
     """
@@ -49,8 +71,10 @@ def test_solution_notebook_executes(notebook_path):
         client.execute()
     except CellExecutionError as e:
         # Provide detailed error information
-        # CellExecutionError stores the error message in str(e)
-        pytest.fail(f"Notebook execution failed:\n{str(e)}")
+        # Include output from ALL cells, not just the failing one
+        all_outputs = extract_cell_outputs(nb)
+        pytest.fail(f"Notebook execution failed:\n{str(e)}\n\n=== ALL CELL OUTPUTS ===\n{all_outputs}")
     except Exception as e:
         # Catch any other execution errors
-        pytest.fail(f"Notebook execution failed: {str(e)}")
+        all_outputs = extract_cell_outputs(nb)
+        pytest.fail(f"Notebook execution failed: {str(e)}\n\n=== ALL CELL OUTPUTS ===\n{all_outputs}")
