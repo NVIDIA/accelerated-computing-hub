@@ -181,15 +181,22 @@ jobs:
           command: |
             cd ${{ matrix.tutorial }}/brev
 
+            # Debug: Show buildx version and check for cache images
+            docker buildx version
+            echo "Checking for existing cache images..."
+            docker manifest inspect "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" > /dev/null 2>&1 && echo "✓ Branch cache exists" || echo "✗ Branch cache not found"
+            docker manifest inspect "${IMAGE_NAME}:buildcache-main" > /dev/null 2>&1 && echo "✓ Main cache exists" || echo "✗ Main cache not found"
+
             docker buildx bake \
+              --progress=plain \
               --allow=fs.read=/home/runner \
               --set "base.output=type=registry" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
               $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},oci-mediatypes=true" \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main,oci-mediatypes=true" \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,oci-mediatypes=true,compression=zstd,compression-level=3" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" \
+              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,image-manifest=true,compression=zstd,compression-level=3" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
