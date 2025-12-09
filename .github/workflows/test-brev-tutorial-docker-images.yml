@@ -72,7 +72,7 @@ jobs:
           # Stop it before running the container tests.
           echo "Stopping DCGM services..."
 
-          # Stop the dcgm-exporter Docker container (this is how it runs on GitHub runners)
+          # Stop the dcgm-exporter Docker container
           echo "Stopping dcgm-exporter Docker container..."
           docker stop dcgm-exporter 2>/dev/null && echo "Stopped dcgm-exporter container" || echo "dcgm-exporter container not running"
           docker rm -f dcgm-exporter 2>/dev/null || echo "dcgm-exporter container already removed"
@@ -116,10 +116,6 @@ jobs:
           systemctl list-units --type=service | grep -iE "(nvidia|dcgm|gpu)" || echo "No matching services"
           echo ""
 
-          echo "=== NCU on Host ==="
-          which ncu 2>/dev/null && ncu --version 2>/dev/null || echo "NCU not found on host"
-          echo ""
-
           echo "=== Profiling Permissions ==="
           cat /proc/sys/kernel/perf_event_paranoid 2>/dev/null || echo "Could not read perf_event_paranoid"
           cat /proc/sys/kernel/kptr_restrict 2>/dev/null || echo "Could not read kptr_restrict"
@@ -132,77 +128,6 @@ jobs:
           echo "=== /dev/nvidia* devices ==="
           ls -la /dev/nvidia* 2>/dev/null || echo "No /dev/nvidia* devices found"
           echo ""
-
-          echo "=== Docker GPU Access Test ==="
-          docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu24.04 nvidia-smi 2>&1 || echo "Docker GPU test failed"
-          echo ""
-
-      - name: Test NCU inside container
-        run: |
-          echo "=== Testing NCU profiling inside container ==="
-          # Pull the tutorial image and test NCU directly
-          COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
-
-          # Extract the image name from the compose file
-          # The image is defined with a YAML anchor like: image: &image ghcr.io/...
-          # We need to extract the actual URL, not the anchor reference
-          IMAGE=$(grep "image: &image" "$COMPOSE_FILE" | sed 's/.*image: &image //')
-          if [ -z "$IMAGE" ]; then
-            # Fallback: try to find any ghcr.io image reference
-            IMAGE=$(grep -o 'ghcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
-          fi
-          echo "Testing with image: $IMAGE"
-
-          # Create a simple test script
-          cat > /tmp/test_ncu.py << 'EOF'
-          from numba import cuda
-          import numpy as np
-
-          @cuda.jit
-          def simple_add(a, b, c):
-              i = cuda.grid(1)
-              if i < a.size:
-                  c[i] = a[i] + b[i]
-
-          n = 1024
-          a = np.ones(n, dtype=np.float32)
-          b = np.ones(n, dtype=np.float32)
-          c = np.zeros(n, dtype=np.float32)
-
-          d_a = cuda.to_device(a)
-          d_b = cuda.to_device(b)
-          d_c = cuda.to_device(c)
-
-          simple_add[4, 256](d_a, d_b, d_c)
-          cuda.synchronize()
-          print("Kernel executed successfully")
-          EOF
-
-          # Test NCU inside the container
-          echo "--- Running NCU profiling test ---"
-          docker run --rm --gpus all \
-            -v /tmp/test_ncu.py:/test_ncu.py:ro \
-            "$IMAGE" \
-            bash -c '
-              echo "NCU version:"
-              ncu --version || echo "NCU not found"
-              echo ""
-              echo "Running simple kernel without profiling:"
-              python /test_ncu.py
-              echo ""
-              echo "Running NCU profiling:"
-              ncu --set full -o /tmp/test_profile python /test_ncu.py 2>&1
-              NCU_EXIT=$?
-              echo "NCU exit code: $NCU_EXIT"
-              echo ""
-              echo "Checking if profile was created:"
-              ls -la /tmp/test_profile.ncu-rep 2>&1 || echo "Profile file not created"
-              echo ""
-              if [ -f /tmp/test_profile.ncu-rep ]; then
-                echo "Profile file exists, testing CSV export:"
-                ncu --import /tmp/test_profile.ncu-rep --csv 2>&1 | head -20
-              fi
-            ' 2>&1 || echo "Container NCU test failed"
 
       - name: Test Docker Compose
         id: test
