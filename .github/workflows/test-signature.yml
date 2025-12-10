@@ -1,0 +1,99 @@
+name: Test Commit Signatures
+
+on:
+  push:
+    branches:
+      - '**'
+  # pull_request is not supported for this workflow due to self-hosted runners
+  # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
+
+jobs:
+  test-signatures:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history to compare with main
+
+      - name: Check commit signatures
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+
+            // Get current branch name
+            const currentBranch = process.env.GITHUB_REF_NAME;
+            console.log(`Current branch: ${currentBranch}`);
+
+            // Skip signature check on main branch to avoid failing on historical unsigned commits
+            if (currentBranch === 'main') {
+              console.log('On main branch - skipping signature check for historical commits.');
+              console.log('Signature verification only runs on PR branches.');
+              return;
+            }
+
+            // Get commits that are on this branch but not on origin/main
+            let commitShas;
+            try {
+              const output = execSync('git rev-list origin/main..HEAD', { encoding: 'utf-8' });
+              commitShas = output.trim().split('\n').filter(sha => sha.length > 0);
+            } catch (error) {
+              console.log('Could not compare with origin/main, checking all commits on this branch.');
+              // Fallback: just check the current commit
+              commitShas = [process.env.GITHUB_SHA];
+            }
+
+            if (commitShas.length === 0) {
+              console.log('No new commits to check (branch is up to date with main).');
+              return;
+            }
+
+            console.log(`Checking ${commitShas.length} commit(s) for signatures...`);
+
+            // Check each commit's verification status via GitHub API
+            const unsignedCommits = [];
+
+            for (const sha of commitShas) {
+              try {
+                const commit = await github.rest.repos.getCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: sha
+                });
+
+                const verification = commit.data.commit.verification;
+                const shortSha = sha.substring(0, 7);
+                const message = commit.data.commit.message.split('\n')[0];
+
+                if (verification && verification.verified) {
+                  console.log(`✓ ${shortSha} - ${message} (${verification.reason})`);
+                } else {
+                  const reason = verification ? verification.reason : 'unknown';
+                  console.log(`✗ ${shortSha} - ${message} (${reason})`);
+                  unsignedCommits.push({
+                    sha: shortSha,
+                    fullSha: sha,
+                    message: message,
+                    reason: reason
+                  });
+                }
+              } catch (error) {
+                console.log(`⚠ ${sha.substring(0, 7)} - Could not verify (${error.message})`);
+                // Don't fail on API errors for individual commits
+              }
+            }
+
+            if (unsignedCommits.length > 0) {
+              console.log('\n❌ Found unsigned commits:');
+              for (const commit of unsignedCommits) {
+                console.log(`   ${commit.sha}: ${commit.message} (reason: ${commit.reason})`);
+              }
+              console.log('\nAll commits must be signed. See the PR comments for instructions on how to sign commits.');
+              console.log('You can re-sign commits with: git rebase -i HEAD~N --exec "git commit --amend --no-edit -S"');
+              core.setFailed(`${unsignedCommits.length} unsigned commit(s) found. All commits must be signed.`);
+            } else {
+              console.log(`\n✅ All ${commitShas.length} commit(s) are properly signed.`);
+            }
+
