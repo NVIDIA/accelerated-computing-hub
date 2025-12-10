@@ -129,6 +129,31 @@ jobs:
           ls -la /dev/nvidia* 2>/dev/null || echo "No /dev/nvidia* devices found"
           echo ""
 
+      - name: Pre-pull Docker images
+        run: |
+          COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
+
+          # Extract all unique images from the compose file
+          # The main image is defined with a YAML anchor like: image: &image ghcr.io/...
+          MAIN_IMAGE=$(grep "image: &image" "$COMPOSE_FILE" | sed 's/.*image: &image //')
+          if [ -z "$MAIN_IMAGE" ]; then
+            # Fallback: try to find any ghcr.io image reference
+            MAIN_IMAGE=$(grep -o 'ghcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
+          fi
+
+          # Extract the nsight image (nvcr.io)
+          NSIGHT_IMAGE=$(grep -o 'nvcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
+
+          echo "Pre-pulling main image: $MAIN_IMAGE"
+          docker pull "$MAIN_IMAGE"
+
+          if [ -n "$NSIGHT_IMAGE" ]; then
+            echo "Pre-pulling nsight image: $NSIGHT_IMAGE"
+            docker pull "$NSIGHT_IMAGE"
+          fi
+
+          echo "All images pulled successfully"
+
       - name: Test Docker Compose
         id: test
         run: |
