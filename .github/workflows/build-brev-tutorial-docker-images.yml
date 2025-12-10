@@ -213,7 +213,7 @@ jobs:
             -f state='pending' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
             -f description='Test started' \
-            -f context="test / ${TUTORIAL_NAME}"
+            -f context="Test Brev Tutorial Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

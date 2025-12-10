@@ -169,7 +169,7 @@ jobs:
             -f state='success' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Tests passed' \
-            -f context='test / ${{ inputs.tutorial }}'
+            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -183,6 +183,6 @@ jobs:
             -f state='failure' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Tests failed' \
-            -f context='test / ${{ inputs.tutorial }}'
+            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
