@@ -1,0 +1,73 @@
+name: Test Git LFS Tracking
+
+on:
+  push:
+    branches:
+      - '**'
+  # pull_request is not supported for this workflow due to self-hosted runners
+  # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
+
+jobs:
+  check-lfs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check that binary files are tracked by LFS
+        run: |
+          echo "Checking that all binary files are tracked by Git LFS..."
+
+          # File extensions that should be tracked by LFS (from .gitattributes)
+          EXTENSIONS="pptx pdf png jpg jpeg gif webp"
+
+          # Build find pattern
+          FIND_PATTERN=""
+          for ext in $EXTENSIONS; do
+            if [ -n "$FIND_PATTERN" ]; then
+              FIND_PATTERN="$FIND_PATTERN -o"
+            fi
+            FIND_PATTERN="$FIND_PATTERN -name *.$ext"
+          done
+
+          # Find all matching files
+          FILES=$(find . -type f \( $FIND_PATTERN \) ! -path "./.git/*" ! -path "./venv/*" 2>/dev/null || true)
+
+          if [ -z "$FILES" ]; then
+            echo "No binary files found to check."
+            exit 0
+          fi
+
+          FAILED=0
+          NOT_LFS_FILES=""
+
+          for file in $FILES; do
+            # Check if file is an LFS pointer (starts with "version https://git-lfs.github.com/spec/v1")
+            if head -c 50 "$file" 2>/dev/null | grep -q "version https://git-lfs.github.com/spec/v1"; then
+              echo "✓ $file (LFS pointer)"
+            else
+              echo "✗ $file (NOT tracked by LFS)"
+              NOT_LFS_FILES="$NOT_LFS_FILES\n  - $file"
+              FAILED=1
+            fi
+          done
+
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "=========================================="
+            echo "ERROR: The following files should be tracked by Git LFS but are not:"
+            echo -e "$NOT_LFS_FILES"
+            echo ""
+            echo "To fix this, run:"
+            echo "  git rm --cached <file>"
+            echo "  git add <file>"
+            echo "  git commit -m 'Track file with Git LFS'"
+            echo ""
+            echo "Make sure Git LFS is installed and .gitattributes includes the file pattern."
+            echo "=========================================="
+            exit 1
+          fi
+
+          echo ""
+          echo "All binary files are properly tracked by Git LFS!"
