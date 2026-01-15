@@ -221,7 +221,7 @@ def diffusion(
 @wp.kernel
 def decaying_turbulence_initializer(
     n: int,
-    k_cutoff: wp.float32,
+    kp: wp.float32,
     s: wp.int32,
     k_mag: wp.array2d(dtype=wp.float32),
     zeta: wp.array2d(dtype=wp.float32),
@@ -232,7 +232,7 @@ def decaying_turbulence_initializer(
 
     Args:
         n: Size of the simulation domain.
-        k_cutoff: Wavenumber magnitude at which maximum of energy spectrum lies.
+        kp: Wavenumber magnitude at which maximum of energy spectrum lies.
         s: Shape parameter of the energy spectrum.
         k_mag: Wavenumber magnitude array.
         zeta: First phase function for phase randomization.
@@ -241,9 +241,7 @@ def decaying_turbulence_initializer(
     """
     i, j = wp.tid()
 
-    amplitude = wp.sqrt(
-        (k_mag[i, j] / wp.pi) * energy_spectrum(k_mag[i, j], s, k_cutoff)
-    )
+    amplitude = wp.sqrt((k_mag[i, j] / wp.pi) * energy_spectrum(k_mag[i, j], s, kp))
     phase = phase_randomizer(n, zeta, eta, i, j)
     omega_hat_init[i, j] = wp.vec2f(
         amplitude * wp.cos(phase), amplitude * wp.sin(phase)
