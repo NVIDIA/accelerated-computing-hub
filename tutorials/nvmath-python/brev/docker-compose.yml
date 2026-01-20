@@ -2,7 +2,7 @@ name: &tutorial-name nvmath-python
 
 x-config:
   dockerfile: &dockerfile tutorials/nvmath-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/nvmath-python-tutorial:brev-reorg-latest
+  image: &image ghcr.io/nvidia/nvmath-python-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/nvmath-python/notebooks
   large: &large true
   gpu-config: &gpu-config
