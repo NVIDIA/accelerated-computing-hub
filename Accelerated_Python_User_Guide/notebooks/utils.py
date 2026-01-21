@@ -305,3 +305,145 @@ def validate_poisson_solver(
 
     plt.tight_layout()
     return fig, axes, max_error
+
+
+def validate_advection_diffusion(
+    advection_diffusion_kernel,
+    n_grid: int,
+    kx: int = 2,
+    ky: int = 3,
+    figsize=(10, 4),
+):
+    """Validate finite-difference advection and diffusion using analytical test case.
+
+    Uses test functions:
+        omega = (kx^2 + ky^2) * sin(kx*x) * sin(ky*y)
+        psi = sin(kx*x) * sin(ky*y)
+
+    Analytical results:
+        Diffusion: nabla^2 omega = -(kx^2 + ky^2)^2 * sin(kx*x) * sin(ky*y)
+        Advection: J(psi, omega) = 0 (since omega = c * psi with constant c)
+
+    Args:
+        advection_diffusion_kernel: Warp kernel with signature:
+            (omega, psi, advection_out, diffusion_out, h, n) where all arrays
+            are wp.array2d(dtype=wp.float32), h is wp.float32, n is wp.int32.
+        n_grid: Grid resolution.
+        kx: Wavenumber in x-direction.
+        ky: Wavenumber in y-direction.
+        figsize: Figure size for each 1x2 panel.
+
+    Returns:
+        (fig_diff, axes_diff): Matplotlib figure/axes for diffusion comparison.
+        (fig_adv, axes_adv): Matplotlib figure/axes for advection comparison.
+        max_diff_error: Maximum absolute error in diffusion.
+        max_adv_error: Maximum absolute error in advection.
+    """
+    # Create 2D grid on [0, 2*pi) x [0, 2*pi)
+    L = 2.0 * np.pi
+    h = L / n_grid
+    x = np.linspace(0, L, n_grid, endpoint=False)
+    y = np.linspace(0, L, n_grid, endpoint=False)
+    X, Y = np.meshgrid(x, y)
+
+    # Analytical fields
+    k_squared = kx**2 + ky**2
+    psi_analytical = np.sin(kx * X) * np.sin(ky * Y)
+    omega_analytical = k_squared * psi_analytical
+
+    # Analytical diffusion: nabla^2 omega = -(kx^2 + ky^2) * omega
+    diffusion_analytical = -k_squared * omega_analytical
+
+    # Analytical advection: J(psi, omega) = 0 (since omega = c * psi)
+    advection_analytical = np.zeros_like(omega_analytical)
+
+    # Create Warp arrays
+    omega_wp = wp.array(omega_analytical.astype(np.float32), dtype=wp.float32)
+    psi_wp = wp.array(psi_analytical.astype(np.float32), dtype=wp.float32)
+    advection_wp = wp.zeros((n_grid, n_grid), dtype=wp.float32)
+    diffusion_wp = wp.zeros((n_grid, n_grid), dtype=wp.float32)
+
+    # Launch user-provided kernel
+    wp.launch(
+        advection_diffusion_kernel,
+        dim=(n_grid, n_grid),
+        inputs=[omega_wp, psi_wp, advection_wp, diffusion_wp, float(h), n_grid],
+    )
+    wp.synchronize()
+
+    # Get numerical results
+    diffusion_numerical = diffusion_wp.numpy()
+    advection_numerical = advection_wp.numpy()
+
+    # --- Diffusion comparison plot (1x2 panel) ---
+    fig_diff, axes_diff = plt.subplots(1, 2, figsize=figsize)
+
+    vmin_d = min(diffusion_analytical.min(), diffusion_numerical.min())
+    vmax_d = max(diffusion_analytical.max(), diffusion_numerical.max())
+
+    im0 = axes_diff[0].imshow(
+        diffusion_analytical,
+        extent=[0, L, 0, L],
+        origin="lower",
+        cmap="RdBu_r",
+        vmin=vmin_d,
+        vmax=vmax_d,
+    )
+    axes_diff[0].set_title(r"Analytical $\nabla^2\omega$")
+    axes_diff[0].set_xlabel("x")
+    axes_diff[0].set_ylabel("y")
+    plt.colorbar(im0, ax=axes_diff[0], shrink=0.8)
+
+    im1 = axes_diff[1].imshow(
+        diffusion_numerical,
+        extent=[0, L, 0, L],
+        origin="lower",
+        cmap="RdBu_r",
+        vmin=vmin_d,
+        vmax=vmax_d,
+    )
+    axes_diff[1].set_title(rf"Numerical Diffusion")
+    axes_diff[1].set_xlabel("x")
+    axes_diff[1].set_ylabel("y")
+    plt.colorbar(im1, ax=axes_diff[1], shrink=0.8)
+
+    fig_diff.suptitle(f"Diffusion Validation (kx={kx}, ky={ky}, N={n_grid})", y=1.02)
+    fig_diff.tight_layout()
+
+    # --- Advection comparison plot (1x2 panel) ---
+    fig_adv, axes_adv = plt.subplots(1, 2, figsize=figsize)
+
+    # For advection, analytical is zero, so set symmetric limits around numerical
+    adv_max = max(np.abs(advection_numerical).max(), 1e-10)
+    vmin_a, vmax_a = -adv_max, adv_max
+
+    im2 = axes_adv[0].imshow(
+        advection_analytical,
+        extent=[0, L, 0, L],
+        origin="lower",
+        cmap="RdBu_r",
+        vmin=vmin_a,
+        vmax=vmax_a,
+    )
+    axes_adv[0].set_title(r"Analytical Advection (= 0)")
+    axes_adv[0].set_xlabel("x")
+    axes_adv[0].set_ylabel("y")
+    plt.colorbar(im2, ax=axes_adv[0], shrink=0.8)
+
+    im3 = axes_adv[1].imshow(
+        advection_numerical,
+        extent=[0, L, 0, L],
+        origin="lower",
+        cmap="RdBu_r",
+        vmin=vmin_a,
+        vmax=vmax_a,
+    )
+    axes_adv[1].set_title(rf"Numerical Advection")
+    axes_adv[1].set_xlabel("x")
+    axes_adv[1].set_ylabel("y")
+    plt.colorbar(im3, ax=axes_adv[1], shrink=0.8)
+
+    fig_adv.suptitle(f"Advection Validation (kx={kx}, ky={ky}, N={n_grid})", y=1.02)
+    fig_adv.tight_layout()
+
+    return (fig_diff, axes_diff), (fig_adv, axes_adv)
