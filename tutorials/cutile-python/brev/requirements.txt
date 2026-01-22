@@ -1,1 +1,31 @@
+# Arrays
+numpy
+
+# Scientific/numeric
+scipy
+matplotlib
+opencv-python-headless
+
+# Jupyter
+jupyter
+jupyterlab
+jupyterlab-nvidia-nsight
+jupyterlab-execute-time
+
+# CUDA
+cuda-python == 13.1.*
+numba-cuda
 cuda-tile
+nvmath-python[cu13]
+cuda-cccl[test-cu13]
+cupy-cuda13x
+
+# NVIDIA developer tools
+nvtx
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
+
+# Distributed computing
+mpi4py
+
+# Testing
+pytest
