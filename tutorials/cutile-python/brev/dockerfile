@@ -1,13 +1,17 @@
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.0.2-base-ubuntu22.04
+FROM nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
 
-ENV PYTHON_VERSION=3.12 \
+ENV ACH_TUTORIAL=cutile-python \
+    PYTHON_VERSION=3.12 \
+    NSIGHT_SYSTEMS_VERSION=2026.1.1 \
+    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_COMPUTE_VERSION=2025.4.1 \
+    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
+    ACH_RAPIDS_VENV=/opt/venvs/rapids \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
-    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
-    ACH_RAPIDS_VENV=/opt/venvs/rapids \
-    ACH_TUTORIAL=accelerated-python
+    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -21,18 +25,6 @@ RUN apt-get update -y \
     lsb-release \
     libglib2.0-0 \
  && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
-
-# Install CUDA
-RUN REPO_URL="https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64" \
- && curl -L -O ${REPO_URL}/cuda-keyring_1.1-1_all.deb \
- && dpkg -i cuda-keyring_1.1-1_all.deb \
- && echo "deb [signed-by=/usr/share/keyrings/cuda-archive-keyring.gpg] ${REPO_URL} /" > /etc/apt/sources.list.d/cuda.list \
- && apt-get update -y \
- && apt-get install -y --no-install-recommends \
-    cuda-tileiras-13.1 \
-    cuda-compiler-13.1 \
-    cuda-libraries-13.1 \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Python
@@ -57,20 +49,20 @@ RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -f /opt/requirements.txt
 
 # Install Nsight Systems and Nsight Compute.
-RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2025_3/NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && dpkg -i NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && rm -f NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
- && dpkg -i nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
- && rm -f nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
+RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
+ && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
+ && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
  && mkdir -p /usr/local/nvidia/bin \
- && ln -s /opt/nvidia/nsight-systems-cli/2025.3.1/bin/nsys /usr/local/nvidia/bin/nsys \
- && ln -s /opt/nvidia/nsight-compute/2025.2.1/ncu /usr/local/nvidia/bin/ncu
+ && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
+ && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
 
-# Install PyTorch with CUDA 12.8 support.
+# Install PyTorch with CUDA 13.0 support.
 RUN pip install --no-cache-dir --root-user-action=ignore \
-    --index-url https://download.pytorch.org/whl/cu129 \
-    torch==2.8.0
+    --index-url https://download.pytorch.org/whl/cu130 \
+    torch==2.10.0
 
 # Setup Bash & JupyterLab.
 RUN mkdir -p ~/.local/state/._bash_history \
