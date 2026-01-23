@@ -1,22 +1,54 @@
-FROM ghcr.io/pytorch/pytorch:2.9.1-cuda13.0-cudnn9-runtime
+FROM ubuntu:24.04 AS artifacts
 
-ENV PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=floating-point-emulation
+COPY . /accelerated-computing-hub
+RUN find /accelerated-computing-hub/tutorials \
+    -mindepth 1 -maxdepth 1 -type d -not -name "floating-point-emulation" \
+    -exec rm -rf {} +
+RUN rm -rf /accelerated-computing-hub/.git
 
-# Copy only requirements.txt first for better Docker layer caching.
+FROM nvidia/cuda:13.1.0-base-ubuntu24.04
+
+# Install CUDA Toolkit + build tools
+RUN apt update -y \
+    && apt install -y wget \
+    && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
+    && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+    && apt update -y \
+    && apt install -y cuda-nvrtc-13-1 cuda-cccl-13-1 libcublas-dev-13-1 \
+    libnvjitlink-13-1 cuda-cudart-13-1 cuda-nvcc-13-1 libnvvm-13-1 \
+    python-is-python3 python3-venv \
+    build-essential cmake \
+    && apt-get clean -y
+
+# Install MathDx
+RUN wget https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx/cuda13/nvidia-mathdx-25.12.1-cuda13.tar.gz \
+    && tar -xvf nvidia-mathdx-25.12.1-cuda13.tar.gz \
+    && rm nvidia-mathdx-25.12.1-cuda13.tar.gz \
+    && mkdir -p /opt/nvidia \
+    && mv nvidia-mathdx-25.12.1-cuda13/nvidia/mathdx /opt/nvidia/mathdx \
+    && rm -rf nvidia-mathdx-25.12.1-cuda13
+
+# Install libmathdx
+RUN wget https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx/cuda13/libmathdx-Linux-x86_64-0.3.1-cuda13.0.tar.gz \
+    && mkdir -p /opt/nvidia/libmathdx \
+    && tar -xvf libmathdx-Linux-x86_64-0.3.1-cuda13.0.tar.gz -C /opt/nvidia/libmathdx \
+    && rm libmathdx-Linux-x86_64-0.3.1-cuda13.0.tar.gz
+
+# Install python
+RUN python -m venv /opt/venv
+ENV ACH_TUTORIAL=floating-point-emulation \
+    CUDA_PATH=/usr/local/cuda-13.1 \
+    PATH="/opt/venv/bin:$PATH" \
+    LD_LIBRARY_PATH="/opt/nvidia/libmathdx/lib:$LD_LIBRARY_PATH"
+
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
 RUN set -ex \
  && `# Install Python packages` \
-     && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
-     && rm -f /opt/requirements.txt \
- && `# Install system packages` \
-     && apt-get update -y \
-     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs \
-     && apt-get clean -y \
-     && rm -rf /var/lib/apt/lists/* \
- && `# Setup Bash` \
-     && mkdir -p ~/.local/state/._bash_history \
+     && pip install --no-cache-dir -r /opt/requirements.txt \
+     && rm /opt/requirements.txt
+
+RUN set -ex \
  && `# Setup JupyterLab` \
      && mkdir -p ~/.jupyter \
      && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
@@ -24,51 +56,8 @@ RUN set -ex \
      && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
-# Install Docker
-RUN apt-get update -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release \
- && mkdir -p /etc/apt/keyrings \
- && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
- && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
- && apt-get update -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    docker-ce \
-    docker-ce-cli \
-    containerd.io \
-    docker-buildx-plugin \
-    docker-compose-plugin \
- && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
-
-# Install CUDA Toolkit
-RUN apt-get update -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    build-essential \
-    wget \
- && wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb \
- && dpkg -i cuda-keyring_1.1-1_all.deb \
- && rm cuda-keyring_1.1-1_all.deb \
- && apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get -y install cuda-toolkit-13-1
-
-# Install MathDx
-RUN wget https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx/cuda13/nvidia-mathdx-25.12.1-cuda13.tar.gz \
- && tar -xvf nvidia-mathdx-25.12.1-cuda13.tar.gz \
- && rm nvidia-mathdx-25.12.1-cuda13.tar.gz \
- && mv nvidia-mathdx-25.12.1-cuda13/nvidia/mathdx /opt/nvidia \
- && rm -rf nvidia-mathdx-25.12.1-cuda13
-
-COPY . /accelerated-computing-hub
+COPY --from=artifacts /accelerated-computing-hub /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
-
-RUN `# Setup Git` \
-     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
-     && git config --global --add safe.directory "/accelerated-computing-hub"
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
