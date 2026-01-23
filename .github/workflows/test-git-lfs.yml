@@ -46,38 +46,38 @@ jobs:
             if (errorType === 'subdir_gitattributes') {
               commentBody = `## ❌ Git LFS Check Failed
 
-**Found \`.gitattributes\` file(s) in subdirectories.** Only the top-level \`.gitattributes\` should be used for LFS configuration.
+              **Found \`.gitattributes\` file(s) in subdirectories.** Only the top-level \`.gitattributes\` should be used for LFS configuration.
 
-🔗 [View workflow run logs](${runUrl})
+              🔗 [View workflow run logs](${runUrl})
 
-### Files to remove:
-${errorFiles.split('\n').map(f => f.trim()).filter(f => f).map(f => '- \`' + f + '\`').join('\n')}
+              ### Files to remove:
+              ${errorFiles.split('\n').map(f => f.trim()).filter(f => f).map(f => '- \`' + f + '\`').join('\n')}
 
-### How to fix:
-\`\`\`bash
-git rm <path/to/.gitattributes>
-git commit -m "Remove subdirectory .gitattributes"
-\`\`\`
-`;
+              ### How to fix:
+              \`\`\`bash
+              git rm <path/to/.gitattributes>
+              git commit -m "Remove subdirectory .gitattributes"
+              \`\`\`
+              `;
             } else if (errorType === 'not_lfs_tracked') {
               commentBody = `## ❌ Git LFS Check Failed
 
-**The following files should be tracked by Git LFS but are not:**
+              **The following files should be tracked by Git LFS but are not:**
 
-🔗 [View workflow run logs](${runUrl})
+              🔗 [View workflow run logs](${runUrl})
 
-${errorFiles}
+              ${errorFiles}
 
-### How to fix:
-\`\`\`bash
-# For each file listed above:
-git rm --cached <file>
-git add <file>
-git commit -m "Track file with Git LFS"
-\`\`\`
+              ### How to fix:
+              \`\`\`bash
+              # For each file listed above:
+              git rm --cached <file>
+              git add <file>
+              git commit -m "Track file with Git LFS"
+              \`\`\`
 
-Make sure Git LFS is installed locally (\`git lfs install\`) before running these commands.
-`;
+              Make sure Git LFS is installed locally (\`git lfs install\`) before running these commands.
+              `;
             }
 
             // Check if we already commented on this PR to avoid spam

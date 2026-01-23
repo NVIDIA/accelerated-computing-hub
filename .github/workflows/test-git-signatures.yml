@@ -132,34 +132,34 @@ jobs:
 
             const commentBody = `## ❌ Commit Signature Check Failed
 
-**Found ${unsignedCount} unsigned commit(s):**
+            **Found ${unsignedCount} unsigned commit(s):**
 
-🔗 [View workflow run logs](${runUrl})
+            🔗 [View workflow run logs](${runUrl})
 
-${unsignedCommits}
+            ${unsignedCommits}
 
-### All commits must be signed
+            ### All commits must be signed
 
-#### How to fix:
+            #### How to fix:
 
-1. **Configure commit signing** (if not already done):
-   \`\`\`bash
-   # For GPG signing
-   git config --global commit.gpgsign true
+            1. **Configure commit signing** (if not already done):
+               \`\`\`bash
+               # For GPG signing
+               git config --global commit.gpgsign true
 
-   # Or for SSH signing (Git 2.34+)
-   git config --global gpg.format ssh
-   git config --global user.signingkey ~/.ssh/id_ed25519.pub
-   \`\`\`
+               # Or for SSH signing (Git 2.34+)
+               git config --global gpg.format ssh
+               git config --global user.signingkey ~/.ssh/id_ed25519.pub
+               \`\`\`
 
-2. **Re-sign your commits:**
-   \`\`\`bash
-   git rebase -i origin/main --exec "git commit --amend --no-edit -S"
-   git push --force-with-lease
-   \`\`\`
+            2. **Re-sign your commits:**
+               \`\`\`bash
+               git rebase -i origin/main --exec "git commit --amend --no-edit -S"
+               git push --force-with-lease
+               \`\`\`
 
-📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
-`;
+            📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+            `;
 
             // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
