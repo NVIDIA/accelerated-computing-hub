@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
 
 ENV ACH_TUTORIAL=cuda-tile \
     PYTHON_VERSION=3.12 \
