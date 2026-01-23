@@ -63,25 +63,25 @@ jobs:
 
             const commentBody = `## ❌ Link Check Failed
 
-**Broken links were detected in this PR.**
+            **Broken links were detected in this PR.**
 
-Please check the [workflow run logs](${runUrl}) for details on which links are broken.
+            Please check the [workflow run logs](${runUrl}) for details on which links are broken.
 
-### Common fixes:
+            ### Common fixes:
 
-1. **Typo in URL** - Check for spelling mistakes in the link
-2. **Outdated link** - The page may have moved or been deleted
-3. **Relative path issue** - Ensure relative links use the correct path
-4. **External site down** - If the external site is temporarily down, you can add it to \`brev/.lycheeignore\`
+            1. **Typo in URL** - Check for spelling mistakes in the link
+            2. **Outdated link** - The page may have moved or been deleted
+            3. **Relative path issue** - Ensure relative links use the correct path
+            4. **External site down** - If the external site is temporarily down, you can add it to \`brev/.lycheeignore\`
 
-### To test links locally:
+            ### To test links locally:
 
-\`\`\`bash
-./brev/test-links.bash .
-\`\`\`
+            \`\`\`bash
+            ./brev/test-links.bash .
+            \`\`\`
 
-📚 [Lychee documentation](https://github.com/lycheeverse/lychee)
-`;
+            📚 [Lychee documentation](https://github.com/lycheeverse/lychee)
+            `;
 
             // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
