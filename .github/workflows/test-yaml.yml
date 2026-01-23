@@ -15,16 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Lint YAML files
-        id: yaml-lint
-        uses: ibiqlik/action-yamllint@v3
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          config_data: |
-            rules:
-              line-length: disable
+          python-version: '3.13'
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        id: yamllint-check
+        run: |
+          yamllint -f github -d '{rules: {line-length: disable}}' .
 
       - name: Comment on PR if check failed
-        if: failure() && steps.yaml-lint.outcome == 'failure'
+        if: failure() && steps.yamllint-check.outcome == 'failure'
         uses: actions/github-script@v7
         with:
           script: |
