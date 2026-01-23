@@ -4,7 +4,7 @@ x-config:
   dockerfile: &dockerfile tutorials/cuda-tile/brev/dockerfile
   image: &image ghcr.io/nvidia/cuda-tile-tutorial:pull-request-108-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-tile/notebooks
-  default-jupyter-url: &default-jupyter-url
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/cuda-tile/notebooks/start.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/cuda-tile/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
