@@ -1,9 +1,8 @@
 # NVMATH + CTK 13.1 + CCCL + cublas
 nvmath-python[dx]==0.8.*
-cuda-core[cu13]
-cuda-toolkit[cccl,nvrtc,cublas]==13.1.*
-nvidia-libmathdx-cu13 >=0.3.1,<0.4.0
-cuda-cccl[cu13]
+cuda-core
+cuda-bindings==13.1.*
+cuda-cccl
 
 # Scientific
 numpy

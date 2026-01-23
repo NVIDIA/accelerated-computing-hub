@@ -2,7 +2,7 @@ name: &tutorial-name floating-point-emulation
 
 x-config:
   dockerfile: &dockerfile tutorials/floating-point-emulation/brev/dockerfile
-  image: &image ghcr.io/nvidia/floating-point-emulation-tutorial:brev-reorg-latest
+  image: &image ghcr.io/nvidia/floating-point-emulation-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/floating-point-emulation/notebooks
   large: &large true
   gpu-config: &gpu-config
