@@ -1,9 +1,9 @@
-name: &tutorial-name cutile-python
+name: &tutorial-name cuda-tile
 
 x-config:
-  dockerfile: &dockerfile tutorials/cutile-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/cutile-python-tutorial:pull-request-108-latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/cutile-python/notebooks
+  dockerfile: &dockerfile tutorials/cuda-tile/brev/dockerfile
+  image: &image ghcr.io/nvidia/cuda-tile-tutorial:pull-request-108-latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-tile/notebooks
   default-jupyter-url: &default-jupyter-url
   gpu-config: &gpu-config
     privileged: true

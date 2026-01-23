@@ -1,6 +1,6 @@
 FROM nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
 
-ENV ACH_TUTORIAL=cutile-python \
+ENV ACH_TUTORIAL=cuda-tile \
     PYTHON_VERSION=3.12 \
     NSIGHT_SYSTEMS_VERSION=2026.1.1 \
     NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
