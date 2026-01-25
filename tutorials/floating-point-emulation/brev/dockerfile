@@ -1,23 +1,31 @@
 FROM ubuntu:24.04 AS artifacts
 
 COPY . /accelerated-computing-hub
-RUN find /accelerated-computing-hub/tutorials \
-    -mindepth 1 -maxdepth 1 -type d -not -name "floating-point-emulation" \
-    -exec rm -rf {} +
-RUN rm -rf /accelerated-computing-hub/.git
+# RUN find /accelerated-computing-hub/tutorials \
+#     -mindepth 1 -maxdepth 1 -type d -not -name "floating-point-emulation" \
+#     -exec rm -rf {} +
+# RUN rm -rf /accelerated-computing-hub/.git
 
 FROM nvidia/cuda:13.1.0-base-ubuntu24.04
 
 # Install CUDA Toolkit + build tools
 RUN apt update -y \
-    && apt install -y wget \
+    && apt install -y wget curl gnupg lsb-release \
     && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
     && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt update -y \
     && apt install -y cuda-nvrtc-13-1 cuda-cccl-13-1 libcublas-dev-13-1 \
     libnvjitlink-13-1 cuda-cudart-13-1 cuda-nvcc-13-1 libnvvm-13-1 \
     python-is-python3 python3-venv \
     build-essential cmake \
+    git git-lfs \
+    docker-ce \
+    docker-ce-cli \
+    containerd.io \
+    docker-buildx-plugin \
+    docker-compose-plugin \
     && apt-get clean -y
 
 # Install MathDx
@@ -59,5 +67,9 @@ RUN set -ex \
 COPY --from=artifacts /accelerated-computing-hub /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
+
+# Setup Git.
+RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+ && git config --global --add safe.directory "/accelerated-computing-hub"
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
