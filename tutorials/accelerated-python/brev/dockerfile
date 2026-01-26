@@ -3,10 +3,9 @@ FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.08-cpp-cuda12.8
 ENV PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    OMPI_ALLOW_RUN_AS_ROOT=1 \
-    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
-    ACH_TUTORIAL=accelerated-python
+    ACH_TUTORIAL=accelerated-python \
+    BASH_ENV=/accelerated-computing-hub/brev/user-setup.bash
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -18,8 +17,15 @@ RUN apt-get update -y \
     curl \
     gnupg \
     lsb-release \
+    sudo \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
+
+# Create ach user with passwordless sudo
+RUN groupadd --gid 1000 ach \
+ && useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash ach \
+ && echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && usermod -aG sudo ach
 
 # Install Docker
 RUN mkdir -p /etc/apt/keyrings \
@@ -33,7 +39,8 @@ RUN mkdir -p /etc/apt/keyrings \
     docker-buildx-plugin \
     docker-compose-plugin \
  && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && usermod -aG docker ach
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
@@ -67,13 +74,8 @@ RUN pip install --no-cache-dir --root-user-action=ignore \
     --index-url https://download.pytorch.org/whl/cu128 \
     torch
 
-# Setup Bash & JupyterLab.
-RUN mkdir -p ~/.local/state/._bash_history \
- && mkdir -p ~/.jupyter \
- && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
- && mkdir -p ~/.ipython/profile_default/startup \
- && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
- && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+# Disable Jupyter announcements extension
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 # Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel.
 RUN python -m venv ${ACH_RAPIDS_VENV} \
@@ -90,10 +92,16 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
 
 COPY . /accelerated-computing-hub
 
+# Ensure accelerated-computing-hub directory is writable by any user and setup shell initialization
+RUN chmod -R a+rwX /accelerated-computing-hub \
+ && mkdir -p /accelerated-computing-hub/logs \
+ && chmod 777 /accelerated-computing-hub/logs \
+ && ln -s /accelerated-computing-hub/brev/user-setup.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/user-setup.bash' >> /etc/bash.bashrc
+
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-# Setup Git.
-RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
- && git config --global --add safe.directory "/accelerated-computing-hub"
+# Set default user to ach (can be overridden with docker run --user)
+USER ach
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]

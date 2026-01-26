@@ -40,11 +40,11 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
     exit 1
 fi
 
-setup_dev_mount "${REPO_ROOT}"
+setup_dev_env "${REPO_ROOT}"
 create_docker_volume "${ACH_TUTORIAL}"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
-cd ${MOUNT}
+cd ${REPO_ROOT}
 
 # Create a modified docker-compose file that binds to 0.0.0.0 instead of 127.0.0.1
 # This is needed for local development so services are accessible from outside the container

@@ -1,36 +1,29 @@
 #! /bin/bash
 #
-# Helper functions for setting up development mounts with bindfs.
+# Helper functions for setting up development mounts with Docker's --user flag.
 #
 # This library provides functions for:
-# - Setting up bindfs mounts of the repository
-# - Creating Docker volumes pointing to the mount
-# - Cleaning up mounts
+# - Exporting HOST_UID/HOST_GID for Docker to match host user permissions
+# - Creating Docker volumes pointing to the repository
 #
 # Usage:
 #   source ./brev/dev-mount.bash
-#   setup_dev_mount
+#   setup_dev_env "/path/to/repo"
 #   create_docker_volume "tutorial-name"
-#   # ... do work ...
-#   cleanup_dev_mount
 
-# Mount location
-MOUNT=/tmp/accelerated-computing-hub-mount
-
-# Setup bindfs mount for the repository
-setup_dev_mount() {
+# Export host user's UID/GID for Docker Compose
+setup_dev_env() {
     local REPO_ROOT=${1}
 
-    echo "🔧 Setting up bindfs mount at ${MOUNT}..."
-    sudo mkdir -p ${MOUNT}
-    sudo bindfs --force-user=$(id -u) --force-group=$(id -g) \
-                --create-for-user=$(id -u) --create-for-group=$(id -g) \
-                ${REPO_ROOT} ${MOUNT}
-    echo -e "${GREEN:-}✅ Bindfs mount created${NC:-}"
+    echo "🔧 Setting up development environment..."
+    export HOST_UID=$(id -u)
+    export HOST_GID=$(id -g)
+    export ACH_REPO_ROOT="${REPO_ROOT}"
+    echo -e "${GREEN:-}✅ HOST_UID=${HOST_UID}, HOST_GID=${HOST_GID}${NC:-}"
     echo ""
 }
 
-# Create Docker volume pointing to the mount
+# Create Docker volume pointing to the repository
 create_docker_volume() {
     local ACH_TUTORIAL=${1}
 
@@ -45,30 +38,8 @@ create_docker_volume() {
     docker volume create --driver local \
       --opt type=none \
       --opt o=bind \
-      --opt device=${MOUNT} \
+      --opt device="${ACH_REPO_ROOT}" \
       "${ACH_TUTORIAL}_accelerated-computing-hub"
     echo -e "${GREEN:-}✅ Docker volume created${NC:-}"
     echo ""
-}
-
-# Cleanup bindfs mount
-cleanup_dev_mount() {
-    echo ""
-    echo "🧹 Cleaning up mount..."
-
-    # Change to a directory outside the mount before unmounting
-    cd /
-
-    # Unmount bindfs
-    if mountpoint -q ${MOUNT} 2>/dev/null; then
-        echo "🔧 Unmounting bindfs from ${MOUNT}..."
-        sudo umount ${MOUNT} || sudo umount -l ${MOUNT}
-        echo -e "${GREEN:-}✅ Bindfs unmounted${NC:-}"
-    fi
-    echo ""
-}
-
-# Setup cleanup trap (call this to register automatic cleanup on exit)
-setup_cleanup_trap() {
-    trap 'EXIT_CODE=$?; cleanup_dev_mount; exit ${EXIT_CODE}' EXIT INT TERM
 }
