@@ -12,7 +12,6 @@ set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
-MOUNT=/tmp/accelerated-computing-hub-mount
 
 # Check argument
 if [ $# -ne 1 ]; then
@@ -39,11 +38,7 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
 fi
 
 echo "Stopping tutorial: ${ACH_TUTORIAL}"
-cd ${MOUNT}
+cd ${REPO_ROOT}
 docker compose -f ${DOCKER_COMPOSE} down
-
-cd / # We've got to be somewhere that isn't the mount to unmount it.
-sudo umount ${MOUNT}
-sudo rmdir ${MOUNT} 2>/dev/null || true
 
 echo "Tutorial ${ACH_TUTORIAL} stopped successfully!"

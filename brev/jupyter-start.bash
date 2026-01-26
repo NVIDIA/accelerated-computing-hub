@@ -1,5 +1,6 @@
 #! /bin/bash
 
+# Generate Jupyter plugin settings
 /accelerated-computing-hub/brev/jupyter-generate-plugin-settings.bash
 
 mkdir -p /accelerated-computing-hub/logs
