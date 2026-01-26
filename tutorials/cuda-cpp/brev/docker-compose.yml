@@ -26,7 +26,7 @@ x-config:
       BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name
       ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
-    user: root
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
     working_dir: *working-dir
   persistent-service: &persistent-service
     depends_on:

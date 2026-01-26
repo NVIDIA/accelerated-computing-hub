@@ -1,7 +1,8 @@
 FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.10-cpp-cuda12.9
 
 ENV PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=cuda-cpp
+    ACH_TUTORIAL=cuda-cpp \
+    BASH_ENV=/accelerated-computing-hub/brev/user-setup.bash
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
@@ -12,17 +13,17 @@ RUN set -ex \
      && rm -f /opt/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
-     && apt-get install -y --no-install-recommends ffmpeg git-lfs \
+     && apt-get install -y --no-install-recommends ffmpeg git-lfs sudo \
      && apt-get clean -y \
      && rm -rf /var/lib/apt/lists/* \
- && `# Setup Bash` \
-     && mkdir -p ~/.local/state/._bash_history \
- && `# Setup JupyterLab` \
-     && mkdir -p ~/.jupyter \
-     && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
-     && mkdir -p ~/.ipython/profile_default/startup \
-     && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
+ && `# Disable Jupyter announcements` \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+# Create ach user with passwordless sudo
+RUN groupadd --gid 1000 ach \
+ && useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash ach \
+ && echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && usermod -aG sudo ach
 
 # Install Docker
 RUN apt-get update -y \
@@ -43,14 +44,21 @@ RUN apt-get update -y \
     docker-buildx-plugin \
     docker-compose-plugin \
  && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
+ && rm -rf /var/lib/apt/lists/* \
+ && usermod -aG docker ach
 
 COPY . /accelerated-computing-hub
 
+# Ensure accelerated-computing-hub directory is writable by any user and setup shell initialization
+RUN chmod -R a+rwX /accelerated-computing-hub \
+ && mkdir -p /accelerated-computing-hub/logs \
+ && chmod 777 /accelerated-computing-hub/logs \
+ && ln -s /accelerated-computing-hub/brev/user-setup.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/user-setup.bash' >> /etc/bash.bashrc
+
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-RUN `# Setup Git` \
-     && git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
-     && git config --global --add safe.directory "/accelerated-computing-hub"
+# Set default user to ach (can be overridden with docker run --user)
+USER ach
 
 ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]

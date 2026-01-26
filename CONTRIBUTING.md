@@ -14,11 +14,11 @@ You can use the following scripts to help with development:
 
 * **`brev/dev-start.bash <tutorial-name>`** - Starts Docker containers for a tutorial, mounting your local repository as `/accelerated-computing-hub` in the containers.
 
-* **`brev/dev-stop.bash <tutorial-name>`** - Stops Docker containers for a tutorial and cleans up the bindfs mount.
+* **`brev/dev-stop.bash <tutorial-name>`** - Stops Docker containers for a tutorial.
 
 * **`brev/dev-shell.bash <tutorial-name|docker-compose-file> <service-name>`** - Starts an interactive bash shell in a Docker container for a tutorial. Can accept either a tutorial name or a path to docker-compose.yml file, plus the service name (e.g., `base`, `jupyter`, `nsight`).
 
-* **`brev/dev-test.bash <tutorial-name|docker-compose-file>`** - Tests a Docker Compose file with the local repository mounted. Sets up bindfs mount and calls `test-docker-compose.bash` to run the tutorial's tests.
+* **`brev/dev-test.bash <tutorial-name|docker-compose-file>`** - Tests a Docker Compose file with the local repository mounted. Calls `test-docker-compose.bash` to run the tutorial's tests.
 
 ## License
 
@@ -71,10 +71,10 @@ If the contributor makes further changes these will also need to be pulled/pushe
 
 ```bash
 # Check out the PR branch again
-gh pr checkout 123  
+gh pr checkout 123
 # Or just `git checkout <name of branch> && git pull` if you already have it
 
-# Push to upstream PR branch 
+# Push to upstream PR branch
 git push upstream pull-request/123  # You may need --force id the contributor has rewritten their history
 ```
 
