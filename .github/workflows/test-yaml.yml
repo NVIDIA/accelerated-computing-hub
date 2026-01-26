@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - '**'
-  # pull_request is not supported for this workflow due to self-hosted runners
-  # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
+  pull_request_target:
+    types: [opened, reopened, synchronize]
 
 jobs:
   test-yaml:
@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
