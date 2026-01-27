@@ -32,9 +32,6 @@ Stage0 += environment(variables={
   # Silence pip warnings about running as root
   'PIP_ROOT_USER_ACTION': 'ignore',
 
-  # Shell initialization
-  'BASH_ENV': '/accelerated-computing-hub/brev/bashrc.bash',
-
   # Simplify running HPC-X on systems without InfiniBand
   'OMPI_MCA_coll_hcoll_enable': '0',
 
@@ -144,13 +141,9 @@ Stage0 += shell(commands=[
 
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 
-# Ensure accelerated-computing-hub directory is writable by any user and setup shell initialization
+# Ensure accelerated-computing-hub directory is writable by any user
 Stage0 += shell(commands=[
   'chmod -R a+rwX /accelerated-computing-hub',
-  'mkdir -p /accelerated-computing-hub/logs',
-  'chmod 777 /accelerated-computing-hub/logs',
-  'ln -s /accelerated-computing-hub/brev/bashrc.bash /etc/profile.d/ach-user-setup.sh',
-  "echo 'source /accelerated-computing-hub/brev/bashrc.bash' >> /etc/bash.bashrc",
 ])
 
 Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')

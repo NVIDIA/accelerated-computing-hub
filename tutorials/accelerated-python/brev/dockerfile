@@ -6,8 +6,7 @@ ENV PIP_ROOT_USER_ACTION=ignore \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
-    ACH_TUTORIAL=accelerated-python \
-    BASH_ENV=/accelerated-computing-hub/brev/bashrc.bash
+    ACH_TUTORIAL=accelerated-python
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -92,12 +91,9 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
 
 COPY . /accelerated-computing-hub
 
-# Ensure accelerated-computing-hub directory is writable by any user and setup shell initialization
-RUN chmod -R a+rwX /accelerated-computing-hub \
- && mkdir -p /accelerated-computing-hub/logs \
- && chmod 777 /accelerated-computing-hub/logs \
- && ln -s /accelerated-computing-hub/brev/bashrc.bash /etc/profile.d/ach-user-setup.sh \
- && echo 'source /accelerated-computing-hub/brev/bashrc.bash' >> /etc/bash.bashrc
+# Ensure accelerated-computing-hub directory is writable by any user
+
+
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
