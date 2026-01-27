@@ -23,8 +23,6 @@ NC='\033[0m' # No Color
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
-source ${SCRIPT_PATH}/dev-mount.bash
-
 # Print usage
 usage() {
     cat << EOF
@@ -79,6 +77,7 @@ echo "Setting up development environment for testing"
 echo "================================================================================"
 echo ""
 
+source ${SCRIPT_PATH}/dev-common.bash
 setup_dev_env "${REPO_ROOT}"
 create_docker_volume "${ACH_TUTORIAL}"
 

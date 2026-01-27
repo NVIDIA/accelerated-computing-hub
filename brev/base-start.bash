@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+source /accelerated-computing-hub/brev/dev-common.bash
+create_user_and_switch exec
+
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
   TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
