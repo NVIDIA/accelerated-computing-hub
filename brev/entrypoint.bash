@@ -66,7 +66,7 @@ if [ "$(id -u)" = "0" ]; then
 
     # Ensure logs directory exists and is writable by the user
     mkdir -p /accelerated-computing-hub/logs
-    chown "${TARGET_USER}:$(id -gn ${TARGET_USER})" /accelerated-computing-hub/logs
+    chown -R "${TARGET_USER}:$(id -gn ${TARGET_USER})" /accelerated-computing-hub/logs
 fi
 
 # Dispatch to service-specific entrypoint
