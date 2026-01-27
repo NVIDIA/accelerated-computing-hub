@@ -58,11 +58,15 @@ if [ "$(id -u)" = "0" ]; then
         ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
     fi
 
-    # Setup Git safe directory
-    git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
+    # Fix ownership of home directory contents (we created them as root)
+    chown -R "${TARGET_USER}:$(id -gn ${TARGET_USER})" "${HOME}"
 
-    # Ensure logs directory exists and is writable
-    mkdir -p /accelerated-computing-hub/logs 2>/dev/null || true
+    # Setup Git safe directory (run as target user)
+    gosu "${TARGET_USER}" git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
+
+    # Ensure logs directory exists and is writable by the user
+    mkdir -p /accelerated-computing-hub/logs
+    chown "${TARGET_USER}:$(id -gn ${TARGET_USER})" /accelerated-computing-hub/logs
 fi
 
 # Dispatch to service-specific entrypoint
