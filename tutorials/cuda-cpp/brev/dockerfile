@@ -19,8 +19,9 @@ RUN set -ex \
  && `# Disable Jupyter announcements` \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
-# Enable passwordless sudo for all users
-RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Enable passwordless sudo for all users and pass through environment and path
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
 
 # Install Docker
 RUN apt-get update -y \
