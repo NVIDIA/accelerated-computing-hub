@@ -16,6 +16,7 @@ RUN apt-get update -y \
     ca-certificates \
     curl \
     gnupg \
+    gosu \
     lsb-release \
     sudo \
  && apt-get clean -y \
