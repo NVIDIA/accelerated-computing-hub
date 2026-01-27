@@ -82,6 +82,7 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
     --extra-index-url=https://pypi.nvidia.com \
     "cudf-cu12==25.10.*" \
     "cuml-cu12==25.10.*" \
+    "scikit-learn>=1.5,<1.6" \
     ipykernel \
     pytest \
  && ${ACH_RAPIDS_VENV}/bin/python -m ipykernel install \
@@ -92,8 +93,7 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
 COPY . /accelerated-computing-hub
 
 # Ensure accelerated-computing-hub directory is writable by any user
-
-
+RUN chmod -R a+rwX /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
