@@ -41,7 +41,7 @@ services:
   base:
     <<: [*gpu-config, *common-service]
     image: *image
-    entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "base"]
     build:
       context: ../../..
       dockerfile: *dockerfile
@@ -49,12 +49,13 @@ services:
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
     ports:
       - "127.0.0.1:8888:8888" # JupyterLab
   nsight:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     ports:
       - "127.0.0.1:8080:8080" # HTTP
       - "127.0.0.1:3478:3478" # TURN

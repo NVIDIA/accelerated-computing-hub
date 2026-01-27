@@ -2,11 +2,6 @@
 
 set -eu
 
-# Ensure HOME is set (user-env.bash should have done this, but be safe)
-if [ -z "${HOME:-}" ]; then
-    export HOME="/home/ach"
-fi
-
 JUPYTER_HOST="jupyter0-${BREV_ENV_ID:-local}.brevlab.com"
 NSIGHT_HTTP_URL="https://nsight0-${BREV_ENV_ID:-local}.brevlab.com"
 

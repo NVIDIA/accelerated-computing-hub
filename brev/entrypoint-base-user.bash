@@ -1,9 +1,10 @@
 #! /bin/bash
+#
+# User-level entrypoint for the base service. Runs tests if configured.
 
 set -euo pipefail
 
-source /accelerated-computing-hub/brev/dev-common.bash
-create_user_and_switch exec "$@"
+export HOME="${ACH_TARGET_HOME}"
 
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
@@ -48,7 +49,7 @@ if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
     } | tee -a "${LOG_FILE}"
   fi
 else
-  if [ -n "${ACH_TUTORIAL}" ]; then
+  if [ -n "${ACH_TUTORIAL:-}" ]; then
     echo "ACH_RUN_TESTS is empty, skipping tutorial tests"
   else
     echo "ACH_TUTORIAL not set, skipping tutorial tests"
