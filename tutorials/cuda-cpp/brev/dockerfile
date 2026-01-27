@@ -13,7 +13,7 @@ RUN set -ex \
      && rm -f /opt/requirements.txt \
  && `# Install system packages` \
      && apt-get update -y \
-     && apt-get install -y --no-install-recommends ffmpeg git-lfs sudo \
+     && apt-get install -y --no-install-recommends ffmpeg git-lfs gosu sudo \
      && apt-get clean -y \
      && rm -rf /var/lib/apt/lists/* \
  && `# Disable Jupyter announcements` \

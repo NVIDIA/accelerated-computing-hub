@@ -27,9 +27,11 @@ setup_dev_env() {
 # Create user and switch to them if running as root.
 # Arguments:
 #   $1 - "login" for interactive login shell, "exec" to re-exec calling script
+#   $2... - script arguments to pass when re-executing (for "exec" mode)
 # If not root, does nothing.
 create_user_and_switch() {
     local MODE="${1:-exec}"
+    shift || true  # Remove MODE from arguments, leaving script args in "$@"
 
     if [ "$(id -u)" != "0" ]; then
         return
@@ -54,10 +56,11 @@ create_user_and_switch() {
     local TARGET_HOME=$(getent passwd "${TARGET_USER}" | cut -d: -f6)
     export HOME="${TARGET_HOME}"
 
+    # Use gosu for clean user switching with full environment preservation
     if [ "${MODE}" = "login" ]; then
-        exec su -l "${TARGET_USER}"
+        exec gosu "${TARGET_USER}" bash -l
     else
-        exec su -s /bin/bash -p "${TARGET_USER}" -c "$0 $*"
+        exec gosu "${TARGET_USER}" "$0" "$@"
     fi
 }
 
