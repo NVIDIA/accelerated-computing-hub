@@ -13,8 +13,6 @@ set -eu
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
-source ${SCRIPT_PATH}/dev-mount.bash
-
 # Check argument
 if [ $# -ne 1 ]; then
     echo "Error: Tutorial name is required"
@@ -40,6 +38,7 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
     exit 1
 fi
 
+source ${SCRIPT_PATH}/dev-common.bash
 setup_dev_env "${REPO_ROOT}"
 create_docker_volume "${ACH_TUTORIAL}"
 

@@ -10,7 +10,7 @@ ENV ACH_TUTORIAL=cuda-tile \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    BASH_ENV=/accelerated-computing-hub/brev/user-setup.bash
+    BASH_ENV=/accelerated-computing-hub/brev/user-env.bash
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -79,8 +79,8 @@ COPY . /accelerated-computing-hub
 RUN chmod -R a+rwX /accelerated-computing-hub \
  && mkdir -p /accelerated-computing-hub/logs \
  && chmod 777 /accelerated-computing-hub/logs \
- && ln -s /accelerated-computing-hub/brev/user-setup.bash /etc/profile.d/ach-user-setup.sh \
- && echo 'source /accelerated-computing-hub/brev/user-setup.bash' >> /etc/bash.bashrc
+ && ln -s /accelerated-computing-hub/brev/user-env.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/user-env.bash' >> /etc/bash.bashrc
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 

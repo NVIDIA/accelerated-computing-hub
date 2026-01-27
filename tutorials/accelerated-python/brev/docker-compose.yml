@@ -27,8 +27,10 @@ x-config:
       BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name
       ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
-      USER: "${HOST_UID:-1000}"
-    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
+      ACH_USER: ${ACH_USER:-ach}
+      ACH_UID: ${ACH_UID:-1000}
+      ACH_GID: ${ACH_GID:-1000}
+    user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
     depends_on:
@@ -55,7 +57,6 @@ services:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
-    user: root
     ports:
       - "127.0.0.1:8080:8080" # HTTP
       - "127.0.0.1:3478:3478" # TURN
