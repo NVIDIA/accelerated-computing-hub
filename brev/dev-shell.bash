@@ -111,9 +111,8 @@ echo "🚀 Starting interactive shell as ${ACH_USER}..."
 echo "   (Type 'exit' or press Ctrl+D to exit the shell)"
 echo ""
 
-docker compose -f "${COMPOSE_FILE}" run --rm \
-    --entrypoint /accelerated-computing-hub/brev/shell-start.bash \
-    -it "${SERVICE}"
+docker compose -f "${COMPOSE_FILE}" run --rm -it \
+    --entrypoint "/accelerated-computing-hub/brev/entrypoint.bash shell"
 
 echo ""
 echo "================================================================================"

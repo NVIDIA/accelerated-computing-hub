@@ -157,4 +157,4 @@ Stage0 += shell(commands=[
   'git config --global --add safe.directory "/accelerated-computing-hub"',
 ])
 
-Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
+Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]')

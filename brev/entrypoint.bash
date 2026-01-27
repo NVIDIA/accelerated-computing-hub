@@ -1,0 +1,50 @@
+#! /bin/bash
+#
+# Main entrypoint for all services. Creates the user if needed, then dispatches
+# to the service-specific entrypoint script.
+#
+# Usage: entrypoint.bash <service> [args...]
+#   service: base, jupyter, nsight, shell
+
+set -euo pipefail
+
+SERVICE="${1:-}"
+shift || true
+
+if [ -z "${SERVICE}" ]; then
+    echo "Error: No service specified. Usage: entrypoint.bash <service> [args...]" >&2
+    exit 1
+fi
+
+# Create user if running as root and user doesn't exist
+if [ "$(id -u)" = "0" ]; then
+    TARGET_USER="${ACH_USER:-ach}"
+    TARGET_UID="${ACH_UID:-1000}"
+    TARGET_GID="${ACH_GID:-1000}"
+
+    if ! id "${TARGET_USER}" &>/dev/null; then
+        # Check if a group with the target GID already exists
+        EXISTING_GROUP=$(getent group "${TARGET_GID}" 2>/dev/null | cut -d: -f1)
+        if [ -n "${EXISTING_GROUP}" ]; then
+            TARGET_GROUP="${EXISTING_GROUP}"
+        else
+            groupadd --gid "${TARGET_GID}" "${TARGET_USER}"
+            TARGET_GROUP="${TARGET_USER}"
+        fi
+        useradd --uid "${TARGET_UID}" --gid "${TARGET_GROUP}" --create-home --shell /bin/bash "${TARGET_USER}"
+        getent group docker &>/dev/null && usermod -aG docker "${TARGET_USER}"
+    fi
+
+    # Export for use by service entrypoints
+    export ACH_TARGET_USER="${TARGET_USER}"
+    export ACH_TARGET_HOME=$(getent passwd "${TARGET_USER}" | cut -d: -f6)
+fi
+
+# Dispatch to service-specific entrypoint
+SERVICE_ENTRYPOINT="/accelerated-computing-hub/brev/entrypoint-${SERVICE}.bash"
+if [ ! -x "${SERVICE_ENTRYPOINT}" ]; then
+    echo "Error: Service entrypoint not found or not executable: ${SERVICE_ENTRYPOINT}" >&2
+    exit 1
+fi
+
+exec "${SERVICE_ENTRYPOINT}" "$@"
