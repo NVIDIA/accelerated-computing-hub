@@ -1,7 +1,7 @@
 #! /bin/bash
 
 source /accelerated-computing-hub/brev/dev-common.bash
-create_user_and_switch exec
+create_user_and_switch exec "$@"
 
 # Generate Jupyter plugin settings
 /accelerated-computing-hub/brev/jupyter-generate-plugin-settings.bash

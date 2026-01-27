@@ -22,6 +22,7 @@ RUN apt-get update -y \
     curl \
     gnupg \
     lsb-release \
+    gosu \
     libglib2.0-0 \
     sudo \
  && apt-get clean -y \
