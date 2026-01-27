@@ -5,10 +5,17 @@
 
 set -euo pipefail
 
-
 # Set USER for nsight streamer's internal user switching
 export USER="${ACH_TARGET_USER}"
 export HOME="${ACH_TARGET_HOME}"
+
+# Ensure a group with the user's name exists.
+# The Nsight Streamer's entrypoint does `chown $USER:$USER` which requires a group
+# with the same name as the user. Our main entrypoint may have reused an existing
+# group with a different name if the target GID was already taken.
+if ! getent group "${ACH_TARGET_USER}" &>/dev/null; then
+    groupadd "${ACH_TARGET_USER}" || true
+fi
 
 # Copy Nsight config and bashrc from nvidia user to target user's home
 mkdir -p "${ACH_TARGET_HOME}/.config/NVIDIA Corporation"

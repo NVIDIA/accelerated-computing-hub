@@ -120,9 +120,40 @@ if docker compose -f "${COMPOSE_FILE}" up -d --quiet-pull; then
     echo -e "${GREEN}✅ Containers started successfully${NC}"
     echo ""
 
-    # Wait a moment for containers to initialize
+    # Wait for containers to initialize, checking for restart loops
     echo "⏳ Waiting for containers to initialize..."
     sleep 5
+
+    # Check multiple times to catch restart loops
+    for i in 1 2 3; do
+        if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+            echo -e "${YELLOW}⚠️  Detected restarting service(s), waiting...${NC}"
+            sleep 5
+        fi
+    done
+
+    # Final check for restart-looping services
+    if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+        echo -e "${RED}❌ Service(s) stuck in restart loop${NC}"
+        echo ""
+        echo "📊 Container status:"
+        docker compose -f "${COMPOSE_FILE}" ps
+        echo ""
+        echo "📋 Container logs:"
+        echo "--------------------------------------------------------------------------------"
+        docker compose -f "${COMPOSE_FILE}" logs --tail=100
+        echo "--------------------------------------------------------------------------------"
+        echo ""
+
+        # Clean up
+        echo "🛑 Stopping containers..."
+        docker compose -f "${COMPOSE_FILE}" down || true
+        echo ""
+        echo "================================================================================"
+        echo -e "${RED}❌ TEST FAILED: ${COMPOSE_FILE}${NC}"
+        echo "================================================================================"
+        exit 1
+    fi
     echo ""
 fi
 
@@ -147,9 +178,17 @@ if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
         echo -e "${GREEN}✅ Services restarted successfully${NC}"
         echo ""
 
-        # Wait a moment for services to stabilize
+        # Wait for services to stabilize, checking for restart loops
         echo "⏳ Waiting for services to stabilize..."
-        sleep 3
+        sleep 5
+
+        # Check multiple times to catch restart loops
+        for i in 1 2 3; do
+            if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+                echo -e "${YELLOW}⚠️  Detected restarting service(s), waiting...${NC}"
+                sleep 5
+            fi
+        done
         echo ""
 
         # Verify containers are still running after restart
@@ -157,8 +196,8 @@ if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
         docker compose -f "${COMPOSE_FILE}" ps
         echo ""
 
-        # Check if any containers are not in running state
-        if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Exit\|Restarting"; then
+        # Check if any containers are not in running state or stuck restarting
+        if docker compose -f "${COMPOSE_FILE}" ps | grep -qE "Exit|Restarting|restarting"; then
             echo -e "${RED}⚠️  Warning: Some containers are not running after restart${NC}"
             echo ""
 
