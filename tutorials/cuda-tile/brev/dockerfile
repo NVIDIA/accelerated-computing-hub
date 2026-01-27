@@ -10,7 +10,7 @@ ENV ACH_TUTORIAL=cuda-tile \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    BASH_ENV=/accelerated-computing-hub/brev/user-env.bash
+    BASH_ENV=/accelerated-computing-hub/brev/bashrc.bash
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -28,11 +28,8 @@ RUN apt-get update -y \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
-# Create ach user with passwordless sudo
-RUN groupadd --gid 1000 ach \
- && useradd --uid 1000 --gid 1000 --create-home --shell /bin/bash ach \
- && echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
- && usermod -aG sudo ach
+# Enable passwordless sudo for all users
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 # Install Python
 RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
@@ -80,12 +77,9 @@ COPY . /accelerated-computing-hub
 RUN chmod -R a+rwX /accelerated-computing-hub \
  && mkdir -p /accelerated-computing-hub/logs \
  && chmod 777 /accelerated-computing-hub/logs \
- && ln -s /accelerated-computing-hub/brev/user-env.bash /etc/profile.d/ach-user-setup.sh \
- && echo 'source /accelerated-computing-hub/brev/user-env.bash' >> /etc/bash.bashrc
+ && ln -s /accelerated-computing-hub/brev/bashrc.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/bashrc.bash' >> /etc/bash.bashrc
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-# Set default user to ach (can be overridden with docker run --user)
-USER ach
-
-ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
+ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
