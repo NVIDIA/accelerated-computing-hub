@@ -21,6 +21,9 @@ NC='\033[0m' # No Color
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
+source "${SCRIPT_PATH}/dev-common.bash"
+setup_dev_env "${REPO_ROOT}"
+
 # Print usage
 usage() {
     cat << EOF
@@ -103,12 +106,14 @@ if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
     echo ""
 fi
 
-# Run interactive shell with bash as entrypoint
-echo "🚀 Starting interactive shell..."
+# Run interactive shell with user switching
+echo "🚀 Starting interactive shell as ${ACH_USER}..."
 echo "   (Type 'exit' or press Ctrl+D to exit the shell)"
 echo ""
 
-docker compose -f "${COMPOSE_FILE}" run --rm --entrypoint /bin/bash -it "${SERVICE}"
+docker compose -f "${COMPOSE_FILE}" run --rm \
+    --entrypoint /accelerated-computing-hub/brev/shell-start.bash \
+    -it "${SERVICE}"
 
 echo ""
 echo "================================================================================"

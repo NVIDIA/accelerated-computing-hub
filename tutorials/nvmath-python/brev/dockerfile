@@ -2,7 +2,7 @@ FROM ghcr.io/nvidia/mirrors/pytorch-2.9.0-cuda12.8-cudnn9-runtime
 
 ENV PIP_ROOT_USER_ACTION=ignore \
     ACH_TUTORIAL=nvmath-python \
-    BASH_ENV=/accelerated-computing-hub/brev/user-setup.bash
+    BASH_ENV=/accelerated-computing-hub/brev/user-env.bash
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
@@ -53,8 +53,8 @@ COPY . /accelerated-computing-hub
 RUN chmod -R a+rwX /accelerated-computing-hub \
  && mkdir -p /accelerated-computing-hub/logs \
  && chmod 777 /accelerated-computing-hub/logs \
- && ln -s /accelerated-computing-hub/brev/user-setup.bash /etc/profile.d/ach-user-setup.sh \
- && echo 'source /accelerated-computing-hub/brev/user-setup.bash' >> /etc/bash.bashrc
+ && ln -s /accelerated-computing-hub/brev/user-env.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/user-env.bash' >> /etc/bash.bashrc
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 

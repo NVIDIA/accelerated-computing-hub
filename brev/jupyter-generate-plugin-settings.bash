@@ -2,7 +2,7 @@
 
 set -eu
 
-# Ensure HOME is set (user-setup.bash should have done this, but be safe)
+# Ensure HOME is set (user-env.bash should have done this, but be safe)
 if [ -z "${HOME:-}" ]; then
     export HOME="/home/ach"
 fi

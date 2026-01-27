@@ -1,30 +1,31 @@
 #! /bin/bash
 #
-# Runtime user environment setup for non-root execution.
+# Runtime user environment setup.
 #
 # This script sets up the user's home directory and configuration files
-# at container startup. It handles both:
-# - Running as the default "ach" user (UID 1000)
-# - Running as a custom UID/GID passed via HOST_UID/HOST_GID
+# at container startup. It looks up HOME from /etc/passwd, falling back
+# to /tmp if the user doesn't exist.
 #
-# This script is sourced by entrypoint scripts to set up the environment.
-#
-# NOTE: Do not use 'set -eu' here as this script is sourced via BASH_ENV
-# and would affect all subsequent scripts.
+# This script is sourced via BASH_ENV and shell startup scripts.
+
 
 # Get current user info
 CURRENT_UID=$(id -u)
 CURRENT_GID=$(id -g)
 
-# Set HOME if not already set or if it's /root but we're not root
-if [ -z "${HOME:-}" ] || { [ "${HOME}" = "/root" ] && [ "${CURRENT_UID}" != "0" ]; }; then
+# Set HOME if not already set, if it's "/" (Docker default for unknown UIDs),
+# or if it's /root but we're not root
+if [ -z "${HOME:-}" ] || [ "${HOME}" = "/" ] || { [ "${HOME}" = "/root" ] && [ "${CURRENT_UID}" != "0" ]; }; then
     if [ "${CURRENT_UID}" = "0" ]; then
         export HOME="/root"
-    elif [ "${CURRENT_UID}" = "1000" ]; then
-        export HOME="/home/ach"
     else
-        # For arbitrary UIDs, use a writable temp home
-        export HOME="/tmp/home-${CURRENT_UID}"
+        # Look up home directory from passwd, fall back to /tmp if user doesn't exist
+        PASSWD_HOME=$(getent passwd "${CURRENT_UID}" 2>/dev/null | cut -d: -f6)
+        if [ -n "${PASSWD_HOME}" ]; then
+            export HOME="${PASSWD_HOME}"
+        else
+            export HOME="/tmp/home-${CURRENT_UID}"
+        fi
         mkdir -p "${HOME}"
     fi
 fi
