@@ -3,6 +3,8 @@ FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.08-cpp-cuda12.8
 ENV PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
     ACH_TUTORIAL=accelerated-python \
     BASH_ENV=/accelerated-computing-hub/brev/bashrc.bash
@@ -22,8 +24,9 @@ RUN apt-get update -y \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
-# Enable passwordless sudo for all users
-RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+# Enable passwordless sudo for all users and pass through environment and path
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
 
 # Install Docker
 RUN mkdir -p /etc/apt/keyrings \
