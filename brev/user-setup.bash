@@ -8,8 +8,9 @@
 # - Running as a custom UID/GID passed via HOST_UID/HOST_GID
 #
 # This script is sourced by entrypoint scripts to set up the environment.
-
-set -eu
+#
+# NOTE: Do not use 'set -eu' here as this script is sourced via BASH_ENV
+# and would affect all subsequent scripts.
 
 # Get current user info
 CURRENT_UID=$(id -u)
