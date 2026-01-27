@@ -8,7 +8,7 @@ mkdir -p /accelerated-computing-hub/logs
 # Set the preferred directory to the current working directory, which is set by Docker Compose.
 ARGS="--ServerApp.preferred_dir=${PWD:-/}"
 
-if [ -n "${1}" ]; then
+if [ -n "${1:-}" ]; then
   ARGS="--LabApp.default_url=${1}"
 fi
 
