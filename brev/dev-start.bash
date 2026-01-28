@@ -44,6 +44,7 @@ create_docker_volume "${ACH_TUTORIAL}"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
 cd ${MOUNT}
-docker compose -f ${DOCKER_COMPOSE} up -d
+# Filter out the "volume already exists" warning while preserving all other warnings/errors on stderr
+docker compose -f ${DOCKER_COMPOSE} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
 
 echo "Tutorial ${ACH_TUTORIAL} started successfully!"
