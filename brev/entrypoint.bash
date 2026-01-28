@@ -24,7 +24,7 @@ if [ "$(id -u)" = "0" ]; then
 
     if ! id "${TARGET_USER}" &>/dev/null; then
         # Check if a group with the target GID already exists
-        EXISTING_GROUP=$(getent group "${TARGET_GID}" 2>/dev/null | cut -d: -f1)
+        EXISTING_GROUP=$(getent group "${TARGET_GID}" 2>/dev/null | cut -d: -f1 || true)
         if [ -n "${EXISTING_GROUP}" ]; then
             TARGET_GROUP="${EXISTING_GROUP}"
         else
@@ -37,7 +37,7 @@ if [ "$(id -u)" = "0" ]; then
 
     # Export for use by service entrypoints
     export ACH_TARGET_USER="${TARGET_USER}"
-    export ACH_TARGET_HOME=$(getent passwd "${TARGET_USER}" | cut -d: -f6)
+    export ACH_TARGET_HOME=$(getent passwd "${TARGET_USER}" | cut -d: -f6 || true)
 
     # Setup user environment (one-time setup, not on every shell)
     export HOME="${ACH_TARGET_HOME}"
