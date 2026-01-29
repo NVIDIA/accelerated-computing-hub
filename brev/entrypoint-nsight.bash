@@ -17,11 +17,13 @@ if ! getent group "${ACH_TARGET_USER}" &>/dev/null; then
     groupadd "${ACH_TARGET_USER}" || true
 fi
 
-# Copy Nsight config and bashrc from nvidia user to target user's home
-mkdir -p "${ACH_TARGET_HOME}/.config/NVIDIA Corporation"
-cp "/home/nvidia/.config/NVIDIA Corporation/NVIDIA Nsight Systems.ini" "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/"
-cp /home/nvidia/.bashrc "${ACH_TARGET_HOME}/.bashrc"
-chown -R "${ACH_TARGET_USER}:$(id -gn ${ACH_TARGET_USER})" "${ACH_TARGET_HOME}"
+# Copy Nsight config and bashrc from nvidia user to target user's home (skip if same user)
+if [ "${ACH_TARGET_HOME}" != "/home/nvidia" ]; then
+    mkdir -p "${ACH_TARGET_HOME}/.config/NVIDIA Corporation"
+    cp "/home/nvidia/.config/NVIDIA Corporation/NVIDIA Nsight Systems.ini" "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/"
+    cp /home/nvidia/.bashrc "${ACH_TARGET_HOME}/.bashrc"
+    chown -R "${ACH_TARGET_USER}:$(id -gn ${ACH_TARGET_USER})" "${ACH_TARGET_HOME}"
+fi
 
 # Install curl if not present
 if ! command -v curl &> /dev/null; then
