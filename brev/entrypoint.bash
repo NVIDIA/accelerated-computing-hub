@@ -16,6 +16,12 @@ if [ -z "${SERVICE}" ]; then
     exit 1
 fi
 
+# Install gosu if not present
+if ! command -v gosu &> /dev/null; then
+    apt-get update -y
+    apt-get install -y gosu
+fi
+
 # Create user if running as root and user doesn't exist
 if [ "$(id -u)" = "0" ]; then
     TARGET_USER="${ACH_USER:-ach}"
