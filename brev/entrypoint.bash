@@ -44,28 +44,24 @@ if [ "$(id -u)" = "0" ]; then
     # Export for use by service entrypoints
     export ACH_TARGET_USER="${TARGET_USER}"
     export ACH_TARGET_HOME=$(getent passwd "${TARGET_USER}" | cut -d: -f6 || true)
-
     # Setup user environment (one-time setup, not on every shell)
     export HOME="${ACH_TARGET_HOME}"
 
     # Setup Jupyter configuration directories
-    mkdir -p "${HOME}/.jupyter"
-    mkdir -p "${HOME}/.local/share/jupyter"
-    mkdir -p "${HOME}/.ipython/profile_default/startup"
-    mkdir -p "${HOME}/.local/state"
+    gosu "${TARGET_USER}" mkdir -p "${HOME}/.jupyter"
+    gosu "${TARGET_USER}" mkdir -p "${HOME}/.local/share/jupyter"
+    gosu "${TARGET_USER}" mkdir -p "${HOME}/.ipython/profile_default/startup"
+    gosu "${TARGET_USER}" mkdir -p "${HOME}/.local/state"
 
     # Link Jupyter server config if not already present
     if [ ! -e "${HOME}/.jupyter/jupyter_server_config.py" ]; then
-        ln -sf /accelerated-computing-hub/brev/jupyter-server-config.py "${HOME}/.jupyter/jupyter_server_config.py"
+        gosu "${TARGET_USER}" ln -sf /accelerated-computing-hub/brev/jupyter-server-config.py "${HOME}/.jupyter/jupyter_server_config.py"
     fi
 
     # Link IPython startup scripts if not already present
     if [ ! -e "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py" ]; then
-        ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
+        gosu "${TARGET_USER}" ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
     fi
-
-    # Fix ownership of home directory contents (we created them as root)
-    chown -R "${TARGET_USER}:$(id -gn ${TARGET_USER})" "${HOME}"
 
     # Setup Git safe directory (run as target user)
     gosu "${TARGET_USER}" git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
