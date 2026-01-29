@@ -23,16 +23,22 @@ if [ "$(id -u)" = "0" ]; then
     TARGET_GID="${ACH_GID:-1000}"
 
     if ! id "${TARGET_USER}" &>/dev/null; then
-        # Check if a group with the target GID already exists
-        EXISTING_GROUP=$(getent group "${TARGET_GID}" 2>/dev/null | cut -d: -f1 || true)
-        if [ -n "${EXISTING_GROUP}" ]; then
-            TARGET_GROUP="${EXISTING_GROUP}"
+        # Check if a user with the target UID already exists.
+        EXISTING_USER=$(getent passwd "${TARGET_UID}" 2>/dev/null | cut -d: -f1 || true)
+        if [ -n "${EXISTING_USER}" ]; then
+            TARGET_USER="${EXISTING_USER}"
         else
-            groupadd --gid "${TARGET_GID}" "${TARGET_USER}"
-            TARGET_GROUP="${TARGET_USER}"
+            # Check if a group with the target GID already exists
+            EXISTING_GROUP=$(getent group "${TARGET_GID}" 2>/dev/null | cut -d: -f1 || true)
+            if [ -n "${EXISTING_GROUP}" ]; then
+                TARGET_GROUP="${EXISTING_GROUP}"
+            else
+                groupadd --gid "${TARGET_GID}" "${TARGET_USER}"
+                TARGET_GROUP="${TARGET_USER}"
+            fi
+            useradd --uid "${TARGET_UID}" --gid "${TARGET_GROUP}" --create-home --shell /bin/bash "${TARGET_USER}"
+            getent group docker &>/dev/null && usermod -aG docker "${TARGET_USER}"
         fi
-        useradd --uid "${TARGET_UID}" --gid "${TARGET_GROUP}" --create-home --shell /bin/bash "${TARGET_USER}"
-        getent group docker &>/dev/null && usermod -aG docker "${TARGET_USER}"
     fi
 
     # Export for use by service entrypoints
