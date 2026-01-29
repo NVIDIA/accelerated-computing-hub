@@ -10,8 +10,7 @@ ENV ACH_TUTORIAL=cuda-tile \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    OMPI_ALLOW_RUN_AS_ROOT=1 \
-    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -23,9 +22,15 @@ RUN apt-get update -y \
     curl \
     gnupg \
     lsb-release \
+    gosu \
     libglib2.0-0 \
+    sudo \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
+
+# Enable passwordless sudo for all users and pass through environment and path
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
 
 # Install Python
 RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
@@ -64,20 +69,14 @@ RUN pip install --no-cache-dir --root-user-action=ignore \
     --index-url https://download.pytorch.org/whl/cu130 \
     torch==2.10.0
 
-# Setup Bash & JupyterLab.
-RUN mkdir -p ~/.local/state/._bash_history \
- && mkdir -p ~/.jupyter \
- && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
- && mkdir -p ~/.ipython/profile_default/startup \
- && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
- && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+# Disable Jupyter announcements extension
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 COPY . /accelerated-computing-hub
 
+# Ensure accelerated-computing-hub directory is writable by any user
+RUN chmod -R a+rwX /accelerated-computing-hub
+
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-# Setup Git.
-RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
- && git config --global --add safe.directory "/accelerated-computing-hub"
-
-ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
+ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]

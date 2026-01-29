@@ -2,7 +2,7 @@
 #
 # Test a Docker Compose file with local repository mounted.
 #
-# This script sets up bindfs mount (like dev-start.bash) and then calls
+# This script sets up the development environment and then calls
 # test-docker-compose.bash to validate Docker Compose configurations.
 #
 # Usage:
@@ -23,8 +23,6 @@ NC='\033[0m' # No Color
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
-source ${SCRIPT_PATH}/dev-mount.bash
-
 # Print usage
 usage() {
     cat << EOF
@@ -42,7 +40,6 @@ Examples:
 
 Requirements:
   - Docker and Docker Compose must be installed
-  - bindfs must be installed (sudo apt-get install bindfs)
 EOF
     exit 1
 }
@@ -80,9 +77,8 @@ echo "Setting up development environment for testing"
 echo "================================================================================"
 echo ""
 
-# Setup mount and cleanup trap
-setup_cleanup_trap
-setup_dev_mount "${REPO_ROOT}"
+source ${SCRIPT_PATH}/dev-common.bash
+setup_dev_env "${REPO_ROOT}"
 create_docker_volume "${ACH_TUTORIAL}"
 
 echo "================================================================================"
@@ -90,6 +86,6 @@ echo "Starting tests (calling test-docker-compose.bash)"
 echo "================================================================================"
 echo ""
 
-# Change to mount directory and call test-docker-compose.bash
-cd ${MOUNT}
+# Change to repo directory and call test-docker-compose.bash
+cd ${REPO_ROOT}
 ${SCRIPT_PATH}/test-docker-compose.bash "${ARG}"

@@ -13,8 +13,6 @@ set -eu
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
-source ${SCRIPT_PATH}/dev-mount.bash
-
 # Check argument
 if [ $# -ne 1 ]; then
     echo "Error: Tutorial name is required"
@@ -39,11 +37,12 @@ if [ ! -f "${DOCKER_COMPOSE}" ]; then
     exit 1
 fi
 
-setup_dev_mount "${REPO_ROOT}"
+source ${SCRIPT_PATH}/dev-common.bash
+setup_dev_env "${REPO_ROOT}"
 create_docker_volume "${ACH_TUTORIAL}"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
-cd ${MOUNT}
+cd ${REPO_ROOT}
 # Filter out the "volume already exists" warning while preserving all other warnings/errors on stderr
 docker compose -f ${DOCKER_COMPOSE} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
 

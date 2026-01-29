@@ -65,6 +65,7 @@ Stage0 += packages(ospackages=[
   'curl', 'wget', 'zip', 'bc',
   'nginx', 'openssh-client',
   'libnuma1',  'numactl',
+  'gosu', 'sudo',
 ])
 Stage0 += boost(version=boost_ver) # Required for AdaptiveCpp
 
@@ -128,33 +129,23 @@ Stage0 += shell(commands=[
   # Put the include directory in the systemwide path:
   f'ln -sf /accelerated-computing-hub/tutorials/stdpar/include/ach /usr/include/ach',
 
-  # Make sure bash history directory exists
-  'mkdir -p ~/.local/state/._bash_history',
-
-  # Configure JupyterLab
-  'mkdir -p ~/.jupyter',
-  'ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py',
-
-  # Configure IPython to add the current working directory to the path
-  'mkdir -p ~/.ipython/profile_default/startup',
-  'ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py',
-
   # Silence JupyterLab announcements
   'python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"',
 ])
 
+# Enable passwordless sudo for all users and pass through environment and path
+Stage0 += shell(commands=[
+  "echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
+  "sed -i -e 's/^Defaults\\s*env_reset/#&/' -e 's/^Defaults\\s*secure_path=/#&/' /etc/sudoers",
+])
+
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
+
+# Ensure accelerated-computing-hub directory is writable by any user
+Stage0 += shell(commands=[
+  'chmod -R a+rwX /accelerated-computing-hub',
+])
 
 Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')
 
-Stage0 += shell(commands=[
-  'set -ex',  # Exit on first error and debug output
-
-  # Don't send GitHub actions CI token when using Git
-  'git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; }',
-
-  # Configure Git to not complain about file ownership
-  'git config --global --add safe.directory "/accelerated-computing-hub"',
-])
-
-Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]')
+Stage0 += raw(docker='ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]')
