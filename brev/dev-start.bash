@@ -26,6 +26,7 @@ fi
 ACH_TUTORIAL=$1
 ACH_TUTORIAL_PATH="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
 DOCKER_COMPOSE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
+export ACH_HOST=0.0.0.0
 
 # Validate tutorial exists
 if [ ! -d "${ACH_TUTORIAL_PATH}" ]; then
