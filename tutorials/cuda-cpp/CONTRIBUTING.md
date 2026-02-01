@@ -299,7 +299,7 @@ The `ach::where_am_I` helper prints "Correct!" or "Wrong guess" — making succe
 ```
 
 **Solution cell** (collapsible):
-```markdown
+````markdown
 <details>
   <summary>Solution</summary>
 
@@ -324,7 +324,7 @@ The `ach::where_am_I` helper prints "Correct!" or "Wrong guess" — making succe
 
   You can find the full solution [here](Solutions/no-magic-execution-space-changes.cpp).
 </details>
-```
+````
 
 ### Images and Diagrams
 
