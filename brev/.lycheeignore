@@ -14,3 +14,6 @@ https://medium.com/.*
 
 # RAPIDS documentation - has aggressive bot protection that resets connections
 https://docs.rapids.ai/.*
+
+# Theoretical link for contributor's guide on the CUDA C++ tutorial
+file://.*/tutorials/cuda-cpp/Solutions/no-magic-execution-space-changes.cpp
