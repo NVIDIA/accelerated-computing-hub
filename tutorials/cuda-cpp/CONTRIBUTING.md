@@ -366,10 +366,7 @@ if os.getenv("COLAB_RELEASE_TAG"):  # If running in Google Colab:
     !wget https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/refs/heads/main/tutorials/cuda-cpp/notebooks/XX.YY-Topic/Sources/ach.h -nv -O Sources/ach.h
 ```
 
-**Docker environment**: The `brev/` directory contains Docker configuration:
-- `dockerfile`: Base image with CUDA toolkit and Jupyter
-- `docker-compose.yml`: Service definitions for Jupyter and Nsight
-- `requirements.txt`: Python dependencies
+Refer to `docs/` to learn more about how to use Brev with this course.
 
 ### Testing
 
