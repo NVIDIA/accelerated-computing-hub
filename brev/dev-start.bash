@@ -26,7 +26,7 @@ fi
 ACH_TUTORIAL=$1
 ACH_TUTORIAL_PATH="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
 DOCKER_COMPOSE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
-export ACH_HOST=0.0.0.0
+DOCKER_COMPOSE_DEV="/tmp/docker-compose.${ACH_TUTORIAL}.dev.yml"
 
 # Validate tutorial exists
 if [ ! -d "${ACH_TUTORIAL_PATH}" ]; then
@@ -45,7 +45,12 @@ create_docker_volume "${ACH_TUTORIAL}"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
 cd ${MOUNT}
+
+# Create a modified docker-compose file that binds to 0.0.0.0 instead of 127.0.0.1
+# This is needed for local development so services are accessible from outside the container
+sed 's/127\.0\.0\.1:/0.0.0.0:/g' "${DOCKER_COMPOSE}" > "${DOCKER_COMPOSE_DEV}"
+
 # Filter out the "volume already exists" warning while preserving all other warnings/errors on stderr
-docker compose -f ${DOCKER_COMPOSE} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
+docker compose -f ${DOCKER_COMPOSE_DEV} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
 
 echo "Tutorial ${ACH_TUTORIAL} started successfully!"
