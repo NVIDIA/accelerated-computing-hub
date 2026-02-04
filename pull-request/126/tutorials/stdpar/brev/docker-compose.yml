@@ -4,6 +4,7 @@ x-config:
   dockerfile: &dockerfile tutorials/stdpar/brev/dockerfile
   image: &image ghcr.io/nvidia/stdpar-tutorial:pull-request-126-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/stdpar/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/stdpar/notebooks/start.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/stdpar/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -47,14 +48,14 @@ services:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
     ports:
-      - "0.0.0.0:8888:8888" # JupyterLab
+      - "127.0.0.1:8888:8888" # JupyterLab
   nsight:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
     entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
     ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
+      - "127.0.0.1:8080:8080" # HTTP
+      - "127.0.0.1:3478:3478" # TURN
 
 volumes:
   accelerated-computing-hub:
