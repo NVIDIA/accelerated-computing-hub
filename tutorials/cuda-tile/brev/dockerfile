@@ -43,14 +43,19 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
  && ln -sf /usr/bin/python3 /usr/bin/python \
  && ln -s /usr/local/bin/pip /usr/bin/pip \
+ && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
+
+# Install PyTorch with CUDA 13.0 support.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+    --index-url https://download.pytorch.org/whl/cu130 \
+    torch==2.10.0
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# Remove externally managed flag and install Python packages.
-RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
- && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
 # Install Nsight Systems and Nsight Compute.
@@ -63,11 +68,6 @@ RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight
  && mkdir -p /usr/local/nvidia/bin \
  && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
  && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
-
-# Install PyTorch with CUDA 13.0 support.
-RUN pip install --no-cache-dir --root-user-action=ignore \
-    --index-url https://download.pytorch.org/whl/cu130 \
-    torch==2.10.0
 
 # Disable Jupyter announcements extension
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
