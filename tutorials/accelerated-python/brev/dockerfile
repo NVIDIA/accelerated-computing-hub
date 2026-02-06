@@ -7,7 +7,8 @@ ENV ACH_TUTORIAL=accelerated-python \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_ROOT_USER_ACTION=ignore \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    MPLCONFIGDIR=/tmp/matplotlib_cache
+    MPLCONFIGDIR=/tmp/matplotlib_cache \
+    PYTHONSTARTUP=
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
