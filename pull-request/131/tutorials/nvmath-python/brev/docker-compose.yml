@@ -1,0 +1,65 @@
+name: &tutorial-name nvmath-python
+
+x-config:
+  dockerfile: &dockerfile tutorials/nvmath-python/brev/dockerfile
+  image: &image ghcr.io/nvidia/nvmath-python-tutorial:pull-request-131-latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/nvmath-python/notebooks
+  large: &large true
+  gpu-config: &gpu-config
+    privileged: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  common-service: &common-service
+    pull_policy: missing
+    volumes:
+      - accelerated-computing-hub:/accelerated-computing-hub
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      BREV_ENV_ID: ${BREV_ENV_ID:-}
+      ACH_TUTORIAL: *tutorial-name
+      ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+      ACH_USER: ${ACH_USER:-ach}
+      ACH_UID: ${ACH_UID:-1000}
+      ACH_GID: ${ACH_GID:-1000}
+    user: root
+    working_dir: *working-dir
+  persistent-service: &persistent-service
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+services:
+  base:
+    <<: [*gpu-config, *common-service]
+    image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "base"]
+    build:
+      context: ../../..
+      dockerfile: *dockerfile
+    restart: "no"
+  jupyter:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
+    ports:
+      - "127.0.0.1:8888:8888" # JupyterLab
+  nsight:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    ports:
+      - "127.0.0.1:8080:8080" # HTTP
+      - "127.0.0.1:3478:3478" # TURN
+
+volumes:
+  accelerated-computing-hub:
