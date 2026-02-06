@@ -1,7 +1,8 @@
 FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.10-cpp-cuda12.9
 
-ENV PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=cuda-cpp
+ENV ACH_TUTORIAL=cuda-cpp \
+    PIP_ROOT_USER_ACTION=ignore \
+    MPLCONFIGDIR=/tmp/matplotlib_cache
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt

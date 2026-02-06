@@ -9,6 +9,7 @@ ENV ACH_TUTORIAL=cuda-tile \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 

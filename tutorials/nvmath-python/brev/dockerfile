@@ -1,7 +1,8 @@
 FROM ghcr.io/nvidia/mirrors/pytorch-2.9.0-cuda12.8-cudnn9-runtime
 
-ENV PIP_ROOT_USER_ACTION=ignore \
-    ACH_TUTORIAL=nvmath-python
+ENV ACH_TUTORIAL=nvmath-python \
+    PIP_ROOT_USER_ACTION=ignore \
+    MPLCONFIGDIR=/tmp/matplotlib_cache
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt

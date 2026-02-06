@@ -1,12 +1,13 @@
 FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.08-cpp-cuda12.8
 
-ENV PIP_ROOT_USER_ACTION=ignore \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+ENV ACH_TUTORIAL=accelerated-python \
+    ACH_RAPIDS_VENV=/opt/venvs/rapids \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
-    ACH_RAPIDS_VENV=/opt/venvs/rapids \
-    ACH_TUTORIAL=accelerated-python
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_ROOT_USER_ACTION=ignore \
+    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    MPLCONFIGDIR=/tmp/matplotlib_cache
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
