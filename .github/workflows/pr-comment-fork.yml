@@ -1,4 +1,4 @@
-name: Fork PR Comment
+name: PR Comment on Forks
 
 on:
   pull_request_target:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    
+
     steps:
       - name: Comment on PR
         uses: actions/github-script@v7
@@ -23,4 +23,3 @@ jobs:
               repo: context.repo.repo,
               body: '👋 Thank you for your contribution!\n\nThis pull request is from a forked repository so GitHub Actions will not be able to run CI. A maintainer will review your changes shortly and manually trigger the CI.\n\n**@maintainers** Please review this PR when you have a chance and follow the instructions in the [CONTRIBUTING.md](https://github.com/NVIDIA/accelerated-computing-hub/blob/main/CONTRIBUTING.md#reviewing-prs-from-forks) file to trigger the CI.'
             })
-

@@ -1,0 +1,109 @@
+name: PR Comment on Git Signatures Check
+
+on:
+  workflow_run:
+    workflows: ["Test Git Signatures"]
+    types: [completed]
+
+# Write permissions for commenting
+permissions:
+  pull-requests: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure'
+
+    steps:
+      - name: Download PR comment data
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-comment-data
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-id: ${{ github.event.workflow_run.id }}
+
+      - name: Post comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read PR number and error details from artifacts
+            const prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
+            const unsignedCount = fs.readFileSync('unsigned_count', 'utf8').trim();
+            const unsignedCommits = fs.readFileSync('unsigned_commits', 'utf8').trim();
+
+            if (!prNumber || isNaN(prNumber)) {
+              console.log('No valid PR number found, skipping comment.');
+              return;
+            }
+
+            if (!unsignedCount || unsignedCount === '0') {
+              console.log('No unsigned commits found, skipping comment.');
+              return;
+            }
+
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${{ github.event.workflow_run.id }}`;
+
+            const commentBody = `## ❌ Commit Signature Check Failed
+
+            **Found ${unsignedCount} unsigned commit(s):**
+
+            🔗 [View workflow run logs](${runUrl})
+
+            ${unsignedCommits}
+
+            ### All commits must be signed
+
+            #### How to fix:
+
+            1. **Configure commit signing** (if not already done):
+               \`\`\`bash
+               # For GPG signing
+               git config --global commit.gpgsign true
+
+               # Or for SSH signing (Git 2.34+)
+               git config --global gpg.format ssh
+               git config --global user.signingkey ~/.ssh/id_ed25519.pub
+               \`\`\`
+
+            2. **Re-sign your commits:**
+               \`\`\`bash
+               git rebase -i origin/main --exec "git commit --amend --no-edit -S"
+               git push --force-with-lease
+               \`\`\`
+
+            📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+            `;
+
+            // Check if we already commented on this PR to avoid spam
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('Commit Signature Check Failed')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+              console.log(`Updated existing comment on PR #${prNumber}`);
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: commentBody
+              });
+              console.log(`Created comment on PR #${prNumber}`);
+            }
