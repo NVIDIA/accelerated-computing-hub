@@ -1,9 +1,10 @@
-name: &tutorial-name cuda-cpp
+name: &tutorial-name cuda-tile
 
 x-config:
-  dockerfile: &dockerfile tutorials/cuda-cpp/brev/dockerfile
-  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
+  dockerfile: &dockerfile tutorials/cuda-tile/brev/dockerfile
+  image: &image ghcr.io/nvidia/cuda-tile-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-tile/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/cuda-tile/notebooks/start.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/cuda-tile/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -46,6 +47,7 @@ services:
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
+    command: *default-jupyter-url
     ports:
       - "127.0.0.1:8888:8888" # JupyterLab
   nsight:

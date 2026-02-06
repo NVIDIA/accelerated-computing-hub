@@ -1,0 +1,190 @@
+name: Test Git Signatures
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  test-git-signatures:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history to compare with main
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Check commit signatures
+        id: github-api-signature-check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require('child_process');
+
+            // Get current branch name
+            const currentBranch = process.env.GITHUB_REF_NAME;
+            console.log(`Current branch: ${currentBranch}`);
+
+            // Skip signature check on main branch to avoid failing on historical unsigned commits
+            if (currentBranch === 'main') {
+              console.log('On main branch - skipping signature check for historical commits.');
+              console.log('Signature verification only runs on PR branches.');
+              return;
+            }
+
+            // Get commits that are on this branch but not on origin/main
+            let commitShas;
+            try {
+              const output = execSync('git rev-list origin/main..HEAD', { encoding: 'utf-8' });
+              commitShas = output.trim().split('\n').filter(sha => sha.length > 0);
+            } catch (error) {
+              console.log('Could not compare with origin/main, checking all commits on this branch.');
+              // Fallback: just check the current commit
+              commitShas = [process.env.GITHUB_SHA];
+            }
+
+            if (commitShas.length === 0) {
+              console.log('No new commits to check (branch is up to date with main).');
+              return;
+            }
+
+            console.log(`Checking ${commitShas.length} commit(s) via GitHub API...`);
+
+            // Check each commit's verification status via GitHub API
+            const unsignedCommits = [];
+
+            for (const sha of commitShas) {
+              try {
+                const commit = await github.rest.repos.getCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: sha
+                });
+
+                const verification = commit.data.commit.verification;
+                const shortSha = sha.substring(0, 7);
+                const message = commit.data.commit.message.split('\n')[0];
+
+                if (verification && verification.verified) {
+                  console.log(`✓ ${shortSha} - ${message} (${verification.reason})`);
+                } else {
+                  const reason = verification ? verification.reason : 'unknown';
+                  console.log(`✗ ${shortSha} - ${message} (${reason})`);
+                  unsignedCommits.push({
+                    sha: shortSha,
+                    fullSha: sha,
+                    message: message,
+                    reason: reason
+                  });
+                }
+              } catch (error) {
+                console.log(`⚠ ${sha.substring(0, 7)} - Could not verify (${error.message})`);
+                // Don't fail on API errors for individual commits
+              }
+            }
+
+            if (unsignedCommits.length > 0) {
+              // Set outputs for PR comment
+              core.setOutput('unsigned_count', unsignedCommits.length);
+              core.setOutput('unsigned_commits', unsignedCommits.map(c => `- \`${c.sha}\`: ${c.message} (${c.reason})`).join('\n'));
+
+              console.log('\n❌ Found unsigned commits:');
+              for (const commit of unsignedCommits) {
+                console.log(`   ${commit.sha}: ${commit.message} (reason: ${commit.reason})`);
+              }
+              console.log('\nAll commits must be signed. See the PR comments for instructions on how to sign commits.');
+              console.log('You can re-sign commits with: git rebase -i HEAD~N --exec "git commit --amend --no-edit -S"');
+              core.setFailed(`${unsignedCommits.length} unsigned commit(s) found. All commits must be signed.`);
+            } else {
+              console.log(`\n✅ All ${commitShas.length} commit(s) are properly signed.`);
+            }
+
+      - name: Comment on PR if check failed
+        if: failure() && steps.github-api-signature-check.outputs.unsigned_count != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Find PR associated with this branch
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head: `${context.repo.owner}:${process.env.GITHUB_REF_NAME}`,
+              state: 'open'
+            });
+
+            if (pulls.length === 0) {
+              console.log('No open PR found for this branch, skipping comment.');
+              return;
+            }
+
+            const prNumber = pulls[0].number;
+            const unsignedCount = '${{ steps.github-api-signature-check.outputs.unsigned_count }}';
+            const unsignedCommits = `${{ steps.github-api-signature-check.outputs.unsigned_commits }}`;
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+
+            const commentBody = `## ❌ Commit Signature Check Failed
+
+            **Found ${unsignedCount} unsigned commit(s):**
+
+            🔗 [View workflow run logs](${runUrl})
+
+            ${unsignedCommits}
+
+            ### All commits must be signed
+
+            #### How to fix:
+
+            1. **Configure commit signing** (if not already done):
+               \`\`\`bash
+               # For GPG signing
+               git config --global commit.gpgsign true
+
+               # Or for SSH signing (Git 2.34+)
+               git config --global gpg.format ssh
+               git config --global user.signingkey ~/.ssh/id_ed25519.pub
+               \`\`\`
+
+            2. **Re-sign your commits:**
+               \`\`\`bash
+               git rebase -i origin/main --exec "git commit --amend --no-edit -S"
+               git push --force-with-lease
+               \`\`\`
+
+            📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+            `;
+
+            // Check if we already commented on this PR to avoid spam
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            const botComment = comments.find(comment =>
+              comment.user.type === 'Bot' &&
+              comment.body.includes('Commit Signature Check Failed')
+            );
+
+            if (botComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: commentBody
+              });
+              console.log(`Updated existing comment on PR #${prNumber}`);
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body: commentBody
+              });
+              console.log(`Created comment on PR #${prNumber}`);
+            }

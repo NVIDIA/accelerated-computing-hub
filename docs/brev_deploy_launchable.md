@@ -6,6 +6,7 @@
   - Go to the invite URL.
   - [Login or signup to Brev](brev_login_signup.md) and select the correct organization.
   - Click "Launchables" on the navigation bar at the top.
+  - Click "My Launchables" instead of "Explore" in the middle.
   - Click "View Launchable" on the Launchable specified by the instructor.
 - If you have a Brev Launchable URL, go to it.
 - Click "Deploy Launchable".

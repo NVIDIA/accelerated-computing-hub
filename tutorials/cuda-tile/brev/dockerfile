@@ -1,0 +1,83 @@
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+
+ENV ACH_TUTORIAL=cuda-tile \
+    PYTHON_VERSION=3.12 \
+    NSIGHT_SYSTEMS_VERSION=2026.1.1 \
+    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_COMPUTE_VERSION=2025.4.1 \
+    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
+    ACH_RAPIDS_VENV=/opt/venvs/rapids \
+    PIP_ROOT_USER_ACTION=ignore \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT=1 \
+    OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+
+# Install system packages (needed before pip install for git-based packages)
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    libglib2.0-0 \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install Python
+RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python${PYTHON_VERSION} \
+    python${PYTHON_VERSION}-dev \
+ && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
+ && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
+ && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -s /usr/local/bin/pip /usr/bin/pip \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+
+# Remove externally managed flag and install Python packages.
+RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
+ && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+ && rm -f /opt/requirements.txt
+
+# Install Nsight Systems and Nsight Compute.
+RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
+ && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
+ && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && mkdir -p /usr/local/nvidia/bin \
+ && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
+ && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
+
+# Install PyTorch with CUDA 13.0 support.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+    --index-url https://download.pytorch.org/whl/cu130 \
+    torch==2.10.0
+
+# Setup Bash & JupyterLab.
+RUN mkdir -p ~/.local/state/._bash_history \
+ && mkdir -p ~/.jupyter \
+ && ln -fs /accelerated-computing-hub/brev/jupyter-server-config.py ~/.jupyter/jupyter_server_config.py \
+ && mkdir -p ~/.ipython/profile_default/startup \
+ && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
+ && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+COPY . /accelerated-computing-hub
+
+WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
+
+# Setup Git.
+RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
+ && git config --global --add safe.directory "/accelerated-computing-hub"
+
+ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]

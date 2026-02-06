@@ -10,6 +10,7 @@ The following interactive tutorials are available and can be used on [NVIDIA Bre
 
 | Content | Docker Compose | Brev Instance | Brev Provider |
 |---------|----------------|---------------|---------------|
+| [CUDA Tile Tutorial](tutorials/cuda-tile/README.md) | [docker-compose.yml](tutorials/cuda-tile/brev/docker-compose.yml) | 1xB300, 1xB200, or 1xRTXPro6000 | Any Blackwell provider; none have Flexible Ports yet |
 | [CUDA C++ Tutorial](tutorials/cuda-cpp/README.md) | [docker-compose.yml](tutorials/cuda-cpp/brev/docker-compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
 | [Standard Parallelism Tutorial](tutorials/stdpar/README.md) | [docker-compose.yml](tutorials/stdpar/brev/docker-compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | GCP, AWS, or any other with Flexible Ports and Linux 6.1.24+, 6.2.11+, or 6.3+ (for HMM) |
 | [Accelerated Python Tutorial](tutorials/accelerated-python/README.md) | [docker-compose.yml](tutorials/accelerated-python/brev/docker-compose.yml) | L40S, L4, or T4; 4xL4 or 2xL4 for distributed | Crusoe or any other with Flexible Ports |
