@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="900" height="280" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .field-box { fill: #FFF9C4; stroke: #1A237E; stroke-width: 2.5; }
+      .compute-box { fill: #E3F2FD; stroke: #1A237E; stroke-width: 2; }
+      .output-box { fill: #E8F5E9; stroke: #1A237E; stroke-width: 2.5; }
+      .text-main { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1A237E; text-anchor: middle; }
+      .text-large { font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; fill: #1A237E; text-anchor: middle; }
+      .text-small { font-family: Arial, sans-serif; font-size: 12px; fill: #1A237E; text-anchor: middle; }
+      .text-label { font-family: Arial, sans-serif; font-size: 14px; font-style: italic; fill: #1976D2; text-anchor: middle; }
+      .arrow { stroke: #1976D2; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrowhead); }
+      .grid-line { stroke: #90A4AE; stroke-width: 1; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 7 3 L 0 6 Q 2 3 0 0" fill="#1976D2" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="280" fill="white"/>
+
+  <!-- ===== INPUT: omega(t), psi(t) on grid ===== -->
+  <rect x="30" y="80" width="140" height="120" rx="8" class="field-box"/>
+  
+  <!-- Small grid inside input box (4x4) -->
+  <g transform="translate(50, 100)">
+    <rect x="0" y="0" width="60" height="60" fill="#FFECB3" stroke="#1A237E" stroke-width="1"/>
+    <line x1="15" y1="0" x2="15" y2="60" class="grid-line"/>
+    <line x1="30" y1="0" x2="30" y2="60" class="grid-line"/>
+    <line x1="45" y1="0" x2="45" y2="60" class="grid-line"/>
+    <line x1="0" y1="15" x2="60" y2="15" class="grid-line"/>
+    <line x1="0" y1="30" x2="60" y2="30" class="grid-line"/>
+    <line x1="0" y1="45" x2="60" y2="45" class="grid-line"/>
+    <!-- Dots inside grid cells -->
+    <circle cx="7.5" cy="7.5" r="2" fill="#1A237E"/>
+    <circle cx="22.5" cy="22.5" r="2" fill="#1A237E"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="#1A237E"/>
+    <circle cx="52.5" cy="52.5" r="2" fill="#1A237E"/>
+  </g>
+  
+  <text x="100" y="180" class="text-large">&#969;(t), &#968;(t)</text>
+  <text x="100" y="65" class="text-label">Input</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 170 140 L 220 140" class="arrow"/>
+
+  <!-- ===== COMPUTE: Advection + Diffusion ===== -->
+  <rect x="220" y="70" width="200" height="140" rx="8" class="compute-box"/>
+  
+  <!-- Two small grids for Advection and Diffusion -->
+  <g transform="translate(240, 90)">
+    <rect x="0" y="0" width="50" height="50" fill="#BBDEFB" stroke="#1A237E" stroke-width="1"/>
+    <line x1="12.5" y1="0" x2="12.5" y2="50" class="grid-line"/>
+    <line x1="25" y1="0" x2="25" y2="50" class="grid-line"/>
+    <line x1="37.5" y1="0" x2="37.5" y2="50" class="grid-line"/>
+    <line x1="0" y1="12.5" x2="50" y2="12.5" class="grid-line"/>
+    <line x1="0" y1="25" x2="50" y2="25" class="grid-line"/>
+    <line x1="0" y1="37.5" x2="50" y2="37.5" class="grid-line"/>
+    <!-- Dots inside grid cells -->
+    <circle cx="6.25" cy="6.25" r="1.5" fill="#1A237E"/>
+    <circle cx="18.75" cy="18.75" r="1.5" fill="#1A237E"/>
+    <circle cx="31.25" cy="31.25" r="1.5" fill="#1A237E"/>
+    <circle cx="43.75" cy="43.75" r="1.5" fill="#1A237E"/>
+  </g>
+  <text x="265" y="160" class="text-small">Advection</text>
+  
+  <g transform="translate(350, 90)">
+    <rect x="0" y="0" width="50" height="50" fill="#BBDEFB" stroke="#1A237E" stroke-width="1"/>
+    <line x1="12.5" y1="0" x2="12.5" y2="50" class="grid-line"/>
+    <line x1="25" y1="0" x2="25" y2="50" class="grid-line"/>
+    <line x1="37.5" y1="0" x2="37.5" y2="50" class="grid-line"/>
+    <line x1="0" y1="12.5" x2="50" y2="12.5" class="grid-line"/>
+    <line x1="0" y1="25" x2="50" y2="25" class="grid-line"/>
+    <line x1="0" y1="37.5" x2="50" y2="37.5" class="grid-line"/>
+    <!-- Dots inside grid cells -->
+    <circle cx="6.25" cy="6.25" r="1.5" fill="#1A237E"/>
+    <circle cx="18.75" cy="18.75" r="1.5" fill="#1A237E"/>
+    <circle cx="31.25" cy="31.25" r="1.5" fill="#1A237E"/>
+    <circle cx="43.75" cy="43.75" r="1.5" fill="#1A237E"/>
+  </g>
+  <text x="375" y="160" class="text-small">Diffusion</text>
+  
+  <text x="320" y="190" class="text-main">Finite Differences</text>
+  <text x="320" y="55" class="text-label">Compute RHS</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 420 140 L 470 140" class="arrow"/>
+
+  <!-- ===== TIME MARCH: Forward Euler ===== -->
+  <rect x="470" y="90" width="160" height="100" rx="8" class="compute-box"/>
+  <text x="550" y="130" class="text-main">&#969; + &#916;t&#183;RHS</text>
+  <text x="550" y="155" class="text-small">(Forward Euler)</text>
+  <text x="550" y="75" class="text-label">Time March</text>
+
+  <!-- Arrow 3 -->
+  <path d="M 630 140 L 680 140" class="arrow"/>
+
+  <!-- ===== OUTPUT: omega(t+dt) on grid ===== -->
+  <rect x="680" y="80" width="140" height="120" rx="8" class="output-box"/>
+  
+  <!-- Small grid inside output box -->
+  <g transform="translate(700, 100)">
+    <rect x="0" y="0" width="60" height="60" fill="#C8E6C9" stroke="#1A237E" stroke-width="1"/>
+    <line x1="15" y1="0" x2="15" y2="60" class="grid-line"/>
+    <line x1="30" y1="0" x2="30" y2="60" class="grid-line"/>
+    <line x1="45" y1="0" x2="45" y2="60" class="grid-line"/>
+    <line x1="0" y1="15" x2="60" y2="15" class="grid-line"/>
+    <line x1="0" y1="30" x2="60" y2="30" class="grid-line"/>
+    <line x1="0" y1="45" x2="60" y2="45" class="grid-line"/>
+    <!-- Dots inside grid cells -->
+    <circle cx="7.5" cy="7.5" r="2" fill="#1A237E"/>
+    <circle cx="22.5" cy="22.5" r="2" fill="#1A237E"/>
+    <circle cx="37.5" cy="37.5" r="2" fill="#1A237E"/>
+    <circle cx="52.5" cy="52.5" r="2" fill="#1A237E"/>
+  </g>
+  
+  <text x="750" y="180" class="text-large">&#969;(t+&#916;t)</text>
+  <text x="750" y="65" class="text-label">Output</text>
+</svg>

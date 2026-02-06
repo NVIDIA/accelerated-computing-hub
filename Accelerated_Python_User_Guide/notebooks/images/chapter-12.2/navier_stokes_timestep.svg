@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="650" height="320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .box { fill: #CBD5E8; stroke: #1A4A6E; stroke-width: 2; }
+      .text-math { font-family: "Times New Roman", Times, serif; font-size: 24px; font-style: italic; fill: #1A4A6E; text-anchor: middle; }
+      .text-label { font-family: "Times New Roman", Times, serif; font-size: 18px; fill: #1A4A6E; text-anchor: middle; }
+      .text-loop { font-family: "Times New Roman", Times, serif; font-size: 20px; fill: #1A4A6E; text-anchor: middle; }
+      .arrow-line { stroke: #1A4A6E; stroke-width: 3; fill: none; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <polygon points="0,0 10,5 0,10 2,5" fill="#1A4A6E"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="650" height="320" fill="white"/>
+
+  <!-- Box 1: omega(t), psi(t) -->
+  <rect x="40" y="100" width="100" height="80" class="box"/>
+  <text x="90" y="135" class="text-math">&#969;(t)</text>
+  <text x="90" y="165" class="text-math">&#968;(t)</text>
+
+  <!-- Arrow 1 with label Eq. (1) -->
+  <path d="M 140 140 L 202 140" class="arrow-line" marker-end="url(#arrowhead)"/>
+  <text x="170" y="115" class="text-label">Eq. (1)</text>
+
+  <!-- Box 2: omega(t+Delta t) -->
+  <rect x="210" y="100" width="120" height="80" class="box"/>
+  <text x="270" y="150" class="text-math">&#969;(t+&#916;t)</text>
+
+  <!-- Arrow 2 with label Eq. (2) -->
+  <path d="M 330 140 L 392 140" class="arrow-line" marker-end="url(#arrowhead)"/>
+  <text x="360" y="115" class="text-label">Eq. (2)</text>
+
+  <!-- Box 3: psi(t+Delta t) -->
+  <rect x="400" y="100" width="120" height="80" class="box"/>
+  <text x="460" y="150" class="text-math">&#968;(t+&#916;t)</text>
+
+  <!-- Return arrow (rectangular): down, left, up -->
+  <path d="M 460 180 L 460 260 L 90 260 L 90 188" class="arrow-line" marker-end="url(#arrowhead)"/>
+
+  <!-- Label: Next timestep -->
+  <text x="275" y="290" class="text-loop">Next timestep</text>
+</svg>
