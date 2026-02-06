@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize]
+
+# Minimal permissions - only read access needed for checks
+permissions:
+  contents: read
 
 jobs:
   test-git-lfs:
@@ -14,102 +18,25 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Check that binary files are tracked by LFS
         id: git-lfs-check
         run: bash brev/test-git-lfs.bash .
 
-      - name: Comment on PR if check failed
-        if: failure() && steps.git-lfs-check.outputs.error_type != ''
-        uses: actions/github-script@v7
+      - name: Save PR number and result
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          mkdir -p ./pr-comment-data
+          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
+          echo '${{ steps.git-lfs-check.outcome }}' > ./pr-comment-data/outcome
+          # Capture outputs if they exist
+          echo '${{ steps.git-lfs-check.outputs.error_type }}' > ./pr-comment-data/error_type
+          echo '${{ steps.git-lfs-check.outputs.error_files }}' > ./pr-comment-data/error_files
+
+      - name: Upload PR comment data
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            // Find PR associated with this branch
-            const { data: pulls } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.repo.owner}:${process.env.GITHUB_REF_NAME}`,
-              state: 'open'
-            });
-
-            if (pulls.length === 0) {
-              console.log('No open PR found for this branch, skipping comment.');
-              return;
-            }
-
-            const prNumber = pulls[0].number;
-            const errorType = '${{ steps.git-lfs-check.outputs.error_type }}';
-            const errorFiles = `${{ steps.git-lfs-check.outputs.error_files }}`;
-            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-
-            let commentBody;
-            if (errorType === 'subdir_gitattributes') {
-              commentBody = `## ❌ Git LFS Check Failed
-
-              **Found \`.gitattributes\` file(s) in subdirectories.** Only the top-level \`.gitattributes\` should be used for LFS configuration.
-
-              🔗 [View workflow run logs](${runUrl})
-
-              ### Files to remove:
-              ${errorFiles.split('\n').map(f => f.trim()).filter(f => f).map(f => '- \`' + f + '\`').join('\n')}
-
-              ### How to fix:
-              \`\`\`bash
-              git rm <path/to/.gitattributes>
-              git commit -m "Remove subdirectory .gitattributes"
-              \`\`\`
-              `;
-            } else if (errorType === 'not_lfs_tracked') {
-              commentBody = `## ❌ Git LFS Check Failed
-
-              **The following files should be tracked by Git LFS but are not:**
-
-              🔗 [View workflow run logs](${runUrl})
-
-              ${errorFiles}
-
-              ### How to fix:
-              \`\`\`bash
-              # For each file listed above:
-              git rm --cached <file>
-              git add <file>
-              git commit -m "Track file with Git LFS"
-              \`\`\`
-
-              Make sure Git LFS is installed locally (\`git lfs install\`) before running these commands.
-              `;
-            }
-
-            // Check if we already commented on this PR to avoid spam
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
-
-            const botComment = comments.find(comment =>
-              comment.user.type === 'Bot' &&
-              comment.body.includes('Git LFS Check Failed')
-            );
-
-            if (botComment) {
-              // Update existing comment
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentBody
-              });
-              console.log(`Updated existing comment on PR #${prNumber}`);
-            } else {
-              // Create new comment
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: commentBody
-              });
-              console.log(`Created comment on PR #${prNumber}`);
-            }
+          name: pr-comment-data
+          path: pr-comment-data/
+          retention-days: 1

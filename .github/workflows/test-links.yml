@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize]
+
+# Minimal permissions - only read access needed for checks
+permissions:
+  contents: read
 
 jobs:
   test-links:
@@ -14,8 +18,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -42,77 +44,17 @@ jobs:
           args: --verbose --no-progress --config brev/lychee.toml --exclude-file brev/.lycheeignore '.'
           fail: true
 
-      - name: Comment on PR if check failed
-        if: failure() && steps.lychee-check.outcome == 'failure'
-        uses: actions/github-script@v7
+      - name: Save PR number and result
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          mkdir -p ./pr-comment-data
+          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
+          echo '${{ steps.lychee-check.outcome }}' > ./pr-comment-data/outcome
+
+      - name: Upload PR comment data
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            // Find PR associated with this branch
-            const { data: pulls } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.repo.owner}:${process.env.GITHUB_REF_NAME}`,
-              state: 'open'
-            });
-
-            if (pulls.length === 0) {
-              console.log('No open PR found for this branch, skipping comment.');
-              return;
-            }
-
-            const prNumber = pulls[0].number;
-            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-
-            const commentBody = `## ❌ Link Check Failed
-
-            **Broken links were detected in this PR.**
-
-            Please check the [workflow run logs](${runUrl}) for details on which links are broken.
-
-            ### Common fixes:
-
-            1. **Typo in URL** - Check for spelling mistakes in the link
-            2. **Outdated link** - The page may have moved or been deleted
-            3. **Relative path issue** - Ensure relative links use the correct path
-            4. **External site down** - If the external site is temporarily down, you can add it to \`brev/.lycheeignore\`
-
-            ### To test links locally:
-
-            \`\`\`bash
-            ./brev/test-links.bash .
-            \`\`\`
-
-            📚 [Lychee documentation](https://github.com/lycheeverse/lychee)
-            `;
-
-            // Check if we already commented on this PR to avoid spam
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
-
-            const botComment = comments.find(comment =>
-              comment.user.type === 'Bot' &&
-              comment.body.includes('Link Check Failed')
-            );
-
-            if (botComment) {
-              // Update existing comment
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentBody
-              });
-              console.log(`Updated existing comment on PR #${prNumber}`);
-            } else {
-              // Create new comment
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: commentBody
-              });
-              console.log(`Created comment on PR #${prNumber}`);
-            }
+          name: pr-comment-data
+          path: pr-comment-data/
+          retention-days: 1

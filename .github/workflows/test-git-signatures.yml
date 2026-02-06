@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request_target:
+  pull_request:
     types: [opened, reopened, synchronize]
+
+# Minimal permissions - only read access needed for checks
+permissions:
+  contents: read
 
 jobs:
   test-git-signatures:
@@ -16,14 +20,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Need full history to compare with main
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Check commit signatures
-        id: github-api-signature-check
+        id: signature-check
         uses: actions/github-script@v7
         with:
           script: |
             const { execSync } = require('child_process');
+            const fs = require('fs');
 
             // Get current branch name
             const currentBranch = process.env.GITHUB_REF_NAME;
@@ -88,7 +92,7 @@ jobs:
             }
 
             if (unsignedCommits.length > 0) {
-              // Set outputs for PR comment
+              // Set outputs for PR comment workflow
               core.setOutput('unsigned_count', unsignedCommits.length);
               core.setOutput('unsigned_commits', unsignedCommits.map(c => `- \`${c.sha}\`: ${c.message} (${c.reason})`).join('\n'));
 
@@ -103,88 +107,21 @@ jobs:
               console.log(`\n✅ All ${commitShas.length} commit(s) are properly signed.`);
             }
 
-      - name: Comment on PR if check failed
-        if: failure() && steps.github-api-signature-check.outputs.unsigned_count != ''
-        uses: actions/github-script@v7
+      - name: Save PR number and result
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          mkdir -p ./pr-comment-data
+          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
+          echo '${{ steps.signature-check.outcome }}' > ./pr-comment-data/outcome
+          echo '${{ steps.signature-check.outputs.unsigned_count }}' > ./pr-comment-data/unsigned_count
+          cat << 'EOF' > ./pr-comment-data/unsigned_commits
+          ${{ steps.signature-check.outputs.unsigned_commits }}
+          EOF
+
+      - name: Upload PR comment data
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
-          script: |
-            // Find PR associated with this branch
-            const { data: pulls } = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              head: `${context.repo.owner}:${process.env.GITHUB_REF_NAME}`,
-              state: 'open'
-            });
-
-            if (pulls.length === 0) {
-              console.log('No open PR found for this branch, skipping comment.');
-              return;
-            }
-
-            const prNumber = pulls[0].number;
-            const unsignedCount = '${{ steps.github-api-signature-check.outputs.unsigned_count }}';
-            const unsignedCommits = `${{ steps.github-api-signature-check.outputs.unsigned_commits }}`;
-            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
-
-            const commentBody = `## ❌ Commit Signature Check Failed
-
-            **Found ${unsignedCount} unsigned commit(s):**
-
-            🔗 [View workflow run logs](${runUrl})
-
-            ${unsignedCommits}
-
-            ### All commits must be signed
-
-            #### How to fix:
-
-            1. **Configure commit signing** (if not already done):
-               \`\`\`bash
-               # For GPG signing
-               git config --global commit.gpgsign true
-
-               # Or for SSH signing (Git 2.34+)
-               git config --global gpg.format ssh
-               git config --global user.signingkey ~/.ssh/id_ed25519.pub
-               \`\`\`
-
-            2. **Re-sign your commits:**
-               \`\`\`bash
-               git rebase -i origin/main --exec "git commit --amend --no-edit -S"
-               git push --force-with-lease
-               \`\`\`
-
-            📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
-            `;
-
-            // Check if we already commented on this PR to avoid spam
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber
-            });
-
-            const botComment = comments.find(comment =>
-              comment.user.type === 'Bot' &&
-              comment.body.includes('Commit Signature Check Failed')
-            );
-
-            if (botComment) {
-              // Update existing comment
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: commentBody
-              });
-              console.log(`Updated existing comment on PR #${prNumber}`);
-            } else {
-              // Create new comment
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: commentBody
-              });
-              console.log(`Created comment on PR #${prNumber}`);
-            }
+          name: pr-comment-data
+          path: pr-comment-data/
+          retention-days: 1
