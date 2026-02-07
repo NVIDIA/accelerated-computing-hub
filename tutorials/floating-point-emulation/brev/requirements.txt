@@ -1,0 +1,24 @@
+# NVMATH + CTK 13.1 + CCCL + cublas
+nvmath-python[dx]==0.8.*
+cuda-core
+cuda-bindings==13.1.*
+cuda-cccl
+
+# Scientific
+numpy
+scipy
+ssgetpy
+cupy-cuda13x
+
+# Visualization
+matplotlib
+
+# Jupyter
+jupyterlab
+jupyterlab-nvidia-nsight
+jupyterlab-execute-time
+ipywidgets
+ipykernel
+
+# MPI
+mpi4py
