@@ -1,14 +1,19 @@
-FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.08-cpp-cuda12.8
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
 
 ENV ACH_TUTORIAL=accelerated-python \
+    PYTHON_VERSION=3.12 \
+    NSIGHT_SYSTEMS_VERSION=2026.1.1 \
+    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_COMPUTE_VERSION=2025.4.1 \
+    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
-    PIP_DISABLE_PIP_VERSION_CHECK=1 \
     PIP_ROOT_USER_ACTION=ignore \
-    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
-    PYTHONSTARTUP=
+    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -19,8 +24,9 @@ RUN apt-get update -y \
     ca-certificates \
     curl \
     gnupg \
-    gosu \
     lsb-release \
+    gosu \
+    libglib2.0-0 \
     sudo \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
@@ -28,6 +34,21 @@ RUN apt-get update -y \
 # Enable passwordless sudo for all users and pass through environment and path
 RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
  && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
+
+# Install Python
+RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python${PYTHON_VERSION} \
+    python${PYTHON_VERSION}-dev \
+    python${PYTHON_VERSION}-venv \
+ && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
+ && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
+ && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -s /usr/local/bin/pip /usr/bin/pip \
+ && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install Docker
 RUN mkdir -p /etc/apt/keyrings \
@@ -43,12 +64,16 @@ RUN mkdir -p /etc/apt/keyrings \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
+# Install PyTorch with CUDA 13.0 support.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+    --index-url https://download.pytorch.org/whl/cu130 \
+    torch==2.10.0
+
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# Remove externally managed flag and install Python packages.
-RUN rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
- && pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
 # Install MPI.
@@ -60,20 +85,15 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Nsight Systems and Nsight Compute.
-RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/2025_3/NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && dpkg -i NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && rm -f NsightSystems-linux-cli-public-2025.3.1.90-3582212.deb \
- && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/debian12/x86_64/nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
- && dpkg -i nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
- && rm -f nsight-compute-2025.2.1_2025.2.1.3-1_amd64.deb \
+RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
+ && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
+ && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
  && mkdir -p /usr/local/nvidia/bin \
- && ln -s /opt/nvidia/nsight-systems-cli/2025.3.1/bin/nsys /usr/local/nvidia/bin/nsys \
- && ln -s /opt/nvidia/nsight-compute/2025.2.1/ncu /usr/local/nvidia/bin/ncu
-
-# Install PyTorch with CUDA 12.8 support.
-RUN pip install --no-cache-dir --root-user-action=ignore \
-    --index-url https://download.pytorch.org/whl/cu128 \
-    torch
+ && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
+ && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
 
 # Disable Jupyter announcements extension
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
@@ -82,13 +102,13 @@ RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:annou
 RUN python -m venv ${ACH_RAPIDS_VENV} \
  && ${ACH_RAPIDS_VENV}/bin/pip install --no-cache-dir \
     --extra-index-url=https://pypi.nvidia.com \
-    "cudf-cu12==25.10.*" \
-    "cuml-cu12==25.10.*" \
+    "cudf-cu13==25.10.*" \
+    "cuml-cu13==25.10.*" \
     "scikit-learn>=1.5,<1.6" \
     ipykernel \
     pytest \
  && ${ACH_RAPIDS_VENV}/bin/python -m ipykernel install \
-    --name=cudf-cu12-25.10 \
+    --name=cudf-cu13-25.10 \
     --display-name="Python 3 (RAPIDS 25.10)" \
     --prefix=/usr/local
 
