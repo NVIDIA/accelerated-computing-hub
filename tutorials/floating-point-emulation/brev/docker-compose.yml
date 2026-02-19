@@ -5,6 +5,7 @@ x-config:
   image: &image ghcr.io/nvidia/floating-point-emulation-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/floating-point-emulation/notebooks
   large: &large true
+  default-jupyter-url: &default-jupyter-url
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -27,6 +28,9 @@ x-config:
       BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name
       ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+      ACH_USER: ${ACH_USER:-ach}
+      ACH_UID: ${ACH_UID:-1000}
+      ACH_GID: ${ACH_GID:-1000}
     user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
@@ -39,7 +43,7 @@ services:
   base:
     <<: [*gpu-config, *common-service]
     image: *image
-    entrypoint: ["/accelerated-computing-hub/brev/base-start.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "base"]
     build:
       context: ../../..
       dockerfile: *dockerfile
@@ -47,15 +51,17 @@ services:
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
+    command: *default-jupyter-url
     ports:
-      - "0.0.0.0:8888:8888" # JupyterLab
+      - "127.0.0.1:8888:8888" # JupyterLab
   nsight:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
-    entrypoint: ["/accelerated-computing-hub/brev/nsight-start.bash"]
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
+      - "127.0.0.1:8080:8080" # HTTP
+      - "127.0.0.1:3478:3478" # TURN
 
 volumes:
   accelerated-computing-hub:
