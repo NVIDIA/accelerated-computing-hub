@@ -8,6 +8,7 @@ ENV ACH_TUTORIAL=cuda-tile \
     NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    CUPY_CACHE_DIR=/tmp/cupy_cache \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
@@ -30,7 +31,7 @@ RUN apt-get update -y \
 
 # Enable passwordless sudo for all users and pass through environment and path
 RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
- && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
+ && sed -i -e 's/^Defaults\s*env_reset/Defaults !env_reset/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
 
 # Install Python
 RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
