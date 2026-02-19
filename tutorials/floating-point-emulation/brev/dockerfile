@@ -1,16 +1,12 @@
-FROM ubuntu:24.04 AS artifacts
-
-COPY . /accelerated-computing-hub
-# RUN find /accelerated-computing-hub/tutorials \
-#     -mindepth 1 -maxdepth 1 -type d -not -name "floating-point-emulation" \
-#     -exec rm -rf {} +
-# RUN rm -rf /accelerated-computing-hub/.git
-
 FROM nvidia/cuda:13.1.0-base-ubuntu24.04
+
+ENV PIP_ROOT_USER_ACTION=ignore \
+    ACH_TUTORIAL=floating-point-emulation \
+    BASH_ENV=/accelerated-computing-hub/brev/user-setup.bash
 
 # Install CUDA Toolkit + build tools
 RUN apt update -y \
-    && apt install -y wget curl gnupg lsb-release \
+    && apt install -y --no-install-recommends wget curl gnupg gosu lsb-release sudo \
     && wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /usr/share/keyrings/kitware-archive-keyring.gpg >/dev/null \
     && echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | tee /etc/apt/sources.list.d/kitware.list >/dev/null \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
@@ -44,8 +40,7 @@ RUN wget https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx
 
 # Install python
 RUN python -m venv /opt/venv
-ENV ACH_TUTORIAL=floating-point-emulation \
-    CUDA_PATH=/usr/local/cuda-13.1 \
+ENV CUDA_PATH=/usr/local/cuda-13.1 \
     PATH="/opt/venv/bin:$PATH" \
     LD_LIBRARY_PATH="/opt/nvidia/libmathdx/lib:$LD_LIBRARY_PATH"
 
@@ -64,7 +59,18 @@ RUN set -ex \
      && ln -fs /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py ~/.ipython/profile_default/startup/00-add-cwd-to-path.py \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
-COPY --from=artifacts /accelerated-computing-hub /accelerated-computing-hub
+# Enable passwordless sudo for all users and pass through environment and path
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && sed -i -e 's/^Defaults\s*env_reset/#&/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
+
+COPY . /accelerated-computing-hub
+
+# Ensure accelerated-computing-hub directory is writable by any user and setup shell initialization
+RUN chmod -R a+rwX /accelerated-computing-hub \
+ && mkdir -p /accelerated-computing-hub/logs \
+ && chmod 777 /accelerated-computing-hub/logs \
+ && ln -s /accelerated-computing-hub/brev/user-setup.bash /etc/profile.d/ach-user-setup.sh \
+ && echo 'source /accelerated-computing-hub/brev/user-setup.bash' >> /etc/bash.bashrc
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
@@ -72,4 +78,7 @@ WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
  && git config --global --add safe.directory "/accelerated-computing-hub"
 
-ENTRYPOINT ["/accelerated-computing-hub/brev/jupyter-start.bash"]
+# Set default user to ach (can be overriden with docker run --user)
+USER ach
+
+ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
