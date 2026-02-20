@@ -16,6 +16,11 @@ if [ -z "${SERVICE}" ]; then
     exit 1
 fi
 
+if [ -n "${BREV_ENV_ID:-}" ]; then
+  modprobe -r nvidia_uvm nvidia_drm nvidia_modeset nvidia || true
+  modprobe nvidia NVreg_RestrictProfilingToAdminUsers=0 NVreg_RegistryDwords="RmProfilingAdminOnly=0" || true
+fi
+
 # Install gosu if not present
 if ! command -v gosu &> /dev/null; then
     apt-get update -y
