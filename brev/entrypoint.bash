@@ -16,7 +16,7 @@ if [ -z "${SERVICE}" ]; then
     exit 1
 fi
 
-if [ -n "${BREV_ENV_ID:-}" ]; then
+if [ -n "${BREV_ENV_ID:-}" ] || [ -n "${ACH_ENABLE_GPU_PROFILING:-}" ]; then
   modprobe -r nvidia_uvm nvidia_drm nvidia_modeset nvidia || true
   modprobe nvidia NVreg_RestrictProfilingToAdminUsers=0 NVreg_RegistryDwords="RmProfilingAdminOnly=0" || true
 fi
