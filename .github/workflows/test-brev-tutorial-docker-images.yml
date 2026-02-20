@@ -28,6 +28,7 @@ jobs:
     env:
       BUILDKIT_PROGRESS: plain
       DOCKER_CLI_HINTS: false
+      ACH_ENABLE_GPU_PROFILING: 1
     steps:
       - name: Show runner info
         run: |
