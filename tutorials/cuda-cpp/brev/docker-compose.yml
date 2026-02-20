@@ -22,6 +22,8 @@ x-config:
     volumes:
       - accelerated-computing-hub:/accelerated-computing-hub
       - /var/run/docker.sock:/var/run/docker.sock
+      - /lib/modules:/lib/modules:ro
+      - /usr/src:/usr/src:ro
     environment:
       BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name

@@ -207,3 +207,8 @@ def test_pytorch():
     z_cuda = torch.matmul(x_cuda, y_cuda.T)
     assert z_cuda.device.type == 'cuda'
     assert torch.allclose(z_cuda.cpu(), expected)
+
+def test_nsightful():
+    from nsightful.notebook import is_interactive_notebook
+
+    assert is_interactive_notebook() == False, "nsightful interactive notebook check failed"
