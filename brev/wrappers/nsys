@@ -8,4 +8,4 @@ sudo -E -n setpriv \
   --inh-caps=+sys_admin,+sys_ptrace \
   --ambient-caps=+sys_admin,+sys_ptrace \
   -- \
-  nsys "$@"
+  "$ACH_NSYS_PATH" "$@"

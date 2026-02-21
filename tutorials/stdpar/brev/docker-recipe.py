@@ -25,6 +25,9 @@ Stage0 += environment(variables={
 
   'ACPP_APPDB_DIR': '/accelerated-computing-hub/',
 
+  'ACH_NSYS_PATH': f'/opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/nsys',
+  'ACH_NCU_PATH':  f'/opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/ncu',
+
   'PATH':            '/accelerated-computing-hub/brev/wrappers:$PATH:/opt/adaptivecpp/bin',
   'LD_LIBRARY_PATH': f'/usr/lib/llvm-{llvm_ver}/lib:$LD_LIBRARY_PATH',
   'LIBRARY_PATH':    f'/usr/lib/llvm-{llvm_ver}/lib:$LIBRARY_PATH',
