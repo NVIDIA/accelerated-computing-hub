@@ -6,8 +6,6 @@ ENV ACH_TUTORIAL=accelerated-python \
     NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
     NSIGHT_COMPUTE_VERSION=2025.4.1 \
     NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
-    ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
-    ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu \
     ACH_RAPIDS_VENV=/opt/venvs/rapids \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
@@ -17,6 +15,9 @@ ENV ACH_TUTORIAL=accelerated-python \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+
+ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
+    ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
