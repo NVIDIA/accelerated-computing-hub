@@ -1,6 +1,8 @@
 FROM ghcr.io/nvidia/mirrors/rapidsai-devcontainers-25.10-cpp-cuda12.9
 
 ENV ACH_TUTORIAL=cuda-cpp \
+    ACH_NSYS_PATH=/usr/local/cuda-12.9/bin/nsys \
+    ACH_NCU_PATH=/usr/local/cuda-12.9/bin/ncu \
     PATH=/accelerated-computing-hub/brev/wrappers:${PATH} \
     PIP_ROOT_USER_ACTION=ignore \
     CUPY_CACHE_DIR=/tmp/cupy_cache \
