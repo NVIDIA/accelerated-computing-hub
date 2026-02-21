@@ -22,13 +22,10 @@ x-config:
     volumes:
       - accelerated-computing-hub:/accelerated-computing-hub
       - /var/run/docker.sock:/var/run/docker.sock
-      - /lib/modules:/lib/modules:ro
-      - /usr/src:/usr/src:ro
     environment:
       BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name
       ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
-      ACH_ENABLE_GPU_PROFILING: ${ACH_ENABLE_GPU_PROFILING:-}
       ACH_USER: ${ACH_USER:-ach}
       ACH_UID: ${ACH_UID:-1000}
       ACH_GID: ${ACH_GID:-1000}

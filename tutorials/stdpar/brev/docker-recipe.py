@@ -65,7 +65,7 @@ Stage0 += packages(ospackages=[
   'curl', 'wget', 'zip', 'bc',
   'nginx', 'openssh-client',
   'libnuma1',  'numactl',
-  'gosu', 'kmod', 'sudo',
+  'gosu', 'libcap2-bin', 'sudo',
 ])
 Stage0 += boost(version=boost_ver) # Required for AdaptiveCpp
 
@@ -137,6 +137,15 @@ Stage0 += shell(commands=[
 Stage0 += shell(commands=[
   "echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
   "sed -i -e 's/^Defaults\\s*env_reset/#&/' -e 's/^Defaults\\s*secure_path=/#&/' /etc/sudoers",
+])
+
+# Grant ncu and nsys CAP_SYS_ADMIN so they can profile without root.
+Stage0 += shell(commands=[
+  'setcap cap_sys_admin+ep $(readlink -f $(which nsys))',
+  'setcap cap_sys_admin+ep $(readlink -f $(which ncu))',
+  'apt-get purge -y libcap2-bin',
+  'apt-get autoremove -y',
+  'rm -rf /var/lib/apt/lists/*',
 ])
 
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
