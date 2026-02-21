@@ -21,8 +21,8 @@ RUN set -ex \
      && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
 
 # Grant ncu and nsys CAP_SYS_ADMIN so they can profile without root.
-RUN setcap cap_sys_admin+ep $(readlink -f $(which nsys)) \
- && setcap cap_sys_admin+ep $(readlink -f $(which ncu)) \
+RUN setcap cap_sys_admin+ep /usr/local/cuda-12.9/bin/nsys \
+ && setcap cap_sys_admin+ep /usr/local/cuda-12.9/bin/ncu \
  && apt-get purge -y libcap2-bin \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/*
