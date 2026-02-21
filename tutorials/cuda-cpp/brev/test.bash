@@ -21,7 +21,12 @@ if [ $# -gt 0 ]; then
         echo "Running: pytest ${TUTORIAL_ROOT}/test/test_notebooks.py -k \"$*\""
         pytest "${TUTORIAL_ROOT}/test/test_notebooks.py" -k "$*"
     fi
-    exit $?
+    EXIT_CODE=$?
+else
+    # Run tests.
+    echo "Running tests..."
+    pytest "${TUTORIAL_ROOT}/test/"
+    EXIT_CODE=$?
 fi
 
 END_TIME=$(date +%s.%N)
@@ -35,4 +40,4 @@ awk -v elapsed="$ELAPSED" 'BEGIN {
     printf "Elapsed time: %dh %dm %.3fs\n", hours, minutes, seconds
 }'
 
-exit 0
+exit $EXIT_CODE

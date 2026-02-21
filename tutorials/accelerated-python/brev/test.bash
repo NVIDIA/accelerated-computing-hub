@@ -31,25 +31,20 @@ if [ $# -gt 0 ]; then
     fi
     EXIT_CODE=$?
 else
-    # Run regular package tests.
-    echo "Running regular package tests..."
-    pytest "${TUTORIAL_ROOT}/test/test_packages.py"
-    EXIT_CODE_PACKAGES=$?
+    # Run tests.
+    echo "Running tests..."
+    pytest "${TUTORIAL_ROOT}/test/" \
+      --ignore="${TUTORIAL_ROOT}/test/test_rapids.py"
+    EXIT_CODE_TESTS=$?
 
-    # Run RAPIDS tests.
+    # Run RAPIDS tests separately because they require a different virtual environment.
     echo ""
-    echo "Running RAPIDS package tests in virtual environment..."
+    echo "Running RAPIDS tests in virtual environment..."
     /opt/venvs/rapids/bin/pytest "${TUTORIAL_ROOT}/test/test_rapids.py"
     EXIT_CODE_RAPIDS=$?
 
-    # Test solution notebooks.
-    echo ""
-    echo "Running solution notebook tests..."
-    pytest "${TUTORIAL_ROOT}/test/test_notebooks.py"
-    EXIT_CODE_NOTEBOOKS=$?
-
     # Overall exit code is non-zero if any test suite failed.
-    EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_RAPIDS || EXIT_CODE_NOTEBOOKS))
+    EXIT_CODE=$((EXIT_CODE_TESTS || EXIT_CODE_RAPIDS))
 fi
 
 END_TIME=$(date +%s.%N)
