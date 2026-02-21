@@ -65,7 +65,7 @@ Stage0 += packages(ospackages=[
   'curl', 'wget', 'zip', 'bc',
   'nginx', 'openssh-client',
   'libnuma1',  'numactl',
-  'gosu', 'sudo',
+  'gosu', 'kmod', 'sudo',
 ])
 Stage0 += boost(version=boost_ver) # Required for AdaptiveCpp
 

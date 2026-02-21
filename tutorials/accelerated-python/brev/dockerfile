@@ -27,6 +27,7 @@ RUN apt-get update -y \
     gnupg \
     lsb-release \
     gosu \
+    kmod \
     libglib2.0-0 \
     sudo \
  && apt-get clean -y \
