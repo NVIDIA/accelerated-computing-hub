@@ -74,6 +74,10 @@ if [ "$(id -u)" = "0" ]; then
 
     # Ensure logs directory exists
     gosu "${TARGET_USER}" mkdir -p /accelerated-computing-hub/logs
+
+    # Relax profiling permissions so Nsight tools can run as non-root.
+    sysctl -w kernel.perf_event_paranoid=0 || true
+    sysctl -w kernel.kptr_restrict=0 || true
 fi
 
 # Dispatch to service-specific entrypoint

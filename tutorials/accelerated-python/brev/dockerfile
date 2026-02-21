@@ -14,7 +14,7 @@ ENV ACH_TUTORIAL=accelerated-python \
     CUPY_CACHE_DIR=/tmp/cupy_cache \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+    PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -27,7 +27,6 @@ RUN apt-get update -y \
     gnupg \
     lsb-release \
     gosu \
-    libcap2-bin \
     libglib2.0-0 \
     sudo \
  && apt-get clean -y \
@@ -96,13 +95,6 @@ RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight
  && mkdir -p /usr/local/nvidia/bin \
  && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
  && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
-
-# Grant ncu and nsys CAP_SYS_ADMIN so they can profile without root.
-RUN setcap cap_sys_admin+ep $(readlink -f $(which nsys)) \
- && setcap cap_sys_admin+ep $(readlink -f $(which ncu)) \
- && apt-get purge -y libcap2-bin \
- && apt-get autoremove -y \
- && rm -rf /var/lib/apt/lists/*
 
 # Disable Jupyter announcements extension
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
