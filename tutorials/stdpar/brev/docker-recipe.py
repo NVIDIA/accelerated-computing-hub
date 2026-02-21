@@ -141,8 +141,8 @@ Stage0 += shell(commands=[
 
 # Grant ncu and nsys CAP_SYS_ADMIN so they can profile without root.
 Stage0 += shell(commands=[
-  'setcap cap_sys_admin+ep $(readlink -f $(which nsys))',
-  'setcap cap_sys_admin+ep $(readlink -f $(which ncu))',
+  f'setcap cap_sys_admin+ep /opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/nsys',
+  f'setcap cap_sys_admin+ep /opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/ncu',
   'apt-get purge -y libcap2-bin',
   'apt-get autoremove -y',
   'rm -rf /var/lib/apt/lists/*',
