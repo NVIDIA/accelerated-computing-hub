@@ -25,7 +25,7 @@ Stage0 += environment(variables={
 
   'ACPP_APPDB_DIR': '/accelerated-computing-hub/',
 
-  'PATH':            '$PATH:/opt/adaptivecpp/bin',
+  'PATH':            '/accelerated-computing-hub/brev/wrappers:$PATH:/opt/adaptivecpp/bin',
   'LD_LIBRARY_PATH': f'/usr/lib/llvm-{llvm_ver}/lib:$LD_LIBRARY_PATH',
   'LIBRARY_PATH':    f'/usr/lib/llvm-{llvm_ver}/lib:$LIBRARY_PATH',
 
@@ -65,7 +65,7 @@ Stage0 += packages(ospackages=[
   'curl', 'wget', 'zip', 'bc',
   'nginx', 'openssh-client',
   'libnuma1',  'numactl',
-  'gosu', 'libcap2-bin', 'sudo',
+  'gosu', 'sudo',
 ])
 Stage0 += boost(version=boost_ver) # Required for AdaptiveCpp
 
@@ -139,14 +139,6 @@ Stage0 += shell(commands=[
   "sed -i -e 's/^Defaults\\s*env_reset/#&/' -e 's/^Defaults\\s*secure_path=/#&/' /etc/sudoers",
 ])
 
-# Grant ncu and nsys CAP_SYS_ADMIN so they can profile without root.
-Stage0 += shell(commands=[
-  f'setcap cap_sys_admin+ep /opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/nsys',
-  f'setcap cap_sys_admin+ep /opt/nvidia/hpc_sdk/Linux_{arch}/{nvhpc_ver}/compilers/bin/ncu',
-  'apt-get purge -y libcap2-bin',
-  'apt-get autoremove -y',
-  'rm -rf /var/lib/apt/lists/*',
-])
 
 Stage0 += copy(src='.', dest='/accelerated-computing-hub')
 

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+UID_="$(id -u)"
+GID_="$(id -g)"
+
+sudo -E -n setpriv \
+  --reuid="$UID_" --regid="$GID_" --init-groups \
+  --inh-caps=+sys_admin,+sys_ptrace \
+  --ambient-caps=+sys_admin,+sys_ptrace \
+  -- \
+  ncu "$@"
