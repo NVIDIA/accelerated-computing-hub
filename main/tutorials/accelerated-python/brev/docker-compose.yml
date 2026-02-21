@@ -60,7 +60,7 @@ services:
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     ports:
       - "127.0.0.1:8080:8080" # HTTP
-      - "127.0.0.1:3478:3478" # TURN
+      - "0.0.0.0:3478:3478" # TURN
 
 volumes:
   accelerated-computing-hub:
