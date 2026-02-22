@@ -175,6 +175,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prune Docker build cache (nightly)
+        if: github.event_name == 'schedule'
+        run: |
+          echo "Nightly build: purging Docker build cache to rebuild from scratch."
+          docker buildx prune --all --force
+          docker system prune --all --force
+
       - name: Build and push Docker image (with retry)
         uses: nick-fields/retry@v3
         env:
@@ -193,6 +200,14 @@ jobs:
             docker manifest inspect "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" > /dev/null 2>&1 && echo "✓ Branch cache exists" || echo "✗ Branch cache not found"
             docker manifest inspect "${IMAGE_NAME}:buildcache-main" > /dev/null 2>&1 && echo "✓ Main cache exists" || echo "✗ Main cache not found"
 
+            # Nightly scheduled builds skip cache-from to rebuild from scratch.
+            if [ "${{ github.event_name }}" = "schedule" ]; then
+              CACHE_FROM_FLAGS=""
+              echo "Nightly build: skipping cache-from to rebuild from scratch."
+            else
+              CACHE_FROM_FLAGS="--set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH} --set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
+            fi
+
             docker buildx bake \
               --progress=plain \
               --allow=fs.read=/home/runner \
@@ -200,8 +215,7 @@ jobs:
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
               $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" \
-              --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main" \
+              $CACHE_FROM_FLAGS \
               --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,image-manifest=true,compression=zstd,compression-level=3" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
