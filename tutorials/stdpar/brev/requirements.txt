@@ -23,3 +23,6 @@ jupyterlab-execute-time
 
 # NVIDIA devtools
 nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
+
+# Testing
+pytest
