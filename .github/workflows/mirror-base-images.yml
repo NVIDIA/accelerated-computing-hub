@@ -2,8 +2,8 @@ name: Mirror Base Images to GHCR
 
 on:
   schedule:
-    # Run nightly at 2 AM UTC
-    - cron: '0 2 * * *'
+    # Nightly build at 11 PM EST (4 AM UTC).
+    - cron: '0 4 * * *'
   workflow_dispatch:
     inputs:
       force_pull:
