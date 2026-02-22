@@ -11,6 +11,7 @@ from nbclient.exceptions import CellExecutionError
 
 # Define the path to the notebooks directory
 NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / 'notebooks'
+TEST_DIR = Path(__file__).resolve().parent
 
 # Discover all solution notebooks (excluding checkpoint files)
 solution_notebooks = sorted([
@@ -18,8 +19,17 @@ solution_notebooks = sorted([
     if '.ipynb_checkpoints' not in str(nb)
 ])
 
+# Discover test notebooks in the test directory
+test_notebooks = sorted([
+    nb for nb in TEST_DIR.glob('*.ipynb')
+    if '.ipynb_checkpoints' not in str(nb)
+])
+
+all_notebooks = solution_notebooks + test_notebooks
+
 # Create test IDs from notebook paths for better test output
-notebook_ids = [nb.relative_to(NOTEBOOKS_DIR).as_posix() for nb in solution_notebooks]
+notebook_ids = [nb.relative_to(NOTEBOOKS_DIR).as_posix() for nb in solution_notebooks] + \
+               [nb.name for nb in test_notebooks]
 
 
 def extract_cell_outputs(nb, cell_times=None):
@@ -66,7 +76,7 @@ def check_gpu_state():
         print(f"  GPU State check failed: {e}")
 
 
-@pytest.mark.parametrize('notebook_path', solution_notebooks, ids=notebook_ids)
+@pytest.mark.parametrize('notebook_path', all_notebooks, ids=notebook_ids)
 def test_solution_notebook_executes(notebook_path):
     """
     Test that a solution notebook executes without errors.
