@@ -52,6 +52,8 @@ services:
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
     command: *default-jupyter-url
+    environment:
+      ACH_JUPYTER_PORT_FORWARDS: "8080:nsight:8080"
     ports:
       - "127.0.0.1:8888:8888" # JupyterLab
   nsight:

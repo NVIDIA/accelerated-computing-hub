@@ -72,8 +72,9 @@ if [ "$(id -u)" = "0" ]; then
     # Setup Git safe directory (run as target user)
     gosu "${TARGET_USER}" git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
 
-    # Ensure logs directory exists
-    gosu "${TARGET_USER}" mkdir -p /accelerated-computing-hub/logs
+    # Ensure logs directory exists and is writable by the target user.
+    mkdir -p /accelerated-computing-hub/logs
+    chown "${TARGET_USER}" /accelerated-computing-hub/logs
 
     # Relax profiling permissions so Nsight tools can run as non-root.
     sysctl -w kernel.perf_event_paranoid=0 || true
