@@ -6,6 +6,7 @@ Nsight Systems and Nsight Compute can successfully profile it.
 """
 
 import pytest
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -44,6 +45,9 @@ def cuda_binary(tmp_path_factory):
 
     src_path.write_text(CUDA_PROGRAM)
 
+    nvcc_path = shutil.which("nvcc")
+    print(f"nvcc resolves to: {nvcc_path}")
+
     result = subprocess.run(
         ["nvcc", "-o", str(bin_path), str(src_path)],
         capture_output=True, text=True, timeout=120
@@ -68,6 +72,9 @@ def test_cuda_binary_runs(cuda_binary):
 
 def test_nsys_profile(cuda_binary, tmp_path):
     """Test that nsys can profile the CUDA binary."""
+    nsys_path = shutil.which("nsys")
+    print(f"nsys resolves to: {nsys_path}")
+
     report_path = tmp_path / "test_report.nsys-rep"
 
     result = subprocess.run(
@@ -84,6 +91,9 @@ def test_nsys_profile(cuda_binary, tmp_path):
 
 def test_ncu_profile(cuda_binary):
     """Test that ncu can profile the CUDA binary."""
+    ncu_path = shutil.which("ncu")
+    print(f"ncu resolves to: {ncu_path}")
+
     result = subprocess.run(
         ["ncu",
          "--target-processes=all",
