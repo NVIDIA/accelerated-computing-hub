@@ -1,0 +1,47 @@
+name: Test Notebook Format
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+# Minimal permissions - only read access needed for checks
+permissions:
+  contents: read
+
+jobs:
+  test-notebook-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install nbformat
+        run: pip install nbformat
+
+      - name: Check notebook format
+        id: notebook-format-check
+        run: python3 brev/test-notebook-format.py
+
+      - name: Save PR number and result
+        if: always() && github.event_name == 'pull_request'
+        run: |
+          mkdir -p ./pr-comment-data
+          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
+          echo '${{ steps.notebook-format-check.outcome }}' > ./pr-comment-data/outcome
+
+      - name: Upload PR comment data
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-comment-data
+          path: pr-comment-data/
+          retention-days: 1
