@@ -29,3 +29,15 @@ c.Application.logging_config = {
         }
     }
 }
+
+c.ServerProxy.servers = {
+    "nsight": {
+        "command": [],
+        "port": 8080,
+        "launcher_entry": {
+            "title": "Nsight",
+            "category": "Other",
+        },
+        "new_browser_tab": False,
+    }
+}

@@ -31,6 +31,7 @@ RUN apt-get update -y \
     lsb-release \
     gosu \
     libglib2.0-0 \
+    socat \
     sudo \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*

@@ -11,6 +11,16 @@ export HOME="${ACH_TARGET_HOME}"
 
 mkdir -p /accelerated-computing-hub/logs
 
+# Forward ports from other Docker Compose services to localhost so that
+# jupyter-server-proxy can reach them (it only proxies to localhost).
+if command -v socat &> /dev/null; then
+  for FORWARD in ${ACH_JUPYTER_PORT_FORWARDS:-}; do
+    LOCAL_PORT="${FORWARD%%:*}"
+    REMOTE="${FORWARD#*:}"
+    socat "TCP-LISTEN:${LOCAL_PORT},fork,reuseaddr" "TCP:${REMOTE}" &
+  done
+fi
+
 # Set the preferred directory to the current working directory, which is set by Docker Compose.
 ARGS="--ServerApp.preferred_dir=${PWD:-/}"
 
