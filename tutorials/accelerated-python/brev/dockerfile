@@ -120,7 +120,7 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
 
 COPY . /accelerated-computing-hub
 
-# Ensure accelerated-computing-hub directory is writable by any user
+# Ensure accelerated-computing-hub directory is writable by any user.
 RUN chmod -R a+rwX /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
