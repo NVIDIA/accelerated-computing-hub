@@ -4,7 +4,7 @@
 # to the service-specific entrypoint script.
 #
 # Usage: entrypoint.bash <service> [args...]
-#   service: base, jupyter, nsight, shell
+#   service: base, jupyter, nsys, ncu, shell
 
 set -euo pipefail
 

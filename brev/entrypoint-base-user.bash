@@ -7,7 +7,7 @@ set -euo pipefail
 export HOME="${ACH_TARGET_HOME}"
 
 # Generate unique TURN credentials for this container session.
-# These are stored on the shared volume so both the nsight and jupyter
+# These are stored on the shared volume so the nsys, ncu, and jupyter
 # services can read them.
 TURN_CREDENTIALS_FILE="/accelerated-computing-hub/.turn-credentials"
 

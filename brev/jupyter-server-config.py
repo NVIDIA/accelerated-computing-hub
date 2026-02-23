@@ -31,12 +31,21 @@ c.Application.logging_config = {
 }
 
 c.ServerProxy.servers = {
-    "nsight": {
+    "nsys": {
         "command": [],
         "port": 8080,
         "launcher_entry": {
-            "title": "Nsight",
-            "category": "Other",
+            "title": "Nsight Systems",
+            "category": "Nsight",
+        },
+        "new_browser_tab": False,
+    },
+    "ncu": {
+        "command": [],
+        "port": 8081,
+        "launcher_entry": {
+            "title": "Nsight Compute",
+            "category": "Nsight",
         },
         "new_browser_tab": False,
     }

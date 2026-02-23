@@ -17,10 +17,12 @@ if ! getent group "${ACH_TARGET_USER}" &>/dev/null; then
     groupadd "${ACH_TARGET_USER}" || true
 fi
 
-# Copy Nsight config and bashrc from nvidia user to target user's home (skip if same user)
+# Copy bashrc and Nsight config from nvidia user to target user's home (skip if same user)
 if [ "${ACH_TARGET_HOME}" != "/home/nvidia" ]; then
     mkdir -p "${ACH_TARGET_HOME}/.config/NVIDIA Corporation"
-    cp "/home/nvidia/.config/NVIDIA Corporation/NVIDIA Nsight Systems.ini" "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/"
+    if [ -f "/home/nvidia/.config/NVIDIA Corporation/NVIDIA Nsight Systems.ini" ]; then
+        cp "/home/nvidia/.config/NVIDIA Corporation/NVIDIA Nsight Systems.ini" "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/"
+    fi
     cp /home/nvidia/.bashrc "${ACH_TARGET_HOME}/.bashrc"
     chown -R "${ACH_TARGET_USER}:$(id -gn ${ACH_TARGET_USER})" "${ACH_TARGET_HOME}"
 fi
@@ -54,6 +56,10 @@ fi
 if [ -n "${TURN_PASSWORD+x}" ]; then
   export TURN_PASSWORD
   VARS+=("TURN_PASSWORD")
+fi
+if [ -n "${TURN_PORT+x}" ]; then
+  export TURN_PORT
+  VARS+=("TURN_PORT")
 fi
 
 for VAR in "${VARS[@]}"; do

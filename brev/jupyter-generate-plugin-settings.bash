@@ -3,7 +3,7 @@
 set -eu
 
 JUPYTER_HOST="jupyter0-${BREV_ENV_ID:-local}.brevlab.com"
-NSIGHT_HTTP_URL="https://nsight0-${BREV_ENV_ID:-local}.brevlab.com"
+NSYS_HTTP_URL="https://nsys0-${BREV_ENV_ID:-local}.brevlab.com"
 
 # Theme
 mkdir -p "${HOME}/.jupyter/lab/user-settings/@jupyterlab/apputils-extension"
@@ -45,7 +45,7 @@ cat << EOF > "${HOME}/.jupyter/lab/user-settings/jupyterlab-nvidia-nsight/plugin
     "suppressServerAddressWarning": true,
     "host": "${JUPYTER_HOST}",
     "dockerHost": "${JUPYTER_HOST}",
-    "defaultStreamerAddress": "${NSIGHT_HTTP_URL}"${TURN_SETTINGS}
+    "defaultStreamerAddress": "${NSYS_HTTP_URL}"${TURN_SETTINGS}
   }
 }
 EOF
