@@ -55,7 +55,7 @@ services:
       - "127.0.0.1:8888:8888" # JupyterLab
   nsight:
     <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     ports:
       - "127.0.0.1:8080:8080" # HTTP
