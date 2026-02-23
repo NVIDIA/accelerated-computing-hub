@@ -6,6 +6,21 @@ set -euo pipefail
 
 export HOME="${ACH_TARGET_HOME}"
 
+# Generate unique TURN credentials for this container session.
+# These are stored on the shared volume so both the nsight and jupyter
+# services can read them.
+TURN_CREDENTIALS_FILE="/accelerated-computing-hub/.turn-credentials"
+
+if [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
+  TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)"
+  TURN_PASSWORD="$(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 32)"
+
+  echo "TURN_USERNAME=${TURN_USERNAME}" > "${TURN_CREDENTIALS_FILE}"
+  echo "TURN_PASSWORD=${TURN_PASSWORD}" >> "${TURN_CREDENTIALS_FILE}"
+
+  chmod 644 "${TURN_CREDENTIALS_FILE}"
+fi
+
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
   TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
