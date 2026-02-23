@@ -9,6 +9,12 @@ on:
     # Nightly build at midnight EST (5 AM UTC).
     - cron: "0 5 * * *"
   workflow_dispatch:
+    inputs:
+      purge_cache:
+        description: "Purge Docker build cache and rebuild from scratch"
+        required: false
+        type: boolean
+        default: false
   # pull_request is not supported for this workflow due to self-hosted runners
   # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
 
@@ -175,10 +181,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prune Docker build cache (nightly)
-        if: github.event_name == 'schedule'
+      - name: Prune Docker build cache (nightly or manual purge)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.purge_cache)
         run: |
-          echo "Nightly build: purging Docker build cache to rebuild from scratch."
+          echo "Purging Docker build cache to rebuild from scratch."
           docker buildx prune --all --force
           docker system prune --all --force
 
@@ -200,10 +206,10 @@ jobs:
             docker manifest inspect "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" > /dev/null 2>&1 && echo "✓ Branch cache exists" || echo "✗ Branch cache not found"
             docker manifest inspect "${IMAGE_NAME}:buildcache-main" > /dev/null 2>&1 && echo "✓ Main cache exists" || echo "✗ Main cache not found"
 
-            # Nightly scheduled builds skip cache-from to rebuild from scratch.
-            if [ "${{ github.event_name }}" = "schedule" ]; then
+            # Nightly scheduled builds and manual purge builds skip cache-from to rebuild from scratch.
+            if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name == 'workflow_dispatch' && inputs.purge_cache }}" = "true" ]; then
               CACHE_FROM_FLAGS=""
-              echo "Nightly build: skipping cache-from to rebuild from scratch."
+              echo "Purge build: skipping cache-from to rebuild from scratch."
             else
               CACHE_FROM_FLAGS="--set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH} --set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
             fi
