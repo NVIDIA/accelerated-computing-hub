@@ -19,6 +19,7 @@ nvmath-python[cu12,dx,cpu,cu12-distributed]
 matplotlib
 
 # Jupyter
+jupyter-server-proxy
 jupyterlab
 jupyterlab-nvidia-nsight
 jupyterlab-execute-time

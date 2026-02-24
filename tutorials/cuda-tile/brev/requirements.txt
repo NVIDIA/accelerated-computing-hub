@@ -8,6 +8,7 @@ opencv-python-headless
 
 # Jupyter
 jupyter
+jupyter-server-proxy
 jupyterlab
 jupyterlab-nvidia-nsight
 jupyterlab-execute-time
