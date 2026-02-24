@@ -132,8 +132,9 @@ Stage0 += shell(commands=[
   # Put the include directory in the systemwide path:
   f'ln -sf /accelerated-computing-hub/tutorials/stdpar/include/ach /usr/include/ach',
 
-  # Silence JupyterLab announcements
+  # Disable unnecessary default Jupyter extensions.
   'python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"',
+  'python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"',
 ])
 
 # Enable passwordless sudo for all users and pass through environment and path

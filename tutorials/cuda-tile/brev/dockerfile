@@ -73,8 +73,9 @@ RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight
  && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
  && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
 
-# Disable Jupyter announcements extension
-RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+# Disable unnecessary default Jupyter extensions.
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+ && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
 
 COPY . /accelerated-computing-hub
 

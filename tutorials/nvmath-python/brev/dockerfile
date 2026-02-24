@@ -16,9 +16,11 @@ RUN set -ex \
      && apt-get update -y \
      && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs gosu sudo \
      && apt-get clean -y \
-     && rm -rf /var/lib/apt/lists/* \
- && `# Disable Jupyter announcements` \
-     && python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+     && rm -rf /var/lib/apt/lists/*
+
+# Disable unnecessary default Jupyter extensions.
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+ && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
 
 # Enable passwordless sudo for all users and pass through environment and path
 RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
