@@ -27,6 +27,11 @@ if [ "${ACH_TARGET_HOME}" != "/home/nvidia" ]; then
     chown -R "${ACH_TARGET_USER}:$(id -gn ${ACH_TARGET_USER})" "${ACH_TARGET_HOME}"
 fi
 
+# Generate Nsight Compute config with the tutorial's notebooks as the default folder
+mkdir -p "${ACH_TARGET_HOME}/.config/NVIDIA Corporation"
+echo "[CorePlugin.Environment]" > "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/NVIDIA Nsight Compute.ini"
+echo "CorePlugin.DefaultDocumentsFolder=/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks" >> "${ACH_TARGET_HOME}/.config/NVIDIA Corporation/NVIDIA Nsight Compute.ini"
+
 # Install curl if not present
 if ! command -v curl &> /dev/null; then
     apt-get update
