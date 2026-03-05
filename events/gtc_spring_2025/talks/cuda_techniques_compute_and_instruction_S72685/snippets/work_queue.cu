@@ -76,7 +76,8 @@ __global__ void scout_and_dive_kernel(){
         if(block_queue_size >= k_queue_process_size){
             process_queue(block_queue, block_queue_size);
         }
-        // assert: queue size is 0 and block is sync'd
+
+        __syncthreads(); // For the case when the queue was not just processed: Don't let any thread reach the atomicAdd before they have all read block_queue_size in the if.
 
         if(!is_thread_finished_scouting()){
             // perform scouting work...
