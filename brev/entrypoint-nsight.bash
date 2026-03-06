@@ -54,18 +54,13 @@ export WEB_PASSWORD=""
 export SELKIES_TURN_HOST=$(curl -sSL ifconfig.me)
 
 VARS=("NVIDIA_DRIVER_CAPABILITIES" "HOST_IP" "WEB_USERNAME" "WEB_PASSWORD" "SELKIES_TURN_HOST")
-if [ -n "${TURN_USERNAME+x}" ]; then
-  export TURN_USERNAME
-  VARS+=("TURN_USERNAME")
-fi
-if [ -n "${TURN_PASSWORD+x}" ]; then
-  export TURN_PASSWORD
-  VARS+=("TURN_PASSWORD")
-fi
-if [ -n "${TURN_PORT+x}" ]; then
-  export TURN_PORT
-  VARS+=("TURN_PORT")
-fi
+OPTIONAL_VARS=("TURN_USERNAME" "TURN_PASSWORD" "HTTP_PORT" "TURN_PORT")
+for VAR in "${OPTIONAL_VARS[@]}"; do
+  if [ -n "${!VAR+x}" ]; then
+    export "${VAR}"
+    VARS+=("${VAR}")
+  fi
+done
 
 for VAR in "${VARS[@]}"; do
   if [[ -n "${!VAR+x}" ]]; then
