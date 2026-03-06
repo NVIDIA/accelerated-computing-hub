@@ -77,8 +77,8 @@ if [ "$(id -u)" = "0" ]; then
     chown "${TARGET_USER}" /accelerated-computing-hub/logs
 
     # Relax profiling permissions so Nsight tools can run as non-root.
-    sysctl -w kernel.perf_event_paranoid=0 || true
-    sysctl -w kernel.kptr_restrict=0 || true
+    sysctl -w kernel.perf_event_paranoid=0 > /dev/null 2>&1 || true
+    sysctl -w kernel.kptr_restrict=0 > /dev/null 2>&1 || true
 fi
 
 # Dispatch to service-specific entrypoint
