@@ -133,6 +133,7 @@ cython_debug/
 
 # Cursor
 .cursor
+.vscode
 
 # Brev Git branch update lockfile
 .git-checkout-done
