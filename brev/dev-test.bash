@@ -6,11 +6,12 @@
 # test-docker-compose.bash to validate Docker Compose configurations.
 #
 # Usage:
-#   ./brev/dev-test.bash <tutorial-name|docker-compose-file>
+#   ./brev/dev-test.bash [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 #
 # Examples:
 #   ./brev/dev-test.bash accelerated-python
-#   ./brev/dev-test.bash tutorials/accelerated-python/brev/docker-compose.yml
+#   ./brev/dev-test.bash accelerated-python test/test_notebooks.py -k "03"
+#   ./brev/dev-test.bash --mount accelerated-python
 
 set -eu
 
@@ -26,17 +27,23 @@ REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 # Print usage
 usage() {
     cat << EOF
-Usage: $(basename "$0") <tutorial-name|docker-compose-file>
+Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 
 Test a Docker Compose file with local repository mounted.
+
+Options:
+  --mount       Bind-mount local repo into the container (live local files)
+  --no-mount    Use image content only (default)
 
 Arguments:
   tutorial-name          Name of tutorial (e.g., accelerated-python)
   docker-compose-file    Path to docker-compose.yml file
+  test-args              Extra arguments forwarded to the tutorial's test.bash
 
 Examples:
   $(basename "$0") accelerated-python
-  $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml
+  $(basename "$0") accelerated-python test/test_notebooks.py -k "03"
+  $(basename "$0") --mount accelerated-python
 
 Requirements:
   - Docker and Docker Compose must be installed
@@ -44,13 +51,23 @@ EOF
     exit 1
 }
 
+# Parse --mount/--no-mount flag (default: no mount for tests)
+MOUNT=false
+if [ $# -gt 0 ]; then
+    case "$1" in
+        --mount)    MOUNT=true;  shift ;;
+        --no-mount) MOUNT=false; shift ;;
+    esac
+fi
+
 # Check argument
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
     echo -e "${RED}Error: Tutorial name or Docker Compose file path is required${NC}"
     usage
 fi
 
 ARG=$1
+shift
 ACH_TUTORIAL=""
 
 # Determine tutorial name
@@ -79,7 +96,6 @@ echo ""
 
 source ${SCRIPT_PATH}/dev-common.bash
 setup_dev_env "${REPO_ROOT}"
-create_docker_volume "${ACH_TUTORIAL}"
 
 echo "================================================================================"
 echo "Starting tests (calling test-docker-compose.bash)"
@@ -88,4 +104,8 @@ echo ""
 
 # Change to repo directory and call test-docker-compose.bash
 cd ${REPO_ROOT}
-${SCRIPT_PATH}/test-docker-compose.bash "${ARG}"
+MOUNT_FLAG="--no-mount"
+if [ "${MOUNT}" = "true" ]; then
+    MOUNT_FLAG="--mount"
+fi
+${SCRIPT_PATH}/test-docker-compose.bash ${MOUNT_FLAG} "${ARG}" "$@"
