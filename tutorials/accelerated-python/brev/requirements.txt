@@ -1,31 +1,31 @@
 # Arrays
-numpy
+numpy == 2.4.2
 
 # Scientific/numeric
-scipy
-matplotlib
-opencv-python-headless
+scipy == 1.17.1
+matplotlib == 3.10.8
+opencv-python-headless == 4.13.0.92
 
 # Jupyter
-jupyter
-jupyter-server-proxy
-jupyterlab
-jupyterlab-nvidia-nsight
-jupyterlab-execute-time
+jupyter == 1.1.1
+jupyter-server-proxy == 4.4.0
+jupyterlab == 4.5.4
+jupyterlab-nvidia-nsight == 1.0.0
+jupyterlab-execute-time == 3.3.0
 
 # CUDA
-cuda-python == 13.*
-numba-cuda[cu13] == 0.20.0
-nvmath-python[cu13]
+cuda-python == 13.1.1
+numba-cuda[cu13] == 0.28.2
+nvmath-python[cu13] == 0.8.0
 cupy-cuda13x == 13.6.0
-cuda-cccl[test-cu13]
+cuda-cccl[test-cu13] == 0.4.3
 
 # NVIDIA developer tools
-nvtx
-nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
+nvtx == 0.2.14
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa5124ebea193f64302058b327f2034ccd8e
 
 # Distributed computing
-mpi4py
+mpi4py == 4.1.1
 
 # Testing
-pytest
+pytest == 9.0.2
