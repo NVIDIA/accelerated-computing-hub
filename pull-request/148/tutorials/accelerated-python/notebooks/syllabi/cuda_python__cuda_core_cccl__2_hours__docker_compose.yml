@@ -22,6 +22,7 @@ x-config:
     BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+    ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
     ACH_USER: ${ACH_USER:-ach}
     ACH_UID: ${ACH_UID:-1000}
     ACH_GID: ${ACH_GID:-1000}
