@@ -11,11 +11,12 @@ def test_cuda_python():
     from cuda.core.experimental import system, Device
 
     # Check CUDA driver version
-    assert system.driver_version is not None
-    assert len(str(system.driver_version)) > 0
+    driver_version = system.get_driver_version()
+    assert driver_version is not None
+    assert len(str(driver_version)) > 0
 
     # Get device count
-    assert system.num_devices > 0, "No CUDA devices found"
+    assert system.get_num_devices() > 0, "No CUDA devices found"
 
     # Get device information
     device = Device(0)
