@@ -2,17 +2,24 @@
 """
 Test Jupyter notebook format integrity and metadata.
 
-This script performs three checks on every notebook:
-  1. Structural integrity: validates the notebook against the official Jupyter
-     notebook JSON schema using nbformat.
-  2. Metadata conformance: verifies that the top-level metadata, nbformat, and
-     nbformat_minor fields match the expected values.
-  3. Clean outputs: non-SOLUTION notebooks must have all cell outputs,
-     execution counts, and execution timing metadata cleared.
+This script checks that every notebook is in **canonical format**: the exact
+byte-for-byte output that nbformat.write() produces after applying our
+metadata policy.  Canonical format means:
+
+  - 1-space JSON indentation, sorted keys, ``(",", ": ")`` separators
+    (the nbformat standard serialization).
+  - Every cell has an ``id`` field (nbformat 4.5 requirement).
+  - Top-level metadata matches the project standard (kernelspec, colab,
+    language_info, etc.).
+  - Non-SOLUTION notebooks have clean outputs (no outputs, execution
+    counts, or execution timing metadata).
+  - SOLUTION notebook outputs are well-formed (e.g. stream outputs have
+    the required ``name`` field).
+  - nbformat 4, nbformat_minor 5.
 
 The cuDF kernelspec is accepted as an alternative to the default ipykernel.
-If a notebook has any other kernelspec (or none), it is treated as incorrect
-and --fix will replace it with the default.
+If a notebook has any other kernelspec (or none), --fix replaces it with the
+default.
 
 Usage:
   ./brev/test-notebook-format.py                       # check all tutorials
@@ -34,7 +41,10 @@ from pathlib import Path
 
 import nbformat
 
-# Standard metadata expected for all notebooks.
+# ---------------------------------------------------------------------------
+# Metadata policy
+# ---------------------------------------------------------------------------
+
 STANDARD_METADATA = {
     "accelerator": "GPU",
     "colab": {
@@ -64,7 +74,6 @@ STANDARD_METADATA = {
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
-# The cuDF kernelspec is accepted as an alternative to the default.
 CUDF_KERNELSPEC = {
     "display_name": "Python 3 (RAPIDS 25.10)",
     "language": "python",
@@ -77,41 +86,44 @@ GREEN = "\033[0;32m"
 YELLOW = "\033[1;33m"
 NC = "\033[0m"  # No Color
 
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
 
-def has_cudf_kernelspec(metadata: dict) -> bool:
+
+def has_cudf_kernelspec(metadata) -> bool:
     """Check if a notebook's metadata contains the cuDF kernelspec."""
-    return metadata.get("kernelspec") == CUDF_KERNELSPEC
+    ks = metadata.get("kernelspec", {})
+    return (
+        ks.get("display_name") == CUDF_KERNELSPEC["display_name"]
+        and ks.get("language") == CUDF_KERNELSPEC["language"]
+        and ks.get("name") == CUDF_KERNELSPEC["name"]
+    )
 
 
-def get_expected_metadata(metadata: dict) -> dict:
-    """
-    Return the expected metadata dict for a notebook.
-
-    If the notebook already has the cuDF kernelspec, it is preserved.
-    Otherwise the default kernelspec is expected.
-    """
+def get_expected_metadata(metadata) -> dict:
     expected = dict(STANDARD_METADATA)
     if has_cudf_kernelspec(metadata):
-        expected = dict(expected)
         expected["kernelspec"] = dict(CUDF_KERNELSPEC)
     return expected
 
 
-def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
-    """
-    Recursively compare actual metadata against expected metadata.
+def is_solution_notebook(notebook_path: Path) -> bool:
+    return "SOLUTION" in notebook_path.name
 
-    Returns a list of human-readable difference descriptions.
-    """
-    diffs = []
+
+def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
+    """Recursively compare metadata.  Returns human-readable differences."""
+    diffs: list[str] = []
     prefix = f"{path}." if path else ""
 
-    # Check for missing keys
     for key in expected:
         if key not in actual:
             diffs.append(f"  Missing key: {prefix}{key}")
         elif isinstance(expected[key], dict) and isinstance(actual[key], dict):
-            diffs.extend(diff_metadata(actual[key], expected[key], f"{prefix}{key}"))
+            diffs.extend(
+                diff_metadata(actual[key], expected[key], f"{prefix}{key}")
+            )
         elif actual[key] != expected[key]:
             diffs.append(
                 f"  Wrong value for {prefix}{key}: "
@@ -119,7 +131,6 @@ def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
                 f"expected {json.dumps(expected[key])}"
             )
 
-    # Check for extra keys
     for key in actual:
         if key not in expected:
             diffs.append(f"  Extra key: {prefix}{key}")
@@ -127,164 +138,201 @@ def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
     return diffs
 
 
-def is_solution_notebook(notebook_path: Path) -> bool:
-    """Check if a notebook is a SOLUTION notebook (filename contains SOLUTION)."""
-    return "SOLUTION" in notebook_path.name
+# ---------------------------------------------------------------------------
+# Canonicalization
+# ---------------------------------------------------------------------------
 
 
-def check_clean_outputs(notebook: dict) -> list[str]:
+def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
+    """Read a notebook and return ``(canonical_text, problems)``.
+
+    *canonical_text* is the byte-for-byte content the file should have.
+    *problems* is a list of human-readable descriptions of anything that
+    had to be changed to reach canonical form (empty when the file is
+    already canonical).
     """
-    Check that code cells have no outputs, execution counts, or execution
-    timing metadata (from the jupyterlab-execute-time plugin).
+    problems: list[str] = []
+    solution = is_solution_notebook(notebook_path)
 
-    Returns a list of problem descriptions (empty if clean).
-    """
-    problems = []
-    for i, cell in enumerate(notebook.get("cells", [])):
-        if cell.get("cell_type") != "code":
-            continue
-        if cell.get("outputs"):
-            problems.append(f"  Cell {i} has non-empty outputs")
-        if cell.get("execution_count") is not None:
-            problems.append(f"  Cell {i} has execution_count={cell['execution_count']}")
-        if "execution" in cell.get("metadata", {}):
-            problems.append(f"  Cell {i} has execution timing metadata")
-    return problems
-
-
-def strip_outputs(notebook: dict) -> None:
-    """Clear outputs, execution counts, and execution timing metadata from all
-    code cells in-place."""
-    for cell in notebook.get("cells", []):
-        if cell.get("cell_type") != "code":
-            continue
-        cell["outputs"] = []
-        cell["execution_count"] = None
-        cell.get("metadata", {}).pop("execution", None)
-
-
-def validate_notebook_schema(notebook_path: Path) -> list[str]:
-    """
-    Validate a notebook against the official Jupyter notebook JSON schema.
-
-    Returns a list of validation error messages (empty if valid).
-    """
-    errors = []
-    try:
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            nb = nbformat.read(str(notebook_path), as_version=4)
-            nbformat.validate(nb)
-    except nbformat.ValidationError as e:
-        errors.append(f"  Schema validation error: {e.message}")
-    except Exception as e:
-        errors.append(f"  Failed to read notebook: {e}")
-    return errors
-
-
-def check_notebook(notebook_path: Path, fix: bool) -> bool:
-    """
-    Check a single notebook's format and metadata.
-
-    Returns True if the notebook passes all checks.
-    If fix=True, corrects the metadata in-place.
-    """
-    # Phase 1: Validate notebook structure against the JSON schema.
-    schema_errors = validate_notebook_schema(notebook_path)
-
-    # Phase 2: Check metadata conformance.
+    # -- Read raw JSON to inspect the original state -------------------------
     try:
         with open(notebook_path, "r", encoding="utf-8") as f:
-            notebook = json.load(f)
-    except (json.JSONDecodeError, OSError) as e:
-        print(f"{RED}✗{NC} {notebook_path}")
-        print(f"  Failed to read notebook: {e}")
-        return False
+            raw_text = f.read()
+    except OSError as e:
+        return "", [f"  Failed to read file: {e}"]
 
-    actual_metadata = notebook.get("metadata", {})
+    try:
+        raw = json.loads(raw_text)
+    except json.JSONDecodeError as e:
+        return "", [f"  Invalid JSON: {e}"]
+
+    # -- Detect original metadata problems before nbformat.read() -----------
+    actual_metadata = raw.get("metadata", {})
     expected_metadata = get_expected_metadata(actual_metadata)
-    actual_nbformat = notebook.get("nbformat")
-    actual_nbformat_minor = notebook.get("nbformat_minor")
-
-    tag = "cudf" if has_cudf_kernelspec(actual_metadata) else "standard"
-
-    problems = []
-
-    # Add schema errors
-    problems.extend(schema_errors)
-
-    # Check metadata
     metadata_diffs = diff_metadata(actual_metadata, expected_metadata, "metadata")
     if metadata_diffs:
         problems.extend(metadata_diffs)
 
-    # Check nbformat
-    if actual_nbformat != STANDARD_NBFORMAT:
+    if raw.get("nbformat") != STANDARD_NBFORMAT:
         problems.append(
-            f"  Wrong nbformat: got {actual_nbformat}, expected {STANDARD_NBFORMAT}"
+            f"  Wrong nbformat: got {raw.get('nbformat')}, "
+            f"expected {STANDARD_NBFORMAT}"
         )
-
-    # Check nbformat_minor
-    if actual_nbformat_minor != STANDARD_NBFORMAT_MINOR:
+    if raw.get("nbformat_minor") != STANDARD_NBFORMAT_MINOR:
         problems.append(
-            f"  Wrong nbformat_minor: got {actual_nbformat_minor}, "
+            f"  Wrong nbformat_minor: got {raw.get('nbformat_minor')}, "
             f"expected {STANDARD_NBFORMAT_MINOR}"
         )
 
-    # Phase 3: Non-SOLUTION notebooks must have clean outputs.
-    if not is_solution_notebook(notebook_path):
-        output_problems = check_clean_outputs(notebook)
-        if output_problems:
-            problems.extend(output_problems)
+    # Check outputs for non-SOLUTION notebooks
+    if not solution:
+        for i, cell in enumerate(raw.get("cells", [])):
+            if cell.get("cell_type") != "code":
+                continue
+            if cell.get("outputs"):
+                problems.append(f"  Cell {i} has non-empty outputs")
+            if cell.get("execution_count") is not None:
+                problems.append(
+                    f"  Cell {i} has execution_count={cell['execution_count']}"
+                )
+            if "execution" in cell.get("metadata", {}):
+                problems.append(f"  Cell {i} has execution timing metadata")
 
-    if not problems:
+    # Check for missing cell IDs
+    cells_missing_ids = sum(
+        1 for c in raw.get("cells", []) if "id" not in c
+    )
+    if cells_missing_ids:
+        problems.append(f"  {cells_missing_ids} cell(s) missing id field")
+
+    # Check for malformed stream outputs (SOLUTION notebooks keep outputs)
+    if solution:
+        for i, cell in enumerate(raw.get("cells", [])):
+            if cell.get("cell_type") != "code":
+                continue
+            for j, out in enumerate(cell.get("outputs", [])):
+                if out.get("output_type") == "stream" and "name" not in out:
+                    problems.append(
+                        f"  Cell {i} output {j}: stream output missing 'name'"
+                    )
+
+    # -- Build canonical form via nbformat -----------------------------------
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        nb = nbformat.read(str(notebook_path), as_version=4)
+
+    # Apply metadata policy
+    nb.metadata = nbformat.from_dict(expected_metadata)
+    nb.nbformat = STANDARD_NBFORMAT
+    nb.nbformat_minor = STANDARD_NBFORMAT_MINOR
+
+    # Fix malformed stream outputs
+    for cell in nb.cells:
+        if cell.get("cell_type") != "code":
+            continue
+        for out in cell.get("outputs", []):
+            if out.get("output_type") == "stream" and "name" not in out:
+                out["name"] = "stdout"
+
+    # Strip outputs for non-SOLUTION notebooks
+    if not solution:
+        for cell in nb.cells:
+            if cell.get("cell_type") != "code":
+                continue
+            cell["outputs"] = []
+            cell["execution_count"] = None
+            cell.get("metadata", {}).pop("execution", None)
+
+    # Serialize canonically (nbformat uses indent=1, sort_keys=True)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        canonical_text = nbformat.writes(nb)
+    if not canonical_text.endswith("\n"):
+        canonical_text += "\n"
+
+    # -- Detect format-only problems ----------------------------------------
+    if not problems and raw_text != canonical_text:
+        # Content is semantically correct but format differs (indentation,
+        # key ordering, missing cell IDs, etc.)
+        raw_lines = raw_text.split("\n")
+        indent = 0
+        for line in raw_lines[1:5]:
+            stripped = line.lstrip()
+            if stripped:
+                indent = len(line) - len(stripped)
+                break
+        if indent != 1:
+            problems.append(
+                f"  Non-canonical indentation ({indent}-space, expected 1-space)"
+            )
+
+        # Key ordering
+        for i, cell in enumerate(raw.get("cells", [])):
+            if list(cell.keys()) != sorted(cell.keys()):
+                problems.append(f"  Cell {i}: keys not in canonical order")
+                break
+
+        if not problems:
+            problems.append("  File not in canonical format (run --fix)")
+
+    return canonical_text, problems
+
+
+# ---------------------------------------------------------------------------
+# Check / fix
+# ---------------------------------------------------------------------------
+
+
+def check_notebook(notebook_path: Path, fix: bool) -> bool:
+    """Check a single notebook.  Returns True if it passes."""
+    canonical_text, problems = canonicalize_notebook(notebook_path)
+
+    if not canonical_text and problems:
+        print(f"{RED}✗{NC} {notebook_path}")
+        for p in problems:
+            print(p)
+        return False
+
+    # Read the original to compare byte-for-byte
+    with open(notebook_path, "r", encoding="utf-8") as f:
+        original_text = f.read()
+
+    tag = "cudf" if has_cudf_kernelspec(json.loads(original_text).get("metadata", {})) else "standard"
+
+    if original_text == canonical_text:
         print(f"{GREEN}✓{NC} {notebook_path} ({tag})")
         return True
 
     # There are problems
     print(f"{RED}✗{NC} {notebook_path} ({tag})")
-    for problem in problems:
-        print(f"  {problem}")
+    for p in problems:
+        print(p)
 
     if fix:
-        notebook["metadata"] = expected_metadata
-        notebook["nbformat"] = STANDARD_NBFORMAT
-        notebook["nbformat_minor"] = STANDARD_NBFORMAT_MINOR
-
-        if not is_solution_notebook(notebook_path):
-            strip_outputs(notebook)
-
         with open(notebook_path, "w", encoding="utf-8") as f:
-            json.dump(notebook, f, indent=1, ensure_ascii=False)
-            f.write("\n")
-
+            f.write(canonical_text)
         print(f"  {GREEN}→ Fixed{NC}")
 
     return False
 
 
+# ---------------------------------------------------------------------------
+# Directory / CLI plumbing
+# ---------------------------------------------------------------------------
+
+
 def find_notebook_dirs(repo_root: Path) -> list[Path]:
-    """
-    Return all directories that should be checked for notebooks.
-
-    This includes every subdirectory under tutorials/ and the
-    Accelerated_Python_User_Guide directory (if it exists).
-    """
     dirs = []
-
     tutorials_root = repo_root / "tutorials"
     if tutorials_root.is_dir():
         dirs.extend(sorted(d for d in tutorials_root.iterdir() if d.is_dir()))
-
     user_guide = repo_root / "Accelerated_Python_User_Guide"
     if user_guide.is_dir():
         dirs.append(user_guide)
-
     return dirs
 
 
 def resolve_tutorial_path(tutorial_arg: str, repo_root: Path) -> Path:
-    """Resolve a tutorial argument to an absolute directory path."""
     if "/" in tutorial_arg or Path(tutorial_arg).is_dir():
         path = Path(tutorial_arg)
         if not path.is_absolute():
@@ -294,11 +342,6 @@ def resolve_tutorial_path(tutorial_arg: str, repo_root: Path) -> Path:
 
 
 def check_directory(dir_path: Path, repo_root: Path, fix: bool) -> tuple[int, int]:
-    """
-    Check all notebooks in a directory.
-
-    Returns (passed, failed) counts.
-    """
     notebooks = sorted(dir_path.rglob("*.ipynb"))
     notebooks = [nb for nb in notebooks if ".ipynb_checkpoints" not in str(nb)]
 
@@ -342,20 +385,18 @@ def main():
     parser.add_argument(
         "--fix",
         action="store_true",
-        help="Automatically correct metadata that does not match",
+        help="Automatically correct formatting, metadata, and outputs",
     )
 
     args = parser.parse_args()
 
-    # Resolve paths
     script_dir = Path(__file__).resolve().parent
     repo_root = script_dir.parent
 
     if args.fix:
-        print(f"{YELLOW}Fix mode enabled: metadata will be corrected in-place{NC}")
+        print(f"{YELLOW}Fix mode enabled: notebooks will be rewritten in canonical format{NC}")
         print()
 
-    # Determine which directories to check
     if args.tutorial is not None:
         tutorial_path = resolve_tutorial_path(args.tutorial, repo_root)
         if not tutorial_path.is_dir():
@@ -379,8 +420,7 @@ def main():
     print("=" * 80)
     if total_failed == 0:
         print(
-            f"{GREEN}✅ All {total_passed} notebook(s) have correct format and "
-            f"metadata!{NC}"
+            f"{GREEN}✅ All {total_passed} notebook(s) are in canonical format!{NC}"
         )
         return 0
     else:
@@ -390,7 +430,7 @@ def main():
             f"{total_passed} passed out of {total_passed + total_failed} total{NC}"
         )
         if not args.fix:
-            print(f"\nRun with --fix to automatically correct metadata.")
+            print(f"\nRun with --fix to automatically rewrite to canonical format.")
         return 0 if args.fix else 1
 
 

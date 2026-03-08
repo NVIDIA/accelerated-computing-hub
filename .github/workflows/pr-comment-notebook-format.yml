@@ -40,25 +40,23 @@ jobs:
 
             const commentBody = `## ❌ Notebook Format Check Failed
 
-            **One or more Jupyter notebooks have format or metadata issues.**
+            **One or more Jupyter notebooks are not in canonical format.**
 
             Please check the [workflow run logs](${runUrl}) for details on which notebooks have issues.
 
             ### What is checked:
 
-            1. **Schema integrity** — notebooks must be valid according to the Jupyter notebook JSON schema
-            2. **Metadata conformance** — notebooks must have the standard metadata block (accelerator, colab, kernelspec, language_info)
-            3. **Clean outputs** — non-SOLUTION notebooks must have outputs, execution counts, and execution timing metadata cleared
+            All notebooks must be in **canonical format** (the exact output of \`nbformat.write()\`):
+
+            1. **Canonical serialization** — 1-space indentation, sorted keys, standard separators
+            2. **Cell IDs** — every cell must have an \`id\` field (nbformat 4.5)
+            3. **Metadata conformance** — notebooks must have the standard metadata block (accelerator, colab, kernelspec, language_info)
+            4. **Clean outputs** — non-SOLUTION notebooks must have outputs, execution counts, and execution timing metadata cleared
+            5. **Well-formed outputs** — SOLUTION notebook outputs must be schema-valid (e.g. stream outputs need the \`name\` field)
 
             ### How to fix:
 
             \`\`\`bash
-            # Check all tutorials
-            python3 brev/test-notebook-format.py
-
-            # Check a specific tutorial
-            python3 brev/test-notebook-format.py <tutorial-name>
-
             # Auto-fix all issues
             python3 brev/test-notebook-format.py --fix
 
