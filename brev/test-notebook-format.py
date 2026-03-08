@@ -26,11 +26,14 @@ Usage:
   ./brev/test-notebook-format.py <tutorial-name>       # check one tutorial
   ./brev/test-notebook-format.py <tutorial-name> --fix # check and fix one tutorial
   ./brev/test-notebook-format.py --fix                 # check and fix all tutorials
+  ./brev/test-notebook-format.py a.ipynb b.ipynb       # check specific files
+  ./brev/test-notebook-format.py a.ipynb --fix         # fix specific files
 
 Examples:
   ./brev/test-notebook-format.py
   ./brev/test-notebook-format.py accelerated-python
   ./brev/test-notebook-format.py cuda-cpp --fix
+  ./brev/test-notebook-format.py tutorials/accelerated-python/notebooks/start.ipynb
 """
 
 import argparse
@@ -368,18 +371,32 @@ def check_directory(dir_path: Path, repo_root: Path, fix: bool) -> tuple[int, in
     return passed, failed
 
 
+def check_files(notebook_paths: list[Path], fix: bool) -> tuple[int, int]:
+    """Check a list of individual notebook files.
+
+    Returns (passed, failed) counts.
+    """
+    passed = 0
+    failed = 0
+    for notebook_path in notebook_paths:
+        if check_notebook(notebook_path, fix):
+            passed += 1
+        else:
+            failed += 1
+    return passed, failed
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Test Jupyter notebook format integrity and metadata."
     )
     parser.add_argument(
-        "tutorial",
-        nargs="?",
-        default=None,
+        "paths",
+        nargs="*",
         help=(
-            'Tutorial name (e.g., "accelerated-python") or path to tutorial '
-            "directory. If omitted, all tutorials and the "
-            "Accelerated_Python_User_Guide are checked."
+            "Notebook files (.ipynb), a tutorial name, or a directory.  "
+            "If omitted, all tutorials and the Accelerated_Python_User_Guide "
+            "are checked."
         ),
     )
     parser.add_argument(
@@ -397,25 +414,35 @@ def main():
         print(f"{YELLOW}Fix mode enabled: notebooks will be rewritten in canonical format{NC}")
         print()
 
-    if args.tutorial is not None:
-        tutorial_path = resolve_tutorial_path(args.tutorial, repo_root)
-        if not tutorial_path.is_dir():
-            print(f"{RED}Error: Tutorial directory not found: {tutorial_path}{NC}")
-            sys.exit(1)
-        dirs_to_check = [tutorial_path]
+    total_passed = 0
+    total_failed = 0
+
+    if args.paths:
+        # If any path ends in .ipynb, treat all args as individual files.
+        notebook_files = [Path(p) for p in args.paths if p.endswith(".ipynb")]
+        if notebook_files:
+            # Filter to only .ipynb args (ignore any non-.ipynb args).
+            passed, failed = check_files(notebook_files, args.fix)
+            total_passed += passed
+            total_failed += failed
+        else:
+            # Single tutorial name / directory path (legacy behavior).
+            tutorial_path = resolve_tutorial_path(args.paths[0], repo_root)
+            if not tutorial_path.is_dir():
+                print(f"{RED}Error: Tutorial directory not found: {tutorial_path}{NC}")
+                sys.exit(1)
+            passed, failed = check_directory(tutorial_path, repo_root, args.fix)
+            total_passed += passed
+            total_failed += failed
     else:
         dirs_to_check = find_notebook_dirs(repo_root)
         if not dirs_to_check:
             print(f"{YELLOW}No tutorial directories found in {repo_root}{NC}")
             sys.exit(0)
-
-    total_passed = 0
-    total_failed = 0
-
-    for dir_path in dirs_to_check:
-        passed, failed = check_directory(dir_path, repo_root, args.fix)
-        total_passed += passed
-        total_failed += failed
+        for dir_path in dirs_to_check:
+            passed, failed = check_directory(dir_path, repo_root, args.fix)
+            total_passed += passed
+            total_failed += failed
 
     print("=" * 80)
     if total_failed == 0:
