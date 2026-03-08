@@ -3,20 +3,39 @@
 # This script starts Docker containers for a tutorial.
 #
 # Usage:
-#   ./dev-start.bash <tutorial-name>
+#   ./dev-start.bash [--mount|--no-mount] <tutorial-name>
 #
-# Example:
-#   ./dev-start.bash accelerated-python
+# Examples:
+#   ./dev-start.bash accelerated-python              # bind-mounts local repo (default)
+#   ./dev-start.bash --no-mount accelerated-python   # uses image content only
 
 set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
+
+# Parse --mount/--no-mount flag (default: mount for dev-start)
+MOUNT=true
+if [ $# -gt 0 ]; then
+    case "$1" in
+        --mount)    MOUNT=true;  shift ;;
+        --no-mount) MOUNT=false; shift ;;
+    esac
+fi
+
 # Check argument
 if [ $# -ne 1 ]; then
-    echo "Error: Tutorial name is required"
-    echo "Usage: $0 <tutorial-name>"
+    echo "Usage: $0 [--mount|--no-mount] <tutorial-name>"
+    echo ""
+    echo "Options:"
+    echo "  --mount       Bind-mount local repo into the container (default)"
+    echo "  --no-mount    Use image content only"
+    echo ""
     echo "Example: $0 accelerated-python"
     exit 1
 fi
@@ -40,7 +59,7 @@ fi
 
 source ${SCRIPT_PATH}/dev-common.bash
 setup_dev_env "${REPO_ROOT}"
-create_docker_volume "${ACH_TUTORIAL}"
+setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
 
 echo "Starting tutorial: ${ACH_TUTORIAL}"
 cd ${REPO_ROOT}

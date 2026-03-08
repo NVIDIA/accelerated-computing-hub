@@ -6,10 +6,12 @@
 # inspect, and cleanly stop containers.
 #
 # Usage:
-#   ./brev/test-docker-compose.bash <tutorial-name|docker-compose-file>
+#   ./brev/test-docker-compose.bash [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 #
 # Examples:
 #   ./brev/test-docker-compose.bash accelerated-python
+#   ./brev/test-docker-compose.bash accelerated-python test/test_notebooks.py -k "01__numpy"
+#   ./brev/test-docker-compose.bash --mount accelerated-python
 #   ./brev/test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
 
 set -eu
@@ -23,19 +25,28 @@ NC='\033[0m' # No Color
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
+source "${SCRIPT_PATH}/dev-common.bash"
+
 # Print usage
 usage() {
     cat << EOF
-Usage: $(basename "$0") <tutorial-name|docker-compose-file>
+Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 
 Test a Docker Compose file by starting and stopping containers.
+
+Options:
+  --mount       Bind-mount local repo into the container
+  --no-mount    Use image content only (default)
 
 Arguments:
   tutorial-name          Name of tutorial (e.g., accelerated-python)
   docker-compose-file    Path to docker-compose.yml file
+  test-args              Extra arguments forwarded to the tutorial's test.bash
 
 Examples:
   $(basename "$0") accelerated-python
+  $(basename "$0") accelerated-python test/test_notebooks.py -k "01__numpy"
+  $(basename "$0") --mount accelerated-python
   $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml
 
 Requirements:
@@ -44,13 +55,23 @@ EOF
     exit 1
 }
 
+# Parse --mount/--no-mount flag (default: no mount)
+MOUNT=false
+if [ $# -gt 0 ]; then
+    case "$1" in
+        --mount)    MOUNT=true;  shift ;;
+        --no-mount) MOUNT=false; shift ;;
+    esac
+fi
+
 # Check argument
-if [ $# -ne 1 ]; then
+if [ $# -lt 1 ]; then
     echo -e "${RED}Error: Tutorial name or Docker Compose file path is required${NC}"
     usage
 fi
 
 ARG=$1
+shift
 COMPOSE_FILE=""
 ACH_TUTORIAL=""
 
@@ -98,19 +119,12 @@ echo "🛑 Stopping any existing containers..."
 docker compose -f "${COMPOSE_FILE}" down &>/dev/null || true
 echo ""
 
-# Check for and remove existing volume
-VOLUME_NAME="${ACH_TUTORIAL}_accelerated-computing-hub"
-if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
-    echo "🗑️  Removing existing volume: ${VOLUME_NAME}"
-    if docker volume rm "${VOLUME_NAME}" 2>/dev/null; then
-        echo -e "${GREEN}✅ Volume removed successfully${NC}"
-    else
-        echo -e "${YELLOW}⚠️ Warning: Could not remove volume (may still be in use)${NC}"
-    fi
-    echo ""
-fi
+# Set up volume (cleanup + optional bind mount)
+setup_dev_env "${REPO_ROOT}"
+setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
 
 export ACH_RUN_TESTS=1
+export ACH_TEST_ARGS="$*"
 
 # Start container
 echo "📦 Starting containers..."

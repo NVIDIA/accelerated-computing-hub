@@ -41,7 +41,7 @@ if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
     } | tee -a "${LOG_FILE}"
 
     # Run tests with output to both console and log file
-    if bash "${TEST_SCRIPT}" 2>&1 | tee -a "${LOG_FILE}"; then
+    if bash "${TEST_SCRIPT}" ${ACH_TEST_ARGS:-} 2>&1 | tee -a "${LOG_FILE}"; then
       {
         echo "=========================================="
         echo "Tests completed successfully for: ${ACH_TUTORIAL}"

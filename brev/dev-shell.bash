@@ -3,11 +3,11 @@
 # This script starts an interactive shell in a Docker container for a tutorial.
 #
 # Usage:
-#   ./brev/dev-shell.bash <tutorial-name|docker-compose-file> <service-name>
+#   ./brev/dev-shell.bash [--mount|--no-mount] <tutorial-name|docker-compose-file> <service-name>
 #
 # Examples:
-#   ./brev/dev-shell.bash accelerated-python base
-#   ./brev/dev-shell.bash accelerated-python jupyter
+#   ./brev/dev-shell.bash accelerated-python base            # bind-mounts local repo (default)
+#   ./brev/dev-shell.bash --no-mount accelerated-python base # uses image content only
 #   ./brev/dev-shell.bash tutorials/accelerated-python/brev/docker-compose.yml jupyter
 
 set -eu
@@ -27,9 +27,13 @@ setup_dev_env "${REPO_ROOT}"
 # Print usage
 usage() {
     cat << EOF
-Usage: $(basename "$0") <tutorial-name|docker-compose-file> <service-name>
+Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> <service-name>
 
 Start an interactive shell in a Docker container for a tutorial.
+
+Options:
+  --mount       Bind-mount local repo into the container (default)
+  --no-mount    Use image content only
 
 Arguments:
   tutorial-name          Name of tutorial (e.g., accelerated-python)
@@ -38,7 +42,7 @@ Arguments:
 
 Examples:
   $(basename "$0") accelerated-python base
-  $(basename "$0") accelerated-python jupyter
+  $(basename "$0") --no-mount accelerated-python base
   $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml jupyter
 
 Requirements:
@@ -46,6 +50,15 @@ Requirements:
 EOF
     exit 1
 }
+
+# Parse --mount/--no-mount flag (default: mount for dev-shell)
+MOUNT=true
+if [ $# -gt 0 ]; then
+    case "$1" in
+        --mount)    MOUNT=true;  shift ;;
+        --no-mount) MOUNT=false; shift ;;
+    esac
+fi
 
 # Check arguments
 if [ $# -ne 2 ]; then
@@ -98,13 +111,8 @@ echo "Docker Compose file: ${COMPOSE_FILE}"
 echo "================================================================================"
 echo ""
 
-# Check for and remove existing volume to ensure fresh state
-VOLUME_NAME="${ACH_TUTORIAL}_accelerated-computing-hub"
-if docker volume inspect "${VOLUME_NAME}" &>/dev/null; then
-    echo "🗑️  Removing existing volume: ${VOLUME_NAME}"
-    docker volume rm "${VOLUME_NAME}" &>/dev/null || true
-    echo ""
-fi
+# Set up volume (cleanup + optional bind mount)
+setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
 
 # Run interactive shell with user switching
 echo "🚀 Starting interactive shell as ${ACH_USER}..."
