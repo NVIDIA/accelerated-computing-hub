@@ -18,7 +18,7 @@ cuda-python == 13.1.1
 numba-cuda[cu13] == 0.28.2
 nvmath-python[cu13] == 0.8.0
 cupy-cuda13x == 13.6.0
-cuda-cccl[test-cu13] == 0.4.3
+cuda-cccl[test-cu13] == 0.4.5
 
 # NVIDIA developer tools
 nvtx == 0.2.14
