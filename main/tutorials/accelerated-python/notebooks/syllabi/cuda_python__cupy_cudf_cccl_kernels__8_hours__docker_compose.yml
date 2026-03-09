@@ -22,6 +22,7 @@ x-config:
     BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+    ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
     ACH_USER: ${ACH_USER:-ach}
     ACH_UID: ${ACH_UID:-1000}
     ACH_GID: ${ACH_GID:-1000}
@@ -55,7 +56,7 @@ services:
     command: *default-jupyter-url
     environment:
       <<: *common-env
-      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
+      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8081"
     ports:
       - "127.0.0.1:8888:8888" # JupyterLab
   nsys:
@@ -71,9 +72,10 @@ services:
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     environment:
       <<: *common-env
+      HTTP_PORT: "8081"
       TURN_PORT: "3479"
     ports:
-      - "127.0.0.1:8081:8080" # HTTP
+      - "127.0.0.1:8081:8081" # HTTP
       - "0.0.0.0:3479:3479" # TURN
 
 volumes:
