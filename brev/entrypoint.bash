@@ -68,7 +68,6 @@ if [ "$(id -u)" = "0" ]; then
     if [ ! -e "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py" ]; then
         gosu "${TARGET_USER}" ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
     fi
-
     # Setup Git safe directory (run as target user)
     gosu "${TARGET_USER}" git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
 

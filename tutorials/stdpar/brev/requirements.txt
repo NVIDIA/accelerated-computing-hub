@@ -8,6 +8,9 @@ pandas
 matplotlib
 seaborn
 
+# Dark mode detection
+jupyter-dark-detect == 0.1.0
+
 # Downloading
 gdown
 conan

@@ -1,7 +1,7 @@
 import numpy as np
+from jupyter_dark_detect import is_dark
 import matplotlib.pyplot as plt
-
-#plt.style.use('dark_background') # Uncomment for dark background
+plt.style.use('dark_background' if is_dark() else 'default')
 
 def visualize(name = 'output'):
     f = open(name, 'rb')
