@@ -20,6 +20,60 @@ You can use the following scripts to help with development:
 
 * **`brev/dev-test.bash <tutorial-name|docker-compose-file>`** - Tests a Docker Compose file with the local repository mounted. Calls `test-docker-compose.bash` to run the tutorial's tests.
 
+## Pre-Commit Hooks
+
+This repository uses [pre-commit](https://pre-commit.com/) to run automated
+checks before commits and pushes. Install the hooks after cloning:
+
+```bash
+pip install pre-commit
+pre-commit install
+pre-commit install --hook-type pre-push
+```
+
+The following hooks are configured:
+
+### `notebook-format` (pre-commit)
+
+Checks that Jupyter notebooks are in **canonical format**: 1-space JSON
+indentation, sorted keys, standard metadata (kernelspec, colab settings,
+language_info), nbformat 4.5, and cell IDs present. Non-SOLUTION notebooks
+must have clean outputs (no outputs or execution counts). To auto-fix
+formatting issues:
+
+```bash
+python3 brev/test-notebook-format.py --fix
+```
+
+### `git-lfs` (pre-commit)
+
+Checks that binary files (`.pptx`, `.pdf`, `.png`, `.jpg`, `.jpeg`, `.gif`,
+`.webp`) are properly tracked by Git LFS. Also verifies that no
+`.gitattributes` files exist in subdirectories. If a file isn't tracked, fix it
+with:
+
+```bash
+git rm --cached <file>
+git add <file>
+```
+
+### `git-signatures` (pre-push)
+
+Checks that all commits on your branch (compared to `origin/main`) are
+cryptographically signed. Runs on `git push`, not on commit. See
+[GitHub's documentation on commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+for setup instructions.
+
+### `test-links` (manual)
+
+Checks that links in Markdown files and Jupyter notebooks are valid using
+[lychee](https://github.com/lycheeverse/lychee). This hook is configured as
+a **manual** stage and won't run automatically. Run it explicitly with:
+
+```bash
+pre-commit run test-links --hook-stage manual --all-files
+```
+
 ## License
 
 The preferred license for contributions to this project is the detailed in the
