@@ -6,6 +6,9 @@ scipy == 1.17.1
 matplotlib == 3.10.8
 opencv-python-headless == 4.13.0.92
 
+# Dark mode detection
+jupyter-dark-detect == 0.1.0
+
 # Jupyter
 jupyter == 1.1.1
 jupyter-server-proxy == 4.4.0
