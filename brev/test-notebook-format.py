@@ -208,15 +208,25 @@ def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
     if cells_missing_ids:
         problems.append(f"  {cells_missing_ids} cell(s) missing id field")
 
-    # Check for malformed stream outputs (SOLUTION notebooks keep outputs)
+    # Check for malformed outputs (SOLUTION notebooks keep outputs)
     if solution:
         for i, cell in enumerate(raw.get("cells", [])):
             if cell.get("cell_type") != "code":
                 continue
             for j, out in enumerate(cell.get("outputs", [])):
-                if out.get("output_type") == "stream" and "name" not in out:
+                otype = out.get("output_type")
+                if otype == "stream" and "name" not in out:
                     problems.append(
                         f"  Cell {i} output {j}: stream output missing 'name'"
+                    )
+                if otype in ("execute_result", "display_data"):
+                    if "metadata" not in out:
+                        problems.append(
+                            f"  Cell {i} output {j}: {otype} missing 'metadata'"
+                        )
+                if otype == "execute_result" and "execution_count" not in out:
+                    problems.append(
+                        f"  Cell {i} output {j}: execute_result missing 'execution_count'"
                     )
 
     # -- Build canonical form via nbformat -----------------------------------
@@ -229,13 +239,18 @@ def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
     nb.nbformat = STANDARD_NBFORMAT
     nb.nbformat_minor = STANDARD_NBFORMAT_MINOR
 
-    # Fix malformed stream outputs
+    # Fix malformed outputs
     for cell in nb.cells:
         if cell.get("cell_type") != "code":
             continue
         for out in cell.get("outputs", []):
-            if out.get("output_type") == "stream" and "name" not in out:
+            otype = out.get("output_type")
+            if otype == "stream" and "name" not in out:
                 out["name"] = "stdout"
+            if otype in ("execute_result", "display_data") and "metadata" not in out:
+                out["metadata"] = {}
+            if otype == "execute_result" and "execution_count" not in out:
+                out["execution_count"] = cell.get("execution_count")
 
     # Strip outputs for non-SOLUTION notebooks
     if not solution:
