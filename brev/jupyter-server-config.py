@@ -36,7 +36,8 @@ c.ServerProxy.servers = {
         "port": 8080,
         "launcher_entry": {
             "title": "Nsight Systems",
-            "category": "Nsight",
+            "category": "Console", # Must be Console or Notebook to render icons.
+            "icon_path": "/accelerated-computing-hub/brev/icons/nsight_systems.svg",
         },
         "new_browser_tab": False,
     },
@@ -45,7 +46,8 @@ c.ServerProxy.servers = {
         "port": 8081,
         "launcher_entry": {
             "title": "Nsight Compute",
-            "category": "Nsight",
+            "category": "Console", # Must be Console or Notebook to render icons.
+            "icon_path": "/accelerated-computing-hub/brev/icons/nsight_compute.svg",
         },
         "new_browser_tab": False,
     }
