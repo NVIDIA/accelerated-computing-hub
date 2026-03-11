@@ -5,10 +5,14 @@
 # This script creates a temporary copy of the repo, converts notebooks to markdown,
 # and runs lychee link checker to avoid polluting the local repo.
 #
+# Accepts one or more paths (files or directories). Notebooks are converted to
+# markdown before checking; plain markdown files are checked directly.
+#
 # Usage:
-#   ./brev/test-links.bash <path>              # Check specific path
-#   ./brev/test-links.bash tutorials/example   # Check specific tutorial
-#   ./brev/test-links.bash .                   # Check entire repo
+#   ./brev/test-links.bash <path>...                          # Check paths
+#   ./brev/test-links.bash tutorials/example                  # Check specific tutorial
+#   ./brev/test-links.bash README.md tutorials/foo/lab.ipynb  # Check specific files
+#   ./brev/test-links.bash .                                  # Check entire repo
 
 set -eu
 
@@ -21,27 +25,27 @@ NC='\033[0m' # No Color
 # Print usage
 usage() {
     cat << EOF
-Usage: $(basename "$0") <path>
+Usage: $(basename "$0") <path>...
 
 Test links in markdown files and Jupyter notebooks using lychee.
 
 Arguments:
-  path    Path to check (file, directory, or tutorial)
+  path    One or more files or directories to check
 
 Examples:
-  $(basename "$0") tutorials/example    # Check specific tutorial
-  $(basename "$0") .                    # Check entire repo
+  $(basename "$0") tutorials/example              # Check a directory
+  $(basename "$0") README.md docs/guide.ipynb     # Check specific files
+  $(basename "$0") .                              # Full check of entire repo
 
 Requirements:
   - lychee must be installed and in PATH
-  - jupyter nbconvert must be installed and in PATH
+  - jupyter nbconvert must be installed and in PATH (for notebooks)
 EOF
     exit 1
 }
 
-# Check if path argument is provided
-if [ $# -eq 0 ]; then
-    echo -e "${RED}Error: No path specified${NC}"
+if [ $# -eq 0 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo -e "${RED}Error: No paths specified${NC}"
     usage
 fi
 
@@ -52,88 +56,99 @@ if ! command -v lychee &> /dev/null; then
     exit 1
 fi
 
-if ! command -v jupyter &> /dev/null; then
-    echo -e "${RED}Error: jupyter is not installed or not in PATH${NC}"
-    echo "Please install jupyter: pip install jupyter nbconvert"
-    exit 1
-fi
-
-# Verify jupyter nbconvert is available
-if ! jupyter nbconvert --version &> /dev/null; then
-    echo -e "${RED}Error: jupyter nbconvert is not available${NC}"
-    echo "Please install nbconvert: pip install nbconvert"
-    exit 1
-fi
-
-TARGET_PATH="$1"
-
-# Get absolute paths
 REPO_ROOT="$(pwd)"
-TARGET_ABS="$(cd "$TARGET_PATH" && pwd)" 2>/dev/null || {
-    echo -e "${RED}Error: Path '$TARGET_PATH' does not exist${NC}"
-    exit 1
-}
+TARGET_PATHS=("$@")
 
-# Get relative path from repo root
-RELATIVE_TARGET="$(realpath --relative-to="$REPO_ROOT" "$TARGET_ABS")"
+# Validate all paths exist and are inside the repo
+RELATIVE_PATHS=()
+HAS_NOTEBOOKS=false
+for target in "${TARGET_PATHS[@]}"; do
+    if [ ! -e "$target" ]; then
+        echo -e "${RED}Error: Path '$target' does not exist${NC}"
+        exit 1
+    fi
+    rel="$(realpath --relative-to="$REPO_ROOT" "$(realpath "$target")")"
+    if [[ "$rel" == ../* ]]; then
+        echo -e "${RED}Error: Path '$target' is not within the current repository${NC}"
+        exit 1
+    fi
+    RELATIVE_PATHS+=("$rel")
+    if [[ "$target" == *.ipynb ]] || [ -d "$target" ]; then
+        HAS_NOTEBOOKS=true
+    fi
+done
 
-# Check if path is outside repo (would start with ../)
-if [[ "$RELATIVE_TARGET" == ../* ]]; then
-    echo -e "${RED}Error: Path '$TARGET_PATH' is not within the current repository${NC}"
-    exit 1
+# Only require jupyter if we may have notebooks to convert
+if [ "$HAS_NOTEBOOKS" = true ]; then
+    if ! command -v jupyter &> /dev/null; then
+        echo -e "${RED}Error: jupyter is not installed or not in PATH${NC}"
+        echo "Please install jupyter: pip install jupyter nbconvert"
+        exit 1
+    fi
+    if ! jupyter nbconvert --version &> /dev/null; then
+        echo -e "${RED}Error: jupyter nbconvert is not available${NC}"
+        echo "Please install nbconvert: pip install nbconvert"
+        exit 1
+    fi
 fi
 
 echo "Repository: $REPO_ROOT"
-echo "Target path: $RELATIVE_TARGET"
+echo "Checking ${#RELATIVE_PATHS[@]} path(s): ${RELATIVE_PATHS[*]}"
 
-# Create temporary directory
+# Create temporary directory (notebook conversion writes files next to the
+# source, so we work in a copy to avoid polluting the working tree).
 TEMP_DIR=$(mktemp -d -t link-check-XXXXXX)
 trap "rm -rf '$TEMP_DIR'" EXIT
 
 TEMP_REPO="$TEMP_DIR/repo"
 
 echo ""
-echo "Creating temporary copy of repository in: $TEMP_REPO"
-echo "Copying files..."
-
-# Copy the repo to temp directory
+echo "Creating temporary copy of repository..."
 cp -r "$REPO_ROOT" "$TEMP_REPO"
 
-# Find and convert notebooks in the temp copy
-TEMP_TARGET="$TEMP_REPO/$RELATIVE_TARGET"
+# Collect notebooks that need conversion and build the lychee target list
+LYCHEE_TARGETS=()
+NOTEBOOKS_TO_CONVERT=()
 
-echo ""
-echo "Looking for Jupyter notebooks to convert..."
-NOTEBOOKS=$(find "$TEMP_TARGET" -name "*.ipynb" -type f 2>/dev/null || true)
+for rel in "${RELATIVE_PATHS[@]}"; do
+    temp_path="$TEMP_REPO/$rel"
+    if [ -d "$temp_path" ]; then
+        # Directory: find all notebooks inside it for conversion, then check
+        # the whole directory.
+        while IFS= read -r nb; do
+            NOTEBOOKS_TO_CONVERT+=("$nb")
+        done < <(find "$temp_path" -name "*.ipynb" -type f 2>/dev/null || true)
+        LYCHEE_TARGETS+=("$rel")
+    elif [[ "$rel" == *.ipynb ]]; then
+        # Single notebook: convert it, then check the resulting .md file.
+        NOTEBOOKS_TO_CONVERT+=("$temp_path")
+        LYCHEE_TARGETS+=("${rel%.ipynb}.md")
+    else
+        # Markdown or other file: check directly.
+        LYCHEE_TARGETS+=("$rel")
+    fi
+done
 
-if [ -z "$NOTEBOOKS" ]; then
-    echo "No notebooks found in $RELATIVE_TARGET"
-else
-    NOTEBOOK_COUNT=$(echo "$NOTEBOOKS" | wc -l)
-    echo "Found $NOTEBOOK_COUNT notebook(s) to convert:"
-    echo "$NOTEBOOKS" | sed 's/^/  - /'
-
+# Convert notebooks to markdown
+if [ ${#NOTEBOOKS_TO_CONVERT[@]} -gt 0 ]; then
     echo ""
-    echo "Converting notebooks to markdown..."
-
-    while IFS= read -r notebook; do
-        echo "Converting: ${notebook#$TEMP_REPO/}"
+    echo "Converting ${#NOTEBOOKS_TO_CONVERT[@]} notebook(s) to markdown..."
+    for notebook in "${NOTEBOOKS_TO_CONVERT[@]}"; do
+        echo "  ${notebook#$TEMP_REPO/}"
         if ! jupyter nbconvert --to markdown "$notebook" 2>&1; then
             echo -e "${YELLOW}Warning: Failed to convert $notebook${NC}"
         fi
-    done <<< "$NOTEBOOKS"
+    done
 fi
 
-# Run lychee directly
+# Build lychee command
 echo ""
-echo "Running lychee link checker on: $RELATIVE_TARGET"
+echo "Running lychee link checker..."
 echo "================================================================================"
 
-# Reference lychee config files from brev directory
 LYCHEE_CONFIG="$REPO_ROOT/brev/lychee.toml"
 LYCHEE_EXCLUDE_FILE="$REPO_ROOT/brev/.lycheeignore"
 
-# Build lychee command with config options
 LYCHEE_CMD="lychee"
 if [ -f "$LYCHEE_CONFIG" ]; then
     LYCHEE_CMD="$LYCHEE_CMD --config $LYCHEE_CONFIG"
@@ -145,11 +160,9 @@ if [ -f "$LYCHEE_EXCLUDE_FILE" ]; then
     echo "Using .lycheeignore file from brev/"
 fi
 
-# Change to temp repo directory and run lychee on the target path
-# Lychee will recursively find all markdown files
 set +e
 cd "$TEMP_REPO"
-$LYCHEE_CMD "$RELATIVE_TARGET"
+$LYCHEE_CMD "${LYCHEE_TARGETS[@]}"
 LYCHEE_EXIT=$?
 cd "$REPO_ROOT"
 set -e
