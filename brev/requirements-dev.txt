@@ -1,0 +1,7 @@
+# Developer dependencies for working on Accelerated Computing Hub.
+# Install with: uv pip install -r brev/requirements-dev.txt
+
+pre-commit
+nbformat
+nbconvert
+hpccm
