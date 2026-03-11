@@ -1,4 +1,4 @@
-name: Test Brev Tutorial Docker Images
+name: Test Tutorial Docker Images
 
 on:
   workflow_dispatch:
@@ -54,7 +54,7 @@ jobs:
       - name: Download commit-specific Docker Compose artifact
         uses: dawidd6/action-download-artifact@v6
         with:
-          workflow: build-brev-tutorial-docker-images.yml
+          workflow: build-tutorial-docker-images.yml
           run_id: ${{ inputs.workflow_run_id }}
           name: docker-compose-${{ inputs.tutorial }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
           path: artifacts/commit-specific/${{ inputs.tutorial }}/
@@ -169,7 +169,7 @@ jobs:
             -f state='success' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Tests passed' \
-            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
+            -f context='Test Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -183,6 +183,6 @@ jobs:
             -f state='failure' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             -f description='Tests failed' \
-            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
+            -f context='Test Tutorial Docker Images / test-tutorial (tutorials/${{ inputs.tutorial }})'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
