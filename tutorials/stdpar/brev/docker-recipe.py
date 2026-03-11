@@ -144,12 +144,7 @@ Stage0 += shell(commands=[
 ])
 
 
-Stage0 += copy(src='.', dest='/accelerated-computing-hub')
-
-# Ensure accelerated-computing-hub directory is writable by any user
-Stage0 += shell(commands=[
-  'chmod -R a+rwX /accelerated-computing-hub',
-])
+Stage0 += raw(docker='COPY --chmod=0777 . /accelerated-computing-hub')
 
 Stage0 += workdir(directory=f'/accelerated-computing-hub/tutorials/{tutorial}/notebooks')
 

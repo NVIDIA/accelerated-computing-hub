@@ -50,10 +50,7 @@ RUN apt-get update -y \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
-COPY . /accelerated-computing-hub
-
-# Ensure accelerated-computing-hub directory is writable by any user
-RUN chmod -R a+rwX /accelerated-computing-hub
+COPY --chmod=0777 . /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
