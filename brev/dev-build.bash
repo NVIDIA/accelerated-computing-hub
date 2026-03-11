@@ -3,12 +3,28 @@
 # This script builds Docker containers for tutorials.
 #
 # Usage:
-#   ./dev-build.bash <tutorial-name>
+#   ./dev-build.bash [--no-cache] [<tutorial-name>]
 #
 # If a tutorial name is provided (e.g., "accelerated-python"), only that tutorial is built.
 # If no argument is provided, all tutorials are built.
+#
+# Options:
+#   --no-cache    Rebuild the image from scratch, ignoring the Docker layer cache.
 
 set -eu
+
+NO_CACHE=""
+while [[ $# -gt 0 ]]; do
+    case ${1} in
+        --no-cache)
+            NO_CACHE="--no-cache"
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
@@ -39,7 +55,7 @@ build_tutorial() {
         echo "Dockerfile generated successfully"
     fi
 
-    docker compose --progress=plain -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build
+    docker compose --progress=plain -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
 
     echo "Successfully built image for ${ACH_TUTORIAL}"
     echo ""
