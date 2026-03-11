@@ -1,7 +1,6 @@
 """
 RAPIDS tests for accelerated-python tutorial.
 These tests validate that cuDF and cuML are installed and functional.
-These tests should be run in the RAPIDS venv.
 """
 
 import pytest
