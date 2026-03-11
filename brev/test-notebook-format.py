@@ -17,9 +17,8 @@ metadata policy.  Canonical format means:
     the required ``name`` field).
   - nbformat 4, nbformat_minor 5.
 
-The cuDF kernelspec is accepted as an alternative to the default ipykernel.
-If a notebook has any other kernelspec (or none), --fix replaces it with the
-default.
+If a notebook has any non-standard kernelspec (or none), --fix replaces it
+with the default.
 
 Usage:
   ./brev/test-notebook-format.py                       # check all tutorials
@@ -77,12 +76,6 @@ STANDARD_METADATA = {
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
-CUDF_KERNELSPEC = {
-    "display_name": "Python 3 (RAPIDS 25.10)",
-    "language": "python",
-    "name": "cudf-cu13-25.10",
-}
-
 # ANSI colors
 RED = "\033[0;31m"
 GREEN = "\033[0;32m"
@@ -92,23 +85,6 @@ NC = "\033[0m"  # No Color
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-
-
-def has_cudf_kernelspec(metadata) -> bool:
-    """Check if a notebook's metadata contains the cuDF kernelspec."""
-    ks = metadata.get("kernelspec", {})
-    return (
-        ks.get("display_name") == CUDF_KERNELSPEC["display_name"]
-        and ks.get("language") == CUDF_KERNELSPEC["language"]
-        and ks.get("name") == CUDF_KERNELSPEC["name"]
-    )
-
-
-def get_expected_metadata(metadata) -> dict:
-    expected = dict(STANDARD_METADATA)
-    if has_cudf_kernelspec(metadata):
-        expected["kernelspec"] = dict(CUDF_KERNELSPEC)
-    return expected
 
 
 def is_solution_notebook(notebook_path: Path) -> bool:
@@ -171,7 +147,7 @@ def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
 
     # -- Detect original metadata problems before nbformat.read() -----------
     actual_metadata = raw.get("metadata", {})
-    expected_metadata = get_expected_metadata(actual_metadata)
+    expected_metadata = dict(STANDARD_METADATA)
     metadata_diffs = diff_metadata(actual_metadata, expected_metadata, "metadata")
     if metadata_diffs:
         problems.extend(metadata_diffs)
@@ -315,14 +291,12 @@ def check_notebook(notebook_path: Path, fix: bool) -> bool:
     with open(notebook_path, "r", encoding="utf-8") as f:
         original_text = f.read()
 
-    tag = "cudf" if has_cudf_kernelspec(json.loads(original_text).get("metadata", {})) else "standard"
-
     if original_text == canonical_text:
-        print(f"{GREEN}✓{NC} {notebook_path} ({tag})")
+        print(f"{GREEN}✓{NC} {notebook_path}")
         return True
 
     # There are problems
-    print(f"{RED}✗{NC} {notebook_path} ({tag})")
+    print(f"{RED}✗{NC} {notebook_path}")
     for p in problems:
         print(p)
 

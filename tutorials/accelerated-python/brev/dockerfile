@@ -6,7 +6,6 @@ ENV ACH_TUTORIAL=accelerated-python \
     NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
     NSIGHT_COMPUTE_VERSION=2025.4.1 \
     NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
-    ACH_RAPIDS_VENV=/opt/venvs/rapids \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     PIP_ROOT_USER_ACTION=ignore \
@@ -81,6 +80,15 @@ COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
+# Upgrade numba-cuda and cuda-cccl to the versions needed by the tutorial
+# notebooks. cuDF and cuML's published metadata still declares
+# numba-cuda<0.23, but they work fine with newer numba-cuda at runtime, so
+# we bypass the declared constraint with --no-deps --force-reinstall.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+    --no-deps --force-reinstall \
+    "numba-cuda[cu13] == 0.28.2" \
+    "cuda-cccl[test-cu13] == 0.4.5"
+
 # Install MPI.
 RUN apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -103,20 +111,6 @@ RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
  && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
-
-# Create an isolated Python env with cuDF and cuML, and register it as a Jupyter kernel.
-RUN python -m venv ${ACH_RAPIDS_VENV} \
- && ${ACH_RAPIDS_VENV}/bin/pip install --no-cache-dir \
-    --extra-index-url=https://pypi.nvidia.com \
-    "cudf-cu13==25.10.*" \
-    "cuml-cu13==25.10.*" \
-    "scikit-learn>=1.5,<1.6" \
-    ipykernel \
-    pytest \
- && ${ACH_RAPIDS_VENV}/bin/python -m ipykernel install \
-    --name=cudf-cu13-25.10 \
-    --display-name="Python 3 (RAPIDS 25.10)" \
-    --prefix=/usr/local
 
 COPY . /accelerated-computing-hub
 

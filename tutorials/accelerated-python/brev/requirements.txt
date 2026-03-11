@@ -1,5 +1,5 @@
 # Arrays
-numpy == 2.4.2
+numpy == 2.2.6
 
 # Scientific/numeric
 scipy == 1.17.1
@@ -15,10 +15,13 @@ jupyterlab-execute-time == 3.3.0
 
 # CUDA
 cuda-python == 13.1.1
-numba-cuda[cu13] == 0.28.2
 nvmath-python[cu13] == 0.8.0
 cupy-cuda13x == 13.6.0
-cuda-cccl[test-cu13] == 0.4.5
+cuda-cccl == 0.4.5
+
+# RAPIDS
+cudf-cu13 == 26.2.1
+cuml-cu13 == 26.2.0
 
 # NVIDIA developer tools
 nvtx == 0.2.14
