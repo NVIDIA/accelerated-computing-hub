@@ -4,6 +4,49 @@ Please use the following guidelines when contributing to this project.
 
 Before contributing significant changes, please begin a discussion of the desired changes via a GitHub Issue to prevent doing unnecessary or overlapping work.
 
+## Developer Setup
+
+After cloning the repository, set up your local development environment:
+
+```bash
+# Create and activate a virtual environment
+uv venv .venv
+source .venv/bin/activate
+
+# Install developer dependencies
+uv pip install -r brev/requirements-dev.txt
+
+# Install pre-commit hooks
+pre-commit install
+pre-commit install --hook-type pre-push
+```
+
+The developer dependencies in `brev/requirements-dev.txt` include:
+
+| Package | Used by |
+|---|---|
+| `pre-commit` | Git pre-commit and pre-push hooks. |
+| `nbformat` | `brev/test-notebook-format.py` for canonical notebook validation. |
+| `nbconvert` | `brev/test-links.bash` for converting notebooks to markdown before link checking. |
+| `hpccm` | `brev/dev-build.bash` for generating Dockerfiles from HPCCM recipes (only needed for tutorials that use HPCCM). |
+
+You will also need the following non-Python tools. On Ubuntu/Debian:
+
+```bash
+# Docker Engine (https://docs.docker.com/engine/install/ubuntu/)
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# Git LFS (https://git-lfs.com/)
+sudo apt-get install git-lfs
+git lfs install
+
+# Rust toolchain, needed to install lychee (https://rustup.rs/)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# lychee link checker (https://lychee.cli.rs/installation)
+cargo install lychee
+```
+
 ## Development Scripts
 
 The `brev/` directory contains scripts for building, running, and testing tutorial Docker containers locally, as well as validation and CI helper scripts.
