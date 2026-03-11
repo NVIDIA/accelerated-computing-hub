@@ -22,7 +22,13 @@ repos:
         stages: [pre-push]
 
       - id: test-links
-        name: Check links in markdown and notebooks
+        name: Check links in changed markdown and notebooks
+        entry: bash brev/test-links.bash
+        language: system
+        files: '\.(md|ipynb)$'
+
+      - id: test-links-all
+        name: Check links in all markdown and notebooks
         entry: bash brev/test-links.bash .
         language: system
         files: '\.(md|ipynb)$'

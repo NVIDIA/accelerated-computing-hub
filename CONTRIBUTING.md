@@ -64,14 +64,19 @@ cryptographically signed. Runs on `git push`, not on commit. See
 [GitHub's documentation on commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 for setup instructions.
 
-### `test-links` (manual)
+### `test-links` (pre-commit)
 
-Checks that links in Markdown files and Jupyter notebooks are valid using
-[lychee](https://github.com/lycheeverse/lychee). This hook is configured as
-a **manual** stage and won't run automatically. Run it explicitly with:
+Checks that links in changed Markdown files and Jupyter notebooks are valid
+using [lychee](https://github.com/lycheeverse/lychee). Only files modified in
+the commit are checked.
+
+### `test-links-all` (manual)
+
+Checks links across the entire repository. This hook is configured as a
+**manual** stage and won't run automatically. Run it explicitly with:
 
 ```bash
-pre-commit run test-links --hook-stage manual --all-files
+pre-commit run --hook-stage manual test-links-all
 ```
 
 ## License
