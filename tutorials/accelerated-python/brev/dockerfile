@@ -118,10 +118,7 @@ RUN python -m venv ${ACH_RAPIDS_VENV} \
     --display-name="Python 3 (RAPIDS 25.10)" \
     --prefix=/usr/local
 
-COPY . /accelerated-computing-hub
-
-# Ensure accelerated-computing-hub directory is writable by any user
-RUN chmod -R a+rwX /accelerated-computing-hub
+COPY --chmod=0777 . /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
