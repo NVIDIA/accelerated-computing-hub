@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    types: [opened, reopened, synchronize]
+      - '!gh-readonly-queue/**'
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-on-${{ github.event_name }}-from-${{ github.ref_name }}
+  cancel-in-progress: true
 
 # Minimal permissions - only read access needed for checks
 permissions:
@@ -30,17 +34,26 @@ jobs:
       - name: Lint YAML files
         id: yamllint-check
         run: |
-          yamllint -f github -d '{rules: {line-length: disable}}' .
+          set -o pipefail
+          yamllint -f parsable -d '{rules: {line-length: disable}}' . 2>&1 | tee ./yamllint-output.txt
 
-      - name: Save PR number and result
-        if: always() && github.event_name == 'pull_request'
+      - name: Get PR info
+        id: get-pr-info
+        if: always() && startsWith(github.ref_name, 'pull-request/')
+        uses: nv-gha-runners/get-pr-info@main
+
+      - name: Save PR comment data
+        if: always()
         run: |
           mkdir -p ./pr-comment-data
-          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
-          echo '${{ steps.yamllint-check.outcome }}' > ./pr-comment-data/outcome
+          PR_NUMBER='${{ startsWith(github.ref_name, 'pull-request/') && fromJSON(steps.get-pr-info.outputs.pr-info).number || '' }}'
+          echo "${PR_NUMBER}" > ./pr-comment-data/pr_number
+          if [ -f ./yamllint-output.txt ]; then
+            cp ./yamllint-output.txt ./pr-comment-data/error_output
+          fi
 
       - name: Upload PR comment data
-        if: always() && github.event_name == 'pull_request'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pr-comment-data

@@ -5,14 +5,16 @@ on:
     workflows: ["Test Git LFS"]
     types: [completed]
 
-# Write permissions for commenting
 permissions:
   pull-requests: write
+  actions: read
 
 jobs:
   comment:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure'
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      (github.event.workflow_run.pull_requests[0] || startsWith(github.event.workflow_run.head_branch, 'pull-request/'))
 
     steps:
       - name: Download PR comment data
@@ -28,15 +30,25 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read PR number and error details from artifacts
-            const prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
-            const errorType = fs.readFileSync('error_type', 'utf8').trim();
-            const errorFiles = fs.readFileSync('error_files', 'utf8').trim();
-
+            const pullRequests = context.payload.workflow_run.pull_requests;
+            let prNumber;
+            if (pullRequests && pullRequests.length > 0) {
+              prNumber = pullRequests[0].number;
+            } else {
+              try {
+                prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
+              } catch (e) {
+                console.log('No PR number found, skipping comment.');
+                return;
+              }
+            }
             if (!prNumber || isNaN(prNumber)) {
               console.log('No valid PR number found, skipping comment.');
               return;
             }
+
+            const errorType = fs.readFileSync('error_type', 'utf8').trim();
+            const errorFiles = fs.readFileSync('error_files', 'utf8').trim();
 
             if (!errorType) {
               console.log('No error type found, skipping comment.');
