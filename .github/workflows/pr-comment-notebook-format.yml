@@ -61,7 +61,8 @@ jobs:
               ? `\n<details>\n<summary>Notebooks with issues</summary>\n\n\`\`\`\n${errorDetails}\n\`\`\`\n\n</details>\n`
               : '';
 
-            const commentBody = `## ❌ Notebook Format Check Failed
+            const commentBody = `
+            ## ❌ Notebook Format Check Failed
 
             🔗 [View workflow run logs](${runUrl})
             ${detailsSection}
@@ -74,9 +75,10 @@ jobs:
             # Auto-fix a specific tutorial
             python3 brev/test-notebook-format.py <tutorial-name> --fix
             \`\`\`
-            `;
 
-            // Check if we already commented on this PR to avoid spam
+            📚 [nbformat documentation](https://nbformat.readthedocs.io/)
+            `.replace(/^ {12}/gm, '').trim();
+
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,

@@ -57,17 +57,21 @@ jobs:
 
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${{ github.event.workflow_run.id }}`;
 
-            const commentBody = `## ❌ Commit Signature Check Failed
-
-            **Found ${unsignedCount} unsigned commit(s):**
+            const commentBody = `
+            ## ❌ Git Signature Check Failed
 
             🔗 [View workflow run logs](${runUrl})
 
+            **Found ${unsignedCount} unsigned commit(s):**
+
+            <details>
+            <summary>Unsigned commits</summary>
+
             ${unsignedCommits}
 
-            ### All commits must be signed
+            </details>
 
-            #### How to fix:
+            ### How to fix:
 
             1. **Configure commit signing** (if not already done):
                \`\`\`bash
@@ -86,9 +90,8 @@ jobs:
                \`\`\`
 
             📚 [GitHub documentation on signing commits](https://docs.github.com/en/authentication/managing-commit-signature-verification)
-            `;
+            `.replace(/^ {12}/gm, '').trim();
 
-            // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -97,7 +100,7 @@ jobs:
 
             const botComment = comments.find(comment =>
               comment.user.type === 'Bot' &&
-              comment.body.includes('Commit Signature Check Failed')
+              comment.body.includes('Git Signature Check Failed')
             );
 
             if (botComment) {

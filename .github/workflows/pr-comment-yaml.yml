@@ -61,11 +61,12 @@ jobs:
               ? `\n<details>\n<summary>YAML lint errors</summary>\n\n\`\`\`\n${errorDetails}\n\`\`\`\n\n</details>\n`
               : '';
 
-            const commentBody = `## ❌ YAML Lint Check Failed
+            const commentBody = `
+            ## ❌ YAML Check Failed
 
             🔗 [View workflow run logs](${runUrl})
             ${detailsSection}
-            ### To lint YAML files locally:
+            ### How to fix:
 
             \`\`\`bash
             pip install yamllint
@@ -73,9 +74,8 @@ jobs:
             \`\`\`
 
             📚 [yamllint documentation](https://yamllint.readthedocs.io/)
-            `;
+            `.replace(/^ {12}/gm, '').trim();
 
-            // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -84,7 +84,7 @@ jobs:
 
             const botComment = comments.find(comment =>
               comment.user.type === 'Bot' &&
-              comment.body.includes('YAML Lint Check Failed')
+              comment.body.includes('YAML Check Failed')
             );
 
             if (botComment) {

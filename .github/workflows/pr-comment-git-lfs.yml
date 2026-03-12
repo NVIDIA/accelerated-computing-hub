@@ -59,46 +59,63 @@ jobs:
 
             let commentBody;
             if (errorType === 'subdir_gitattributes') {
-              commentBody = `## ❌ Git LFS Check Failed
+              const fileList = errorFiles.split('\n').map(f => f.trim()).filter(f => f).map(f => '- `' + f + '`').join('\n');
+              commentBody = `
+              ## ❌ Git LFS Check Failed
 
-            **Found \`.gitattributes\` file(s) in subdirectories.** Only the top-level \`.gitattributes\` should be used for LFS configuration.
+              🔗 [View workflow run logs](${runUrl})
 
-            🔗 [View workflow run logs](${runUrl})
+              **Found \`.gitattributes\` file(s) in subdirectories.** Only the top-level \`.gitattributes\` should be used for LFS configuration.
 
-            ### Files to remove:
-            ${errorFiles.split('\n').map(f => f.trim()).filter(f => f).map(f => '- \`' + f + '\`').join('\n')}
+              <details>
+              <summary>Files to remove</summary>
 
-            ### How to fix:
-            \`\`\`bash
-            git rm <path/to/.gitattributes>
-            git commit -m "Remove subdirectory .gitattributes"
-            \`\`\`
-            `;
+              ${fileList}
+
+              </details>
+
+              ### How to fix:
+
+              \`\`\`bash
+              git rm <path/to/.gitattributes>
+              git commit -m "Remove subdirectory .gitattributes"
+              \`\`\`
+
+              📚 [Git LFS documentation](https://git-lfs.com/)
+              `.replace(/^ {14}/gm, '').trim();
             } else if (errorType === 'not_lfs_tracked') {
-              commentBody = `## ❌ Git LFS Check Failed
+              commentBody = `
+              ## ❌ Git LFS Check Failed
 
-            **The following files should be tracked by Git LFS but are not:**
+              🔗 [View workflow run logs](${runUrl})
 
-            🔗 [View workflow run logs](${runUrl})
+              **The following files should be tracked by Git LFS but are not:**
 
-            ${errorFiles}
+              <details>
+              <summary>Files not tracked by LFS</summary>
 
-            ### How to fix:
-            \`\`\`bash
-            # For each file listed above:
-            git rm --cached <file>
-            git add <file>
-            git commit -m "Track file with Git LFS"
-            \`\`\`
+              ${errorFiles}
 
-            Make sure Git LFS is installed locally (\`git lfs install\`) before running these commands.
-            `;
+              </details>
+
+              ### How to fix:
+
+              \`\`\`bash
+              # For each file listed above:
+              git rm --cached <file>
+              git add <file>
+              git commit -m "Track file with Git LFS"
+              \`\`\`
+
+              Make sure Git LFS is installed locally (\`git lfs install\`) before running these commands.
+
+              📚 [Git LFS documentation](https://git-lfs.com/)
+              `.replace(/^ {14}/gm, '').trim();
             } else {
               console.log(`Unknown error type: ${errorType}, skipping comment.`);
               return;
             }
 
-            // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
