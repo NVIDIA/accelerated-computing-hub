@@ -5,14 +5,16 @@ on:
     workflows: ["Test Links"]
     types: [completed]
 
-# Write permissions for commenting
 permissions:
   pull-requests: write
+  actions: read
 
 jobs:
   comment:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure'
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      (github.event.workflow_run.pull_requests[0] || startsWith(github.event.workflow_run.head_branch, 'pull-request/'))
 
     steps:
       - name: Download PR comment data
@@ -28,9 +30,18 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read PR number from artifact
-            const prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
-
+            const pullRequests = context.payload.workflow_run.pull_requests;
+            let prNumber;
+            if (pullRequests && pullRequests.length > 0) {
+              prNumber = pullRequests[0].number;
+            } else {
+              try {
+                prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
+              } catch (e) {
+                console.log('No PR number found, skipping comment.');
+                return;
+              }
+            }
             if (!prNumber || isNaN(prNumber)) {
               console.log('No valid PR number found, skipping comment.');
               return;
@@ -38,12 +49,23 @@ jobs:
 
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${{ github.event.workflow_run.id }}`;
 
-            const commentBody = `## ❌ Link Check Failed
+            let errorDetails = '';
+            try {
+              const raw = fs.readFileSync('error_output', 'utf8').trim();
+              if (raw) {
+                errorDetails = raw.length > 30000 ? raw.substring(0, 30000) + '\n\n... (truncated)' : raw;
+              }
+            } catch (e) {}
 
-            **Broken links were detected in this PR.**
+            const detailsSection = errorDetails
+              ? `\n<details>\n<summary>Broken links found by Lychee</summary>\n\n${errorDetails}\n\n</details>\n`
+              : '';
 
-            Please check the [workflow run logs](${runUrl}) for details on which links are broken.
+            const commentBody = `
+            ## ❌ Link Check Failed
 
+            🔗 [View workflow run logs](${runUrl})
+            ${detailsSection}
             ### Common fixes:
 
             1. **Typo in URL** - Check for spelling mistakes in the link
@@ -58,9 +80,8 @@ jobs:
             \`\`\`
 
             📚 [Lychee documentation](https://github.com/lycheeverse/lychee)
-            `;
+            `.replace(/^ {12}/gm, '').trim();
 
-            // Check if we already commented on this PR to avoid spam
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
