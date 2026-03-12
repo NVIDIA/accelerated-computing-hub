@@ -5,14 +5,16 @@ on:
     workflows: ["Test Notebook Format"]
     types: [completed]
 
-# Write permissions for commenting
 permissions:
   pull-requests: write
+  actions: read
 
 jobs:
   comment:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'failure'
+    if: >-
+      github.event.workflow_run.conclusion == 'failure' &&
+      (github.event.workflow_run.pull_requests[0] || startsWith(github.event.workflow_run.head_branch, 'pull-request/'))
 
     steps:
       - name: Download PR comment data
@@ -28,9 +30,18 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read PR number from artifact
-            const prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
-
+            const pullRequests = context.payload.workflow_run.pull_requests;
+            let prNumber;
+            if (pullRequests && pullRequests.length > 0) {
+              prNumber = pullRequests[0].number;
+            } else {
+              try {
+                prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
+              } catch (e) {
+                console.log('No PR number found, skipping comment.');
+                return;
+              }
+            }
             if (!prNumber || isNaN(prNumber)) {
               console.log('No valid PR number found, skipping comment.');
               return;
@@ -38,22 +49,22 @@ jobs:
 
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${{ github.event.workflow_run.id }}`;
 
+            let errorDetails = '';
+            try {
+              const raw = fs.readFileSync('error_output', 'utf8').trim();
+              if (raw) {
+                errorDetails = raw.length > 30000 ? raw.substring(0, 30000) + '\n\n... (truncated)' : raw;
+              }
+            } catch (e) {}
+
+            const detailsSection = errorDetails
+              ? `\n<details>\n<summary>Notebooks with issues</summary>\n\n\`\`\`\n${errorDetails}\n\`\`\`\n\n</details>\n`
+              : '';
+
             const commentBody = `## ❌ Notebook Format Check Failed
 
-            **One or more Jupyter notebooks are not in canonical format.**
-
-            Please check the [workflow run logs](${runUrl}) for details on which notebooks have issues.
-
-            ### What is checked:
-
-            All notebooks must be in **canonical format** (the exact output of \`nbformat.write()\`):
-
-            1. **Canonical serialization** — 1-space indentation, sorted keys, standard separators
-            2. **Cell IDs** — every cell must have an \`id\` field (nbformat 4.5)
-            3. **Metadata conformance** — notebooks must have the standard metadata block (accelerator, colab, kernelspec, language_info)
-            4. **Clean outputs** — non-SOLUTION notebooks must have outputs, execution counts, and execution timing metadata cleared
-            5. **Well-formed outputs** — SOLUTION notebook outputs must be schema-valid (e.g. stream outputs need the \`name\` field)
-
+            🔗 [View workflow run logs](${runUrl})
+            ${detailsSection}
             ### How to fix:
 
             \`\`\`bash
