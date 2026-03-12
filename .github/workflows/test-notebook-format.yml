@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - '**'
-  pull_request:
-    types: [opened, reopened, synchronize]
+      - '!gh-readonly-queue/**'
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-on-${{ github.event_name }}-from-${{ github.ref_name }}
+  cancel-in-progress: true
 
 # Minimal permissions - only read access needed for checks
 permissions:
@@ -29,17 +33,27 @@ jobs:
 
       - name: Check notebook format
         id: notebook-format-check
-        run: python3 brev/test-notebook-format.py
+        run: |
+          set -o pipefail
+          python3 brev/test-notebook-format.py 2>&1 | tee ./notebook-format-output.txt
 
-      - name: Save PR number and result
-        if: always() && github.event_name == 'pull_request'
+      - name: Get PR info
+        id: get-pr-info
+        if: always() && startsWith(github.ref_name, 'pull-request/')
+        uses: nv-gha-runners/get-pr-info@main
+
+      - name: Save PR comment data
+        if: always()
         run: |
           mkdir -p ./pr-comment-data
-          echo '${{ github.event.pull_request.number }}' > ./pr-comment-data/pr_number
-          echo '${{ steps.notebook-format-check.outcome }}' > ./pr-comment-data/outcome
+          PR_NUMBER='${{ startsWith(github.ref_name, 'pull-request/') && fromJSON(steps.get-pr-info.outputs.pr-info).number || '' }}'
+          echo "${PR_NUMBER}" > ./pr-comment-data/pr_number
+          if [ -f ./notebook-format-output.txt ]; then
+            sed 's/\x1b\[[0-9;]*m//g' ./notebook-format-output.txt > ./pr-comment-data/error_output
+          fi
 
       - name: Upload PR comment data
-        if: always() && github.event_name == 'pull_request'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pr-comment-data
