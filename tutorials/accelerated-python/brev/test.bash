@@ -2,8 +2,8 @@
 #
 # Run tests for the accelerated-python tutorial.
 #
-# When called with no arguments, runs all three test suites (packages, RAPIDS,
-# notebooks).  When called with arguments:
+# When called with no arguments, runs both test suites (packages, notebooks).
+# When called with arguments:
 #   - Bare words (e.g. "03") are treated as a pytest -k filter for notebook tests.
 #   - Paths or flags (e.g. "test/test_packages.py", "-k foo") are forwarded to
 #     pytest directly.
@@ -31,16 +31,10 @@ if [ $# -gt 0 ]; then
     fi
     EXIT_CODE=$?
 else
-    # Run regular package tests.
-    echo "Running regular package tests..."
-    pytest "${TUTORIAL_ROOT}/test/test_packages.py"
+    # Run package tests.
+    echo "Running package tests..."
+    pytest "${TUTORIAL_ROOT}/test/test_packages.py" "${TUTORIAL_ROOT}/test/test_rapids.py"
     EXIT_CODE_PACKAGES=$?
-
-    # Run RAPIDS tests.
-    echo ""
-    echo "Running RAPIDS package tests in virtual environment..."
-    /opt/venvs/rapids/bin/pytest "${TUTORIAL_ROOT}/test/test_rapids.py"
-    EXIT_CODE_RAPIDS=$?
 
     # Test solution notebooks.
     echo ""
@@ -49,7 +43,7 @@ else
     EXIT_CODE_NOTEBOOKS=$?
 
     # Overall exit code is non-zero if any test suite failed.
-    EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_RAPIDS || EXIT_CODE_NOTEBOOKS))
+    EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_NOTEBOOKS))
 fi
 
 END_TIME=$(date +%s.%N)
