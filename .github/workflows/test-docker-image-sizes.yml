@@ -1,0 +1,142 @@
+name: Test Docker Image Sizes
+
+on:
+  workflow_run:
+    workflows: ["Build and Push Brev Tutorial Docker Images"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch name (for tag construction)"
+        required: false
+        type: string
+      sha:
+        description: "Git SHA (for tag construction)"
+        required: false
+        type: string
+
+jobs:
+  test-image-sizes:
+    name: test-image-sizes
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success' ||
+      github.event.workflow_run.conclusion == 'failure'
+    permissions:
+      contents: read
+      packages: read
+      actions: write
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Set variables
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            GIT_BRANCH_NAME="${{ github.event.workflow_run.head_branch }}"
+            GIT_SHA="${{ github.event.workflow_run.head_sha }}"
+          elif [ -n "${{ inputs.branch }}" ]; then
+            GIT_BRANCH_NAME="${{ inputs.branch }}"
+            GIT_SHA="${{ inputs.sha || github.sha }}"
+          else
+            GIT_BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+            GIT_SHA="${{ github.sha }}"
+          fi
+
+          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
+          GIT_SHORT_SHA=${GIT_SHA:0:7}
+
+          # Extract PR number from pull-request/* branches
+          PR_NUMBER=""
+          if [[ "$GIT_BRANCH_NAME" =~ ^pull-request/([0-9]+)$ ]]; then
+            PR_NUMBER="${BASH_REMATCH[1]}"
+          fi
+
+          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> $GITHUB_ENV
+          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> $GITHUB_ENV
+          echo "GIT_SHA=${GIT_SHA}" >> $GITHUB_ENV
+          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> $GITHUB_ENV
+          echo "OWNER=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+
+      - name: Collect image sizes
+        id: sizes
+        run: |
+          IMAGE_TAG="${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
+          THRESHOLD=5
+
+          RESULTS=$(brev/test-docker-image-sizes.bash compare \
+            --owner "${OWNER}" \
+            --tutorial all \
+            --tag "${IMAGE_TAG}" \
+            --baseline "main-latest" \
+            --format json)
+
+          # Count tutorials exceeding the threshold
+          WARNING_COUNT=$(echo "$RESULTS" | jq --argjson t "$THRESHOLD" \
+            '[.[] | select(.diff_pct != null and ((.diff_pct > $t) or (.diff_pct < -$t)))] | length')
+          ERRORS=$(echo "$RESULTS" | jq '[.[] | select(.error == true)] | length')
+
+          # --- Build job summary ---
+          {
+            echo "## 📦 Docker Image Size Report"
+            echo ""
+            echo "**Branch:** \`${GIT_BRANCH_NAME}\` (\`${GIT_SHORT_SHA}\`)"
+            echo "**Baseline:** \`main-latest\`"
+            echo ""
+            echo "| Tutorial | Current | Baseline | Change | |"
+            echo "|:---------|--------:|---------:|-------:|:---:|"
+
+            echo "$RESULTS" | jq -r --argjson t "$THRESHOLD" '.[] |
+              if .error then
+                "| " + .tutorial + " | _(error)_ | — | — | ❌ |"
+              elif .baseline_exists == false then
+                "| " + .tutorial + " | " + .current_size_human + " | _(not found)_ | — | ➖ |"
+              else
+                (if ((.diff_pct > $t) or (.diff_pct < (-1 * $t))) then "⚠️" else "✅" end) as $icon |
+                "| " + .tutorial + " | " + .current_size_human + " | " + .baseline_size_human + " | " + .change_human + " | " + $icon + " |"
+              end'
+
+            echo ""
+            if [ "$WARNING_COUNT" -gt 0 ]; then
+              echo "> ⚠️ **${WARNING_COUNT} image(s) changed by more than ${THRESHOLD}%.** Large increases may indicate unnecessary dependencies."
+            elif [ "$ERRORS" -gt 0 ]; then
+              echo "> ❌ **${ERRORS} image(s) could not be checked.** This is expected if the build failed for those tutorials."
+            else
+              echo "> ✅ All images are within the ${THRESHOLD}% size threshold."
+            fi
+          } >> $GITHUB_STEP_SUMMARY
+
+          # --- Save PR comment data ---
+          mkdir -p pr-comment-data
+          echo "${PR_NUMBER}" > pr-comment-data/pr_number
+          echo "${WARNING_COUNT}" > pr-comment-data/warning_count
+          echo "${THRESHOLD}" > pr-comment-data/threshold
+          echo "$RESULTS" > pr-comment-data/results.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload PR comment data
+        if: env.PR_NUMBER != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-comment-data
+          path: pr-comment-data/
+          retention-days: 1
+
+      - name: Trigger PR comment workflow
+        if: env.PR_NUMBER != ''
+        run: |
+          echo "Triggering PR comment workflow for PR #${PR_NUMBER}"
+          gh workflow run pr-comment-docker-image-sizes.yml \
+            --ref ${GIT_BRANCH_NAME} \
+            -f workflow_run_id=${{ github.run_id }}
+          echo "PR comment workflow triggered successfully"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
