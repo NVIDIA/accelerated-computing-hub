@@ -18,6 +18,9 @@ nvmath-python[cu12,dx,cpu,cu12-distributed]
 # Visualization
 matplotlib
 
+# Dark mode detection
+jupyter-dark-detect == 0.1.0
+
 # Jupyter
 jupyter-server-proxy
 jupyterlab
