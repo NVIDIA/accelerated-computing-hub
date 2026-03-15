@@ -1,6 +1,9 @@
 # Visualization
 matplotlib
 
+# Dark mode detection
+jupyter-dark-detect == 0.1.0
+
 # Jupyter
 jupyter
 jupyter-server-proxy
