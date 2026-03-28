@@ -47,7 +47,7 @@ Once your VM is deployed, follow the Brev access instructions provided for your 
   - `brev ls` to list your VMs
   - `brev shell <your vm name>` to connect via SSH
 
-For Linux and Windows instructions check the [brev-cli install documentation](https://docs.nvidia.com/brev/latest/brev-cli.html#installation-instructions)
+For Linux and Windows instructions check the [brev-cli install documentation](https://docs.nvidia.com/brev/latest/cli/getting-started#installation)
 
 ### Exploring our GPU Software Environment
 
