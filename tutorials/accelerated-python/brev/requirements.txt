@@ -31,4 +31,4 @@ nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa51
 mpi4py == 4.1.1
 
 # Testing
-pytest == 9.0.2
+pytest == 9.0.3
