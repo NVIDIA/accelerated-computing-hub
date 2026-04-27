@@ -1,4 +1,4 @@
-name: Build and Push Brev Tutorial Docker Images
+name: Build and Push Docker Images
 
 on:
   push:
@@ -234,16 +234,16 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             /repos/${{ github.repository }}/statuses/${GIT_SHA} \
             -f state='pending' \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-docker-images.yml" \
             -f description='Test started' \
-            -f context="Test Brev Tutorial Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
+            -f context="Test Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger test workflow
         run: |
           echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
-          gh workflow run test-brev-tutorial-docker-images.yml \
+          gh workflow run test-docker-images.yml \
             --ref ${{ github.ref_name }} \
             -f tutorial=${TUTORIAL_NAME} \
             -f git_sha=${GIT_SHA} \
