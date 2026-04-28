@@ -1,0 +1,79 @@
+name: &tutorial-name cuda-cpp
+
+x-config:
+  dockerfile: &dockerfile tutorials/cuda-cpp/brev/dockerfile
+  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:pull-request-172-latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
+  gpu-config: &gpu-config
+    privileged: true
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    shm_size: 1g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  common-env: &common-env
+    BREV_ENV_ID: ${BREV_ENV_ID:-}
+    ACH_TUTORIAL: *tutorial-name
+    ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+    ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
+    ACH_USER: ${ACH_USER:-ach}
+    ACH_UID: ${ACH_UID:-1000}
+    ACH_GID: ${ACH_GID:-1000}
+  common-service: &common-service
+    pull_policy: missing
+    volumes:
+      - accelerated-computing-hub:/accelerated-computing-hub
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment: *common-env
+    user: root
+    working_dir: *working-dir
+  persistent-service: &persistent-service
+    depends_on:
+      base:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+services:
+  base:
+    <<: [*gpu-config, *common-service]
+    image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "base"]
+    build:
+      context: ../../..
+      dockerfile: *dockerfile
+    restart: "no"
+  jupyter:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: *image
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
+    environment:
+      <<: *common-env
+      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
+    ports:
+      - "127.0.0.1:8888:8888" # JupyterLab
+  nsys:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    ports:
+      - "127.0.0.1:8080:8080" # HTTP
+      - "0.0.0.0:3478:3478" # TURN
+  ncu:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    environment:
+      <<: *common-env
+      TURN_PORT: "3479"
+    ports:
+      - "127.0.0.1:8081:8080" # HTTP
+      - "0.0.0.0:3479:3479" # TURN
+
+volumes:
+  accelerated-computing-hub:
