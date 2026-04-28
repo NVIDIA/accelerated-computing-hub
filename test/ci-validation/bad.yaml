@@ -1,0 +1,5 @@
+key: value
+  bad_indent: this line has wrong indentation
+duplicate_key: first
+duplicate_key: second
+trailing_space: value   
