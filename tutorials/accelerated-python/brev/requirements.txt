@@ -12,7 +12,7 @@ jupyter-dark-detect == 0.1.0
 # Jupyter
 jupyter == 1.1.1
 jupyter-server-proxy == 4.4.0
-jupyterlab == 4.5.4
+jupyterlab == 4.5.7
 jupyterlab-nvidia-nsight == 1.0.0
 jupyterlab-execute-time == 3.3.0
 
