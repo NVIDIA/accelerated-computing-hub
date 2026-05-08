@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 340"
+     width="850" height="340" style="background:#fff;max-width:100%">
+<style>
+  text         { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .title       { font-size: 13.5px; font-weight: 600; fill: #1e293b; }
+  .section     { font-size: 12px; font-weight: 600; fill: #1e293b; text-anchor: middle; }
+  .box-lbl     { font-size: 11px; font-weight: 600; fill: #1e293b;
+                 text-anchor: middle; dominant-baseline: central; }
+  .gm-lbl      { font-size: 10px; fill: #475569;
+                 text-anchor: middle; dominant-baseline: central; }
+  .code        { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+  .ann         { font-size: 9.5px; fill: #475569; text-anchor: middle; }
+  .step-lbl    { font-size: 10.5px; fill: #1e293b; text-anchor: middle;
+                 dominant-baseline: central; }
+  .reg-lbl     { font-size: 9px; fill: #10b981; font-style: italic; text-anchor: middle; }
+</style>
+
+<defs>
+  <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#64748b"/>
+  </marker>
+  <marker id="ah-grn" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#10b981"/>
+  </marker>
+</defs>
+
+<!-- Title -->
+<text x="32" y="22" class="title">Kernel Fusion</text>
+
+<!-- Dashed vertical divider -->
+<line x1="420" y1="38" x2="420" y2="300"
+      stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- LEFT: UNFUSED — 3 kernel launches             -->
+<!-- ══════════════════════════════════════════════ -->
+<text x="200" y="50" class="section">Unfused — 3 kernel launches</text>
+
+<!-- Kernel 1 (blue) -->
+<rect x="110" y="68" width="180" height="36" rx="2"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+<text x="200" y="86" class="box-lbl">Compute <tspan class="code">a</tspan></text>
+
+<!-- Arrow K1 → GM1 -->
+<line x1="200" y1="104" x2="200" y2="120"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- Global Memory 1 (rose) -->
+<rect x="110" y="120" width="180" height="24" rx="2"
+      fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.2"/>
+<text x="200" y="132" class="gm-lbl">Global Memory</text>
+
+<!-- Arrow GM1 → K2 -->
+<line x1="200" y1="144" x2="200" y2="160"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- Kernel 2 (blue) -->
+<rect x="110" y="160" width="180" height="36" rx="2"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+<text x="200" y="178" class="box-lbl">Update <tspan class="code">v</tspan></text>
+
+<!-- Arrow K2 → GM2 -->
+<line x1="200" y1="196" x2="200" y2="212"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- Global Memory 2 (rose) -->
+<rect x="110" y="212" width="180" height="24" rx="2"
+      fill="#ffe4e6" stroke="#f43f5e" stroke-width="1.2"/>
+<text x="200" y="224" class="gm-lbl">Global Memory</text>
+
+<!-- Arrow GM2 → K3 -->
+<line x1="200" y1="236" x2="200" y2="252"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- Kernel 3 (blue) -->
+<rect x="110" y="252" width="180" height="36" rx="2"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+<text x="200" y="270" class="box-lbl">Update <tspan class="code">x</tspan></text>
+
+<!-- Annotation (left) -->
+<text x="200" y="310" class="ann">Intermediate results make round-trips through</text>
+<text x="200" y="324" class="ann">slow global memory between every step</text>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- RIGHT: FUSED — 1 kernel launch                -->
+<!-- ══════════════════════════════════════════════ -->
+<text x="640" y="50" class="section">Fused — 1 kernel launch</text>
+
+<!-- Single large kernel box (blue) -->
+<rect x="550" y="68" width="180" height="220" rx="2"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+
+<!-- Step 1: Compute a  (aligned with K1 center y=86) -->
+<text x="640" y="86" class="step-lbl">Compute <tspan class="code">a</tspan></text>
+
+<!-- Green registers arrow 1→2 -->
+<line x1="640" y1="98" x2="640" y2="166"
+      stroke="#10b981" stroke-width="1" marker-end="url(#ah-grn)"/>
+<text x="674" y="132" class="reg-lbl">registers</text>
+
+<!-- Step 2: Update v  (aligned with K2 center y=178) -->
+<text x="640" y="178" class="step-lbl">Update <tspan class="code">v</tspan></text>
+
+<!-- Green registers arrow 2→3 -->
+<line x1="640" y1="190" x2="640" y2="258"
+      stroke="#10b981" stroke-width="1" marker-end="url(#ah-grn)"/>
+<text x="674" y="224" class="reg-lbl">registers</text>
+
+<!-- Step 3: Update x  (aligned with K3 center y=270) -->
+<text x="640" y="270" class="step-lbl">Update <tspan class="code">x</tspan></text>
+
+<!-- Annotation (right) -->
+<text x="640" y="310" class="ann">Intermediate results stay in fast registers —</text>
+<text x="640" y="324" class="ann">no global memory round-trips between steps</text>
+
+</svg>
