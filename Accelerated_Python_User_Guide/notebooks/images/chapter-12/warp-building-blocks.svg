@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 966 205"
+     width="966" height="205" style="background:#fff;max-width:100%">
+<style>
+  text        { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .title      { font-size: 13.5px; font-weight: 600; fill: #1e293b; }
+  .card-title { font-size: 12px; font-weight: 600; fill: #1e293b;
+                text-anchor: middle; dominant-baseline: central; }
+  .code       { font-size: 10px; font-family: "SF Mono", "Fira Code", Consolas, monospace;
+                fill: #475569; }
+  .ann        { font-size: 9.5px; fill: #475569; text-anchor: middle; }
+</style>
+
+<defs>
+  <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#64748b"/>
+  </marker>
+</defs>
+
+<!-- Title -->
+<text x="32" y="22" class="title">Building Blocks of a Warp Program</text>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Card 1: Data (blue)                                            -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<rect x="28" y="42" width="280" height="114" rx="4"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+<text x="168" y="60" class="card-title">Data</text>
+<line x1="48" y1="70" x2="288" y2="70"
+      stroke="#3b82f6" stroke-width="0.6" stroke-opacity="0.35"/>
+<text x="44" y="99" class="code">pos = wp.array(data, dtype=wp.vec3)</text>
+<text x="44" y="113" class="code">vel = wp.zeros(N, dtype=wp.vec3)</text>
+<text x="44" y="127" class="code">result = wp.empty_like(pos)</text>
+
+<!-- Arrow 1→2 -->
+<line x1="308" y1="99" x2="330" y2="99"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Card 2: Kernel (amber)                                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<rect x="332" y="42" width="280" height="114" rx="4"
+      fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8"/>
+<text x="472" y="60" class="card-title">Kernel</text>
+<line x1="352" y1="70" x2="592" y2="70"
+      stroke="#f59e0b" stroke-width="0.6" stroke-opacity="0.35"/>
+<text x="348" y="85" class="code">@wp.kernel</text>
+<text x="348" y="99" class="code">def step(pos: wp.array[wp.vec3],</text>
+<text x="402" y="113" class="code">vel: wp.array[wp.vec3]):</text>
+<text x="372" y="127" class="code">i = wp.tid()</text>
+<text x="372" y="141" class="code">pos[i] = pos[i] + vel[i] * dt</text>
+
+<!-- Arrow 2→3 -->
+<line x1="612" y1="99" x2="634" y2="99"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Card 3: Orchestration (green)                                  -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<rect x="636" y="42" width="296" height="114" rx="4"
+      fill="#d1fae5" stroke="#10b981" stroke-width="1.8"/>
+<text x="784" y="60" class="card-title">Orchestration</text>
+<line x1="656" y1="70" x2="912" y2="70"
+      stroke="#10b981" stroke-width="0.6" stroke-opacity="0.35"/>
+<text x="650" y="104" class="code">for _ in range(num_steps):</text>
+<text x="650" y="120" class="code">wp.launch(step, dim=N, inputs=[pos, vel])</text>
+
+<!-- Annotations below cards -->
+<text x="168" y="174" class="ann">Allocate GPU memory for scalars,</text>
+<text x="168" y="188" class="ann">vectors, and matrices</text>
+
+<text x="472" y="174" class="ann">JIT-compiled to CUDA C++ — results are</text>
+<text x="472" y="188" class="ann">written back through array arguments</text>
+
+<text x="784" y="174" class="ann">Sequence kernel launches to</text>
+<text x="784" y="188" class="ann">build up the computation</text>
+
+</svg>
