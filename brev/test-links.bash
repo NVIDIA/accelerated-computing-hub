@@ -56,7 +56,7 @@ if ! command -v lychee &> /dev/null; then
     exit 1
 fi
 
-REPO_ROOT="$(pwd)"
+REPO_ROOT="$(realpath "$(pwd)")"
 TARGET_PATHS=("$@")
 
 # Validate all paths exist and are inside the repo
@@ -67,8 +67,12 @@ for target in "${TARGET_PATHS[@]}"; do
         echo -e "${RED}Error: Path '$target' does not exist${NC}"
         exit 1
     fi
-    rel="$(realpath --relative-to="$REPO_ROOT" "$(realpath "$target")")"
-    if [[ "$rel" == ../* ]]; then
+    target_abs="$(realpath "$target")"
+    if [[ "$target_abs" == "$REPO_ROOT" ]]; then
+        rel="."
+    elif [[ "$target_abs" == "$REPO_ROOT"/* ]]; then
+        rel="${target_abs#"$REPO_ROOT"/}"
+    else
         echo -e "${RED}Error: Path '$target' is not within the current repository${NC}"
         exit 1
     fi
