@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 60"
+     width="620" height="60" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      .state { font-size: 13px; fill: #1e293b; font-style: italic; }
+      .func  { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+    </style>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- ω(0) -->
+  <text x="20" y="40" class="state">&#x3c9;(0)</text>
+
+  <!-- arrow 1 + advance_vorticity_by_dt() -->
+  <line x1="58" y1="37" x2="238" y2="37" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="148" y="28" class="func" text-anchor="middle">advance_vorticity_by_dt()</text>
+
+  <!-- ω(Δt) -->
+  <text x="245" y="40" class="state">&#x3c9;(&#x394;t)</text>
+
+  <!-- arrow 2 + advance_vorticity_by_dt() -->
+  <line x1="297" y1="37" x2="477" y2="37" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="387" y="28" class="func" text-anchor="middle">advance_vorticity_by_dt()</text>
+
+  <!-- ellipsis -->
+  <text x="485" y="40" class="state">&#x22ef;</text>
+
+  <!-- arrow 3 (unlabeled) -->
+  <line x1="503" y1="37" x2="548" y2="37" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+
+  <!-- ω(T) -->
+  <text x="555" y="40" class="state">&#x3c9;(T)</text>
+</svg>
