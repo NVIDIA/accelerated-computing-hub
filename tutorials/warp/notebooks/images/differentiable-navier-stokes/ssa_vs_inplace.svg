@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 270"
+     width="840" height="270" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text       { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      .section   { font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .label     { font-size: 11.5px; fill: #334155; text-anchor: middle;
+                   dominant-baseline: central; }
+      .code-c    { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace;
+                   fill: #475569; text-anchor: middle; }
+      .field-box { fill: #fef3c7; stroke: #f59e0b; stroke-width: 1.8; rx: 4; }
+      .grad-box  { fill: #e0e7ff; stroke: #6366f1; stroke-width: 1.2; rx: 3; }
+      .ic-box    { fill: #d1fae5; stroke: #10b981; stroke-width: 1.8; rx: 4; }
+      .out-box   { fill: #dbeafe; stroke: #3b82f6; stroke-width: 1.8; rx: 4; }
+    </style>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#64748b"/>
+    </marker>
+    <marker id="ah-red" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════ Top: Forward Solver (in-place) ═══════ -->
+  <text x="32" y="28" class="section">Forward Solver (in-place)</text>
+
+  <rect x="40"  y="50" width="74"  height="40" class="ic-box"/>
+  <text x="77"  y="70" class="label">IC</text>
+
+  <path d="M 114 70 L 154 70" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="160" y="50" width="100" height="40" class="field-box"/>
+  <text x="210" y="70" class="label">omega_0</text>
+
+  <path d="M 260 62 C 320 24, 440 24, 500 62" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+  <text x="380" y="22" class="code-c">advance_vorticity_by_dt()</text>
+
+  <rect x="500" y="50" width="100" height="40" class="field-box"/>
+  <text x="550" y="70" class="label">omega_1</text>
+
+  <path d="M 500 78 C 440 106, 320 106, 260 78" stroke="#dc2626" stroke-width="2"
+        fill="none" stroke-dasharray="4,3" marker-end="url(#ah-red)"/>
+  <text x="380" y="120" class="code-c">wp.copy()</text>
+
+  <path d="M 600 70 L 664 70" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="670" y="50" width="80" height="40" class="out-box"/>
+  <text x="710" y="70" class="label">Output</text>
+
+  <!-- ═══════ Divider ═══════ -->
+  <line x1="32" y1="136" x2="808" y2="136" stroke="#e2e8f0" stroke-width="1.2"/>
+
+  <!-- ═══════ Bottom: Differentiable Solver (unique arrays) ═══════ -->
+  <text x="32" y="158" class="section">Differentiable Solver (unique arrays per timestep)</text>
+
+  <rect x="40"  y="174" width="74"  height="40" class="ic-box"/>
+  <text x="77"  y="194" class="label">IC</text>
+
+  <path d="M 114 194 L 130 194" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="136" y="174" width="82" height="40" class="field-box"/>
+  <text x="177" y="194" class="label">omega[0]</text>
+
+  <path d="M 218 194 L 234 194" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="240" y="174" width="82" height="40" class="field-box"/>
+  <text x="281" y="194" class="label">omega[1]</text>
+
+  <path d="M 322 194 L 338 194" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="344" y="174" width="82" height="40" class="field-box"/>
+  <text x="385" y="194" class="label">omega[2]</text>
+
+  <path d="M 426 194 L 444 194" stroke="#64748b" stroke-width="1.5" fill="none"/>
+  <text x="454" y="196" class="label">···</text>
+  <path d="M 466 194 L 476 194" stroke="#64748b" stroke-width="1.5"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="482" y="174" width="96" height="40" class="field-box"/>
+  <text x="530" y="194" class="label">omega[T−1]</text>
+
+  <path d="M 578 194 L 594 194" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="600" y="174" width="82" height="40" class="field-box"/>
+  <text x="641" y="194" class="label">omega[T]</text>
+
+  <path d="M 682 194 L 698 194" stroke="#64748b" stroke-width="2"
+        fill="none" marker-end="url(#ah)"/>
+
+  <rect x="704" y="174" width="80" height="40" class="out-box"/>
+  <text x="744" y="194" class="label">Output</text>
+
+  <!-- ═══════ Companion .grad arrays ═══════ -->
+  <rect x="136" y="222" width="82" height="26" class="grad-box"/>
+  <text x="177" y="238" class="code-c" style="font-size:9.5px">omega[0].grad</text>
+
+  <rect x="240" y="222" width="82" height="26" class="grad-box"/>
+  <text x="281" y="238" class="code-c" style="font-size:9.5px">omega[1].grad</text>
+
+  <rect x="344" y="222" width="82" height="26" class="grad-box"/>
+  <text x="385" y="238" class="code-c" style="font-size:9.5px">omega[2].grad</text>
+
+  <rect x="482" y="222" width="96" height="26" class="grad-box"/>
+  <text x="530" y="238" class="code-c" style="font-size:9.5px">omega[T−1].grad</text>
+
+  <rect x="600" y="222" width="82" height="26" class="grad-box"/>
+  <text x="641" y="238" class="code-c" style="font-size:9.5px">omega[T].grad</text>
+</svg>

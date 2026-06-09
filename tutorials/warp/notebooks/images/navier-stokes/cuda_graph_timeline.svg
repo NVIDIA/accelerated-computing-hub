@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 430"
+     width="780" height="430" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text     { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      .title   { font-size: 14.5px; font-weight: 600; fill: #1e293b; }
+      .section { font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .sub     { font-size: 10.5px; font-family: "SF Mono", "Fira Code", Consolas, monospace;
+                 fill: #475569; }
+      .row-lbl { font-size: 11px; font-weight: 600; fill: #475569; text-anchor: end; }
+      .kern    { font-size: 9px; fill: #1e293b; text-anchor: middle;
+                 dominant-baseline: central; }
+      .cpu-tag { font-size: 9px; font-family: "SF Mono", "Fira Code", Consolas, monospace;
+                 fill: #475569; text-anchor: middle; dominant-baseline: central; }
+      .gap-lbl { font-size: 9.5px; fill: #dc2626; }
+      .note    { font-size: 10px; fill: #475569; }
+      .save    { font-size: 9.5px; font-weight: 600; fill: #059669;
+                 text-anchor: middle; dominant-baseline: central; }
+      .replay  { font-size: 11px; font-weight: 700; fill: #059669; }
+      .legend  { font-size: 9.5px; fill: #334155; }
+      .summary { font-size: 10.5px; font-weight: 600; fill: #1e293b; }
+      .time-lbl{ font-size: 9px; fill: #94a3b8; }
+    </style>
+    <marker id="ta" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+      <polygon points="0,0 6,2 0,4" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- ═══════ Title ═══════ -->
+  <text x="390" y="26" text-anchor="middle" class="title">
+    CUDA Graph: Capture Once, Replay Many</text>
+
+  <!-- ═══════ Section 1: Without CUDA Graph ═══════ -->
+  <text x="32" y="54" class="section">Without CUDA Graph</text>
+  <text x="32" y="68" class="sub">10× wp.launch() per step</text>
+
+  <!-- CPU row -->
+  <text x="102" y="97" class="row-lbl">CPU</text>
+  <rect x="110" y="84" width="570" height="22" rx="2"
+        fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+  <!-- 10 CPU launch pulses (8 px wide each, stride 58) -->
+  <rect x="110" y="85" width="8" height="20" rx="1" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.6"/>
+  <rect x="168" y="85" width="8" height="20" rx="1" fill="#fef3c7" stroke="#f59e0b" stroke-width="0.6"/>
+  <rect x="226" y="85" width="8" height="20" rx="1" fill="#d1fae5" stroke="#10b981" stroke-width="0.6"/>
+  <rect x="284" y="85" width="8" height="20" rx="1" fill="#fce7f3" stroke="#ec4899" stroke-width="0.6"/>
+  <rect x="342" y="85" width="8" height="20" rx="1" fill="#d1fae5" stroke="#10b981" stroke-width="0.6"/>
+  <rect x="400" y="85" width="8" height="20" rx="1" fill="#e0e7ff" stroke="#6366f1" stroke-width="0.6"/>
+  <rect x="458" y="85" width="8" height="20" rx="1" fill="#d1fae5" stroke="#10b981" stroke-width="0.6"/>
+  <rect x="516" y="85" width="8" height="20" rx="1" fill="#fce7f3" stroke="#ec4899" stroke-width="0.6"/>
+  <rect x="574" y="85" width="8" height="20" rx="1" fill="#d1fae5" stroke="#10b981" stroke-width="0.6"/>
+  <rect x="632" y="85" width="8" height="20" rx="1" fill="#fef3c7" stroke="#f59e0b" stroke-width="0.6"/>
+
+  <!-- Dashed lines CPU→GPU (K0, K5, K9) -->
+  <line x1="114" y1="106" x2="114" y2="130" stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <line x1="404" y1="106" x2="404" y2="130" stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="2,2"/>
+  <line x1="636" y1="106" x2="636" y2="130" stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="2,2"/>
+
+  <!-- GPU row -->
+  <text x="102" y="143" class="row-lbl">GPU</text>
+  <rect x="110" y="130" width="570" height="22" rx="2"
+        fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+  <!-- Red underlayer — visible only in the 14 px gaps between kernels -->
+  <rect x="110" y="131" width="566" height="20" fill="#fee2e2" rx="1"/>
+
+  <!-- GPU kernel blocks (44 px wide, stride 58) -->
+  <rect x="110" y="131" width="44" height="20" rx="2" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="132" y="141" class="kern">Advect</text>
+  <rect x="168" y="131" width="44" height="20" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="190" y="141" class="kern">R→C</text>
+  <rect x="226" y="131" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="248" y="141" class="kern">FFT</text>
+  <rect x="284" y="131" width="44" height="20" rx="2" fill="#fce7f3" stroke="#ec4899" stroke-width="1.2"/>
+  <text x="306" y="141" class="kern">T</text>
+  <rect x="342" y="131" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="364" y="141" class="kern">FFT</text>
+  <rect x="400" y="131" width="44" height="20" rx="2" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.2"/>
+  <text x="422" y="141" class="kern">k⁻²</text>
+  <rect x="458" y="131" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="480" y="141" class="kern">IFFT</text>
+  <rect x="516" y="131" width="44" height="20" rx="2" fill="#fce7f3" stroke="#ec4899" stroke-width="1.2"/>
+  <text x="538" y="141" class="kern">T</text>
+  <rect x="574" y="131" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="596" y="141" class="kern">IFFT</text>
+  <rect x="632" y="131" width="44" height="20" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="654" y="141" class="kern">C→R</text>
+
+  <!-- Gap legend -->
+  <rect x="110" y="160" width="10" height="10" fill="#fee2e2" stroke="#ef4444" stroke-width="0.6" rx="1"/>
+  <text x="124" y="169" class="gap-lbl">= per-kernel launch overhead (9 gaps per step)</text>
+
+  <!-- Time arrow -->
+  <line x1="110" y1="182" x2="700" y2="182" stroke="#94a3b8" stroke-width="1"
+        marker-end="url(#ta)"/>
+  <text x="708" y="186" class="time-lbl">time</text>
+
+  <!-- ═══════ Divider ═══════ -->
+  <line x1="32" y1="198" x2="748" y2="198" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- ═══════ Section 2: With CUDA Graph ═══════ -->
+  <text x="32" y="220" class="section">With CUDA Graph</text>
+  <text x="32" y="234" class="sub">wp.ScopedCapture() → wp.capture_launch()</text>
+
+  <!-- CPU row -->
+  <text x="102" y="263" class="row-lbl">CPU</text>
+  <rect x="110" y="250" width="570" height="22" rx="2"
+        fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+  <!-- Single replay block -->
+  <rect x="110" y="251" width="80" height="20" rx="2" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.2"/>
+  <text x="150" y="261" class="cpu-tag">replay</text>
+
+  <!-- Reference dashed line at x = 676 (traditional end) -->
+  <line x1="676" y1="246" x2="676" y2="320" stroke="#94a3b8" stroke-width="0.8"
+        stroke-dasharray="4,3"/>
+
+  <!-- GPU row -->
+  <text x="102" y="309" class="row-lbl">GPU</text>
+  <rect x="110" y="296" width="570" height="22" rx="2"
+        fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.8"/>
+  <!-- Green "time saved" region -->
+  <rect x="568" y="297" width="108" height="20" fill="#dcfce7" rx="1"/>
+  <text x="622" y="307" class="save">time saved</text>
+
+  <!-- GPU kernel blocks (packed tight, stride 46 = 44 kernel + 2 gap) -->
+  <rect x="110" y="297" width="44" height="20" rx="2" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2"/>
+  <text x="132" y="307" class="kern">Advect</text>
+  <rect x="156" y="297" width="44" height="20" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="178" y="307" class="kern">R→C</text>
+  <rect x="202" y="297" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="224" y="307" class="kern">FFT</text>
+  <rect x="248" y="297" width="44" height="20" rx="2" fill="#fce7f3" stroke="#ec4899" stroke-width="1.2"/>
+  <text x="270" y="307" class="kern">T</text>
+  <rect x="294" y="297" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="316" y="307" class="kern">FFT</text>
+  <rect x="340" y="297" width="44" height="20" rx="2" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.2"/>
+  <text x="362" y="307" class="kern">k⁻²</text>
+  <rect x="386" y="297" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="408" y="307" class="kern">IFFT</text>
+  <rect x="432" y="297" width="44" height="20" rx="2" fill="#fce7f3" stroke="#ec4899" stroke-width="1.2"/>
+  <text x="454" y="307" class="kern">T</text>
+  <rect x="478" y="297" width="44" height="20" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="1.2"/>
+  <text x="500" y="307" class="kern">IFFT</text>
+  <rect x="524" y="297" width="44" height="20" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="546" y="307" class="kern">C→R</text>
+
+  <!-- Back-to-back note -->
+  <text x="110" y="334" style="font-size:9.5px;font-weight:600;fill:#059669">
+    Eliminates CPU-side launch overhead per kernel</text>
+
+  <!-- Time arrow -->
+  <line x1="110" y1="348" x2="700" y2="348" stroke="#94a3b8" stroke-width="1"
+        marker-end="url(#ta)"/>
+  <text x="708" y="352" class="time-lbl">time</text>
+
+  <!-- ═══════ Legend ═══════ -->
+  <rect x="110" y="372" width="12" height="12" rx="2" fill="#dbeafe" stroke="#3b82f6" stroke-width="0.8"/>
+  <text x="126" y="382" class="legend">Advection</text>
+
+  <rect x="204" y="372" width="12" height="12" rx="2" fill="#fef3c7" stroke="#f59e0b" stroke-width="0.8"/>
+  <text x="220" y="382" class="legend">Data conversion</text>
+
+  <rect x="338" y="372" width="12" height="12" rx="2" fill="#d1fae5" stroke="#10b981" stroke-width="0.8"/>
+  <text x="354" y="382" class="legend">FFT / IFFT</text>
+
+  <rect x="438" y="372" width="12" height="12" rx="2" fill="#fce7f3" stroke="#ec4899" stroke-width="0.8"/>
+  <text x="454" y="382" class="legend">Transpose</text>
+
+  <rect x="538" y="372" width="12" height="12" rx="2" fill="#e0e7ff" stroke="#6366f1" stroke-width="0.8"/>
+  <text x="554" y="382" class="legend">Poisson solve</text>
+
+  <!-- ═══════ Summary ═══════ -->
+  <text x="390" y="416" text-anchor="middle" class="summary">
+    10 kernel launches/step reduced to 1 graph replay, eliminating per-launch CPU overhead</text>
+</svg>
