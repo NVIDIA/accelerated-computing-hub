@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400"
+     width="1000" height="400" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      .col-label  { font-size: 15px; font-weight: 600; fill: #1e293b; text-anchor: middle; }
+      .code-c     { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace;
+                    fill: #475569; text-anchor: middle; }
+      .note       { font-size: 10px; fill: #475569; text-anchor: middle; }
+      /* Column 1 — Memory (amber) */
+      .mem-box    { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2; rx: 4; }
+      .mem-outer  { fill: none; stroke: #f59e0b; stroke-width: 2.5; stroke-dasharray: 6 3; rx: 6; }
+      /* Column 2 — Kernels (blue) */
+      .kern-box   { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; rx: 4; }
+      .kern-outer { fill: none; stroke: #3b82f6; stroke-width: 2.5; stroke-dasharray: 6 3; rx: 6; }
+      /* Column 3 — Orchestration (green) */
+      .orch-box   { fill: #d1fae5; stroke: #10b981; stroke-width: 2; rx: 4; }
+      .orch-outer { fill: none; stroke: #10b981; stroke-width: 2.5; stroke-dasharray: 6 3; rx: 6; }
+      /* Arrows */
+      .arrow      { stroke: #64748b; stroke-width: 2.5; fill: none;
+                    stroke-linecap: round; stroke-linejoin: round;
+                    marker-end: url(#ah); }
+    </style>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- ===== Column 1: Memory (amber) ===== -->
+  <text x="165" y="28" class="col-label">Memory</text>
+  <rect x="30" y="40" width="270" height="310" class="mem-outer"/>
+
+  <rect x="55" y="65" width="220" height="50" class="mem-box"/>
+  <text x="165" y="86" class="code-c">wp.zeros(shape, dtype)</text>
+  <text x="165" y="102" class="note">Allocate GPU array</text>
+
+  <rect x="55" y="135" width="220" height="50" class="mem-box"/>
+  <text x="165" y="156" class="code-c">wp.array(numpy_data)</text>
+  <text x="165" y="172" class="note">NumPy &#x2192; GPU transfer</text>
+
+  <rect x="55" y="205" width="220" height="50" class="mem-box"/>
+  <text x="165" y="226" class="code-c">wp.copy(dst, src)</text>
+  <text x="165" y="242" class="note">Device-to-device copy</text>
+
+  <rect x="55" y="275" width="220" height="50" class="mem-box"/>
+  <text x="165" y="296" class="code-c">array.numpy()</text>
+  <text x="165" y="312" class="note">GPU &#x2192; NumPy transfer</text>
+
+  <!-- ===== Arrow 1&#x2192;2 ===== -->
+  <path d="M 300 195 L 345 195" class="arrow"/>
+
+  <!-- ===== Column 2: Kernels (blue) ===== -->
+  <text x="490" y="28" class="col-label">Kernels</text>
+  <rect x="345" y="40" width="290" height="310" class="kern-outer"/>
+
+  <rect x="370" y="65" width="240" height="50" class="kern-box"/>
+  <text x="490" y="86" class="code-c">@wp.kernel()</text>
+  <text x="490" y="102" class="note">GPU-compiled function</text>
+
+  <rect x="370" y="135" width="240" height="50" class="kern-box"/>
+  <text x="490" y="156" class="code-c">@wp.func()</text>
+  <text x="490" y="172" class="note">Reusable device function</text>
+
+  <!-- ===== Arrow 2&#x2192;3 ===== -->
+  <path d="M 635 195 L 680 195" class="arrow"/>
+
+  <!-- ===== Column 3: Orchestration (green) ===== -->
+  <text x="825" y="28" class="col-label">Orchestration</text>
+  <rect x="680" y="40" width="290" height="310" class="orch-outer"/>
+
+  <rect x="705" y="65" width="240" height="50" class="orch-box"/>
+  <text x="825" y="86" class="code-c">wp.launch(kernel, dim, inputs)</text>
+  <text x="825" y="102" class="note">SIMT launch</text>
+
+  <rect x="705" y="135" width="240" height="50" class="orch-box"/>
+  <text x="825" y="156" class="code-c">wp.launch_tiled(kernel, dim, &#x2026;)</text>
+  <text x="825" y="172" class="note">Tile launch</text>
+
+  <rect x="705" y="205" width="240" height="50" class="orch-box"/>
+  <text x="825" y="226" class="code-c">wp.ScopedCapture()</text>
+  <text x="825" y="242" class="note">CUDA graph capture</text>
+
+  <rect x="705" y="275" width="240" height="50" class="orch-box"/>
+  <text x="825" y="296" class="code-c">wp.capture_launch(graph)</text>
+  <text x="825" y="312" class="note">Replay captured graph</text>
+
+  <!-- Annotations below columns -->
+  <text x="165" y="370" class="note">Allocate GPU memory for scalars,</text>
+  <text x="165" y="384" class="note">vectors, and matrices</text>
+
+  <text x="490" y="370" class="note">JIT-compiled to CUDA C++ &#x2014; results are</text>
+  <text x="490" y="384" class="note">written back through array arguments</text>
+
+  <text x="825" y="370" class="note">Sequence kernel launches to</text>
+  <text x="825" y="384" class="note">build up the computation</text>
+</svg>

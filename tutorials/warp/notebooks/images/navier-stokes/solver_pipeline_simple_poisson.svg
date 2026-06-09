@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400"
+     width="1000" height="400" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      /* Active styles */
+      .step-box   { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
+      .field-box  { fill: #fef3c7; stroke: #f59e0b; stroke-width: 2.5; }
+      /* Muted styles */
+      .step-muted  { fill: #f1f5f9; stroke: #cbd5e1; stroke-width: 2; }
+      .field-muted { fill: #f1f5f9; stroke: #cbd5e1; stroke-width: 2; }
+      /* Text styles */
+      .text-main  { font-size: 13.5px; font-weight: 600; fill: #1e293b; text-anchor: middle; }
+      .text-large { font-size: 18px;   font-weight: 600; fill: #1e293b; text-anchor: middle; }
+      .text-small { font-size: 11.5px; font-style: italic; fill: #475569; text-anchor: middle; }
+      .text-label { font-size: 11.5px; font-style: italic; font-weight: 600;
+                    fill: #475569; text-anchor: middle; }
+      .text-muted { fill: #94a3b8; }
+      /* Arrows */
+      .arrow       { stroke: #64748b; stroke-width: 2.5; fill: none;
+                     stroke-linecap: round; stroke-linejoin: round;
+                     marker-end: url(#ah); }
+      .arrow-plain { stroke: #64748b; stroke-width: 2.5; fill: none;
+                     stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- 1. ω(t), ψ(t)  [muted] -->
+  <rect x="50" y="160" width="120" height="80" rx="4" class="field-muted"/>
+  <text x="110" y="195" class="text-large text-muted">ω(t)</text>
+  <text x="110" y="220" class="text-large text-muted">ψ(t)</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 170 200 L 230 200" class="arrow"/>
+
+  <!-- 2. Discretization + Time Marching  [muted] -->
+  <rect x="230" y="160" width="220" height="80" rx="4" class="step-muted"/>
+  <text x="340" y="207" class="text-main text-muted">Vorticity Update</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 450 200 L 510 200" class="arrow"/>
+
+  <!-- 3. ω(t+Δt)  [muted] -->
+  <rect x="510" y="160" width="130" height="80" rx="4" class="field-muted"/>
+  <text x="575" y="207" class="text-large text-muted">ω(t+Δt)</text>
+
+  <!-- Arrow 3 -->
+  <path d="M 640 200 L 700 200" class="arrow"/>
+
+  <!-- 4. Fourier Poisson Solver  [ACTIVE] -->
+  <rect x="700" y="160" width="220" height="80" rx="4" class="step-box"/>
+  <text x="810" y="195" class="text-main">Fourier Poisson Solver</text>
+  <text x="810" y="215" class="text-small">for ψ(t+Δt)</text>
+
+  <!-- Return path: down, left, up -->
+  <path d="M 810 240 L 810 320" class="arrow"/>
+  <path d="M 810 320 L 110 320" class="arrow-plain"/>
+  <path d="M 110 320 L 110 240" class="arrow"/>
+
+  <!-- Label on return arrow -->
+  <text x="500" y="352" class="text-label">Next timestep</text>
+</svg>

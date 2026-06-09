@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160"
+     width="680" height="160" style="background:#fff;max-width:100%">
+<style>
+  text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .title      { font-size: 13.5px; font-weight: 600; fill: #1e293b; }
+  .code       { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+  .arr-label  { font-size: 11.5px; fill: #334155; }
+  .note       { font-size: 10px; fill: #475569; }
+  .note-code  { font-size: 10px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+  .var-label  { font-size: 13px; font-weight: 600; text-anchor: middle; }
+  .domain-lbl { font-size: 9.5px; fill: #64748b; text-anchor: middle; }
+</style>
+
+<defs>
+  <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#64748b"/>
+  </marker>
+</defs>
+
+<!-- Title -->
+<text x="340" y="22" class="title" text-anchor="middle">Fourier Poisson Solver Pipeline</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Node 1: ω (spatial, blue)                                      -->
+<!-- Grid: x=38, w=76.  Rows at y=50, 68, 98.  Brackets y=48..114. -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="omega-spatial">
+  <!-- Row 0 -->
+  <rect x="38" y="50" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="42,57 49,53 56,58 63,52 70,56 77,53 84,59 91,54 98,57 105,53 110,56"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Row 1 -->
+  <rect x="38" y="68" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="42,76 49,72 56,77 63,71 70,74 77,78 84,72 91,76 98,73 105,77 110,75"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="76" cy="86" r="1.2" fill="#94a3b8"/>
+  <circle cx="76" cy="90" r="1.2" fill="#94a3b8"/>
+  <circle cx="76" cy="94" r="1.2" fill="#94a3b8"/>
+
+  <!-- Row N-1 -->
+  <rect x="38" y="98" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="42,103 49,108 56,102 63,107 70,104 77,100 84,105 91,109 98,104 105,101 110,104"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Matrix brackets -->
+  <path d="M38,48 L34,48 L34,114 L38,114" fill="none" stroke="#64748b" stroke-width="1"/>
+  <path d="M114,48 L118,48 L118,114 L114,114" fill="none" stroke="#64748b" stroke-width="1"/>
+
+  <!-- Labels -->
+  <text x="76" y="132" class="var-label" fill="#3b82f6">&#x03C9;</text>
+  <text x="76" y="146" class="domain-lbl">spatial</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Arrow 1: 2-D FFT                                               -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="arrow-fft">
+  <line x1="122" y1="81" x2="206" y2="81" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="164" y="73" class="code" text-anchor="middle">2-D FFT</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Node 2: &#x03C9;&#x0302; (spectral, amber)                    -->
+<!-- Grid: x=214, w=76.  Same row positions.                        -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="omega-hat-spectral">
+  <!-- Row 0: broad spectrum, energy peaked around mid-k -->
+  <rect x="214" y="50" width="76" height="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" rx="1.5"/>
+  <g fill="#f59e0b" fill-opacity="0.6">
+    <rect x="220" y="63" width="3" height="1" rx="0.5"/>
+    <rect x="229" y="58" width="3" height="6" rx="0.5"/>
+    <rect x="238" y="54" width="3" height="10" rx="0.5"/>
+    <rect x="247" y="51" width="3" height="13" rx="0.5"/>
+    <rect x="256" y="54" width="3" height="10" rx="0.5"/>
+    <rect x="265" y="57" width="3" height="7" rx="0.5"/>
+    <rect x="274" y="60" width="3" height="4" rx="0.5"/>
+    <rect x="283" y="62" width="3" height="2" rx="0.5"/>
+  </g>
+
+  <!-- Row 1 -->
+  <rect x="214" y="68" width="76" height="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" rx="1.5"/>
+  <g fill="#f59e0b" fill-opacity="0.6">
+    <rect x="220" y="81" width="3" height="1" rx="0.5"/>
+    <rect x="229" y="76" width="3" height="6" rx="0.5"/>
+    <rect x="238" y="73" width="3" height="9" rx="0.5"/>
+    <rect x="247" y="70" width="3" height="12" rx="0.5"/>
+    <rect x="256" y="74" width="3" height="8" rx="0.5"/>
+    <rect x="265" y="77" width="3" height="5" rx="0.5"/>
+    <rect x="274" y="79" width="3" height="3" rx="0.5"/>
+  </g>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="252" cy="86" r="1.2" fill="#94a3b8"/>
+  <circle cx="252" cy="90" r="1.2" fill="#94a3b8"/>
+  <circle cx="252" cy="94" r="1.2" fill="#94a3b8"/>
+
+  <!-- Row N-1 -->
+  <rect x="214" y="98" width="76" height="14" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2" rx="1.5"/>
+  <g fill="#f59e0b" fill-opacity="0.6">
+    <rect x="220" y="108" width="3" height="4" rx="0.5"/>
+    <rect x="229" y="105" width="3" height="7" rx="0.5"/>
+    <rect x="238" y="103" width="3" height="9" rx="0.5"/>
+    <rect x="247" y="100" width="3" height="12" rx="0.5"/>
+    <rect x="256" y="103" width="3" height="9" rx="0.5"/>
+    <rect x="265" y="106" width="3" height="6" rx="0.5"/>
+    <rect x="274" y="108" width="3" height="4" rx="0.5"/>
+    <rect x="283" y="110" width="3" height="2" rx="0.5"/>
+  </g>
+
+  <!-- Matrix brackets -->
+  <path d="M214,48 L210,48 L210,114 L214,114" fill="none" stroke="#64748b" stroke-width="1"/>
+  <path d="M290,48 L294,48 L294,114 L290,114" fill="none" stroke="#64748b" stroke-width="1"/>
+
+  <!-- Labels: ω with hand-drawn hat -->
+  <text x="252" y="132" class="var-label" fill="#f59e0b">&#x03C9;</text>
+  <path d="M247,123 L252,118 L257,123" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="252" y="146" class="domain-lbl">spectral</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Arrow 2: Poisson solve (divide by |k|^2)                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="arrow-poisson">
+  <line x1="298" y1="81" x2="382" y2="81" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="340" y="73" class="note-code" text-anchor="middle">&#xF7; |k|&#xB2;</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Node 3: &#x03C8;&#x0302; (spectral, green)                    -->
+<!-- Bars peaked at low k (the 1/|k|^2 attenuates high modes)      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="psi-hat-spectral">
+  <!-- Row 0: low-k dominated after ÷|k|² -->
+  <rect x="390" y="50" width="76" height="14" fill="#d1fae5" stroke="#10b981" stroke-width="1.2" rx="1.5"/>
+  <g fill="#10b981" fill-opacity="0.6">
+    <rect x="396" y="63" width="3" height="1" rx="0.5"/>
+    <rect x="405" y="52" width="3" height="12" rx="0.5"/>
+    <rect x="414" y="59" width="3" height="5" rx="0.5"/>
+    <rect x="423" y="61" width="3" height="3" rx="0.5"/>
+    <rect x="432" y="63" width="3" height="1" rx="0.5"/>
+  </g>
+
+  <!-- Row 1 -->
+  <rect x="390" y="68" width="76" height="14" fill="#d1fae5" stroke="#10b981" stroke-width="1.2" rx="1.5"/>
+  <g fill="#10b981" fill-opacity="0.6">
+    <rect x="396" y="81" width="3" height="1" rx="0.5"/>
+    <rect x="405" y="70" width="3" height="12" rx="0.5"/>
+    <rect x="414" y="77" width="3" height="5" rx="0.5"/>
+    <rect x="423" y="79" width="3" height="3" rx="0.5"/>
+    <rect x="432" y="81" width="3" height="1" rx="0.5"/>
+  </g>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="428" cy="86" r="1.2" fill="#94a3b8"/>
+  <circle cx="428" cy="90" r="1.2" fill="#94a3b8"/>
+  <circle cx="428" cy="94" r="1.2" fill="#94a3b8"/>
+
+  <!-- Row N-1 -->
+  <rect x="390" y="98" width="76" height="14" fill="#d1fae5" stroke="#10b981" stroke-width="1.2" rx="1.5"/>
+  <g fill="#10b981" fill-opacity="0.6">
+    <rect x="396" y="111" width="3" height="1" rx="0.5"/>
+    <rect x="405" y="100" width="3" height="12" rx="0.5"/>
+    <rect x="414" y="107" width="3" height="5" rx="0.5"/>
+    <rect x="423" y="109" width="3" height="3" rx="0.5"/>
+    <rect x="432" y="111" width="3" height="1" rx="0.5"/>
+  </g>
+
+  <!-- Matrix brackets -->
+  <path d="M390,48 L386,48 L386,114 L390,114" fill="none" stroke="#64748b" stroke-width="1"/>
+  <path d="M466,48 L470,48 L470,114 L466,114" fill="none" stroke="#64748b" stroke-width="1"/>
+
+  <!-- Labels: ψ with hand-drawn hat -->
+  <text x="428" y="132" class="var-label" fill="#10b981">&#x03C8;</text>
+  <path d="M423,123 L428,118 L433,123" fill="none" stroke="#10b981" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="428" y="146" class="domain-lbl">spectral</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Arrow 3: 2-D IFFT                                              -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="arrow-ifft">
+  <line x1="474" y1="81" x2="558" y2="81" stroke="#64748b" stroke-width="1.2" marker-end="url(#ah)"/>
+  <text x="516" y="73" class="code" text-anchor="middle">2-D IFFT</text>
+</g>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Node 4: &#x03C8; (spatial, blue)                               -->
+<!-- Sparklines smoother than ω (stream function is smoother)       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<g id="psi-spatial">
+  <!-- Row 0 -->
+  <rect x="566" y="50" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="570,59 578,57 586,55 594,54 602,54 610,55 618,57 626,58 634,57 638,57"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Row 1 -->
+  <rect x="566" y="68" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="570,77 578,75 586,73 594,72 602,73 610,74 618,76 626,77 634,76 638,76"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="604" cy="86" r="1.2" fill="#94a3b8"/>
+  <circle cx="604" cy="90" r="1.2" fill="#94a3b8"/>
+  <circle cx="604" cy="94" r="1.2" fill="#94a3b8"/>
+
+  <!-- Row N-1 -->
+  <rect x="566" y="98" width="76" height="14" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.2" rx="1.5"/>
+  <polyline points="570,107 578,105 586,103 594,102 602,103 610,105 618,106 626,105 634,104 638,104"
+           fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Matrix brackets -->
+  <path d="M566,48 L562,48 L562,114 L566,114" fill="none" stroke="#64748b" stroke-width="1"/>
+  <path d="M642,48 L646,48 L646,114 L642,114" fill="none" stroke="#64748b" stroke-width="1"/>
+
+  <!-- Labels -->
+  <text x="604" y="132" class="var-label" fill="#3b82f6">&#x03C8;</text>
+  <text x="604" y="146" class="domain-lbl">spatial</text>
+</g>
+
+</svg>

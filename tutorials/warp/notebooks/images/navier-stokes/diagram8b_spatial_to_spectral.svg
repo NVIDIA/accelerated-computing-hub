@@ -1,0 +1,211 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 368" width="680" height="368"
+     style="background:#fff;max-width:100%">
+<style>
+  text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .title      { font-size: 13.5px; font-weight: 600; fill: #1e293b; }
+  .code       { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+  .arr-label  { font-size: 11.5px; fill: #334155; }
+  .cell-idx   { font-size: 10.5px; font-family: "SF Mono", Consolas, monospace;
+                fill: #1e293b; text-anchor: middle; dominant-baseline: central; }
+  .range-lbl  { font-size: 10px; font-family: "SF Mono", Consolas, monospace;
+                fill: #1e293b; text-anchor: middle; dominant-baseline: central; }
+  .tile-lbl   { font-size: 11px; font-weight: 600; fill: #1e293b; text-anchor: middle; }
+  .block-lbl  { font-size: 10px; fill: #475569; }
+  .note       { font-size: 10px; fill: #475569; }
+  .note-code  { font-size: 10px; font-family: "SF Mono", Consolas, monospace; fill: #475569; }
+</style>
+
+<defs>
+  <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#64748b"/>
+  </marker>
+  <marker id="ah-lg" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+    <path d="M0,0 L10,3.5 L0,7Z" fill="#64748b"/>
+  </marker>
+</defs>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Title + Launch code                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<text x="340" y="20" class="title" text-anchor="middle">Spatial → Spectral: Row-wise tile_fft() on an N×N Grid</text>
+<text x="340" y="36" class="code" text-anchor="middle">wp.launch_tiled(fft_tiled, dim=[N, 1], block_dim=N//2)</text>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- LEFT: Spatial Domain                                            -->
+<!-- Grid: x=60, w=130.  Rows at y=96,124,152,200 (h=22, step=28). -->
+<!-- Brackets: x=54/196, y=94..224 → 130×130 square frame.          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<g id="input">
+  <text x="60" y="54" class="arr-label" style="font-weight:600">Spatial Domain</text>
+  <text x="60" y="68" class="note-code">spatial[row, col]</text>
+  <text x="125" y="84" class="note-code" text-anchor="middle">col = 0, 1, …, N-1</text>
+
+  <!-- Row 0 (blue) -->
+  <rect x="60" y="96" width="130" height="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8" rx="2"/>
+  <text x="46" y="107" class="note-code" style="text-anchor:end">0</text>
+
+  <!-- Sparkline: vorticity-like data — broad bump + gentle variation -->
+  <polyline points="60,108 70,107 80,104 90,101 100,99 110,100 120,104
+                    130,109 140,113 150,112 160,108 170,105 180,104 190,106"
+           fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Row 1 (amber) -->
+  <rect x="60" y="124" width="130" height="22" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8" rx="2"/>
+  <text x="46" y="135" class="note-code" style="text-anchor:end">1</text>
+
+  <!-- Sparkline: hump then dip, non-periodic -->
+  <polyline points="60,135 70,137 80,140 90,142 100,140 110,136 120,131
+                    130,128 140,127 150,129 160,132 170,135 180,137 190,136"
+           fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Row 2 (green) -->
+  <rect x="60" y="152" width="130" height="22" fill="#d1fae5" stroke="#10b981" stroke-width="1.8" rx="2"/>
+  <text x="46" y="163" class="note-code" style="text-anchor:end">2</text>
+
+  <!-- Sparkline: gentle slope with wiggles -->
+  <polyline points="60,170 70,168 80,166 90,163 100,160 110,158 120,159
+                    130,161 140,163 150,165 160,167 170,168 180,169 190,168"
+           fill="none" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="125" cy="181" r="1.5" fill="#94a3b8"/>
+  <circle cx="125" cy="187" r="1.5" fill="#94a3b8"/>
+  <circle cx="125" cy="193" r="1.5" fill="#94a3b8"/>
+  <text x="46" y="187" class="note-code" style="text-anchor:end">⋮</text>
+
+  <!-- Row N-1 (pink) -->
+  <rect x="60" y="200" width="130" height="22" fill="#fce7f3" stroke="#ec4899" stroke-width="1.8" rx="2"/>
+  <text x="46" y="211" class="note-code" style="text-anchor:end">N-1</text>
+
+  <!-- Sparkline: more turbulent / choppy region -->
+  <polyline points="60,211 70,207 80,212 90,216 100,210 110,205 120,207
+                    130,212 140,216 150,213 160,208 170,205 180,207 190,210"
+           fill="none" stroke="#ec4899" stroke-width="1.5" stroke-opacity="0.7"
+           stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- Matrix brackets (130×130 square) -->
+  <path d="M60,94 L54,94 L54,224 L60,224" fill="none" stroke="#64748b" stroke-width="1.2"/>
+  <path d="M190,94 L196,94 L196,224 L190,224" fill="none" stroke="#64748b" stroke-width="1.2"/>
+</g>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- MIDDLE: Pipeline arrow                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<g id="pipeline">
+  <text x="340" y="147" class="code" text-anchor="middle" style="fill:#1e293b">tile_load → tile_fft → tile_store</text>
+  <line x1="210" y1="159" x2="456" y2="159" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-lg)"/>
+  <text x="340" y="175" class="note" text-anchor="middle">N blocks, one per row, N/2 threads each</text>
+</g>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- RIGHT: Frequency Domain                                         -->
+<!-- Grid: x=490, w=130.  Same row positions as left.                -->
+<!-- Brackets: x=484/626, y=94..224 → 130×130 square frame.         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<g id="output">
+  <text x="490" y="54" class="arr-label" style="font-weight:600">Frequency Domain</text>
+  <text x="490" y="68" class="note-code">freq[row, col]</text>
+  <text x="555" y="84" class="note-code" text-anchor="middle">col = 0, 1, …, N-1</text>
+
+  <!-- Row 0 (blue) -->
+  <rect x="490" y="96" width="130" height="22" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8" rx="2"/>
+  <text x="476" y="107" class="note-code" style="text-anchor:end">0</text>
+
+  <!-- Frequency bars: spectrum peaked at low-k -->
+  <g fill="#3b82f6" fill-opacity="0.6">
+    <rect x="496" y="115" width="3" height="3" rx="1"/>
+    <rect x="516" y="110" width="3" height="8" rx="1"/>
+    <rect x="536" y="102" width="3" height="16" rx="1"/>
+    <rect x="556" y="106" width="3" height="12" rx="1"/>
+    <rect x="576" y="113" width="3" height="5" rx="1"/>
+    <rect x="596" y="116" width="3" height="2" rx="1"/>
+  </g>
+
+  <!-- Row 1 (amber) -->
+  <rect x="490" y="124" width="130" height="22" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8" rx="2"/>
+  <text x="476" y="135" class="note-code" style="text-anchor:end">1</text>
+
+  <!-- Frequency bars: peak shifted to higher k -->
+  <g fill="#f59e0b" fill-opacity="0.6">
+    <rect x="510" y="144" width="3" height="2" rx="1"/>
+    <rect x="528" y="141" width="3" height="5" rx="1"/>
+    <rect x="546" y="137" width="3" height="9" rx="1"/>
+    <rect x="564" y="130" width="3" height="16" rx="1"/>
+    <rect x="582" y="134" width="3" height="12" rx="1"/>
+    <rect x="600" y="142" width="3" height="4" rx="1"/>
+  </g>
+
+  <!-- Row 2 (green) -->
+  <rect x="490" y="152" width="130" height="22" fill="#d1fae5" stroke="#10b981" stroke-width="1.8" rx="2"/>
+  <text x="476" y="163" class="note-code" style="text-anchor:end">2</text>
+
+  <!-- Frequency bars: energy concentrated near k=0 -->
+  <g fill="#10b981" fill-opacity="0.6">
+    <rect x="496" y="169" width="3" height="5" rx="1"/>
+    <rect x="516" y="158" width="3" height="16" rx="1"/>
+    <rect x="536" y="166" width="3" height="8" rx="1"/>
+    <rect x="556" y="172" width="3" height="2" rx="1"/>
+  </g>
+
+  <!-- Vertical ellipsis -->
+  <circle cx="555" cy="181" r="1.5" fill="#94a3b8"/>
+  <circle cx="555" cy="187" r="1.5" fill="#94a3b8"/>
+  <circle cx="555" cy="193" r="1.5" fill="#94a3b8"/>
+  <text x="476" y="187" class="note-code" style="text-anchor:end">⋮</text>
+
+  <!-- Row N-1 (pink) -->
+  <rect x="490" y="200" width="130" height="22" fill="#fce7f3" stroke="#ec4899" stroke-width="1.8" rx="2"/>
+  <text x="476" y="211" class="note-code" style="text-anchor:end">N-1</text>
+
+  <!-- Frequency bars: broad spectrum (many frequencies active) -->
+  <g fill="#ec4899" fill-opacity="0.6">
+    <rect x="494" y="214" width="3" height="8" rx="1"/>
+    <rect x="505" y="211" width="3" height="11" rx="1"/>
+    <rect x="516" y="216" width="3" height="6" rx="1"/>
+    <rect x="527" y="209" width="3" height="13" rx="1"/>
+    <rect x="538" y="215" width="3" height="7" rx="1"/>
+    <rect x="549" y="212" width="3" height="10" rx="1"/>
+    <rect x="560" y="217" width="3" height="5" rx="1"/>
+    <rect x="571" y="213" width="3" height="9" rx="1"/>
+    <rect x="582" y="215" width="3" height="7" rx="1"/>
+    <rect x="593" y="214" width="3" height="8" rx="1"/>
+    <rect x="604" y="218" width="3" height="4" rx="1"/>
+    <rect x="615" y="219" width="3" height="3" rx="1"/>
+  </g>
+
+  <!-- Matrix brackets (130×130 square) -->
+  <path d="M490,94 L484,94 L484,224 L490,224" fill="none" stroke="#64748b" stroke-width="1.2"/>
+  <path d="M620,94 L626,94 L626,224 L620,224" fill="none" stroke="#64748b" stroke-width="1.2"/>
+</g>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!-- Pipeline detail box                                             -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<g id="detail">
+  <rect x="80" y="234" width="520" height="122" rx="6"
+        fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+
+  <text x="96" y="254" class="arr-label" style="font-weight:600">Inside each block (N/2 cooperating threads):</text>
+
+  <!-- Step 1: tile_load -->
+  <text x="96" y="272" class="code" style="fill:#1e293b">t = wp.tile_load(spatial, shape=(1, N), offset=(row, 0))</text>
+  <text x="112" y="284" class="note">load one row from global memory into a register tile</text>
+
+  <!-- Arrow -->
+  <line x1="340" y1="290" x2="340" y2="300" stroke="#64748b" stroke-width="0.7" marker-end="url(#ah)"/>
+
+  <!-- Step 2: tile_fft -->
+  <text x="96" y="310" class="code" style="fill:#1e293b">wp.tile_fft(t)</text>
+  <text x="112" y="322" class="note">cooperatively compute the in-place FFT via cuFFTDx</text>
+
+  <!-- Arrow -->
+  <line x1="340" y1="328" x2="340" y2="338" stroke="#64748b" stroke-width="0.7" marker-end="url(#ah)"/>
+
+  <!-- Step 3: tile_store -->
+  <text x="96" y="348" class="code" style="fill:#1e293b">wp.tile_store(freq, t, offset=(row, 0))</text>
+</g>
+
+</svg>
