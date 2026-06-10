@@ -97,11 +97,15 @@ for sha in $COMMIT_SHAS; do
     if git verify-commit "$sha" 2>/dev/null; then
         echo -e "${GREEN}✓${NC} $SHORT_SHA - $MESSAGE (signed)"
     else
-        # Check if it has a signature at all (even if we can't verify it)
-        if git log -1 --format="%G?" "$sha" 2>/dev/null | grep -q "^[GUX]"; then
-            # G = good, U = good but untrusted, X = good but expired
-            SIGNATURE_STATUS=$(git log -1 --format="%G?" "$sha" 2>/dev/null)
-            echo -e "${YELLOW}⚠${NC} $SHORT_SHA - $MESSAGE (signature present but unverifiable: $SIGNATURE_STATUS)"
+        # git verify-commit can fail even when the commit IS signed: SSH
+        # signatures cannot be verified unless gpg.ssh.allowedSignersFile is
+        # configured, and GPG signatures cannot be verified without the
+        # signer's public key. In both cases `git log --format=%G?` reports
+        # "N" (no signature), so it is not a reliable presence check here.
+        # Instead, look for a signature block directly in the commit object.
+        # CI performs the authoritative verification via the GitHub API.
+        if git cat-file -p "$sha" 2>/dev/null | sed '/^$/q' | grep -q "^gpgsig"; then
+            echo -e "${YELLOW}⚠${NC} $SHORT_SHA - $MESSAGE (signature present but not verifiable locally)"
         else
             echo -e "${RED}✗${NC} $SHORT_SHA - $MESSAGE (NOT signed)"
             UNSIGNED_COMMITS="$UNSIGNED_COMMITS"$'\n'"  - $SHORT_SHA: $MESSAGE"
