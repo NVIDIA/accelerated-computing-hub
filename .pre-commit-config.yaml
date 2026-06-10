@@ -21,11 +21,15 @@ repos:
         pass_filenames: false
         stages: [pre-push]
 
+      # Link checking is flaky (external sites intermittently time out or
+      # rate-limit), so these hooks are manual-only and do not run on commit.
+      # Run on demand with `pre-commit run --hook-stage manual test-links`.
       - id: test-links
         name: Check links in changed markdown and notebooks
         entry: bash brev/test-links.bash
         language: system
         files: '\.(md|ipynb)$'
+        stages: [manual]
 
       - id: test-links-all
         name: Check links in all markdown and notebooks

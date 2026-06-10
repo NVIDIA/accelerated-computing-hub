@@ -1,9 +1,10 @@
 name: PR Comment on Link Check
 
+# Disabled along with the "Test Links" workflow (see test-links.yml). Link
+# checking is flaky, so the automatic link-check PR comment is turned off.
+# Retained for manual dispatch only.
 on:
-  workflow_run:
-    workflows: ["Test Links"]
-    types: [completed]
+  workflow_dispatch:
 
 permissions:
   pull-requests: write
