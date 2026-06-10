@@ -1,11 +1,12 @@
 name: Test Links
 
+# Automatic link checking is disabled: the lychee-based link checks are flaky
+# (external sites intermittently time out or rate-limit, producing spurious CI
+# failures). The workflow is retained and can still be run on demand from the
+# Actions tab via "Run workflow". To check links locally, run
+# `./brev/test-links.bash .`.
 on:
-  push:
-    branches:
-      - '**'
-      - '!gh-readonly-queue/**'
-  merge_group:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-on-${{ github.event_name }}-from-${{ github.ref_name }}

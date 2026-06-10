@@ -102,7 +102,7 @@ The following hooks are configured:
 | **`notebook-format`** | pre-commit | `*.ipynb` | Validates that notebooks are in canonical format (consistent cell metadata, output ordering, etc.) to prevent noisy diffs from editor reformatting. |
 | **`git-lfs`** | pre-commit | Binary files (`*.pptx`, `*.pdf`, `*.png`, `*.jpg`, etc.) | Ensures binary files are tracked by Git LFS rather than committed directly to the repository. |
 | **`git-signatures`** | pre-push | All commits | Verifies that all commits being pushed have valid cryptographic signatures (see [Signing Your Commits](#signing-your-commits)). |
-| **`test-links`** | manual | `*.md`, `*.ipynb` | Checks for broken links in markdown and notebook files. Run manually with `pre-commit run test-links --all-files`. |
+| **`test-links`** | manual | `*.md`, `*.ipynb` | Checks for broken links in markdown and notebook files. Manual-only because link checking is flaky (external sites intermittently time out or rate-limit). Run with `pre-commit run --hook-stage manual test-links --all-files`. |
 
 If a hook fails, fix the issue and re-stage your changes before committing again.
 
@@ -220,11 +220,17 @@ cryptographically signed. Runs on `git push`, not on commit. See
 [GitHub's documentation on commit signature verification](https://docs.github.com/en/authentication/managing-commit-signature-verification)
 for setup instructions.
 
-### `test-links` (pre-commit)
+### `test-links` (manual)
 
 Checks that links in changed Markdown files and Jupyter notebooks are valid
-using [lychee](https://github.com/lycheeverse/lychee). Only files modified in
-the commit are checked.
+using [lychee](https://github.com/lycheeverse/lychee). This hook is **manual**
+and does not run automatically on commit, because link checking is flaky
+(external sites intermittently time out or rate-limit, producing spurious
+failures). Run it explicitly with:
+
+```bash
+pre-commit run --hook-stage manual test-links
+```
 
 ### `test-links-all` (manual)
 
