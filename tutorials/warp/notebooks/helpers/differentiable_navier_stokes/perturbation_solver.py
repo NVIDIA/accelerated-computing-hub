@@ -61,7 +61,7 @@ BLOCK_DIM = N_GRID // 2
 class PoissonFFTBuffers:
     """Complex-valued scratch buffers for the FFT-based Poisson solver.
 
-    The 2-D FFT is decomposed as: row-wise 1-D FFT → transpose → column-wise
+    The 2-D FFT is decomposed as: row-wise 1-D FFT -> transpose -> column-wise
     1-D FFT, using three scratch arrays for intermediate results.  A fourth
     array (``psi_hat``) stores the stream function in Fourier space.
     """
@@ -387,7 +387,7 @@ class OptimalPerturbationSolver:
             out_arr=poisson_fft.scratch_3,
         )
 
-        # Extract real part (no N_GRID^2 normalization — only needed for FFT → IFFT roundtrips)
+        # Extract real part (no N_GRID^2 normalization - only needed for FFT -> IFFT roundtrips)
         wp.launch(
             extract_real_and_normalize,
             dim=(N_GRID, N_GRID),
@@ -534,7 +534,7 @@ class OptimalPerturbationSolver:
         transpose_scratch: wp.array2d[wp.vec2f],
         out_arr: wp.array2d[wp.vec2f],
     ) -> None:
-        """Perform 2-D FFT or IFFT: row-wise 1-D transform → transpose → column-wise 1-D transform."""
+        """Perform 2-D FFT or IFFT: row-wise 1-D transform -> transpose -> column-wise 1-D transform."""
         wp.launch_tiled(
             kernel,
             dim=[N_GRID, 1],
@@ -565,7 +565,7 @@ class OptimalPerturbationSolver:
         # Pack vorticity into complex form for FFT
         wp.launch(copy_float_to_complex, dim=(N_GRID, N_GRID), inputs=[omega], outputs=[fft_buffers.omega_complex])
 
-        # Forward fft_buffers: omega → omega_hat (stored in fft.scratch_3)
+        # Forward fft_buffers: omega -> omega_hat (stored in fft.scratch_3)
         self._fft_2d(
             fft_tiled,
             in_arr=fft_buffers.omega_complex,
@@ -582,7 +582,7 @@ class OptimalPerturbationSolver:
             outputs=[fft_buffers.psi_hat],
         )
 
-        # Inverse FFT: psi_hat → psi (reuses scratch_1-3; safe because FFT/IFFT
+        # Inverse FFT: psi_hat -> psi (reuses scratch_1-3; safe because FFT/IFFT
         # are linear so the adjoint doesn't need the forward intermediates)
         self._fft_2d(
             ifft_tiled,
@@ -671,7 +671,7 @@ class OptimalPerturbationSolver:
             )
             self.tape.zero()
 
-    def train_step(self, lead_steps: int) -> float:
+    def train_step(self) -> float:
         """Run one optimization iteration and return the scalar loss."""
         self.step()
         return float(self.loss.numpy()[0])
@@ -714,13 +714,13 @@ class OptimalPerturbationSolver:
         vlim_delta_omega = max(float(np.abs(delta_omega_np).max()), 1e-8)
         self._img_delta_omega.set_data(delta_omega_np.T)
         self._img_delta_omega.set_clim(-vlim_delta_omega, vlim_delta_omega)
-        self._ax_delta_omega.set_title(f"Optimal vorticity perturbation — iter {iteration}")
+        self._ax_delta_omega.set_title(f"Optimal vorticity perturbation - iter {iteration}")
 
         omega_np = self.omega_timesteps[self.lead_steps].numpy()
         vlim_omega = max(float(np.abs(omega_np).max()), 1e-8)
         self._img_omega.set_data(omega_np.T)
         self._img_omega.set_clim(-vlim_omega, vlim_omega)
-        self._ax_omega.set_title(f"Perturbed vorticity at lead time — iter {iteration}")
+        self._ax_omega.set_title(f"Perturbed vorticity at lead time - iter {iteration}")
 
         plt.pause(0.001)
 
