@@ -1,7 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 AND CC-BY-NC-4.0
-"""Warp kernels and utilities for the differentiable solver (notebook 02).
+"""Warp kernels and utilities for the differentiable Navier-Stokes notebook.
 
-Also provides shared kernels (FFT, Poisson, transpose) used by notebook 01.
 Module-level constants are captured at compile time by tile-based kernels,
 so changing N_GRID requires a kernel cache clear.
 """
@@ -12,7 +11,7 @@ import numpy as np
 import warp as wp
 
 # ---------------------------------------------------------------------------
-# Grid / simulation constants (notebook 02 only; notebook 01 uses utils_forward)
+# Grid / simulation constants.
 # ---------------------------------------------------------------------------
 N_GRID = 256
 LEN = 2.0 * math.pi
@@ -298,7 +297,7 @@ def compute_initial_state(n_spinup, t_lead, seed=42):
         k2i: Precomputed 1/|k|^2, warp float32 array.
     """
     import numpy as np
-    from utils_forward import initialize_decaying_turbulence
+    from helpers.navier_stokes.utils import initialize_decaying_turbulence
 
     n = N_GRID
 
@@ -369,7 +368,7 @@ def load_target_image(image_path, grid_size, blur_sigma=0.0):
             img_np = (img_np - img_min) / (img_max - img_min)
 
     target = VORTICITY_MIN + img_np * (VORTICITY_MAX - VORTICITY_MIN)
-    # Image y=0 at top, simulation y=0 at bottom; transpose so image-x → sim index 0
+    # Image y=0 at top, simulation y=0 at bottom; transpose so image-x -> sim index 0
     target = np.flipud(target).T.copy()
     return target
 

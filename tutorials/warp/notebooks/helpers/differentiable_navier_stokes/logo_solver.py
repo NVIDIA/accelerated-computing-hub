@@ -402,10 +402,6 @@ class VorticityInverseSolver:
         target_image_path: str,
         lead_steps: int = 100,
         curriculum_increment: int = 10,
-        n_grid: int = N_GRID,
-        re: float = RE,
-        dt: float = DT,
-        length: float = LEN,
         blur_sigma: float = 3.0,
         use_cuda_graph: bool | None = False,
     ) -> None:
@@ -413,21 +409,17 @@ class VorticityInverseSolver:
 
         Args:
             target_image_path: Path to the target image.
-            max_steps: Maximum number of simulation steps.
+            lead_steps: Maximum number of simulation steps.
             curriculum_increment: Number of steps to add in each curriculum stage.
-            n_grid: Grid resolution.
-            re: Reynolds number.
-            dt: Time step size.
-            length: Physical domain size.
             blur_sigma: Gaussian blur for smooth edges (0=sharp, 3-10=smooth).
             use_cuda_graph: Enable CUDA graph capture for faster training.
                 None = auto-detect (enable if on CUDA device).
         """
-        self.n = n_grid
-        self.length = length
+        self.n = N_GRID
+        self.length = LEN
         self.h = self.length / self.n
-        self.re = re
-        self.dt = dt
+        self.re = RE
+        self.dt = DT
         self.max_steps = lead_steps
         self.curriculum_increment = curriculum_increment
 
@@ -888,7 +880,7 @@ if __name__ == "__main__":
 
         example = VorticityInverseSolver(
             target_image_path=target_path,
-            max_steps=args.max_steps,
+            lead_steps=args.max_steps,
             curriculum_increment=args.curriculum_increment,
             blur_sigma=args.blur_sigma,
             use_cuda_graph=args.use_cuda_graph,
