@@ -14,6 +14,14 @@ gcc_ver = '13'
 llvm_ver = '18'
 cmake_ver = '3.27.2'
 boost_ver = '1.75.0'
+# Pin stdexec to a commit that is known to compile with the nvc++ from NVHPC 24.3.
+# Newer stdexec revisions on `main` use constructs (e.g. the `__msplice_v` variable
+# template in `__typeinfo.hpp`) that crash the nvc++ 24.3 EDG front-end with a
+# catastrophic internal error, which breaks the Lab 2 senders & receivers exercise.
+# This commit (2026-01-08) is the most recent revision that still both compiles on
+# nvc++ 24.3 (multicore and gpu) and exposes the `stdexec::on(sch, sender)` API the
+# tutorial uses. Bump this together with `nvhpc_ver`.
+stdexec_commit = '433dc54f93ab503b5595c2c7c047c8e9b80b62bd'
 arch = platform.machine()
 
 Stage0 += baseimage(image=f'nvcr.io/nvidia/nvhpc:{nvhpc_ver}-devel-cuda{cuda_ver}-ubuntu{ubuntu_ver}')
@@ -114,7 +122,15 @@ Stage0 += shell(commands=[
   'git clone --depth=1 https://github.com/ericniebler/range-v3.git',
   'cp -r range-v3/include/* /usr/include/',
   'rm -rf range-v3',
-  'git clone --depth=1 https://github.com/nvidia/stdexec.git',
+  # NOTE: stdexec is pinned (see `stdexec_commit` above) because newer revisions
+  #       crash the nvc++ 24.3 front-end. Fetch just the pinned commit to keep the
+  #       checkout shallow.
+  'git init stdexec',
+  'cd stdexec',
+  'git remote add origin https://github.com/nvidia/stdexec.git',
+  f'git fetch --depth=1 origin {stdexec_commit}',
+  'git checkout FETCH_HEAD',
+  'cd -',
   'cp -r stdexec/include/* /usr/include/',
   'rm -rf stdexec',
 
