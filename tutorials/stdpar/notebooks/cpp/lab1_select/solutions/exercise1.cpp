@@ -101,7 +101,9 @@ void bench(std::vector<int>& v, Predicate&& predicate, std::vector<size_t>& inde
         select(v, predicate, index, w);
     }
     auto seconds = std::chrono::duration<double>(clk_t::now() - start).count(); // Duration in [s]
-    // Bandwith for a memcpy:
-    auto gigabytes = 2. * sizeof(int) * (double)v.size() * 1.e-9; // GB
+    // Effective memory traffic: read every element of `v` once and write the
+    // selected elements to `w`. (The `index` scratch array is not counted.)
+    auto selected = std::count_if(std::execution::par, v.begin(), v.end(), predicate);
+    auto gigabytes = sizeof(int) * ((double)v.size() + (double)selected) * 1.e-9; // GB
     std::cerr << "Problem size: " << gigabytes << " GB, Bandwidth [GB/s]: " << (gigabytes * (double)nit / seconds) << std::endl;
 }
