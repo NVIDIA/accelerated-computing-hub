@@ -1,0 +1,8 @@
+# Artifacts generated when the tutorial is run
+notebooks/build/
+notebooks/CMakeLists.txt
+notebooks/swe_step.cpython-*.so
+notebooks/timings.json
+__pycache__/
+*.egg-info/
+*.log

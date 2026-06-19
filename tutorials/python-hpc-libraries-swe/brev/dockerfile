@@ -1,0 +1,150 @@
+# Stage 1: LLVM builder
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04 AS llvm-builder
+ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
+ARG LLVM_TAG=isc2026
+
+ARG LLVM_PARALLEL_LINK_JOBS=2
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update -y \
+ && apt-get install -y --no-install-recommends \
+    git cmake ninja-build lld build-essential ca-certificates python3 python3-dev \
+ && rm -rf /var/lib/apt/lists/*
+RUN git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
+ && cmake -S /src/llvm/llvm -B /src/llvm-build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DLLVM_ENABLE_PROJECTS="clang;lld" \
+      -DLLVM_TARGETS_TO_BUILD="X86;NVPTX" \
+      -DLLVM_ENABLE_ASSERTIONS=OFF \
+      -DLLVM_USE_LINKER=lld \
+      -DLLVM_INSTALL_UTILS=ON \
+      -DLLVM_INCLUDE_TESTS=OFF \
+      -DCLANG_ENABLE_STATIC_ANALYZER=OFF \
+      -DCLANG_ENABLE_ARCMT=OFF \
+      -DLLVM_PARALLEL_LINK_JOBS=${LLVM_PARALLEL_LINK_JOBS} \
+      -DCMAKE_INSTALL_PREFIX=/opt/llvm \
+ && cmake --build /src/llvm-build --target install \
+ && rm -rf /src/llvm /src/llvm-build
+
+# Stage 2: Tutorial image 
+FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+
+ENV ACH_TUTORIAL=python-hpc-libraries-swe \
+    PYTHON_VERSION=3.12 \
+    NSIGHT_SYSTEMS_VERSION=2026.1.1 \
+    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_COMPUTE_VERSION=2025.4.1 \
+    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
+    PIP_ROOT_USER_ACTION=ignore \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    MPLCONFIGDIR=/tmp/matplotlib_cache \
+    VIRTUAL_ENV_DISABLE_PROMPT=1 \
+    PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+
+ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
+    ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu
+
+# Install system packages (needed before pip install for git-based packages)
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    gosu \
+    libglib2.0-0 \
+    socat \
+    sudo \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# Enable passwordless sudo for all users and pass through environment and path
+RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
+ && sed -i -e 's/^Defaults\s*env_reset/Defaults !env_reset/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
+
+# Install Python
+RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python${PYTHON_VERSION} \
+    python${PYTHON_VERSION}-dev \
+    python${PYTHON_VERSION}-venv \
+ && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
+ && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
+ && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -s /usr/local/bin/pip /usr/bin/pip \
+ && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
+ && rm -rf /var/lib/apt/lists/*
+
+# cpp
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    ninja-build \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+ && rm -f /opt/requirements.txt
+
+# Install Nsight Systems and Nsight Compute.
+RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
+ && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
+ && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
+ && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
+ && mkdir -p /usr/local/nvidia/bin \
+ && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
+ && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
+
+# Disable unnecessary default Jupyter extensions.
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+ && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
+
+# LLVM, CppInterOP, CppJIT
+ARG CPPJIT_REPO=https://github.com/aaronj0/cppjit-compres.git
+ARG CPPJIT_TAG=isc2026
+ENV CUDA=/usr/local/cuda-13.1 \
+    CPPJIT=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/cppjit
+
+# Patched LLVM 21.1.8 from the builder stage (install only).
+COPY --from=llvm-builder /opt/llvm /opt/llvm
+
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    zlib1g-dev libzstd-dev \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --depth 1 --branch ${CPPJIT_TAG} ${CPPJIT_REPO} /opt/cppjit-src \
+ && pip install --no-cache-dir --root-user-action=ignore /opt/cppjit-src \
+      --config-settings=cmake.define.LLVM_DIR=/opt/llvm/lib/cmake/llvm \
+      --config-settings=cmake.define.Clang_DIR=/opt/llvm/lib/cmake/clang \
+ && rm -rf /opt/cppjit-src
+
+ENV CPPJIT_ENABLE_CUDA=1
+ENV CPLUS_INCLUDE_PATH=${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/x86_64-linux/include/cccl:${CUDA}/targets/x86_64-linux/include
+ENV LD_LIBRARY_PATH=${CUDA}/lib64:${CUDA}/targets/x86_64-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+
+# Build-time sanity check
+RUN test -f ${CUDA}/nvvm/libdevice/libdevice.10.bc \
+ && /opt/llvm/bin/clang-repl --version >/dev/null \
+ && CPPJIT_ENABLE_CUDA=0 python -c "import cppjit, os; p=os.path.dirname(cppjit.__file__); \
+assert p=='${CPPJIT}', p; \
+assert os.path.exists(p+'/cppyy_backend/lib/libclangCppInterOp.so'), 'CppInterOp .so missing'; \
+print('cppjit layer OK at', p)"
+
+COPY --chmod=0777 . /accelerated-computing-hub
+
+WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
+
+ENTRYPOINT ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]

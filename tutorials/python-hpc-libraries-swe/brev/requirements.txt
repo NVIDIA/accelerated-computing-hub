@@ -1,0 +1,19 @@
+numpy == 2.3.5
+matplotlib == 3.10.9
+psutil == 7.2.2
+
+# Jupyter
+jupyter == 1.1.1
+jupyter-server-proxy == 4.4.0
+jupyterlab == 4.5.4
+jupyterlab-nvidia-nsight == 1.0.0
+jupyterlab-execute-time == 3.3.0
+jupyter-dark-detect == 0.1.0
+nbformat == 5.10.4
+nbconvert == 7.17.1
+
+# Libraries
+jax[cuda13] == 0.10.0
+pyomp == 0.5.1
+nanobind == 2.12.0
+pybind11 == 3.0.4 
