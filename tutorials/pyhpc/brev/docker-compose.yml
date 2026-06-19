@@ -1,9 +1,9 @@
-name: &tutorial-name python-hpc-libraries-swe
+name: &tutorial-name pyhpc
 
 x-config:
-  dockerfile: &dockerfile tutorials/python-hpc-libraries-swe/brev/dockerfile
-  image: &image ghcr.io/nvidia/python-hpc-libraries-swe-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/python-hpc-libraries-swe/notebooks
+  dockerfile: &dockerfile tutorials/pyhpc/brev/dockerfile
+  image: &image ghcr.io/nvidia/pyhpc-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/pyhpc/notebooks
   default-jupyter-url: &default-jupyter-url
   gpu-config: &gpu-config
     privileged: true
