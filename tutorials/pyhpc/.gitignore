@@ -1,8 +1,21 @@
-# Artifacts generated when the tutorial is run
+# Artifacts generated when the tutorial is run.
+#
+# SWE ladder (notebooks 05-10):
 notebooks/build/
 notebooks/CMakeLists.txt
 notebooks/swe_step.cpython-*.so
 notebooks/timings.json
+
+# Kernel / asynchrony notebooks (11-13): %%writefile scripts, Nsight
+# profiler reports, the downloaded text corpus, and rendered plots.
+notebooks/*.py
+!notebooks/swe_core.py
+notebooks/*.nsys-rep
+notebooks/*.sqlite
+notebooks/*.ncu-rep
+notebooks/books__15m.txt
+notebooks/test.png
+
 __pycache__/
 *.egg-info/
 *.log
