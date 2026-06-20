@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - "event/**"
       - "pull-request/[0-9]+"
   schedule:
     # Nightly build at midnight EST (5 AM UTC).
@@ -15,8 +16,19 @@ on:
         required: false
         type: boolean
         default: false
+      tutorials_filter:
+        description: "Space/comma-separated tutorial names to build (empty = all). Default scopes the fork to pyhpc."
+        required: false
+        type: string
+        default: "pyhpc"
   # pull_request is not supported for this workflow due to self-hosted runners
   # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
+
+# Fork scoping: this fork only maintains the pyhpc tutorial image, so by
+# default the build matrix is filtered to pyhpc. Override with the
+# tutorials_filter input (set it empty to build every tutorial).
+env:
+  ACH_TUTORIALS_FILTER: ${{ github.event.inputs.tutorials_filter || 'pyhpc' }}
 
 jobs:
   discover-tutorials:
@@ -35,7 +47,22 @@ jobs:
       - name: Find tutorial directories
         id: find-tutorials
         run: |
-          tutorials=$(brev/discover-tutorials.bash | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          all=$(brev/discover-tutorials.bash)
+          # Optionally filter to a subset (fork default: pyhpc only). An empty
+          # filter keeps every discovered tutorial.
+          filter="${ACH_TUTORIALS_FILTER//,/ }"
+          if [ -n "${filter// }" ]; then
+            selected=""
+            for dir in ${all}; do
+              name=$(basename "${dir}")
+              for want in ${filter}; do
+                if [ "${name}" = "${want}" ]; then selected="${selected}${dir}"$'\n'; fi
+              done
+            done
+          else
+            selected="${all}"
+          fi
+          tutorials=$(printf '%s\n' "${selected}" | jq -R -s -c 'split("\n") | map(select(length > 0))')
           echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
           echo "Found tutorials: ${tutorials}"
 
