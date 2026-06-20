@@ -245,7 +245,7 @@ jobs:
 
             docker buildx bake \
               --progress=plain \
-              --allow=fs.read=/home/runner \
+              --allow=fs.read=* \
               --set "base.output=type=registry" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
