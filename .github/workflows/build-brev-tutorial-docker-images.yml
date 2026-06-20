@@ -135,12 +135,14 @@ jobs:
         run: |
           python3 brev/generate-tagged-docker-composes.py \
             --image-tag "${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
+            --image-owner "${{ github.repository_owner }}" \
             --output-dir "artifacts/commit-specific" \
             --tutorial "${TUTORIAL_NAME}" \
             --type all
 
           python3 brev/generate-tagged-docker-composes.py \
             --image-tag "${DOCKER_TAG_BRANCH}-latest" \
+            --image-owner "${{ github.repository_owner }}" \
             --output-dir "artifacts/branch-latest" \
             --tutorial "${TUTORIAL_NAME}" \
             --type all
