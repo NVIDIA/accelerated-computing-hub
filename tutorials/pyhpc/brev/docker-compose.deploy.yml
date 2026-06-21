@@ -10,7 +10,7 @@ x-config:
   dockerfile: &dockerfile tutorials/pyhpc/brev/dockerfile
   image: &image ghcr.io/nvidia/pyhpc-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/pyhpc/notebooks
-  default-jupyter-url: &default-jupyter-url "/lab/tree/accelerated-computing-hub/tutorials/pyhpc/notebooks/syllabi/pyhpc__cupy_jax_mpi4py_cppinterop_kernels__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/pyhpc/notebooks"
+  default-jupyter-url: &default-jupyter-url "/lab/tree/accelerated-computing-hub/tutorials/pyhpc/notebooks/syllabi/pyhpc__cupy_mpi4py_jax_cppinterop_kernels__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/pyhpc/notebooks"
   gpu-config: &gpu-config
     privileged: true
     ulimits:
