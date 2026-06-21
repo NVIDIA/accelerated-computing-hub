@@ -14,7 +14,7 @@ Brev Launchables of this tutorial should use:
 
 ## Syllabi
 
-- [PyHPC - NumPy, CuPy, JAX, mpi4py, & CUDA Kernels - 8 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_jax_mpi4py_kernels__8_hours.ipynb)
+- [PyHPC - CuPy, JAX, mpi4py, CppInterOp, & CUDA Kernels - 8 Hours](./notebooks/syllabi/pyhpc__cupy_jax_mpi4py_cppinterop_kernels__8_hours.ipynb)
 
 ## Notebooks
 
