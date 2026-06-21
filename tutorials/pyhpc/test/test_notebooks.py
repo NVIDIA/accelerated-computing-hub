@@ -1,7 +1,7 @@
 """
 Test that the tutorial notebooks execute without errors.
 
-The notebooks run as an ordered ladder (00 to 12). For each rung we prefer
+The notebooks run as an ordered ladder (00 to 13). For each rung we prefer
 the filled-in solution notebook when one exists, and otherwise fall back to
 the exercise notebook (the intro/reference notebook 04, the synthesis
 notebook 09, and the mpi4py walkthrough 03 have no separate solution and are
@@ -9,7 +9,7 @@ complete as written).
 
 Ordering matters for the SWE sub-ladder: notebooks 04 to 08 each append a
 row to timings.json and 09 reads them, so 04-08 must run before 09. pytest
-executes the parametrized cases in list order, so listing the rungs 00..12
+executes the parametrized cases in list order, so listing the rungs 00..13
 in order is sufficient.
 """
 
@@ -49,6 +49,7 @@ LADDER_STEMS = [
     "10__power_iteraiton__cupy__asynchrony",
     "11__copy__kernel_authoring",
     "12__book_histogram__kernel_authoring",
+    "13__cpp_interop",
 ]
 ladder = [(stem, _runnable_notebook(stem)) for stem in LADDER_STEMS]
 ladder = [(stem, nb) for stem, nb in ladder if nb is not None]

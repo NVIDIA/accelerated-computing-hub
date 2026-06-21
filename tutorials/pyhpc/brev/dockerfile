@@ -78,6 +78,7 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
  && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
  && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -sf /usr/bin/python${PYTHON_VERSION}-config /usr/bin/python3-config \
  && ln -s /usr/local/bin/pip /usr/bin/pip \
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
@@ -143,7 +144,7 @@ RUN git clone --depth 1 --branch ${CPPJIT_TAG} ${CPPJIT_REPO} /opt/cppjit-src \
  && rm -rf /opt/cppjit-src
 
 ENV CPPJIT_ENABLE_CUDA=1
-ENV CPLUS_INCLUDE_PATH=${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/x86_64-linux/include/cccl:${CUDA}/targets/x86_64-linux/include
+ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/x86_64-linux/include/cccl:${CUDA}/targets/x86_64-linux/include
 ENV LD_LIBRARY_PATH=${CUDA}/lib64:${CUDA}/targets/x86_64-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
 # Build-time sanity check

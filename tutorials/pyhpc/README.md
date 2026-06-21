@@ -55,6 +55,14 @@ Notebooks 04-09 are the Shallow Water Equations "ladder": an intro plus NumPy ba
 | 11 | Copy - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/11__copy__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/11__copy__kernel_authoring__SOLUTION.ipynb) |
 | 12 | Book Histogram - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/12__book_histogram__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/12__book_histogram__kernel_authoring__SOLUTION.ipynb) |
 
+### Python/C++ interoperability
+
+A standalone comparison of several ways to call C and C++ from Python (ctypes, cffi, nanobind, and CppJIT), benchmarked on the different kernels that expose various C++ features.
+
+| # | Notebook | Link | Solution |
+|---|----------|------|----------|
+| 13 | C++ Interop: ctypes, cffi, nanobind, and CppJIT compared | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/13__cpp_interop.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/13__cpp_interop__SOLUTION.ipynb) |
+
 ## The Shallow Water Equations problem
 
 A 1D shallow-water bump pulse: a small mound of water at rest splits into two outgoing wave packets. Two conserved fields (`h`, `hu`) advance under a forward-Euler step. This PDE is small enough to read in full while exhibiting nonlinearity, and a fixed number of steps from the initial condition gives a result we can compare across tools. The full specification is in [`04__swe__intro.ipynb`](./notebooks/04__swe__intro.ipynb).
@@ -73,4 +81,4 @@ Then open JupyterLab on port 8888. The notebooks are self-contained and can be r
 
 ## CppJIT toolchain
 
-Notebook 08 uses CppJIT to automatically bind our Python runtime with CUDA C++, using the clang-repl C++ interpreter and [CppInterOp](https://github.com/compiler-research/CppInterOp). This is currently source built in the [Docker image](./brev/dockerfile) and not a standard `pip install`, so this will only run in the tutorial image. [CppJIT](https://github.com/compiler-research/CppJIT) is the successor to the [cppyy](https://cppyy.readthedocs.io/) automatic bindings tool, and no official CppJIT release is published on PyPI yet.
+Notebook 08 uses CppJIT to automatically bind our Python runtime with CUDA C++, using the clang-repl C++ interpreter and [CppInterOp](https://github.com/compiler-research/CppInterOp). This is currently source built in the [Docker image](./brev/dockerfile) and not a standard `pip install`, so this will only run in the tutorial image. [CppJIT](https://github.com/compiler-research/CppJIT) is the successor to the [cppyy](https://cppyy.readthedocs.io/) automatic bindings tool, and no official CppJIT release is published on PyPI yet (beta release planned for end of summer 2026).

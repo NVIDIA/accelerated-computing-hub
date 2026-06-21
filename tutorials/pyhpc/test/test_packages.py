@@ -100,6 +100,24 @@ def test_cppjit():
     assert cppjit.gbl.cppjit_smoke_add(2, 3) == 5
 
 
+def test_cffi():
+    """cffi declares and calls a C function from the system C library."""
+    from cffi import FFI
+
+    ffi = FFI()
+    ffi.cdef("int abs(int);")
+    libc = ffi.dlopen(None)
+    assert libc.abs(-7) == 7
+
+
+def test_memory_profiler():
+    """memory_profiler samples the memory use of a callable."""
+    from memory_profiler import memory_usage
+
+    mem = memory_usage((sum, ([0] * 100_000,)))
+    assert mem and max(mem) > 0
+
+
 def test_nsightful():
     """nsightful imports and correctly reports a non-interactive context."""
     import nsightful
