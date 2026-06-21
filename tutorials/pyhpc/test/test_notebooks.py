@@ -50,6 +50,7 @@ LADDER_STEMS = [
     "11__asynchrony__power_iteration",
     "12__kernel_authoring__copy",
     "13__kernel_authoring__book_histogram",
+    "14__python_cpp_interop",
 ]
 ladder = [(stem, _runnable_notebook(stem)) for stem in LADDER_STEMS]
 ladder = [(stem, nb) for stem, nb in ladder if nb is not None]

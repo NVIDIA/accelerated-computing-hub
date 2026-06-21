@@ -56,6 +56,14 @@ Notebooks 04-10 are the Shallow Water Equations "ladder": a NumPy baseline, four
 | 12 | Kernel authoring: copy | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/12__kernel_authoring__copy.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/12__kernel_authoring__copy__SOLUTION.ipynb) |
 | 13 | Kernel authoring: book histogram | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/13__kernel_authoring__book_histogram.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/13__kernel_authoring__book_histogram__SOLUTION.ipynb) |
 
+### Python/C++ interoperability
+
+A standalone comparison of several ways to call C and C++ from Python (ctypes, cffi, nanobind, and CppJIT), benchmarked on the different kernels that expose various C++ features.
+
+| # | Notebook | Link | Solution |
+|---|----------|------|----------|
+| 14 | Interop: ctypes, cffi, nanobind, and CppJIT compared | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/14__python_cpp_interop.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/14__python_cpp_interop__SOLUTION.ipynb) |
+
 ## The Shallow Water Equations problem
 
 A 1D shallow-water bump pulse: a small mound of water at rest splits into two outgoing wave packets. Two conserved fields (`h`, `hu`) advance under a forward-Euler step. This PDE is small enough to read in full while exhibiting nonlinearity, and a fixed number of steps from the initial condition gives a result we can compare across tools. The full specification is in [`04__intro.ipynb`](./notebooks/04__intro.ipynb).
