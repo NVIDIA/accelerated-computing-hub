@@ -1,15 +1,15 @@
 """
 Test that the tutorial notebooks execute without errors.
 
-The notebooks run as an ordered ladder (00 to 13). For each rung we prefer
+The notebooks run as an ordered ladder (00 to 12). For each rung we prefer
 the filled-in solution notebook when one exists, and otherwise fall back to
-the exercise notebook (the framing notebooks 04/10, the NumPy reference 05,
-and the mpi4py walkthrough 03 have no separate solution and are complete as
-written).
+the exercise notebook (the intro/reference notebook 04, the synthesis
+notebook 09, and the mpi4py walkthrough 03 have no separate solution and are
+complete as written).
 
-Ordering matters for the SWE sub-ladder: notebooks 05 to 09 each append a
-row to timings.json and 10 reads them, so 05-09 must run before 10. pytest
-executes the parametrized cases in list order, so listing the rungs 00..13
+Ordering matters for the SWE sub-ladder: notebooks 04 to 08 each append a
+row to timings.json and 09 reads them, so 04-08 must run before 09. pytest
+executes the parametrized cases in list order, so listing the rungs 00..12
 in order is sufficient.
 """
 
@@ -36,20 +36,19 @@ def _runnable_notebook(stem):
 
 
 LADDER_STEMS = [
-    "00__numpy_intro__ndarray_basics",
-    "01__numpy_to_cupy__ndarray_basics",
-    "02__memory_spaces__power_iteration",
-    "03__mpi4py__collectives",
-    "04__intro",
-    "05__swe_core__reference_solver",
-    "06__jax__lax_scan",
-    "07__pyomp__parallel_for",
-    "08__nanobind__cpp_kernel",
-    "09__cppjit__gpu_thrust",
-    "10__synthesis",
-    "11__asynchrony__power_iteration",
-    "12__kernel_authoring__copy",
-    "13__kernel_authoring__book_histogram",
+    "00__numpy",
+    "01__cupy",
+    "02__power_iteration__cupy__memory_spaces",
+    "03__mpi4py",
+    "04__swe__intro",
+    "05__swe__jax",
+    "06__swe__pyomp",
+    "07__swe__nanobind",
+    "08__swe__cppjit__thrust",
+    "09__swe__synthesis",
+    "10__power_iteraiton__cupy__asynchrony",
+    "11__copy__kernel_authoring",
+    "12__book_histogram__kernel_authoring",
 ]
 ladder = [(stem, _runnable_notebook(stem)) for stem in LADDER_STEMS]
 ladder = [(stem, nb) for stem, nb in ladder if nb is not None]

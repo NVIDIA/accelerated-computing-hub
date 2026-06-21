@@ -12,18 +12,18 @@ jupyter-dark-detect == 0.1.0
 nbformat == 5.10.4
 nbconvert == 7.17.1
 
-# Programming models and interop (notebooks 05-10: the SWE ladder)
+# Programming models and interop (notebooks 04-09: the SWE ladder)
 jax[cuda13] == 0.10.0
 pyomp == 0.5.1
 nanobind == 2.12.0
 pybind11 == 3.0.4
 
-# CuPy and CUDA kernels (notebooks 00-02, 11-13: ported accelerated-python exercises)
+# CuPy and CUDA kernels (notebooks 00-02, 10-12: ported accelerated-python exercises)
 cupy-cuda13x == 13.6.0
 numba-cuda[cu13] == 0.28.2
 cuda-cccl[test-cu13] == 0.4.5
 
-# NVIDIA developer tools (notebooks 11-13: Nsight Systems / Nsight Compute profiling)
+# NVIDIA developer tools (notebooks 10-12: Nsight Systems / Nsight Compute profiling)
 nvtx == 0.2.14
 nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa5124ebea193f64302058b327f2034ccd8e
 
