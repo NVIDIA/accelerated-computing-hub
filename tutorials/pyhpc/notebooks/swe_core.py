@@ -38,7 +38,8 @@ DRY_TOL = 1e-6     # depth below this is clamped (to avoid division by 0)
 # As this is a canonical asset, allow arbitrary callers to resolve this file's location
 HERE          = Path(__file__).resolve().parent
 TIMINGS_PATH  = str(HERE / "timings.json")
-SWE_STEP_CPP  = str(HERE / "swe_step.cpp")
+SWE_STEP_CPP   = str(HERE / "swe_step.cpp")
+SWE_THRUST_CPP = str(HERE / "swe_thrust_solver.cpp")
 
 
 # --- Initial / boundary conditions -----------------------------------------
