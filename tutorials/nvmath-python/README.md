@@ -34,6 +34,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 | 04. FFT Callbacks | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/04_callbacks.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/04_callbacks_SOLUTION.ipynb) |
 | 05. Device API | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/05_device_api.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/05_device_api_SOLUTION.ipynb) |
 | 06. Direct Sparse Solver | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/06_sparse_solver.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/06_sparse_solver_SOLUTION.ipynb) |
+| 07. Universal Sparse Tensor | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/07_ust.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/nvmath-python/notebooks/07_ust_SOLUTION.ipynb) |
 
 ---
 
@@ -136,6 +137,23 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 - nvmath-python provides high-performance sparse solver backed by NVIDIA cuDSS library
 - Direct methods are suitable for sparse linear systems with specific matrix structures
 - CSR format efficiently stores and manipulates sparse matrices on GPU
+
+---
+
+### 07. Universal Sparse Tensor ([`07_ust.ipynb`](notebooks/07_ust.ipynb))
+
+**Key Topics:**
+
+- Introduction to the Universal Sparse Tensor in nvmath-python
+- Zero-cost interoperability: data-movement-free conversion with e.g. CuPy
+- Common and custom formats: define novel sparsity schemes
+- Transparent caching: avoid JIT/LTO recompilation and replanning
+
+**Key Insights:**
+
+- Decoupling a tensor’s sparsity from its memory storage representation
+- DSL describes how a tensor should be represented in memory
+- Developers focus on the sparsity of a tensor only
 
 ---
 
