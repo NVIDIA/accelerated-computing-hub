@@ -145,7 +145,7 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 **Key Topics:**
 
 - Introduction to the Universal Sparse Tensor in nvmath-python
-- Zero-cost interoperability: data-movement-free conversion with e.g. CuPy
+- Zero-cost interoperability with sparse packages: data-movement-free conversion with e.g. CuPy
 - Common and custom formats: define novel sparsity schemes
 - Transparent caching: avoid JIT/LTO recompilation and replanning
 
