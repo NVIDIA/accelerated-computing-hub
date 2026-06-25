@@ -147,11 +147,11 @@ Please refer to the [nvmath-python documentation](https://docs.nvidia.com/cuda/n
 - Introduction to the Universal Sparse Tensor in nvmath-python
 - Zero-cost interoperability with sparse packages: data-movement-free conversion with e.g. CuPy
 - Common and custom formats: define novel sparsity schemes
-- Transparent caching: avoid JIT/LTO recompilation and replanning
+- Transparent caches: avoid JIT/LTO recompilation and replanning
 
 **Key Insights:**
 
-- Decoupling a tensor’s sparsity from its memory storage representation
+- Decouples a tensor’s sparsity from its memory storage representation
 - DSL describes how a tensor should be represented in memory
 - Developers focus on the sparsity of a tensor only
 
