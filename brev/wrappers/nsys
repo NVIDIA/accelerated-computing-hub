@@ -3,6 +3,10 @@
 UID_="$(id -u)"
 GID_="$(id -g)"
 
+if [ "${ACH_ROOTLESS_PODMAN:-}" = "1" ] && [ "${UID_}" = "0" ]; then
+  exec "${ACH_NSYS_PATH}" "$@"
+fi
+
 sudo -E -n setpriv \
   --reuid="$UID_" --regid="$GID_" --init-groups \
   --inh-caps=+sys_admin,+sys_ptrace \

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script stops Docker containers for a tutorial.
+# This script stops containers for a tutorial.
 #
 # Usage:
 #   ./dev-stop.bash <tutorial-name>
@@ -12,6 +12,9 @@ set -eu
 
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
+
+source "${SCRIPT_PATH}/dev-common.bash"
+setup_container_engine
 
 # Check argument
 if [ $# -ne 1 ]; then
@@ -39,6 +42,6 @@ fi
 
 echo "Stopping tutorial: ${ACH_TUTORIAL}"
 cd ${REPO_ROOT}
-docker compose -f ${DOCKER_COMPOSE} down
+compose -f ${DOCKER_COMPOSE} down
 
 echo "Tutorial ${ACH_TUTORIAL} stopped successfully!"

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script builds Docker containers for tutorials.
+# This script builds containers for tutorials.
 #
 # Usage:
 #   ./dev-build.bash [--no-cache] [<tutorial-name>]
@@ -29,6 +29,9 @@ done
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
+source "${SCRIPT_PATH}/dev-common.bash"
+setup_container_engine
+
 # Function to build a single tutorial
 build_tutorial() {
     local ACH_TUTORIAL_PATH=${1}
@@ -55,7 +58,11 @@ build_tutorial() {
         echo "Dockerfile generated successfully"
     fi
 
-    docker compose --progress=plain -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
+    if [ "${ACH_CONTAINER_ENGINE}" = "docker" ]; then
+        compose --progress=plain -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
+    else
+        compose -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
+    fi
 
     echo "Successfully built image for ${ACH_TUTORIAL}"
     echo ""

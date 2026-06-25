@@ -11,7 +11,11 @@ TUTORIAL_ROOT=/accelerated-computing-hub/tutorials/cuda-cpp
 
 START_TIME=$(date +%s.%N)
 
-nvidia-smi
+if command -v nvidia-smi >/dev/null 2>&1; then
+    nvidia-smi
+else
+    echo "nvidia-smi not found; continuing without GPU inventory"
+fi
 
 if [ $# -gt 0 ]; then
     if [[ "$1" == -* ]] || [[ "$1" == */* ]] || [[ "$1" == *.py ]]; then
