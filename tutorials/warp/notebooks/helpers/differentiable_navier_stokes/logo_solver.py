@@ -31,8 +31,8 @@
 #
 ######################################################################################
 
-import os
 import sys
+from pathlib import Path
 
 import numpy as np
 
@@ -456,7 +456,12 @@ class VorticityInverseSolver:
         self._init_poisson_solver()
 
         # CUDA graph support (only works on CUDA devices)
-        self.use_cuda_graph = use_cuda_graph and wp.get_device().is_cuda
+        device_is_cuda = wp.get_device().is_cuda
+        self.use_cuda_graph = (
+            device_is_cuda
+            if use_cuda_graph is None
+            else use_cuda_graph and device_is_cuda
+        )
         self.graph = None
         self.tape = None
         self.graph_num_steps = None  # Number of steps the current graph was captured for
@@ -793,6 +798,14 @@ class VorticityInverseSolver:
 if __name__ == "__main__":
     import argparse
 
+    notebooks_dir = Path(__file__).resolve().parents[2]
+    default_target = (
+        notebooks_dir
+        / "images"
+        / "differentiable-navier-stokes"
+        / "gtc_logo.png"
+    )
+
     parser = argparse.ArgumentParser(
         description="2-D Navier-Stokes Optimization to Target Image",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -805,8 +818,8 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--target",
-        type=str,
-        default="images/differentiable-navier-stokes/gtc_logo.png",
+        type=Path,
+        default=default_target,
         help="Path to target image.",
     )
     parser.add_argument(
@@ -866,20 +879,12 @@ if __name__ == "__main__":
             can_visualize = True
 
     with wp.ScopedDevice(args.device):
-        # Find target image path
         target_path = args.target
-        if not os.path.exists(target_path):
-            # Try looking in current directory or warp examples
-            import warp.examples
-
-            alt_path = os.path.join(os.path.dirname(__file__), args.target)
-            if os.path.exists(alt_path):
-                target_path = alt_path
-            else:
-                raise FileNotFoundError(f"Target image not found: {args.target}")
+        if not target_path.exists():
+            raise FileNotFoundError(f"Target image not found: {target_path}")
 
         example = VorticityInverseSolver(
-            target_image_path=target_path,
+            target_image_path=str(target_path),
             lead_steps=args.max_steps,
             curriculum_increment=args.curriculum_increment,
             blur_sigma=args.blur_sigma,

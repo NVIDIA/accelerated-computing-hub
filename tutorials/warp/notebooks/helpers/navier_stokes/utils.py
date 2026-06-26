@@ -244,6 +244,9 @@ def validate_transpose(
 
     Returns:
         fig, axes: Matplotlib figure and axes.
+
+    Raises:
+        AssertionError: If an out-of-place kernel produces an incorrect transpose.
     """
     inplace = len(transpose_kernel.adj.args) == 1
 
@@ -293,6 +296,11 @@ def validate_transpose(
     else:
         print(f"FAILED: {n_wrong}/{n_total} elements differ from expected transpose.")
 
+    if not inplace and not passed:
+        raise AssertionError(
+            f"Out-of-place transpose failed: {n_wrong}/{n_total} elements differ from the expected result."
+        )
+
     return fig, axes
 
 
@@ -328,7 +336,7 @@ def validate_diffusion(
     h = L / n_grid
     x = np.linspace(0, L, n_grid, endpoint=False)
     y = np.linspace(0, L, n_grid, endpoint=False)
-    X, Y = np.meshgrid(x, y)
+    X, Y = np.meshgrid(x, y, indexing="ij")
 
     # Analytical fields
     k_squared = kx**2 + ky**2
@@ -435,7 +443,7 @@ def validate_advection(
     h = L / n_grid
     x = np.linspace(0, L, n_grid, endpoint=False)
     y = np.linspace(0, L, n_grid, endpoint=False)
-    X, Y = np.meshgrid(x, y)
+    X, Y = np.meshgrid(x, y, indexing="ij")
 
     # Analytical fields (chosen to give non-zero advection)
     psi_analytical = np.sin(kx * X) * np.sin(ky * Y)
