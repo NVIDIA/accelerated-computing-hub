@@ -2,6 +2,14 @@
 
 This tutorial contains notebooks for learning [NVIDIA Warp](https://github.com/NVIDIA/warp), an open-source Python framework for writing high-performance simulation and graphics code on CPUs and NVIDIA GPUs.
 
+These notebooks can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
+
+- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/warp-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+
+Brev Launchables of this tutorial should use:
+- L40S, L4, or T4 instances.
+- Crusoe or any other provider with Flexible Ports.
+
 ## Notebooks
 
 | Notebook | Description | Colab |
