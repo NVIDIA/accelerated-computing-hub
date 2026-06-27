@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1000" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .step-box { fill: #E3F2FD; stroke: #1A237E; stroke-width: 2; }
+      .field-box { fill: #FFF9C4; stroke: #1A237E; stroke-width: 2.5; }
+      .text-main { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #1A237E; text-anchor: middle; }
+      .text-large { font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; fill: #1A237E; text-anchor: middle; }
+      .text-small { font-family: Arial, sans-serif; font-size: 14px; font-style: italic; fill: #1A237E; text-anchor: middle; }
+      .text-label { font-family: Arial, sans-serif; font-size: 14px; font-style: italic; font-weight: bold; fill: #1976D2; text-anchor: middle; }
+      .text-title { font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; fill: #1A237E; text-anchor: middle; }
+      .arrow { stroke: #1976D2; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrowhead); }
+      .arrow-plain { stroke: #1976D2; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 7 3 L 0 6 Q 2 3 0 0" fill="#1976D2" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="400" fill="white"/>
+
+  <!-- Flow at y=200 -->
+
+  <!-- 1. ω(t), ψ(t) -->
+  <rect x="50" y="160" width="120" height="80" rx="10" class="field-box"/>
+  <text x="110" y="195" class="text-large">ω(t)</text>
+  <text x="110" y="225" class="text-large">ψ(t)</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 170 200 L 230 200" class="arrow"/>
+
+  <!-- 2. Discretization + Time Marching -->
+  <rect x="230" y="160" width="220" height="80" rx="10" class="step-box"/>
+  <text x="340" y="195" class="text-main">Discretization +</text>
+  <text x="340" y="215" class="text-main">Time Marching</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 450 200 L 510 200" class="arrow"/>
+
+  <!-- 3. ω(t+Δt) -->
+  <rect x="510" y="160" width="130" height="80" rx="10" class="field-box"/>
+  <text x="575" y="210" class="text-large">ω(t+Δt)</text>
+
+  <!-- Arrow 3 -->
+  <path d="M 640 200 L 700 200" class="arrow"/>
+
+  <!-- 4. Fourier Poisson Solver -->
+  <rect x="680" y="160" width="240" height="80" rx="10" class="step-box"/>
+  <text x="800" y="195" class="text-main">Fourier Poisson Solver</text>
+  <text x="800" y="215" class="text-small">for ψ(t+Δt)</text>
+
+  <!-- Return path -->
+  <!-- Down with arrow from bottom of Poisson Solve box -->
+  <path d="M 800 240 L 800 320" class="arrow"/>
+  <!-- Left -->
+  <path d="M 800 320 L 110 320" class="arrow-plain"/>
+  <!-- Up with arrow -->
+  <path d="M 110 320 L 110 240" class="arrow"/>
+
+  <!-- Label on return arrow -->
+  <text x="500" y="355" class="text-label">Next timestep</text>
+</svg>
