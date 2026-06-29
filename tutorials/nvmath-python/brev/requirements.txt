@@ -1,10 +1,7 @@
 # Pin NVIDIA library versions to match PyTorch requirements from
 # pytorch:2.12.1-cuda13.2-cudnn9-runtime image.
-cuda-toolkit==13.2.*
-nvidia-cublas==13.4.0.1
+cuda-toolkit[cublas,nvrtc,nvjitlink]==13.2.1
 nvidia-nvshmem-cu13==3.4.5
-nvidia-cuda-nvrtc==13.2.*
-nvidia-nvjitlink==13.2.*
 
 # Scientific
 numpy
