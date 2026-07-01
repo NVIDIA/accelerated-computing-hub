@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.12.1-cuda13.2-cudnn9-runtime
+FROM ghcr.io/nvidia/mirrors/pytorch-2.12.1-cuda13.2-cudnn9-runtime
 
 ENV ACH_TUTORIAL=nvmath-python \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
