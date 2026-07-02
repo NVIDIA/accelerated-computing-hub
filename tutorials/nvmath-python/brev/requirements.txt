@@ -3,6 +3,8 @@
 cuda-toolkit[cublas,nvrtc,nvjitlink]==13.2.1
 nvidia-nvshmem-cu13==3.4.5
 
+mkl<2026
+
 # Scientific
 numpy
 scipy
