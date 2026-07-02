@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 252"
+     width="880" height="252" style="background:#fff;max-width:100%">
+<style>
+  text        { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+  .title      { font-size: 13.5px; font-weight: 600; fill: #1e293b; }
+  .box-lbl    { font-size: 11px; font-weight: 600; fill: #1e293b;
+                text-anchor: middle; dominant-baseline: central; }
+  .box-sub    { font-size: 9.5px; fill: #475569;
+                text-anchor: middle; dominant-baseline: central; }
+  .code       { font-family: "SF Mono", "Fira Code", Consolas, monospace; }
+  .ann        { font-size: 9.5px; fill: #475569; text-anchor: middle; }
+  .note       { font-size: 10px; fill: #94a3b8; font-style: italic; }
+  .rt-item    { font-size: 9px; fill: #475569;
+                font-family: "SF Mono", "Fira Code", Consolas, monospace; }
+  .path-lbl   { font-size: 9.5px; font-weight: 600; }
+</style>
+
+<defs>
+  <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#64748b"/>
+  </marker>
+  <marker id="ah-up" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+    <path d="M0,0 L7,2.5 L0,5Z" fill="#10b981"/>
+  </marker>
+</defs>
+
+<!-- Title -->
+<text x="32" y="22" class="title">Warp Kernel Compilation Pipeline</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 1: @wp.kernel  (blue)                                      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="32" y="68" width="148" height="48" rx="3"
+      fill="#dbeafe" stroke="#3b82f6" stroke-width="1.8"/>
+<text x="106" y="84" class="box-lbl code">@wp.kernel</text>
+<text x="106" y="100" class="box-sub">Python AST</text>
+
+<!-- Arrow 1→2 -->
+<line x1="180" y1="92" x2="198" y2="92"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 2: Code Generation  (amber)                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="198" y="68" width="148" height="48" rx="3"
+      fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8"/>
+<text x="272" y="84" class="box-lbl">Code Generation</text>
+<text x="272" y="100" class="box-sub">AST → C++/CUDA source</text>
+
+<!-- Arrow 2→3 -->
+<line x1="346" y1="92" x2="364" y2="92"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 3: Source Assembly  (green)                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="364" y="68" width="148" height="48" rx="3"
+      fill="#d1fae5" stroke="#10b981" stroke-width="1.8"/>
+<text x="438" y="84" class="box-lbl">Source Assembly</text>
+<text x="438" y="100" class="box-sub code">.cu / .cpp</text>
+
+<!-- Single arrow: Source Assembly → compiler group -->
+<line x1="512" y1="92" x2="530" y2="92"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- Compiler group container (one OR the other) -->
+<rect x="532" y="32" width="164" height="120" rx="4"
+      fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+<!-- "or" label between the two compiler boxes -->
+<text x="614" y="95" class="ann" style="font-style:italic">or</text>
+
+<!-- Annotation under compiler group -->
+<text x="614" y="164" class="ann">produces a compiled module</text>
+<text x="614" y="178" class="ann">(PTX/CUBIN or native .o)</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Native Runtime — feeds into Source Assembly from below          -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="328" y="160" width="220" height="84" rx="3"
+      fill="#f0fdf4" stroke="#10b981" stroke-width="1.2" stroke-dasharray="4,3"/>
+<text x="438" y="176" class="box-lbl">Native Runtime</text>
+<text x="438" y="190" class="box-sub code">builtin.h</text>
+
+<!-- Two-column list of built-in types -->
+<text x="345" y="208" class="rt-item">Mesh</text>
+<text x="345" y="220" class="rt-item">BVH</text>
+<text x="345" y="232" class="rt-item">HashGrid</text>
+
+<text x="445" y="208" class="rt-item">Volume</text>
+<text x="445" y="220" class="rt-item">vec / mat / quat</text>
+<text x="445" y="232" class="rt-item">spatial queries</text>
+
+<!-- Arrow: Native Runtime → Source Assembly (upward) -->
+<line x1="438" y1="160" x2="438" y2="119"
+      stroke="#10b981" stroke-width="1" marker-end="url(#ah-up)"/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 4a: NVRTC — GPU path  (pink)                              -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="540" y="40" width="148" height="40" rx="3"
+      fill="#fce7f3" stroke="#ec4899" stroke-width="1.8"/>
+<text x="614" y="54" class="box-lbl">NVRTC (GPU)</text>
+<text x="614" y="70" class="box-sub code">.cu → PTX / CUBIN</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 4b: LLVM / Clang — CPU path  (indigo)                     -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="540" y="104" width="148" height="40" rx="3"
+      fill="#e0e7ff" stroke="#6366f1" stroke-width="1.8"/>
+<text x="614" y="118" class="box-lbl">LLVM / Clang (CPU)</text>
+<text x="614" y="134" class="box-sub code">.cpp → native .o</text>
+
+<!-- Single arrow: compiler group → Load & Launch -->
+<line x1="696" y1="92" x2="716" y2="92"
+      stroke="#64748b" stroke-width="1" marker-end="url(#ah)"/>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Box 5: Load & Launch  (teal)                                   -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<rect x="716" y="68" width="148" height="48" rx="3"
+      fill="#ccfbf1" stroke="#14b8a6" stroke-width="1.8"/>
+<text x="790" y="84" class="box-lbl">Load &amp; Launch</text>
+<text x="790" y="100" class="box-sub code">wp.launch()</text>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- Annotations under boxes 1, 2, 5                                -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<text x="106" y="164" class="ann">reads your Python source</text>
+<text x="106" y="178" class="ann">parses into an AST</text>
+
+<text x="272" y="164" class="ann">walks AST nodes</text>
+<text x="272" y="178" class="ann">emits fwd + adjoint code</text>
+
+<text x="790" y="164" class="ann">loads compiled binary</text>
+<text x="790" y="178" class="ann">dispatches to device</text>
+
+
+</svg>

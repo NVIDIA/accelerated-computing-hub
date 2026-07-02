@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 480"
+     width="560" height="480" style="background:#fff;max-width:100%">
+  <defs>
+    <style>
+      text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+      .title   { font-size: 13.5px; font-weight: 600; fill: #1e293b; text-anchor: middle; }
+      .label   { font-size: 11.5px; fill: #334155; }
+      .code    { font-size: 11px; font-family: "SF Mono", "Fira Code", Consolas, monospace; fill: #475569; }
+      .note    { font-size: 10px; fill: #475569; }
+    </style>
+    <marker id="ah" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto">
+      <polygon points="0,0 7,2.5 0,5" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="280" y="24" class="title">N × N Structured Grid</text>
+
+  <!-- Grid area: origin (94,40), 16×16 cells, cell=22px, grid=352×352 -->
+  <!-- Cell center at (col,row): x = 94 + col*22 + 11, y = 40 + row*22 + 11 -->
+  <!-- col centers: 105 127 149 171 193 215 237 259 281 303 325 347 369 391 413 435 -->
+  <!-- row centers:  51  73  95 117 139 161 183 205 227 249 271 293 315 337 359 381 -->
+
+  <!-- Vertical grid lines (17 lines, x = 94 to 446) -->
+  <line x1="94"  y1="40" x2="94"  y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="116" y1="40" x2="116" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="138" y1="40" x2="138" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="160" y1="40" x2="160" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="182" y1="40" x2="182" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="204" y1="40" x2="204" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="226" y1="40" x2="226" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="248" y1="40" x2="248" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="270" y1="40" x2="270" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="292" y1="40" x2="292" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="314" y1="40" x2="314" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="336" y1="40" x2="336" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="358" y1="40" x2="358" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="380" y1="40" x2="380" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="402" y1="40" x2="402" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="424" y1="40" x2="424" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="446" y1="40" x2="446" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+
+  <!-- Horizontal grid lines (17 lines, y = 40 to 392) -->
+  <line x1="94" y1="40"  x2="446" y2="40"  stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="62"  x2="446" y2="62"  stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="84"  x2="446" y2="84"  stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="106" x2="446" y2="106" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="128" x2="446" y2="128" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="150" x2="446" y2="150" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="172" x2="446" y2="172" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="194" x2="446" y2="194" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="216" x2="446" y2="216" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="238" x2="446" y2="238" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="260" x2="446" y2="260" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="282" x2="446" y2="282" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="304" x2="446" y2="304" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="326" x2="446" y2="326" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="348" x2="446" y2="348" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="370" x2="446" y2="370" stroke="#94a3b8" stroke-width="0.5"/>
+  <line x1="94" y1="392" x2="446" y2="392" stroke="#94a3b8" stroke-width="0.5"/>
+
+  <!-- Cell-center dots: 16×16 = 256 circles -->
+  <!-- Stencil positions to skip (drawn as colored later):
+       Center:  col 8, row 8 => (281, 227)
+       Up:      col 8, row 7 => (281, 205)
+       Down:    col 8, row 9 => (281, 249)
+       Left:    col 7, row 8 => (259, 227)
+       Right:   col 9, row 8 => (303, 227)
+  -->
+  <!-- Row 0 (y=51) -->
+  <circle cx="105" cy="51" r="2" fill="#1e293b"/><circle cx="127" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="51" r="2" fill="#1e293b"/><circle cx="171" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="51" r="2" fill="#1e293b"/><circle cx="215" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="51" r="2" fill="#1e293b"/><circle cx="259" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="51" r="2" fill="#1e293b"/><circle cx="303" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="51" r="2" fill="#1e293b"/><circle cx="347" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="51" r="2" fill="#1e293b"/><circle cx="391" cy="51" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="51" r="2" fill="#1e293b"/><circle cx="435" cy="51" r="2" fill="#1e293b"/>
+  <!-- Row 1 (y=73) -->
+  <circle cx="105" cy="73" r="2" fill="#1e293b"/><circle cx="127" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="73" r="2" fill="#1e293b"/><circle cx="171" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="73" r="2" fill="#1e293b"/><circle cx="215" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="73" r="2" fill="#1e293b"/><circle cx="259" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="73" r="2" fill="#1e293b"/><circle cx="303" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="73" r="2" fill="#1e293b"/><circle cx="347" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="73" r="2" fill="#1e293b"/><circle cx="391" cy="73" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="73" r="2" fill="#1e293b"/><circle cx="435" cy="73" r="2" fill="#1e293b"/>
+  <!-- Row 2 (y=95) -->
+  <circle cx="105" cy="95" r="2" fill="#1e293b"/><circle cx="127" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="95" r="2" fill="#1e293b"/><circle cx="171" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="95" r="2" fill="#1e293b"/><circle cx="215" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="95" r="2" fill="#1e293b"/><circle cx="259" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="95" r="2" fill="#1e293b"/><circle cx="303" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="95" r="2" fill="#1e293b"/><circle cx="347" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="95" r="2" fill="#1e293b"/><circle cx="391" cy="95" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="95" r="2" fill="#1e293b"/><circle cx="435" cy="95" r="2" fill="#1e293b"/>
+  <!-- Row 3 (y=117) -->
+  <circle cx="105" cy="117" r="2" fill="#1e293b"/><circle cx="127" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="117" r="2" fill="#1e293b"/><circle cx="171" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="117" r="2" fill="#1e293b"/><circle cx="215" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="117" r="2" fill="#1e293b"/><circle cx="259" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="117" r="2" fill="#1e293b"/><circle cx="303" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="117" r="2" fill="#1e293b"/><circle cx="347" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="117" r="2" fill="#1e293b"/><circle cx="391" cy="117" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="117" r="2" fill="#1e293b"/><circle cx="435" cy="117" r="2" fill="#1e293b"/>
+  <!-- Row 4 (y=139) -->
+  <circle cx="105" cy="139" r="2" fill="#1e293b"/><circle cx="127" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="139" r="2" fill="#1e293b"/><circle cx="171" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="139" r="2" fill="#1e293b"/><circle cx="215" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="139" r="2" fill="#1e293b"/><circle cx="259" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="139" r="2" fill="#1e293b"/><circle cx="303" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="139" r="2" fill="#1e293b"/><circle cx="347" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="139" r="2" fill="#1e293b"/><circle cx="391" cy="139" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="139" r="2" fill="#1e293b"/><circle cx="435" cy="139" r="2" fill="#1e293b"/>
+  <!-- Row 5 (y=161) -->
+  <circle cx="105" cy="161" r="2" fill="#1e293b"/><circle cx="127" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="161" r="2" fill="#1e293b"/><circle cx="171" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="161" r="2" fill="#1e293b"/><circle cx="215" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="161" r="2" fill="#1e293b"/><circle cx="259" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="161" r="2" fill="#1e293b"/><circle cx="303" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="161" r="2" fill="#1e293b"/><circle cx="347" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="161" r="2" fill="#1e293b"/><circle cx="391" cy="161" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="161" r="2" fill="#1e293b"/><circle cx="435" cy="161" r="2" fill="#1e293b"/>
+  <!-- Row 6 (y=183) -->
+  <circle cx="105" cy="183" r="2" fill="#1e293b"/><circle cx="127" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="183" r="2" fill="#1e293b"/><circle cx="171" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="183" r="2" fill="#1e293b"/><circle cx="215" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="183" r="2" fill="#1e293b"/><circle cx="259" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="183" r="2" fill="#1e293b"/><circle cx="303" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="183" r="2" fill="#1e293b"/><circle cx="347" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="183" r="2" fill="#1e293b"/><circle cx="391" cy="183" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="183" r="2" fill="#1e293b"/><circle cx="435" cy="183" r="2" fill="#1e293b"/>
+  <!-- Row 7 (y=205) — skip col 8 (281,205) = up neighbor -->
+  <circle cx="105" cy="205" r="2" fill="#1e293b"/><circle cx="127" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="205" r="2" fill="#1e293b"/><circle cx="171" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="205" r="2" fill="#1e293b"/><circle cx="215" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="205" r="2" fill="#1e293b"/><circle cx="259" cy="205" r="2" fill="#1e293b"/>
+  <!-- skip cx=281 (up neighbor) -->
+  <circle cx="303" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="205" r="2" fill="#1e293b"/><circle cx="347" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="205" r="2" fill="#1e293b"/><circle cx="391" cy="205" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="205" r="2" fill="#1e293b"/><circle cx="435" cy="205" r="2" fill="#1e293b"/>
+  <!-- Row 8 (y=227) — skip col 7 (259), col 8 (281), col 9 (303) = left, center, right -->
+  <circle cx="105" cy="227" r="2" fill="#1e293b"/><circle cx="127" cy="227" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="227" r="2" fill="#1e293b"/><circle cx="171" cy="227" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="227" r="2" fill="#1e293b"/><circle cx="215" cy="227" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="227" r="2" fill="#1e293b"/>
+  <!-- skip cx=259 (left), cx=281 (center), cx=303 (right) -->
+  <circle cx="325" cy="227" r="2" fill="#1e293b"/><circle cx="347" cy="227" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="227" r="2" fill="#1e293b"/><circle cx="391" cy="227" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="227" r="2" fill="#1e293b"/><circle cx="435" cy="227" r="2" fill="#1e293b"/>
+  <!-- Row 9 (y=249) — skip col 8 (281,249) = down neighbor -->
+  <circle cx="105" cy="249" r="2" fill="#1e293b"/><circle cx="127" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="249" r="2" fill="#1e293b"/><circle cx="171" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="249" r="2" fill="#1e293b"/><circle cx="215" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="249" r="2" fill="#1e293b"/><circle cx="259" cy="249" r="2" fill="#1e293b"/>
+  <!-- skip cx=281 (down neighbor) -->
+  <circle cx="303" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="249" r="2" fill="#1e293b"/><circle cx="347" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="249" r="2" fill="#1e293b"/><circle cx="391" cy="249" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="249" r="2" fill="#1e293b"/><circle cx="435" cy="249" r="2" fill="#1e293b"/>
+  <!-- Row 10 (y=271) -->
+  <circle cx="105" cy="271" r="2" fill="#1e293b"/><circle cx="127" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="271" r="2" fill="#1e293b"/><circle cx="171" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="271" r="2" fill="#1e293b"/><circle cx="215" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="271" r="2" fill="#1e293b"/><circle cx="259" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="271" r="2" fill="#1e293b"/><circle cx="303" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="271" r="2" fill="#1e293b"/><circle cx="347" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="271" r="2" fill="#1e293b"/><circle cx="391" cy="271" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="271" r="2" fill="#1e293b"/><circle cx="435" cy="271" r="2" fill="#1e293b"/>
+  <!-- Row 11 (y=293) -->
+  <circle cx="105" cy="293" r="2" fill="#1e293b"/><circle cx="127" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="293" r="2" fill="#1e293b"/><circle cx="171" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="293" r="2" fill="#1e293b"/><circle cx="215" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="293" r="2" fill="#1e293b"/><circle cx="259" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="293" r="2" fill="#1e293b"/><circle cx="303" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="293" r="2" fill="#1e293b"/><circle cx="347" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="293" r="2" fill="#1e293b"/><circle cx="391" cy="293" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="293" r="2" fill="#1e293b"/><circle cx="435" cy="293" r="2" fill="#1e293b"/>
+  <!-- Row 12 (y=315) -->
+  <circle cx="105" cy="315" r="2" fill="#1e293b"/><circle cx="127" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="315" r="2" fill="#1e293b"/><circle cx="171" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="315" r="2" fill="#1e293b"/><circle cx="215" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="315" r="2" fill="#1e293b"/><circle cx="259" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="315" r="2" fill="#1e293b"/><circle cx="303" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="315" r="2" fill="#1e293b"/><circle cx="347" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="315" r="2" fill="#1e293b"/><circle cx="391" cy="315" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="315" r="2" fill="#1e293b"/><circle cx="435" cy="315" r="2" fill="#1e293b"/>
+  <!-- Row 13 (y=337) -->
+  <circle cx="105" cy="337" r="2" fill="#1e293b"/><circle cx="127" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="337" r="2" fill="#1e293b"/><circle cx="171" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="337" r="2" fill="#1e293b"/><circle cx="215" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="337" r="2" fill="#1e293b"/><circle cx="259" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="337" r="2" fill="#1e293b"/><circle cx="303" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="337" r="2" fill="#1e293b"/><circle cx="347" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="337" r="2" fill="#1e293b"/><circle cx="391" cy="337" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="337" r="2" fill="#1e293b"/><circle cx="435" cy="337" r="2" fill="#1e293b"/>
+  <!-- Row 14 (y=359) -->
+  <circle cx="105" cy="359" r="2" fill="#1e293b"/><circle cx="127" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="359" r="2" fill="#1e293b"/><circle cx="171" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="359" r="2" fill="#1e293b"/><circle cx="215" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="359" r="2" fill="#1e293b"/><circle cx="259" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="359" r="2" fill="#1e293b"/><circle cx="303" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="359" r="2" fill="#1e293b"/><circle cx="347" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="359" r="2" fill="#1e293b"/><circle cx="391" cy="359" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="359" r="2" fill="#1e293b"/><circle cx="435" cy="359" r="2" fill="#1e293b"/>
+  <!-- Row 15 (y=381) -->
+  <circle cx="105" cy="381" r="2" fill="#1e293b"/><circle cx="127" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="149" cy="381" r="2" fill="#1e293b"/><circle cx="171" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="193" cy="381" r="2" fill="#1e293b"/><circle cx="215" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="237" cy="381" r="2" fill="#1e293b"/><circle cx="259" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="281" cy="381" r="2" fill="#1e293b"/><circle cx="303" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="325" cy="381" r="2" fill="#1e293b"/><circle cx="347" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="369" cy="381" r="2" fill="#1e293b"/><circle cx="391" cy="381" r="2" fill="#1e293b"/>
+  <circle cx="413" cy="381" r="2" fill="#1e293b"/><circle cx="435" cy="381" r="2" fill="#1e293b"/>
+
+  <!--
+    5-point stencil overlay
+    Center (col 8, row 8): (281, 227)
+    Up     (col 8, row 7): (281, 205)
+    Down   (col 8, row 9): (281, 249)
+    Left   (col 7, row 8): (259, 227)
+    Right  (col 9, row 8): (303, 227)
+  -->
+
+  <!-- Arrows from center to each neighbor -->
+  <line x1="281" y1="222" x2="281" y2="210" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="281" y1="232" x2="281" y2="244" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="276" y1="227" x2="264" y2="227" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+  <line x1="286" y1="227" x2="298" y2="227" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- Red neighbor dots (drawn on top of black dots) -->
+  <circle cx="281" cy="205" r="3.5" fill="#ef4444"/>
+  <circle cx="281" cy="249" r="3.5" fill="#ef4444"/>
+  <circle cx="259" cy="227" r="3.5" fill="#ef4444"/>
+  <circle cx="303" cy="227" r="3.5" fill="#ef4444"/>
+
+  <!-- Blue center dot (topmost layer) -->
+  <circle cx="281" cy="227" r="4" fill="#3b82f6"/>
+
+
+  <!-- Bottom annotations -->
+  <text x="280" y="432" class="label" text-anchor="middle" font-size="11.5">16 × 16 structured grid</text>
+  <text x="280" y="449" class="note" text-anchor="middle">Vorticity (&#x3c9;) and stream function (&#x3c8;) evaluated at cell centers</text>
+
+  <!-- Legend -->
+  <circle cx="105" cy="468" r="3.5" fill="#3b82f6"/>
+  <text x="113" y="471" class="note" text-anchor="start">Stencil center (i, j)</text>
+  <circle cx="230" cy="468" r="3.5" fill="#ef4444"/>
+  <text x="238" y="471" class="note" text-anchor="start">Direct neighbors</text>
+  <circle cx="345" cy="468" r="2" fill="#1e293b"/>
+  <text x="351" y="471" class="note" text-anchor="start">Cell-center grid points</text>
+</svg>
