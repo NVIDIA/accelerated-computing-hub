@@ -19,7 +19,6 @@ x-config:
               count: all
               capabilities: [gpu]
   common-env: &common-env
-    BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
     ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
