@@ -55,7 +55,7 @@ services:
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
     command: *default-jupyter-url
     ports:
-      - "127.0.0.1:8888:8888" # JupyterLab
+      - "0.0.0.0:8888:8888" # JupyterLab
 
 volumes:
   accelerated-computing-hub:
