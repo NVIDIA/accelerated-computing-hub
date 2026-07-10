@@ -22,7 +22,6 @@ jupyter-dark-detect == 0.1.0
 # Jupyter
 jupyter-server-proxy
 jupyterlab
-jupyterlab-nvidia-nsight
 jupyterlab-execute-time
 ipywidgets
 ipykernel
