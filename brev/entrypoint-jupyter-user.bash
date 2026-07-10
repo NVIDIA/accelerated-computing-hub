@@ -6,8 +6,8 @@ set -euo pipefail
 
 export HOME="${ACH_TARGET_HOME}"
 
-# Generate Jupyter plugin settings
-/accelerated-computing-hub/brev/jupyter-generate-plugin-settings.bash
+# Generate JupyterLab user settings
+/accelerated-computing-hub/brev/jupyter-generate-settings.bash
 
 mkdir -p /accelerated-computing-hub/logs
 
