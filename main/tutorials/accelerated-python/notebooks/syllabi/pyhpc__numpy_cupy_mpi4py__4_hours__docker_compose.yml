@@ -58,13 +58,13 @@ services:
       <<: *common-env
       ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8081"
     ports:
-      - "127.0.0.1:8888:8888" # JupyterLab
+      - "0.0.0.0:8888:8888" # JupyterLab
   nsys:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     ports:
-      - "127.0.0.1:8080:8080" # HTTP
+      - "0.0.0.0:8080:8080" # HTTP
       - "0.0.0.0:3478:3478" # TURN
   ncu:
     <<: [*gpu-config, *common-service, *persistent-service]
@@ -75,7 +75,7 @@ services:
       HTTP_PORT: "8081"
       TURN_PORT: "3479"
     ports:
-      - "127.0.0.1:8081:8081" # HTTP
+      - "0.0.0.0:8081:8081" # HTTP
       - "0.0.0.0:3479:3479" # TURN
 
 volumes:
