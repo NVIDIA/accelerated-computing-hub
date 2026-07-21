@@ -13,6 +13,7 @@ notebooks/timings.json
 notebooks/*.py
 notebooks/solutions/*.py
 !notebooks/swe_core.py
+!notebooks/mpi4py_launcher.py
 notebooks/*.nsys-rep
 notebooks/solutions/*.nsys-rep
 notebooks/*.sqlite

@@ -116,6 +116,10 @@ mkdir -p "$(dirname "${OUTPUT}")"
     echo "ACH_USER = \"${ACH_USER:-ach}\""
     echo "ACH_UID = \"${ACH_UID:-1000}\""
     echo "ACH_GID = \"${ACH_GID:-1000}\""
+    if [ "${ACH_TUTORIAL}" = "pyhpc" ]; then
+        echo "PMIX_MCA_gds = \"hash\""
+        echo "PMIX_MCA_psec = \"native\""
+    fi
 } > "${OUTPUT}"
 
 echo "Generated CSCS EDF: ${OUTPUT}"
