@@ -16,15 +16,20 @@ workflow to succeed before starting a Daint run.
 
 ## Use the published image on Daint
 
-From the repository checkout, set the account and EDF path:
+From the repository checkout, download the branch-specific EDF published by
+GitHub CI, then set the account and EDF path:
 
 ```bash
 export CSCS_ACCOUNT="YOUR_ACCOUNT"
 export ACH_REPO="$(git rev-parse --show-toplevel)"
-export CSCS_EDF="${ACH_REPO}/tutorials/pyhpc/brev/cscs.toml"
+export ACH_BRANCH="event/2026-07-cscs-summer-school"
+export CSCS_EDF="${SCRATCH}/pyhpc-${ACH_BRANCH//\//-}.toml"
+curl -fsSL \
+  "https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_BRANCH}/tutorials/pyhpc/brev/cscs.toml" \
+  --output "${CSCS_EDF}"
 ```
 
-The committed EDF selects the public event image without bind-mounting the
+The generated EDF selects the public event image without bind-mounting a
 checkout, so the source and dependencies always come from the same CI build.
 Slurm Container Engine selects and caches the ARM64 manifest automatically.
 
@@ -45,9 +50,8 @@ For a reproducible run, generate a no-mount EDF pinned to the CI commit tag:
   pyhpc
 ```
 
-The committed and generated EDFs set `PMIX_MCA_gds=hash` and
-`PMIX_MCA_psec=native`, which are the PMIx settings used for clean Slurm MPI
-runs on Daint.
+The generated EDF sets `PMIX_MCA_gds=hash` and `PMIX_MCA_psec=native`, which
+are the PMIx settings used for clean Slurm MPI runs on Daint.
 
 ## Run tests
 

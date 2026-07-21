@@ -71,6 +71,11 @@ DOCKER_COMPOSE=$(prepare_compose_file "${DOCKER_COMPOSE}")
 sed 's/127\.0\.0\.1:/0.0.0.0:/g' "${DOCKER_COMPOSE}" > "${DOCKER_COMPOSE_DEV}"
 
 # Filter out the "volume already exists" warning while preserving all other warnings/errors on stderr
-compose -f ${DOCKER_COMPOSE_DEV} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
+UP_ARGS=(up -d)
+if [ "${ACH_CONTAINER_ENGINE}" = "podman" ]; then
+    UP_ARGS+=(--no-build)
+fi
+compose -f "${DOCKER_COMPOSE_DEV}" "${UP_ARGS[@]}" \
+    2> >(grep -v "already exists but was not created by Docker Compose" >&2)
 
 echo "Tutorial ${ACH_TUTORIAL} started successfully!"

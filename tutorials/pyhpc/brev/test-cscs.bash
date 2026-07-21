@@ -2,12 +2,10 @@
 #
 # Run the PyHPC tutorial validation suite on CSCS Slurm Container Engine.
 #
-# This script is intended to run on a CSCS login node using the committed EDF
-# or a caller-provided CSCS_EDF override.
+# This script is intended to run on a CSCS login node using an EDF published
+# to the generated branch by GitHub CI.
 
 set -euo pipefail
-
-SCRIPT_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)
 
 if [ -z "${CSCS_ACCOUNT:-}" ]; then
     echo "Error: set CSCS_ACCOUNT to the CSCS project/account for srun." >&2
@@ -15,7 +13,8 @@ if [ -z "${CSCS_ACCOUNT:-}" ]; then
 fi
 
 if [ -z "${CSCS_EDF:-}" ]; then
-    CSCS_EDF="${SCRIPT_PATH}/cscs.toml"
+    echo "Error: set CSCS_EDF to a generated-branch EDF file." >&2
+    exit 2
 fi
 
 if [ ! -f "${CSCS_EDF}" ]; then

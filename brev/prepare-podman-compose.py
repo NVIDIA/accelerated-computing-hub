@@ -27,7 +27,7 @@ NVIDIA_LIBRARY_DIRECTORIES = ("/usr/lib/*-linux-gnu", "/usr/lib64")
 def strip_podman_incompatible(value):
     """Remove Compose keys unsupported by the rootless Podman setup."""
     if isinstance(value, dict):
-        for key in ("build", "privileged", "ulimits", "deploy"):
+        for key in ("privileged", "ulimits", "deploy"):
             value.pop(key, None)
         volumes = value.get("volumes")
         if isinstance(volumes, list):
@@ -141,12 +141,20 @@ def add_rootless_gpu_access(data):
             service["environment"] = environment
 
 
+def use_host_network_for_base(data):
+    """Avoid rootless veth creation for the one-shot Podman test service."""
+    base = (data.get("services") or {}).get("base")
+    if base is not None:
+        base["network_mode"] = "host"
+
+
 def prepare(source, destination, repo_root="", bind_repo=False):
     """Write a Podman-compatible copy of source to destination."""
     with open(source, "r", encoding="utf-8") as handle:
         data = yaml.safe_load(handle)
 
     strip_podman_incompatible(data)
+    use_host_network_for_base(data)
     if bind_repo and repo_root:
         replace_repo_volume(data, repo_root)
     add_rootless_gpu_access(data)
