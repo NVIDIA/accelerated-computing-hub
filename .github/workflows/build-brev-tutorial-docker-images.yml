@@ -30,6 +30,7 @@ on:
 env:
   ACH_TUTORIALS_FILTER: ${{ github.event.inputs.tutorials_filter || 'pyhpc' }}
 
+# Prevent an older run from replacing a newer run's branch-latest tag.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -43,7 +44,8 @@ jobs:
       run:
         working-directory: ${{ github.workspace }}
     outputs:
-      tutorials: ${{ steps.find-tutorials.outputs.tutorials }}
+      build-matrix: ${{ steps.find-tutorials.outputs.build-matrix }}
+      publish-matrix: ${{ steps.find-tutorials.outputs.publish-matrix }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -51,6 +53,8 @@ jobs:
       - name: Find tutorial directories
         id: find-tutorials
         run: |
+          set -euo pipefail
+
           all=$(brev/discover-tutorials.bash)
           # Optionally filter to a subset (fork default: pyhpc only). An empty
           # filter keeps every discovered tutorial.
@@ -66,58 +70,112 @@ jobs:
           else
             selected="${all}"
           fi
+
           tutorials=$(printf '%s\n' "${selected}" | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "tutorials=${tutorials}" >> $GITHUB_OUTPUT
+          build_entries=$(
+            while IFS= read -r tutorial; do
+              compose_config=$(docker compose \
+                -f "${tutorial}/brev/docker-compose.yml" \
+                config --format json)
+              architectures=$(jq -c '."x-config".architectures // ["amd64"]' <<< "${compose_config}")
+              large=$(jq -r '."x-config".large // false' <<< "${compose_config}")
+              if ! jq -e 'type == "array" and length > 0 and length == (unique | length) and all(.[]; . == "amd64" or . == "arm64")' \
+                <<< "${architectures}" > /dev/null; then
+                echo "${tutorial}: architectures must contain unique amd64/arm64 values" >&2
+                exit 1
+              fi
+
+              while IFS= read -r architecture; do
+                case "${architecture}" in
+                  amd64)
+                    if [ "${large}" = "true" ]; then
+                      runner=linux-amd64-cpu16
+                    else
+                      runner=linux-amd64-cpu4
+                    fi
+                    ;;
+                  arm64) runner=linux-arm64-cpu16 ;;
+                esac
+                jq -cn \
+                  --arg tutorial "${tutorial}" \
+                  --arg architecture "${architecture}" \
+                  --arg runner "${runner}" \
+                  '{tutorial: $tutorial, architecture: $architecture, runner: $runner}'
+              done < <(jq -r '.[]' <<< "${architectures}")
+            done < <(jq -r '.[]' <<< "${tutorials}")
+          )
+          build_matrix=$(jq -sc '{include: .}' <<< "${build_entries}")
+          publish_matrix=$(jq -cn --argjson tutorials "${tutorials}" \
+            '{include: ($tutorials | map({tutorial: .}))}')
+
+          {
+            echo "build-matrix=${build_matrix}"
+            echo "publish-matrix=${publish_matrix}"
+          } >> "${GITHUB_OUTPUT}"
           echo "Found tutorials: ${tutorials}"
+          echo "Build matrix: ${build_matrix}"
 
   build-and-push:
     needs: discover-tutorials
-    runs-on: linux-amd64-cpu16
-    timeout-minutes: 360
+    runs-on: ${{ matrix.runner }}
     defaults:
       run:
         working-directory: ${{ github.workspace }}
     permissions:
-      contents: write
+      contents: read
       packages: write
-      actions: write
-      statuses: write
     strategy:
-      matrix:
-        tutorial: ${{ fromJson(needs.discover-tutorials.outputs.tutorials) }}
+      matrix: ${{ fromJson(needs.discover-tutorials.outputs.build-matrix) }}
       fail-fast: false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set Git branch variables
+      - name: Set build variables
         run: |
           GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
           # Sanitize branch name for Docker tags (replace invalid characters with hyphens and convert to lowercase)
           DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
           GIT_SHA=${{ github.sha }}
           GIT_SHORT_SHA=${GIT_SHA::7}
-          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> $GITHUB_ENV
-          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> $GITHUB_ENV
-          echo "GIT_SHA=${GIT_SHA}" >> $GITHUB_ENV
-          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> $GITHUB_ENV
-
-      - name: Set image name and tutorial name
-        run: |
-          TUTORIAL_NAME=$(basename ${{ matrix.tutorial }})
+          TUTORIAL_DIR="${{ matrix.tutorial }}"
+          TUTORIAL_NAME=$(basename "${TUTORIAL_DIR}")
+          ARCHITECTURE="${{ matrix.architecture }}"
           IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${TUTORIAL_NAME}-tutorial"
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> $GITHUB_ENV
-          echo "TUTORIAL_NAME=${TUTORIAL_NAME}" >> $GITHUB_ENV
+
+          {
+            echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}"
+            echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}"
+            echo "GIT_SHA=${GIT_SHA}"
+            echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}"
+            echo "TUTORIAL_DIR=${TUTORIAL_DIR}"
+            echo "TUTORIAL_NAME=${TUTORIAL_NAME}"
+            echo "ARCHITECTURE=${ARCHITECTURE}"
+            echo "IMAGE_NAME=${IMAGE_NAME,,}"
+          } >> "${GITHUB_ENV}"
+
+      - name: Verify native runner architecture
+        run: |
+          case "${ARCHITECTURE}" in
+            amd64) expected=x86_64 ;;
+            arm64) expected=aarch64 ;;
+            *) echo "Unsupported architecture: ${ARCHITECTURE}" >&2; exit 1 ;;
+          esac
+          actual=$(uname -m)
+          if [ "${actual}" != "${expected}" ]; then
+            echo "Expected ${expected} runner for ${ARCHITECTURE}, got ${actual}" >&2
+            exit 1
+          fi
 
       - name: Check for HPCCM recipe
         run: |
-          if [ -f "${{ matrix.tutorial }}/brev/docker-recipe.py" ]; then
+          if [ -f "${TUTORIAL_DIR}/brev/docker-recipe.py" ]; then
             HAS_HPCCM=true
           else
             HAS_HPCCM=false
           fi
-          echo "HAS_HPCCM=${HAS_HPCCM}" >> $GITHUB_ENV
+          echo "HAS_HPCCM=${HAS_HPCCM}" >> "${GITHUB_ENV}"
 
       - name: Set up Python (for HPCCM)
         if: env.HAS_HPCCM == 'true'
@@ -134,76 +192,7 @@ jobs:
       - name: Generate Dockerfile from HPCCM recipe
         if: env.HAS_HPCCM == 'true'
         run: |
-          hpccm --recipe ${{ matrix.tutorial }}/brev/docker-recipe.py --format docker > ${{ matrix.tutorial }}/brev/dockerfile
-
-      - name: Generate Docker Compose files
-        run: |
-          python3 brev/generate-tagged-docker-composes.py \
-            --image-tag "${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
-            --image-owner "${{ github.repository_owner }}" \
-            --output-dir "artifacts/commit-specific" \
-            --tutorial "${TUTORIAL_NAME}" \
-            --type all
-
-          python3 brev/generate-tagged-docker-composes.py \
-            --image-tag "${DOCKER_TAG_BRANCH}-latest" \
-            --image-owner "${{ github.repository_owner }}" \
-            --output-dir "artifacts/branch-latest" \
-            --tutorial "${TUTORIAL_NAME}" \
-            --type all
-
-      - name: Upload commit-specific Docker Compose artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
-          path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
-          retention-days: 30
-
-      - name: Push branch-latest Docker Compose to generated branch
-        run: |
-          # Configure git
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Fetch the generated branch
-          git fetch origin generated:generated
-          git checkout generated
-
-          # Create directory structure for this branch and tutorial
-          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
-
-          # Remove only this tutorial's old files (if they exist)
-          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-
-          # Copy this tutorial's generated files
-          cp -r artifacts/branch-latest/${TUTORIAL_NAME} "${GIT_BRANCH_NAME}/tutorials/"
-
-          # Stage only this tutorial's directory
-          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-
-          # Check if there are changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes to commit for ${TUTORIAL_NAME}"
-          else
-            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
-
-            # Push with retry logic for concurrent updates
-            for i in {1..5}; do
-              if git push origin generated; then
-                echo "✓ Successfully pushed to generated branch"
-                break
-              else
-                echo "Push failed (attempt $i/5), pulling and retrying..."
-                git pull --rebase origin generated
-                sleep 2
-              fi
-            done
-          fi
-
-          # Return to original branch
-          git checkout ${GITHUB_REF#refs/heads/}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          hpccm --recipe "${TUTORIAL_DIR}/brev/docker-recipe.py" --format docker > "${TUTORIAL_DIR}/brev/dockerfile"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -230,20 +219,20 @@ jobs:
           DOCKER_BUILDKIT: 1
           BUILDKIT_PROGRESS: plain
         with:
-          timeout_minutes: 165
-          max_attempts: 2
+          timeout_minutes: 60
+          max_attempts: 3
           retry_wait_seconds: 30
           command: |
-            cd ${{ matrix.tutorial }}/brev
+            cd "${TUTORIAL_DIR}/brev"
 
             # Show buildx version and check for cache images
             docker buildx version
             echo "Checking for existing cache images..."
             docker manifest inspect \
-              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64" \
+              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-${ARCHITECTURE}" \
               > /dev/null 2>&1 && echo "Branch cache exists" || \
               echo "Branch cache not found"
-            docker manifest inspect "${IMAGE_NAME}:buildcache-main-amd64" \
+            docker manifest inspect "${IMAGE_NAME}:buildcache-main-${ARCHITECTURE}" \
               > /dev/null 2>&1 && echo "Main cache exists" || \
               echo "Main cache not found"
 
@@ -253,29 +242,14 @@ jobs:
               echo "Purge build: skipping cache-from to rebuild from scratch."
             else
               CACHE_FROM_FLAGS=(
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64"
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}"
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main-amd64"
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-${ARCHITECTURE}"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main-${ARCHITECTURE}"
               )
-            fi
-
-            if [ "${TUTORIAL_NAME}" = "pyhpc" ]; then
-              TAG_FLAGS=(
-                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-amd64"
-              )
-              BUILD_ARG_FLAGS=(
-                --set "base.args.LLVM_PARALLEL_LINK_JOBS=2"
-                --set "base.args.LLVM_TARGETS_TO_BUILD=X86;NVPTX"
-              )
-            else
-              TAG_FLAGS=(
-                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
-                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
-              )
-              BUILD_ARG_FLAGS=()
-              if [ "${GIT_BRANCH_NAME}" = "main" ]; then
-                TAG_FLAGS+=(--set "base.tags=${IMAGE_NAME}:latest")
+              if [ "${ARCHITECTURE}" = "amd64" ]; then
+                CACHE_FROM_FLAGS+=(
+                  --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}"
+                  --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
+                )
               fi
             fi
 
@@ -283,40 +257,12 @@ jobs:
               --progress=plain \
               --allow=fs.read=* \
               --set "base.output=type=registry" \
-              "${TAG_FLAGS[@]}" \
-              "${BUILD_ARG_FLAGS[@]}" \
+              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-${ARCHITECTURE}" \
               "${CACHE_FROM_FLAGS[@]}" \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64,mode=max,image-manifest=true,compression=zstd,compression-level=3" \
-              --set "base.platform=linux/amd64" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-${ARCHITECTURE},mode=max,image-manifest=true,compression=zstd,compression-level=3" \
+              --set "base.platform=linux/${ARCHITECTURE}" \
               -f docker-compose.yml \
               base
-
-      - name: Create pending commit status for test
-        if: env.TUTORIAL_NAME != 'pyhpc'
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/statuses/${GIT_SHA} \
-            -f state='pending' \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
-            -f description='Test started' \
-            -f context="Test Brev Tutorial Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger test workflow
-        if: env.TUTORIAL_NAME != 'pyhpc'
-        run: |
-          echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
-          gh workflow run test-brev-tutorial-docker-images.yml \
-            --ref ${{ github.ref_name }} \
-            -f tutorial=${TUTORIAL_NAME} \
-            -f git_sha=${GIT_SHA} \
-            -f workflow_run_id=${{ github.run_id }}
-          echo "Test workflow triggered successfully"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check disk space after build
         if: always()
@@ -328,140 +274,108 @@ jobs:
           du -sh /var/lib/docker/* 2>/dev/null || true
           du -sh /var/lib/buildkit/* 2>/dev/null || true
 
-  build-pyhpc-arm64:
-    needs: discover-tutorials
-    if: contains(fromJson(needs.discover-tutorials.outputs.tutorials), 'tutorials/pyhpc')
-    runs-on: linux-arm64-cpu16
-    timeout-minutes: 360
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}
+  publish-and-test:
+    needs:
+      - discover-tutorials
+      - build-and-push
+    runs-on: linux-amd64-cpu4
+    timeout-minutes: 30
     permissions:
-      contents: read
+      actions: write
+      contents: write
       packages: write
+      statuses: write
+    strategy:
+      matrix: ${{ fromJson(needs.discover-tutorials.outputs.publish-matrix) }}
+      fail-fast: false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify native ARM64 runner
-        run: |
-          test "$(uname -m)" = "aarch64"
-
-      - name: Set image and branch variables
+      - name: Set publish variables
         run: |
           GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
           DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | \
             sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
           GIT_SHA=${{ github.sha }}
           GIT_SHORT_SHA=${GIT_SHA::7}
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/pyhpc-tutorial"
-          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> "$GITHUB_ENV"
-          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> "$GITHUB_ENV"
-          echo "GIT_SHA=${GIT_SHA}" >> "$GITHUB_ENV"
-          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> "$GITHUB_ENV"
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "$GITHUB_ENV"
+          TUTORIAL_DIR="${{ matrix.tutorial }}"
+          TUTORIAL_NAME=$(basename "${TUTORIAL_DIR}")
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${TUTORIAL_NAME}-tutorial"
+          compose_config=$(docker compose \
+            -f "${TUTORIAL_DIR}/brev/docker-compose.yml" \
+            config --format json)
+          ARCHITECTURES=$(jq -r '."x-config".architectures // ["amd64"] | join(" ")' <<< "${compose_config}")
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-config: /etc/buildkit/buildkitd.toml
+          {
+            echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}"
+            echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}"
+            echo "GIT_SHA=${GIT_SHA}"
+            echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}"
+            echo "TUTORIAL_DIR=${TUTORIAL_DIR}"
+            echo "TUTORIAL_NAME=${TUTORIAL_NAME}"
+            echo "IMAGE_NAME=${IMAGE_NAME,,}"
+            echo "ARCHITECTURES=${ARCHITECTURES}"
+          } >> "${GITHUB_ENV}"
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Prune Docker build cache (nightly or manual purge)
-        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.purge_cache)
+      - name: Generate Docker Compose files
         run: |
-          echo "Purging Docker build cache to rebuild from scratch."
-          docker buildx prune --all --force
-          docker system prune --all --force
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
+            --image-owner "${{ github.repository_owner }}" \
+            --output-dir "artifacts/commit-specific" \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type all
 
-      - name: Build and push ARM64 image (with retry)
-        uses: nick-fields/retry@v3
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "${DOCKER_TAG_BRANCH}-latest" \
+            --image-owner "${{ github.repository_owner }}" \
+            --output-dir "artifacts/branch-latest" \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type all
+
+      - name: Upload commit-specific Docker Compose artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
+          path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
+          retention-days: 30
+
+      - name: Push branch-latest Docker Compose to generated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin generated:generated
+          git checkout generated
+          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
+          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+          cp -r "artifacts/branch-latest/${TUTORIAL_NAME}" "${GIT_BRANCH_NAME}/tutorials/"
+          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit for ${TUTORIAL_NAME}"
+          else
+            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
+            for i in {1..5}; do
+              if git push origin generated; then
+                echo "Successfully pushed to generated branch"
+                break
+              fi
+              if [ "${i}" -eq 5 ]; then
+                echo "Failed to push generated branch after ${i} attempts" >&2
+                exit 1
+              fi
+              echo "Push failed (attempt ${i}/5), pulling and retrying..."
+              git pull --rebase origin generated
+              sleep 2
+            done
+          fi
+
+          git checkout "${GITHUB_REF#refs/heads/}"
         env:
-          DOCKER_BUILDKIT: 1
-          BUILDKIT_PROGRESS: plain
-        with:
-          timeout_minutes: 165
-          max_attempts: 2
-          retry_wait_seconds: 30
-          command: |
-            cd tutorials/pyhpc/brev
-
-            docker buildx version
-            echo "Checking for ARM64 cache images..."
-            docker manifest inspect \
-              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64" \
-              > /dev/null 2>&1 && echo "Branch cache exists" || \
-              echo "Branch cache not found"
-            docker manifest inspect "${IMAGE_NAME}:buildcache-main-arm64" \
-              > /dev/null 2>&1 && echo "Main cache exists" || \
-              echo "Main cache not found"
-
-            CACHE_FROM_FLAGS=()
-            if [ "${{ github.event_name }}" = "schedule" ] || \
-               [ "${{ github.event_name == 'workflow_dispatch' && inputs.purge_cache }}" = "true" ]; then
-              echo "Purge build: skipping cache-from to rebuild from scratch."
-            else
-              CACHE_FROM_FLAGS=(
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64"
-                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main-arm64"
-              )
-            fi
-
-            docker buildx bake \
-              --progress=plain \
-              --allow=fs.read=* \
-              --set "base.output=type=registry" \
-              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-arm64" \
-              --set "base.args.LLVM_PARALLEL_LINK_JOBS=1" \
-              --set "base.args.LLVM_TARGETS_TO_BUILD=AArch64;NVPTX" \
-              "${CACHE_FROM_FLAGS[@]}" \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64,mode=max,image-manifest=true,compression=zstd,compression-level=3" \
-              --set "base.platform=linux/arm64" \
-              -f docker-compose.yml \
-              base
-
-      - name: Check disk space after build
-        if: always()
-        run: |
-          df -h /
-          du -sh /var/lib/docker/* 2>/dev/null || true
-          du -sh /var/lib/buildkit/* 2>/dev/null || true
-
-  publish-pyhpc-manifest:
-    needs:
-      - discover-tutorials
-      - build-and-push
-      - build-pyhpc-arm64
-    if: contains(fromJson(needs.discover-tutorials.outputs.tutorials), 'tutorials/pyhpc')
-    runs-on: linux-amd64-cpu4
-    timeout-minutes: 30
-    permissions:
-      actions: write
-      contents: read
-      packages: write
-      statuses: write
-
-    steps:
-      - name: Set image and branch variables
-        run: |
-          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | \
-            sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
-          GIT_SHA=${{ github.sha }}
-          GIT_SHORT_SHA=${GIT_SHA::7}
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/pyhpc-tutorial"
-          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> "$GITHUB_ENV"
-          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> "$GITHUB_ENV"
-          echo "GIT_SHA=${GIT_SHA}" >> "$GITHUB_ENV"
-          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> "$GITHUB_ENV"
-          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "$GITHUB_ENV"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -475,65 +389,70 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish and verify multi-architecture image
+      - name: Publish and verify image manifest
         run: |
           set -euo pipefail
 
           verify_platforms() {
             local image=$1
-            local expected
             local platforms
-            expected=$(printf 'linux/amd64\nlinux/arm64')
-            platforms=$(docker buildx imagetools inspect "${image}" --raw | \
-              jq -r '.manifests[] | select(.platform != null) | select(.platform.os != null and .platform.architecture != null) | select(.platform.os != "unknown" and .platform.architecture != "unknown") | "\(.platform.os)/\(.platform.architecture)"' | \
+            platforms=$(docker manifest inspect --verbose "${image}" | \
+              jq -r '(if type == "array" then .[] else . end) | .Descriptor.platform | select(. != null and .os != null and .architecture != null) | select(.os != "unknown" and .architecture != "unknown") | "\(.os)/\(.architecture)"' | \
               sort -u)
-            if [ "${platforms}" != "${expected}" ]; then
+            if [ "${platforms}" != "${EXPECTED_PLATFORMS}" ]; then
               echo "Unexpected platforms in ${image}:" >&2
               echo "${platforms}" >&2
+              echo "Expected:" >&2
+              echo "${EXPECTED_PLATFORMS}" >&2
               exit 1
             fi
           }
 
           COMMIT_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
-          AMD64_IMAGE="${COMMIT_IMAGE}-amd64"
-          ARM64_IMAGE="${COMMIT_IMAGE}-arm64"
-
-          docker buildx imagetools create \
-            --tag "${COMMIT_IMAGE}" \
-            "${AMD64_IMAGE}" \
-            "${ARM64_IMAGE}"
-          verify_platforms "${COMMIT_IMAGE}"
-
           LATEST_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
-          TAG_FLAGS=(--tag "${LATEST_IMAGE}")
+          SOURCES=()
+          EXPECTED_PLATFORMS=""
+          for architecture in ${ARCHITECTURES}; do
+            SOURCES+=("${COMMIT_IMAGE}-${architecture}")
+            EXPECTED_PLATFORMS+="linux/${architecture}"$'\n'
+          done
+          EXPECTED_PLATFORMS=$(printf '%s' "${EXPECTED_PLATFORMS}" | sort -u)
+
+          TAG_FLAGS=(--tag "${COMMIT_IMAGE}" --tag "${LATEST_IMAGE}")
           if [ "${GIT_BRANCH_NAME}" = "main" ]; then
             TAG_FLAGS+=(--tag "${IMAGE_NAME}:latest")
           fi
           docker buildx imagetools create \
             "${TAG_FLAGS[@]}" \
-            "${COMMIT_IMAGE}"
+            "${SOURCES[@]}"
+
+          verify_platforms "${COMMIT_IMAGE}"
           verify_platforms "${LATEST_IMAGE}"
+          if [ "${GIT_BRANCH_NAME}" = "main" ]; then
+            verify_platforms "${IMAGE_NAME}:latest"
+          fi
 
       - name: Create pending commit status for test
         run: |
           gh api \
             --method POST \
             -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/statuses/${GIT_SHA} \
+            "/repos/${{ github.repository }}/statuses/${GIT_SHA}" \
             -f state='pending' \
             -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
             -f description='Test started' \
-            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/pyhpc)'
+            -f context="Test Brev Tutorial Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger test workflow
         run: |
+          echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
           gh workflow run test-brev-tutorial-docker-images.yml \
             --ref ${{ github.ref_name }} \
-            -f tutorial=pyhpc \
-            -f git_sha=${GIT_SHA} \
+            -f tutorial="${TUTORIAL_NAME}" \
+            -f git_sha="${GIT_SHA}" \
             -f workflow_run_id=${{ github.run_id }}
-          echo "PyHPC test workflow triggered successfully"
+          echo "Test workflow triggered successfully"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -3,9 +3,6 @@ ARG CUDA_BASE_IMAGE=docker.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
 FROM ${CUDA_BASE_IMAGE} AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
 ARG LLVM_TAG=isc2026
-
-ARG LLVM_PARALLEL_LINK_JOBS=2
-ARG LLVM_TARGETS_TO_BUILD="AArch64;X86;NVPTX"
 ENV DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
  && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries \
@@ -13,18 +10,25 @@ RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubun
  && apt-get install -y --no-install-recommends \
     git cmake ninja-build lld build-essential ca-certificates python3 python3-dev \
  && rm -rf /var/lib/apt/lists/*
-RUN git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) native_llvm_target=X86; default_link_jobs=2 ;; \
+      arm64) native_llvm_target=AArch64; default_link_jobs=1 ;; \
+      *) echo "Unsupported LLVM build architecture" >&2; exit 1 ;; \
+    esac \
+ && llvm_targets="${native_llvm_target};NVPTX" \
+ && link_jobs="${default_link_jobs}" \
+ && git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
  && cmake -S /src/llvm/llvm -B /src/llvm-build -G Ninja \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_PROJECTS="clang;lld" \
-      -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD}" \
+      -DLLVM_TARGETS_TO_BUILD="${llvm_targets}" \
       -DLLVM_ENABLE_ASSERTIONS=OFF \
       -DLLVM_USE_LINKER=lld \
       -DLLVM_INSTALL_UTILS=ON \
       -DLLVM_INCLUDE_TESTS=OFF \
       -DCLANG_ENABLE_STATIC_ANALYZER=OFF \
       -DCLANG_ENABLE_ARCMT=OFF \
-      -DLLVM_PARALLEL_LINK_JOBS=${LLVM_PARALLEL_LINK_JOBS} \
+      -DLLVM_PARALLEL_LINK_JOBS="${link_jobs}" \
       -DCMAKE_INSTALL_PREFIX=/opt/llvm \
  && cmake --build /src/llvm-build --target install \
  && rm -rf /src/llvm /src/llvm-build
@@ -36,8 +40,7 @@ ENV ACH_TUTORIAL=pyhpc \
     PYTHON_VERSION=3.12 \
     NSIGHT_SYSTEMS_VERSION=2026.1.1 \
     NSIGHT_SYSTEMS_AMD64_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
-    NSIGHT_SYSTEMS_ARM64_VERSION=2024.2.3 \
-    NSIGHT_SYSTEMS_ARM64_DEB_FILE=ubuntu2204/sbsa/nsight-systems-cli-2024.2.3_2024.2.3.38-1_arm64.deb \
+    NSIGHT_SYSTEMS_ARM64_DEB_FILE=2026_1/nsight-systems-cli-2026.1.1_2026.1.1.204-1_arm64.deb \
     NSIGHT_COMPUTE_VERSION=2025.4.1 \
     NSIGHT_COMPUTE_DEB_VERSION=2025.4.1.2-1 \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
@@ -49,8 +52,8 @@ ENV ACH_TUTORIAL=pyhpc \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
-ENV ACH_NSYS_PATH=/usr/local/nvidia/bin/nsys \
-    ACH_NCU_PATH=/usr/local/nvidia/bin/ncu
+ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
+    ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu
 
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
  && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries
@@ -117,14 +120,12 @@ RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "${arch}" in \
       amd64) \
-        nsys_url="https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_AMD64_DEB_FILE}"; \
-        nsys_deb="${NSIGHT_SYSTEMS_AMD64_DEB_FILE##*/}"; \
+        nsys_file="${NSIGHT_SYSTEMS_AMD64_DEB_FILE}"; \
         ncu_repo_arch="ubuntu2204/x86_64"; \
         ncu_deb="nsight-compute-${NSIGHT_COMPUTE_VERSION}_${NSIGHT_COMPUTE_DEB_VERSION}_amd64.deb"; \
         ;; \
       arm64) \
-        nsys_url="https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_SYSTEMS_ARM64_DEB_FILE}"; \
-        nsys_deb="${NSIGHT_SYSTEMS_ARM64_DEB_FILE##*/}"; \
+        nsys_file="${NSIGHT_SYSTEMS_ARM64_DEB_FILE}"; \
         ncu_repo_arch="ubuntu2204/sbsa"; \
         ncu_deb="nsight-compute-${NSIGHT_COMPUTE_VERSION}_${NSIGHT_COMPUTE_DEB_VERSION}_arm64.deb"; \
         ;; \
@@ -133,21 +134,15 @@ RUN set -eux; \
         exit 1; \
         ;; \
     esac; \
+    nsys_url="https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${nsys_file}"; \
+    nsys_deb="${nsys_file##*/}"; \
     curl -fL -o "${nsys_deb}" "${nsys_url}"; \
     curl -fL -o "${ncu_deb}" "https://developer.download.nvidia.com/compute/cuda/repos/${ncu_repo_arch}/${ncu_deb}"; \
     apt-get update -y; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "./${nsys_deb}" "./${ncu_deb}"; \
     rm -f "${nsys_deb}" "${ncu_deb}"; \
-    mkdir -p /usr/local/nvidia/bin; \
-    nsys_path="$(command -v nsys || true)"; \
-    if [ -z "${nsys_path}" ]; then \
-      nsys_path="$(find /opt/nvidia/nsight-systems-cli -name nsys -type f | sort -V | tail -n 1)"; \
-    fi; \
-    ncu_path="$(find /opt/nvidia/nsight-compute -path '*/ncu' -type f | sort -V | tail -n 1)"; \
-    test -n "${nsys_path}"; \
-    test -n "${ncu_path}"; \
-    ln -sf "${nsys_path}" /usr/local/nvidia/bin/nsys; \
-    ln -sf "${ncu_path}" /usr/local/nvidia/bin/ncu; \
+    test -x "${ACH_NSYS_PATH}"; \
+    test -x "${ACH_NCU_PATH}"; \
     apt-get clean -y; \
     rm -rf /var/lib/apt/lists/*
 

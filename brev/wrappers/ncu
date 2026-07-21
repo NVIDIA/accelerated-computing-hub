@@ -5,15 +5,13 @@ GID_="$(id -g)"
 
 if [ "${ACH_ROOTLESS_PODMAN:-}" = "1" ]; then
   exec "${ACH_NCU_PATH}" "$@"
-fi
-
-if sudo -E -n true >/dev/null 2>&1; then
+elif sudo -E -n true >/dev/null 2>&1; then
   exec sudo -E -n setpriv \
     --reuid="$UID_" --regid="$GID_" --init-groups \
     --inh-caps=+sys_admin,+sys_ptrace \
     --ambient-caps=+sys_admin,+sys_ptrace \
     -- \
     "$ACH_NCU_PATH" "$@"
+else
+  exec "$ACH_NCU_PATH" "$@"
 fi
-
-exec "$ACH_NCU_PATH" "$@"

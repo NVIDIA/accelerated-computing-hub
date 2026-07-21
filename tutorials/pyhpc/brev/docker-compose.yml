@@ -4,6 +4,8 @@ x-config:
   dockerfile: &dockerfile tutorials/pyhpc/brev/dockerfile
   image: &image ghcr.io/nvidia/pyhpc-tutorial:latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/pyhpc/notebooks
+  large: true
+  architectures: [amd64, arm64]
   default-jupyter-url: &default-jupyter-url
   gpu-config: &gpu-config
     privileged: true
