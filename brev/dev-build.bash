@@ -58,11 +58,7 @@ build_tutorial() {
         echo "Dockerfile generated successfully"
     fi
 
-    if [ "${ACH_CONTAINER_ENGINE}" = "docker" ]; then
-        compose --progress=plain -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
-    else
-        compose -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
-    fi
+    compose -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
 
     echo "Successfully built image for ${ACH_TUTORIAL}"
     echo ""

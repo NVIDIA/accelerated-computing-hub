@@ -16,19 +16,12 @@ on:
         required: false
         type: boolean
         default: false
-      tutorials_filter:
-        description: "Space/comma-separated tutorial names to build (empty = all). Default scopes the fork to pyhpc."
-        required: false
-        type: string
-        default: "pyhpc"
   # pull_request is not supported for this workflow due to self-hosted runners
   # see the "Reviewing PRs from forks" section in CONTRIBUTING.md for more details
 
-# Fork scoping: this fork only maintains the pyhpc tutorial image, so by
-# default the build matrix is filtered to pyhpc. Override with the
-# tutorials_filter input (set it empty to build every tutorial).
 env:
-  ACH_TUTORIALS_FILTER: ${{ github.event.inputs.tutorials_filter || 'pyhpc' }}
+  GIT_BRANCH_NAME: ${{ github.ref_name }}
+  GIT_SHA: ${{ github.sha }}
 
 # Prevent an older run from replacing a newer run's branch-latest tag.
 concurrency:
@@ -46,6 +39,8 @@ jobs:
     outputs:
       build-matrix: ${{ steps.find-tutorials.outputs.build-matrix }}
       publish-matrix: ${{ steps.find-tutorials.outputs.publish-matrix }}
+      docker-tag-branch: ${{ steps.find-tutorials.outputs.docker-tag-branch }}
+      git-short-sha: ${{ steps.find-tutorials.outputs.git-short-sha }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -55,28 +50,16 @@ jobs:
         run: |
           set -euo pipefail
 
-          all=$(brev/discover-tutorials.bash)
-          # Optionally filter to a subset (fork default: pyhpc only). An empty
-          # filter keeps every discovered tutorial.
-          filter="${ACH_TUTORIALS_FILTER//,/ }"
-          if [ -n "${filter// }" ]; then
-            selected=""
-            for dir in ${all}; do
-              name=$(basename "${dir}")
-              for want in ${filter}; do
-                if [ "${name}" = "${want}" ]; then selected="${selected}${dir}"$'\n'; fi
-              done
-            done
-          else
-            selected="${all}"
-          fi
-
-          tutorials=$(printf '%s\n' "${selected}" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          tutorials=$(brev/discover-tutorials.bash | \
+            jq -R -s -c 'split("\n") | map(select(length > 0))')
           build_entries=$(
             while IFS= read -r tutorial; do
               compose_config=$(docker compose \
                 -f "${tutorial}/brev/docker-compose.yml" \
                 config --format json)
+              tutorial_name=$(basename "${tutorial}")
+              image_name=$(jq -r '."x-config".image | sub(":[^/:]+$"; "")' \
+                <<< "${compose_config}")
               architectures=$(jq -c '."x-config".architectures // ["amd64"]' <<< "${compose_config}")
               large=$(jq -r '."x-config".large // false' <<< "${compose_config}")
               if ! jq -e 'type == "array" and length > 0 and length == (unique | length) and all(.[]; . == "amd64" or . == "arm64")' \
@@ -98,19 +81,33 @@ jobs:
                 esac
                 jq -cn \
                   --arg tutorial "${tutorial}" \
+                  --arg tutorial_name "${tutorial_name}" \
+                  --arg image_name "${image_name,,}" \
                   --arg architecture "${architecture}" \
                   --arg runner "${runner}" \
-                  '{tutorial: $tutorial, architecture: $architecture, runner: $runner}'
+                  '{tutorial: $tutorial, tutorial_name: $tutorial_name,
+                    image_name: $image_name, architecture: $architecture,
+                    runner: $runner}'
               done < <(jq -r '.[]' <<< "${architectures}")
             done < <(jq -r '.[]' <<< "${tutorials}")
           )
           build_matrix=$(jq -sc '{include: .}' <<< "${build_entries}")
-          publish_matrix=$(jq -cn --argjson tutorials "${tutorials}" \
-            '{include: ($tutorials | map({tutorial: .}))}')
+          publish_matrix=$(jq -sc '
+            {include: (group_by(.tutorial) | map({
+              tutorial: .[0].tutorial,
+              tutorial_name: .[0].tutorial_name,
+              image_name: .[0].image_name,
+              architectures: (map(.architecture) | join(" "))
+            }))}' <<< "${build_entries}")
+          docker_tag_branch=${GIT_BRANCH_NAME//[^a-zA-Z0-9._-]/-}
+          docker_tag_branch=${docker_tag_branch,,}
+          git_short_sha=${GIT_SHA::7}
 
           {
             echo "build-matrix=${build_matrix}"
             echo "publish-matrix=${publish_matrix}"
+            echo "docker-tag-branch=${docker_tag_branch}"
+            echo "git-short-sha=${git_short_sha}"
           } >> "${GITHUB_OUTPUT}"
           echo "Found tutorials: ${tutorials}"
           echo "Build matrix: ${build_matrix}"
@@ -118,6 +115,12 @@ jobs:
   build-and-push:
     needs: discover-tutorials
     runs-on: ${{ matrix.runner }}
+    env:
+      DOCKER_TAG_BRANCH: ${{ needs.discover-tutorials.outputs.docker-tag-branch }}
+      GIT_SHORT_SHA: ${{ needs.discover-tutorials.outputs.git-short-sha }}
+      TUTORIAL_DIR: ${{ matrix.tutorial }}
+      IMAGE_NAME: ${{ matrix.image_name }}
+      ARCHITECTURE: ${{ matrix.architecture }}
     defaults:
       run:
         working-directory: ${{ github.workspace }}
@@ -131,29 +134,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Set build variables
-        run: |
-          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          # Sanitize branch name for Docker tags (replace invalid characters with hyphens and convert to lowercase)
-          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
-          GIT_SHA=${{ github.sha }}
-          GIT_SHORT_SHA=${GIT_SHA::7}
-          TUTORIAL_DIR="${{ matrix.tutorial }}"
-          TUTORIAL_NAME=$(basename "${TUTORIAL_DIR}")
-          ARCHITECTURE="${{ matrix.architecture }}"
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${TUTORIAL_NAME}-tutorial"
-
-          {
-            echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}"
-            echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}"
-            echo "GIT_SHA=${GIT_SHA}"
-            echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}"
-            echo "TUTORIAL_DIR=${TUTORIAL_DIR}"
-            echo "TUTORIAL_NAME=${TUTORIAL_NAME}"
-            echo "ARCHITECTURE=${ARCHITECTURE}"
-            echo "IMAGE_NAME=${IMAGE_NAME,,}"
-          } >> "${GITHUB_ENV}"
 
       - name: Verify native runner architecture
         run: |
@@ -255,7 +235,7 @@ jobs:
 
             docker buildx bake \
               --progress=plain \
-              --allow=fs.read=* \
+              --allow=fs.read=/home/runner \
               --set "base.output=type=registry" \
               --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-${ARCHITECTURE}" \
               "${CACHE_FROM_FLAGS[@]}" \
@@ -278,8 +258,18 @@ jobs:
     needs:
       - discover-tutorials
       - build-and-push
+    # Publish tutorials whose platform images succeeded even if an unrelated
+    # tutorial in the build matrix failed. Missing source tags fail only that
+    # tutorial's publish matrix entry.
+    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' }}
     runs-on: linux-amd64-cpu4
     timeout-minutes: 30
+    env:
+      DOCKER_TAG_BRANCH: ${{ needs.discover-tutorials.outputs.docker-tag-branch }}
+      GIT_SHORT_SHA: ${{ needs.discover-tutorials.outputs.git-short-sha }}
+      TUTORIAL_NAME: ${{ matrix.tutorial_name }}
+      IMAGE_NAME: ${{ matrix.image_name }}
+      ARCHITECTURES: ${{ matrix.architectures }}
     permissions:
       actions: write
       contents: write
@@ -293,47 +283,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set publish variables
-        run: |
-          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | \
-            sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
-          GIT_SHA=${{ github.sha }}
-          GIT_SHORT_SHA=${GIT_SHA::7}
-          TUTORIAL_DIR="${{ matrix.tutorial }}"
-          TUTORIAL_NAME=$(basename "${TUTORIAL_DIR}")
-          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/${TUTORIAL_NAME}-tutorial"
-          compose_config=$(docker compose \
-            -f "${TUTORIAL_DIR}/brev/docker-compose.yml" \
-            config --format json)
-          ARCHITECTURES=$(jq -r '."x-config".architectures // ["amd64"] | join(" ")' <<< "${compose_config}")
-
-          {
-            echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}"
-            echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}"
-            echo "GIT_SHA=${GIT_SHA}"
-            echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}"
-            echo "TUTORIAL_DIR=${TUTORIAL_DIR}"
-            echo "TUTORIAL_NAME=${TUTORIAL_NAME}"
-            echo "IMAGE_NAME=${IMAGE_NAME,,}"
-            echo "ARCHITECTURES=${ARCHITECTURES}"
-          } >> "${GITHUB_ENV}"
-
       - name: Generate Docker Compose files
         run: |
           python3 brev/generate-tagged-docker-composes.py \
             --image-tag "${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
-            --image-owner "${{ github.repository_owner }}" \
             --output-dir "artifacts/commit-specific" \
             --tutorial "${TUTORIAL_NAME}" \
             --type all
 
           python3 brev/generate-tagged-docker-composes.py \
             --image-tag "${DOCKER_TAG_BRANCH}-latest" \
-            --image-owner "${{ github.repository_owner }}" \
             --output-dir "artifacts/branch-latest" \
             --tutorial "${TUTORIAL_NAME}" \
             --type all
+
+      - name: Generate CSCS EDF
+        if: contains(matrix.architectures, 'arm64')
+        run: |
+          brev/generate-cscs-edf.bash \
+            --output "artifacts/branch-latest/${TUTORIAL_NAME}/brev/cscs.toml" \
+            "artifacts/branch-latest/${TUTORIAL_NAME}/brev/docker-compose.yml"
 
       - name: Upload commit-specific Docker Compose artifacts
         uses: actions/upload-artifact@v4
@@ -341,41 +310,6 @@ jobs:
           name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
           path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
           retention-days: 30
-
-      - name: Push branch-latest Docker Compose to generated branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git fetch origin generated:generated
-          git checkout generated
-          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
-          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-          cp -r "artifacts/branch-latest/${TUTORIAL_NAME}" "${GIT_BRANCH_NAME}/tutorials/"
-          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-
-          if git diff --staged --quiet; then
-            echo "No changes to commit for ${TUTORIAL_NAME}"
-          else
-            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
-            for i in {1..5}; do
-              if git push origin generated; then
-                echo "Successfully pushed to generated branch"
-                break
-              fi
-              if [ "${i}" -eq 5 ]; then
-                echo "Failed to push generated branch after ${i} attempts" >&2
-                exit 1
-              fi
-              echo "Push failed (attempt ${i}/5), pulling and retrying..."
-              git pull --rebase origin generated
-              sleep 2
-            done
-          fi
-
-          git checkout "${GITHUB_REF#refs/heads/}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -431,6 +365,41 @@ jobs:
           if [ "${GIT_BRANCH_NAME}" = "main" ]; then
             verify_platforms "${IMAGE_NAME}:latest"
           fi
+
+      - name: Push branch-latest deployment files to generated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin generated:generated
+          git checkout generated
+          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
+          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+          cp -r "artifacts/branch-latest/${TUTORIAL_NAME}" "${GIT_BRANCH_NAME}/tutorials/"
+          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit for ${TUTORIAL_NAME}"
+          else
+            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
+            for i in {1..5}; do
+              if git push origin generated; then
+                echo "Successfully pushed to generated branch"
+                break
+              fi
+              if [ "${i}" -eq 5 ]; then
+                echo "Failed to push generated branch after ${i} attempts" >&2
+                exit 1
+              fi
+              echo "Push failed (attempt ${i}/5), pulling and retrying..."
+              git pull --rebase origin generated
+              sleep 2
+            done
+          fi
+
+          git checkout "${GITHUB_REF#refs/heads/}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create pending commit status for test
         run: |

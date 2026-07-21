@@ -6,6 +6,6 @@ set -euo pipefail
 
 if [ "$(id -u)" = "0" ]; then
     exec gosu "${ACH_TARGET_USER}" bash -l
+else
+    exec bash -l
 fi
-
-exec bash -l

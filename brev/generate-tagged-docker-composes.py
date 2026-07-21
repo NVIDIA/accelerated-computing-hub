@@ -33,33 +33,6 @@ def extract_working_dir(content: str) -> str:
     return ""
 
 
-def modify_image_owner(content: str, owner: str) -> str:
-    """
-    Rewrite the GHCR owner of the &image anchor.
-
-    The committed compose files reference ``ghcr.io/nvidia/...``. On a fork,
-    the build job pushes to ``ghcr.io/<fork-owner>/...`` (it derives the image
-    name from ``github.repository_owner``), so the generated compose must point
-    at the same owner or the test job cannot pull the freshly built image.
-
-    Args:
-        content: docker-compose.yml content
-        owner: GHCR namespace to use (e.g. "robobryce"); empty/None is a no-op
-
-    Returns:
-        Modified docker-compose.yml content
-    """
-    if not owner:
-        return content
-    # Pattern matches: image: &image ghcr.io/<owner>/<repo>...  (owner only)
-    return re.sub(
-        r'(image:\s*&image\s+ghcr\.io/)[^/\s]+(/)',
-        f'\\1{owner.lower()}\\2',
-        content,
-        flags=re.MULTILINE,
-    )
-
-
 def modify_image_tag(content: str, new_tag: str) -> str:
     """
     Modify docker-compose content by updating the image tag.
@@ -102,8 +75,7 @@ def modify_jupyter_url(content: str, jupyter_url: str) -> str:
     return modified
 
 
-def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path,
-                           image_owner: str = "") -> int:
+def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path) -> int:
     """
     Generate modified base docker-compose file with the specified image tag.
 
@@ -111,7 +83,6 @@ def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path,
         tutorial_dir: Path to the tutorial directory
         image_tag: Image tag to use
         output_dir: Directory to write the modified file
-        image_owner: GHCR owner to rewrite the image to (empty = leave as-is)
 
     Returns:
         Number of files generated
@@ -124,9 +95,8 @@ def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path,
     with open(docker_compose_src, 'r') as f:
         compose_content = f.read()
 
-    # Rewrite the image owner (for forks) then the image tag.
-    modified_content = modify_image_owner(compose_content, image_owner)
-    modified_content = modify_image_tag(modified_content, image_tag)
+    # Modify the image tag
+    modified_content = modify_image_tag(compose_content, image_tag)
 
     # Create output directory structure
     tutorial_name = tutorial_dir.name
@@ -145,8 +115,7 @@ def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path,
 def generate_syllabi_composes(
     tutorial_dir: Path,
     image_tag: str,
-    output_dir: Path,
-    image_owner: str = ""
+    output_dir: Path
 ) -> int:
     """
     Generate modified syllabi docker-compose files with the specified image tag.
@@ -155,7 +124,6 @@ def generate_syllabi_composes(
         tutorial_dir: Path to the tutorial directory
         image_tag: Image tag to use
         output_dir: Directory to write the modified files
-        image_owner: GHCR owner to rewrite the image to (empty = leave as-is)
 
     Returns:
         Number of files generated
@@ -177,8 +145,7 @@ def generate_syllabi_composes(
     with open(docker_compose_src, 'r') as f:
         compose_content = f.read()
 
-    # Rewrite the image owner (for forks) then the image tag.
-    compose_content = modify_image_owner(compose_content, image_owner)
+    # Modify the image tag
     compose_content = modify_image_tag(compose_content, image_tag)
 
     # Extract the working-dir anchor value
@@ -241,13 +208,6 @@ def main():
         default='all',
         help='Type of docker-compose files to generate'
     )
-    parser.add_argument(
-        '--image-owner',
-        type=str,
-        default='',
-        help='Rewrite the GHCR owner of the image (e.g. a fork owner). '
-             'Empty leaves the committed owner unchanged.'
-    )
 
     args = parser.parse_args()
 
@@ -285,8 +245,7 @@ def main():
             base_count += generate_base_composes(
                 tutorial_dir,
                 args.image_tag,
-                args.output_dir,
-                args.image_owner
+                args.output_dir
             )
 
         # Generate syllabi docker-compose files
@@ -294,8 +253,7 @@ def main():
             syllabi_count += generate_syllabi_composes(
                 tutorial_dir,
                 args.image_tag,
-                args.output_dir,
-                args.image_owner
+                args.output_dir
             )
 
     print(f"\n✅ Successfully generated:")
