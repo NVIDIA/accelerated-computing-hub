@@ -104,7 +104,12 @@ if [ ! -f "${COMPOSE_FILE}" ]; then
     echo -e "${RED}Error: Docker/Podman Compose file not found: ${COMPOSE_FILE}${NC}"
     exit 1
 fi
+setup_container_engine
 COMPOSE_FILE=$(prepare_compose_file "${COMPOSE_FILE}")
+SHELL_ENTRYPOINT="/accelerated-computing-hub/brev/entrypoint.bash"
+if [ "${ACH_CONTAINER_ENGINE}" = "podman" ]; then
+    SHELL_ENTRYPOINT="/accelerated-computing-hub/brev/entrypoint-podman-gpu.bash"
+fi
 
 echo "================================================================================"
 echo "Starting interactive shell for: ${ACH_TUTORIAL} (service: ${SERVICE})"
@@ -121,7 +126,7 @@ echo "   (Type 'exit' or press Ctrl+D to exit the shell)"
 echo ""
 
 compose -f "${COMPOSE_FILE}" run --rm -it \
-    --entrypoint "/accelerated-computing-hub/brev/entrypoint.bash" \
+    --entrypoint "${SHELL_ENTRYPOINT}" \
     "${SERVICE}" shell
 
 echo ""

@@ -122,16 +122,23 @@ nvidia_devices = [path for path in (
     "/dev/nvidia-uvm-tools",
 ) if os.path.exists(path)]
 nvidia_mounts = []
+nvidia_lib_dirs = set()
 for pattern in (
     "/usr/bin/nvidia-smi",
-    "/usr/lib/x86_64-linux-gnu/libcuda.so.*",
-    "/usr/lib/x86_64-linux-gnu/libnvidia-ml.so.*",
-    "/usr/lib/x86_64-linux-gnu/libnvidia-ptxjitcompiler.so.*",
-    "/usr/lib/x86_64-linux-gnu/libnvidia-nvvm.so.*",
+    "/usr/lib/*-linux-gnu/libcuda.so.*",
+    "/usr/lib/*-linux-gnu/libnvidia-ml.so.*",
+    "/usr/lib/*-linux-gnu/libnvidia-ptxjitcompiler.so.*",
+    "/usr/lib/*-linux-gnu/libnvidia-nvvm.so.*",
+    "/usr/lib64/libcuda.so.*",
+    "/usr/lib64/libnvidia-ml.so.*",
+    "/usr/lib64/libnvidia-ptxjitcompiler.so.*",
+    "/usr/lib64/libnvidia-nvvm.so.*",
 ):
     for path in glob.glob(pattern):
         if os.path.isfile(path) and not os.path.islink(path):
             nvidia_mounts.append(f"{path}:{path}:ro")
+            if path != "/usr/bin/nvidia-smi":
+                nvidia_lib_dirs.add(os.path.dirname(path))
 
 if bind_repo == "1" and repo_root:
     volume_name = "accelerated-computing-hub"
@@ -167,7 +174,9 @@ for service_name, service in services.items():
 
         environment = service.get("environment") or {}
         if isinstance(environment, dict):
-            environment.setdefault("LD_LIBRARY_PATH", "/usr/lib/x86_64-linux-gnu")
+            if nvidia_lib_dirs:
+                driver_lib_path = ":".join(sorted(nvidia_lib_dirs))
+                environment["ACH_NVIDIA_LIB_DIRS"] = driver_lib_path
             environment["ACH_ROOTLESS_PODMAN"] = "1"
             service["environment"] = environment
 
