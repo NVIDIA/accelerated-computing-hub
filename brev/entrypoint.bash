@@ -78,6 +78,13 @@ if [ "$(id -u)" = "0" ]; then
     # Relax profiling permissions so Nsight tools can run as non-root.
     sysctl -w kernel.perf_event_paranoid=0 > /dev/null 2>&1 || true
     sysctl -w kernel.kptr_restrict=0 > /dev/null 2>&1 || true
+else
+    export ACH_TARGET_USER="${ACH_TARGET_USER:-$(id -un)}"
+    export ACH_TARGET_HOME="${ACH_TARGET_HOME:-${HOME:-}}"
+    if [ -z "${ACH_TARGET_HOME}" ]; then
+        export ACH_TARGET_HOME="$(getent passwd "$(id -u)" | cut -d: -f6 || true)"
+    fi
+    export HOME="${ACH_TARGET_HOME:-/tmp}"
 fi
 
 # Dispatch to service-specific entrypoint

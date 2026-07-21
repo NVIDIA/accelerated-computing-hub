@@ -70,9 +70,11 @@ done
 
 # Workaround: The Nsight Streamer container isn't restartable because it unconditionally creates
 # symlinks every time it starts, which fails if the symlinks already exist.
-if test -e /usr/lib/x86_64-linux-gnu/libnvrtc.so; then
-  rm -f /usr/lib/x86_64-linux-gnu/libnvrtc.so
-fi
+for libnvrtc in /usr/lib/*-linux-gnu/libnvrtc.so /usr/lib64/libnvrtc.so; do
+  if test -e "${libnvrtc}"; then
+    rm -f "${libnvrtc}"
+  fi
+done
 
 if test -e /mnt/persist/home/host; then
   rm -rf /mnt/persist/home/host
