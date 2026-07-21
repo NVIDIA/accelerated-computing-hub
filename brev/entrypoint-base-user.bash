@@ -9,9 +9,7 @@ export HOME="${ACH_TARGET_HOME}"
 # Generate unique TURN credentials for this container session.
 # These are stored on the shared volume so the nsys, ncu, and jupyter
 # services can read them.
-ACH_RUNTIME_DIR="${ACH_RUNTIME_DIR:-/accelerated-computing-hub}"
-mkdir -p "${ACH_RUNTIME_DIR}"
-TURN_CREDENTIALS_FILE="${ACH_RUNTIME_DIR}/.turn-credentials"
+TURN_CREDENTIALS_FILE="/accelerated-computing-hub/.turn-credentials"
 
 if [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
   TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)"
@@ -26,7 +24,7 @@ fi
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
   TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
-  LOG_DIR="${ACH_RUNTIME_DIR}/logs"
+  LOG_DIR="/accelerated-computing-hub/logs"
   LOG_FILE="${LOG_DIR}/test.log"
 
   # Create logs directory if it doesn't exist

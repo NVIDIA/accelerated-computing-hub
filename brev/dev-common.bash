@@ -79,7 +79,11 @@ container() {
 
 compose() {
     setup_container_engine
-    ${ACH_COMPOSE_CMD} "$@"
+    if [ "${ACH_CONTAINER_ENGINE}" = "docker" ]; then
+        BUILDKIT_PROGRESS=plain ${ACH_COMPOSE_CMD} "$@"
+    else
+        ${ACH_COMPOSE_CMD} "$@"
+    fi
 }
 
 prepare_compose_file() {
@@ -92,105 +96,15 @@ prepare_compose_file() {
         return 0
     fi
 
-    local output_file="${TMPDIR:-/tmp}/$(basename "${compose_file}").podman.$$"
-    python3 - "${compose_file}" "${output_file}" "${ACH_REPO_ROOT:-}" "${ACH_PODMAN_BIND_REPO:-}" <<'PY'
-import glob
-import os
-import sys
-import yaml
-
-source, destination, repo_root, bind_repo = sys.argv[1:5]
-with open(source, "r", encoding="utf-8") as handle:
-    data = yaml.safe_load(handle)
-
-def strip_podman_incompatible(value):
-    if isinstance(value, dict):
-        for key in ("privileged", "ulimits", "deploy"):
-            value.pop(key, None)
-        for child in value.values():
-            strip_podman_incompatible(child)
-    elif isinstance(value, list):
-        for child in value:
-            strip_podman_incompatible(child)
-
-strip_podman_incompatible(data)
-
-nvidia_devices = [path for path in (
-    "/dev/nvidia0",
-    "/dev/nvidiactl",
-    "/dev/nvidia-uvm",
-    "/dev/nvidia-uvm-tools",
-) if os.path.exists(path)]
-nvidia_mounts = []
-nvidia_lib_dirs = set()
-for pattern in (
-    "/usr/bin/nvidia-smi",
-    "/usr/lib/*-linux-gnu/libcuda.so.*",
-    "/usr/lib/*-linux-gnu/libnvidia-ml.so.*",
-    "/usr/lib/*-linux-gnu/libnvidia-ptxjitcompiler.so.*",
-    "/usr/lib/*-linux-gnu/libnvidia-nvvm.so.*",
-    "/usr/lib64/libcuda.so.*",
-    "/usr/lib64/libnvidia-ml.so.*",
-    "/usr/lib64/libnvidia-ptxjitcompiler.so.*",
-    "/usr/lib64/libnvidia-nvvm.so.*",
-):
-    for path in glob.glob(pattern):
-        if os.path.isfile(path) and not os.path.islink(path):
-            nvidia_mounts.append(f"{path}:{path}:ro")
-            if path != "/usr/bin/nvidia-smi":
-                nvidia_lib_dirs.add(os.path.dirname(path))
-
-if bind_repo == "1" and repo_root:
-    volume_name = "accelerated-computing-hub"
-    bind_mount = f"{repo_root}:/accelerated-computing-hub:U"
-    services = data.get("services") or {}
-    for service in services.values():
-        volumes = service.get("volumes") or []
-        service["volumes"] = [bind_mount if item == f"{volume_name}:/accelerated-computing-hub" else item for item in volumes]
-        environment = service.get("environment") or {}
-        if isinstance(environment, dict):
-            environment.setdefault("ACH_RUNTIME_DIR", "/tmp/accelerated-computing-hub-runtime")
-            environment["ACH_USER"] = "root"
-            environment["ACH_UID"] = "0"
-            environment["ACH_GID"] = "0"
-            service["environment"] = environment
-    volumes = data.get("volumes")
-    if isinstance(volumes, dict):
-        volumes.pop(volume_name, None)
-services = data.get("services") or {}
-for service_name, service in services.items():
-    if service_name in ("base", "jupyter", "nsys", "ncu") and nvidia_devices:
-        devices = service.get("devices") or []
-        for device in nvidia_devices:
-            if device not in devices:
-                devices.append(device)
-        service["devices"] = devices
-
-        volumes = service.get("volumes") or []
-        for mount in nvidia_mounts:
-            if mount not in volumes:
-                volumes.append(mount)
-        service["volumes"] = volumes
-
-        environment = service.get("environment") or {}
-        if isinstance(environment, dict):
-            if nvidia_lib_dirs:
-                driver_lib_path = ":".join(sorted(nvidia_lib_dirs))
-                environment["ACH_NVIDIA_LIB_DIRS"] = driver_lib_path
-            environment["ACH_ROOTLESS_PODMAN"] = "1"
-            service["environment"] = environment
-
-        command = service.get("command")
-        entrypoint = service.get("entrypoint") or []
-        service_arg = entrypoint[1] if isinstance(entrypoint, list) and len(entrypoint) > 1 else service_name
-        service["entrypoint"] = ["/accelerated-computing-hub/brev/entrypoint-podman-gpu.bash", service_arg]
-        if command is not None:
-            service["command"] = command
-        else:
-            service.pop("command", None)
-with open(destination, "w", encoding="utf-8") as handle:
-    yaml.safe_dump(data, handle, default_flow_style=False, sort_keys=False)
-PY
+    local output_file
+    local script_path
+    output_file="${TMPDIR:-/tmp}/$(basename "${compose_file}").podman.$$"
+    script_path=$(cd "$(dirname "${BASH_SOURCE[0]}")" || return; pwd -P)
+    python3 "${script_path}/prepare-podman-compose.py" \
+        "${compose_file}" \
+        "${output_file}" \
+        "${ACH_REPO_ROOT:-}" \
+        "${ACH_PODMAN_BIND_REPO:-}"
     echo "${output_file}"
 }
 

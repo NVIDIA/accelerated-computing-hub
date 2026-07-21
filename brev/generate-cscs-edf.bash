@@ -86,15 +86,22 @@ if [ ! -f "${COMPOSE_FILE}" ]; then
     exit 1
 fi
 
+if [ -z "${IMAGE}" ] || [ -z "${WORKDIR}" ]; then
+    COMPOSE_CONFIG=$(docker compose -f "${COMPOSE_FILE}" config --format json)
+fi
 if [ -z "${IMAGE}" ]; then
-    IMAGE=$(awk '/image:[[:space:]]*&image[[:space:]]/ {print $3; exit}' "${COMPOSE_FILE}")
+    IMAGE=$(jq -r '."x-config".image // empty' <<< "${COMPOSE_CONFIG}")
+    if [ -z "${IMAGE}" ]; then
+        echo "Error: x-config.image is not set in ${COMPOSE_FILE}" >&2
+        exit 1
+    fi
 fi
 if [ -n "${IMAGE_TAG}" ]; then
     IMAGE="${IMAGE%%:*}:${IMAGE_TAG}"
 fi
 IMAGE=$(format_cscs_image_ref "${IMAGE}")
 if [ -z "${WORKDIR}" ]; then
-    WORKDIR=$(awk '/working-dir:[[:space:]]*&working-dir[[:space:]]/ {print $3; exit}' "${COMPOSE_FILE}")
+    WORKDIR=$(jq -r '."x-config"."working-dir" // empty' <<< "${COMPOSE_CONFIG}")
 fi
 if [ -z "${OUTPUT}" ]; then
     OUTPUT="${TUTORIAL_DIR}/brev/cscs.toml"
