@@ -17,7 +17,7 @@ Brev Launchables of this tutorial should use:
 
 ## Notebooks
 
-Each exercise notebook that has a paired solution carries `# TODO:` cells with `...` placeholders; the solution fills them in. The intro/reference notebook (07), the synthesis notebook (12), and the mpi4py walkthrough (06) are complete as written and have no separate solution.
+Each exercise notebook that has a paired solution carries clearly marked `# TODO:` placeholders; the solution fills them in. The intro/reference notebook (07) and synthesis notebook (12) are complete as written and have no separate solution.
 
 ### Fundamentals
 
@@ -39,7 +39,7 @@ Each exercise notebook that has a paired solution carries `# TODO:` cells with `
 
 | # | Notebook | Link | Solution |
 |---|----------|------|----------|
-| 06 | mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/06__mpi4py.ipynb) |  |
+| 06 | mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/06__mpi4py.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/06__mpi4py__SOLUTION.ipynb) |
 
 ### Programming models and interoperability
 
