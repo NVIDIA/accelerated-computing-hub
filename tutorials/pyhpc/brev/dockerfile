@@ -1,11 +1,15 @@
 # Stage 1: LLVM builder
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04 AS llvm-builder
+ARG CUDA_BASE_IMAGE=docker.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
+FROM ${CUDA_BASE_IMAGE} AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
 ARG LLVM_TAG=isc2026
 
 ARG LLVM_PARALLEL_LINK_JOBS=2
+ARG LLVM_TARGETS_TO_BUILD="AArch64;X86;NVPTX"
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y \
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
+ && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries \
+ && apt-get update -y \
  && apt-get install -y --no-install-recommends \
     git cmake ninja-build lld build-essential ca-certificates python3 python3-dev \
  && rm -rf /var/lib/apt/lists/*
@@ -13,7 +17,7 @@ RUN git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
  && cmake -S /src/llvm/llvm -B /src/llvm-build -G Ninja \
       -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_ENABLE_PROJECTS="clang;lld" \
-      -DLLVM_TARGETS_TO_BUILD="X86;NVPTX" \
+      -DLLVM_TARGETS_TO_BUILD="${LLVM_TARGETS_TO_BUILD}" \
       -DLLVM_ENABLE_ASSERTIONS=OFF \
       -DLLVM_USE_LINKER=lld \
       -DLLVM_INSTALL_UTILS=ON \
@@ -26,14 +30,16 @@ RUN git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
  && rm -rf /src/llvm /src/llvm-build
 
 # Stage 2: Tutorial image 
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+FROM ${CUDA_BASE_IMAGE}
 
 ENV ACH_TUTORIAL=pyhpc \
     PYTHON_VERSION=3.12 \
     NSIGHT_SYSTEMS_VERSION=2026.1.1 \
-    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_SYSTEMS_AMD64_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_SYSTEMS_ARM64_VERSION=2024.2.3 \
+    NSIGHT_SYSTEMS_ARM64_DEB_FILE=ubuntu2204/sbsa/nsight-systems-cli-2024.2.3_2024.2.3.38-1_arm64.deb \
     NSIGHT_COMPUTE_VERSION=2025.4.1 \
-    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
+    NSIGHT_COMPUTE_DEB_VERSION=2025.4.1.2-1 \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     PIP_ROOT_USER_ACTION=ignore \
@@ -43,8 +49,11 @@ ENV ACH_TUTORIAL=pyhpc \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
-ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
-    ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu
+ENV ACH_NSYS_PATH=/usr/local/nvidia/bin/nsys \
+    ACH_NCU_PATH=/usr/local/nvidia/bin/ncu
+
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
+ && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -69,7 +78,7 @@ RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
 
 # Install Python
 RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
- && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
  && apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION} \
@@ -89,34 +98,58 @@ RUN apt-get update -y \
     build-essential \
     cmake \
     ninja-build \
- && apt-get clean -y \
- && rm -rf /var/lib/apt/lists/*
-
-# Install MPI (notebook 03 runs mpi4py programs under mpirun).
-RUN apt-get update -y \
- && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    openmpi-bin \
-    libopenmpi-dev \
+    mpich \
+    libmpich-dev \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# Install Python packages.
-RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+# Install Python packages. Build mpi4py against MPICH so notebook-local MPI
+# launches work inside CSCS Slurm Container Engine steps.
+RUN MPICC=/usr/bin/mpicc.mpich \
+    pip install --no-cache-dir --root-user-action=ignore --no-binary=mpi4py -r /opt/requirements.txt \
  && rm -f /opt/requirements.txt
 
 # Install Nsight Systems and Nsight Compute.
-RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
- && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
- && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
- && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
- && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
- && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
- && mkdir -p /usr/local/nvidia/bin \
- && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
- && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "${arch}" in \
+      amd64) \
+        nsys_url="https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_AMD64_DEB_FILE}"; \
+        nsys_deb="${NSIGHT_SYSTEMS_AMD64_DEB_FILE##*/}"; \
+        ncu_repo_arch="ubuntu2204/x86_64"; \
+        ncu_deb="nsight-compute-${NSIGHT_COMPUTE_VERSION}_${NSIGHT_COMPUTE_DEB_VERSION}_amd64.deb"; \
+        ;; \
+      arm64) \
+        nsys_url="https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_SYSTEMS_ARM64_DEB_FILE}"; \
+        nsys_deb="${NSIGHT_SYSTEMS_ARM64_DEB_FILE##*/}"; \
+        ncu_repo_arch="ubuntu2204/sbsa"; \
+        ncu_deb="nsight-compute-${NSIGHT_COMPUTE_VERSION}_${NSIGHT_COMPUTE_DEB_VERSION}_arm64.deb"; \
+        ;; \
+      *) \
+        echo "Unsupported architecture for Nsight packages: ${arch}" >&2; \
+        exit 1; \
+        ;; \
+    esac; \
+    curl -fL -o "${nsys_deb}" "${nsys_url}"; \
+    curl -fL -o "${ncu_deb}" "https://developer.download.nvidia.com/compute/cuda/repos/${ncu_repo_arch}/${ncu_deb}"; \
+    apt-get update -y; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "./${nsys_deb}" "./${ncu_deb}"; \
+    rm -f "${nsys_deb}" "${ncu_deb}"; \
+    mkdir -p /usr/local/nvidia/bin; \
+    nsys_path="$(command -v nsys || true)"; \
+    if [ -z "${nsys_path}" ]; then \
+      nsys_path="$(find /opt/nvidia/nsight-systems-cli -name nsys -type f | sort -V | tail -n 1)"; \
+    fi; \
+    ncu_path="$(find /opt/nvidia/nsight-compute -path '*/ncu' -type f | sort -V | tail -n 1)"; \
+    test -n "${nsys_path}"; \
+    test -n "${ncu_path}"; \
+    ln -sf "${nsys_path}" /usr/local/nvidia/bin/nsys; \
+    ln -sf "${ncu_path}" /usr/local/nvidia/bin/ncu; \
+    apt-get clean -y; \
+    rm -rf /var/lib/apt/lists/*
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
@@ -131,6 +164,15 @@ ENV CUDA=/usr/local/cuda-13.1 \
 # Patched LLVM 21.1.8 from the builder stage (install only).
 COPY --from=llvm-builder /opt/llvm /opt/llvm
 
+RUN set -eux; \
+    case "$(dpkg --print-architecture)" in \
+      amd64) cuda_target="x86_64-linux" ;; \
+      arm64) cuda_target="sbsa-linux" ;; \
+      *) echo "Unsupported CUDA target architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac; \
+    test -d "${CUDA}/targets/${cuda_target}"; \
+    ln -sfn "${cuda_target}" "${CUDA}/targets/native-linux"
+
 RUN apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     zlib1g-dev libzstd-dev \
@@ -144,8 +186,8 @@ RUN git clone --depth 1 --branch ${CPPJIT_TAG} ${CPPJIT_REPO} /opt/cppjit-src \
  && rm -rf /opt/cppjit-src
 
 ENV CPPJIT_ENABLE_CUDA=1
-ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/x86_64-linux/include/cccl:${CUDA}/targets/x86_64-linux/include
-ENV LD_LIBRARY_PATH=${CUDA}/lib64:${CUDA}/targets/x86_64-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/native-linux/include/cccl:${CUDA}/targets/native-linux/include
+ENV LD_LIBRARY_PATH=${CUDA}/lib64:${CUDA}/targets/native-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
 # Build-time sanity check
 RUN test -f ${CUDA}/nvvm/libdevice/libdevice.10.bc \
