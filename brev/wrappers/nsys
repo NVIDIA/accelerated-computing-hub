@@ -3,9 +3,13 @@
 UID_="$(id -u)"
 GID_="$(id -g)"
 
-sudo -E -n setpriv \
-  --reuid="$UID_" --regid="$GID_" --init-groups \
-  --inh-caps=+sys_admin,+sys_ptrace \
-  --ambient-caps=+sys_admin,+sys_ptrace \
-  -- \
-  "$ACH_NSYS_PATH" "$@"
+if [ "${ACH_ROOTLESS_PODMAN:-}" != "1" ] && sudo -E -n true >/dev/null 2>&1; then
+  exec sudo -E -n setpriv \
+    --reuid="$UID_" --regid="$GID_" --init-groups \
+    --inh-caps=+sys_admin,+sys_ptrace \
+    --ambient-caps=+sys_admin,+sys_ptrace \
+    -- \
+    "$ACH_NSYS_PATH" "$@"
+else
+  exec "$ACH_NSYS_PATH" "$@"
+fi

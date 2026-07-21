@@ -68,15 +68,5 @@ for VAR in "${VARS[@]}"; do
   fi
 done
 
-# Workaround: The Nsight Streamer container isn't restartable because it unconditionally creates
-# symlinks every time it starts, which fails if the symlinks already exist.
-if test -e /usr/lib/x86_64-linux-gnu/libnvrtc.so; then
-  rm -f /usr/lib/x86_64-linux-gnu/libnvrtc.so
-fi
-
-if test -e /mnt/persist/home/host; then
-  rm -rf /mnt/persist/home/host
-fi
-
 # Hand off to nsight streamer's entrypoint (which handles user switching via USER env var)
 source /setup/entrypoint.sh "$@"

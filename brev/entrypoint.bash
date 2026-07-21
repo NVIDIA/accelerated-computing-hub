@@ -16,10 +16,29 @@ if [ -z "${SERVICE}" ]; then
     exit 1
 fi
 
-# Install gosu if not present
-if ! command -v gosu &> /dev/null; then
+# Install gosu when a root entrypoint needs to switch users.
+if [ "$(id -u)" = "0" ] && ! command -v gosu &> /dev/null; then
     apt-get update -y
     apt-get install -y gosu
+fi
+
+# Rootless Podman receives the host driver as individual bind-mounted files.
+# Create the soname links expected by CUDA without changing Docker entrypoints.
+if [ "${ACH_ROOTLESS_PODMAN:-}" = "1" ]; then
+    for library_link in ${ACH_NVIDIA_LIBRARY_LINKS:-}; do
+        library=${library_link%%:*}
+        soname=${library_link#*:}
+        for path in "/usr/lib/"*-linux-gnu/"${library}".so.* /usr/lib64/"${library}".so.*; do
+            if [ -f "${path}" ] && [ ! -L "${path}" ]; then
+                ln -sf "$(basename "${path}")" "$(dirname "${path}")/${soname}" 2>/dev/null || true
+                break
+            fi
+        done
+    done
+
+    if [ -n "${ACH_NVIDIA_LIB_DIRS:-}" ]; then
+        export LD_LIBRARY_PATH="${ACH_NVIDIA_LIB_DIRS}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+    fi
 fi
 
 # Create user if running as root and user doesn't exist
@@ -78,6 +97,13 @@ if [ "$(id -u)" = "0" ]; then
     # Relax profiling permissions so Nsight tools can run as non-root.
     sysctl -w kernel.perf_event_paranoid=0 > /dev/null 2>&1 || true
     sysctl -w kernel.kptr_restrict=0 > /dev/null 2>&1 || true
+else
+    export ACH_TARGET_USER="${ACH_TARGET_USER:-$(id -un)}"
+    export ACH_TARGET_HOME="${ACH_TARGET_HOME:-${HOME:-}}"
+    if [ -z "${ACH_TARGET_HOME}" ]; then
+        export ACH_TARGET_HOME="$(getent passwd "$(id -u)" | cut -d: -f6 || true)"
+    fi
+    export HOME="${ACH_TARGET_HOME:-/tmp}"
 fi
 
 # Dispatch to service-specific entrypoint

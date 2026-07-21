@@ -1,9 +1,9 @@
 #! /bin/bash
 #
-# Test a Docker Compose file with local repository mounted.
+# Test a Docker/Podman Compose file with local repository mounted.
 #
 # This script sets up the development environment and then calls
-# test-docker-compose.bash to validate Docker Compose configurations.
+# test-docker-compose.bash to validate Docker/Podman Compose configurations.
 #
 # Usage:
 #   ./brev/dev-test.bash [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
@@ -29,7 +29,7 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 
-Test a Docker Compose file with local repository mounted.
+Test a Docker/Podman Compose file with local repository mounted.
 
 Options:
   --mount       Bind-mount local repo into the container (live local files)
@@ -46,7 +46,7 @@ Examples:
   $(basename "$0") --mount accelerated-python
 
 Requirements:
-  - Docker and Docker Compose must be installed
+  - Docker Compose or Podman Compose must be installed
 EOF
     exit 1
 }
@@ -62,7 +62,7 @@ fi
 
 # Check argument
 if [ $# -lt 1 ]; then
-    echo -e "${RED}Error: Tutorial name or Docker Compose file path is required${NC}"
+    echo -e "${RED}Error: Tutorial name or Docker/Podman Compose file path is required${NC}"
     usage
 fi
 

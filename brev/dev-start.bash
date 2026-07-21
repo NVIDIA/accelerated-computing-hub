@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script starts Docker containers for a tutorial.
+# This script starts containers for a tutorial.
 #
 # Usage:
 #   ./dev-start.bash [--mount|--no-mount] <tutorial-name>
@@ -64,11 +64,18 @@ setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
 echo "Starting tutorial: ${ACH_TUTORIAL}"
 cd ${REPO_ROOT}
 
+DOCKER_COMPOSE=$(prepare_compose_file "${DOCKER_COMPOSE}")
+
 # Create a modified docker-compose file that binds to 0.0.0.0 instead of 127.0.0.1
 # This is needed for local development so services are accessible from outside the container
 sed 's/127\.0\.0\.1:/0.0.0.0:/g' "${DOCKER_COMPOSE}" > "${DOCKER_COMPOSE_DEV}"
 
 # Filter out the "volume already exists" warning while preserving all other warnings/errors on stderr
-docker compose -f ${DOCKER_COMPOSE_DEV} up -d 2> >(grep -v "already exists but was not created by Docker Compose" >&2)
+UP_ARGS=(up -d)
+if [ "${ACH_CONTAINER_ENGINE}" = "podman" ]; then
+    UP_ARGS+=(--no-build)
+fi
+compose -f "${DOCKER_COMPOSE_DEV}" "${UP_ARGS[@]}" \
+    2> >(grep -v "already exists but was not created by Docker Compose" >&2)
 
 echo "Tutorial ${ACH_TUTORIAL} started successfully!"

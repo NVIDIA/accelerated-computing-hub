@@ -1,0 +1,38 @@
+numpy == 2.3.5
+matplotlib == 3.10.9
+psutil == 7.2.2
+
+# Jupyter
+jupyter == 1.1.1
+jupyter-server-proxy == 4.4.0
+jupyterlab == 4.5.4
+jupyterlab-nvidia-nsight == 1.0.0
+jupyterlab-execute-time == 3.3.0
+jupyter-dark-detect == 0.1.0
+nbformat == 5.10.4
+nbconvert == 7.17.1
+
+# Programming models and interop (notebooks 04-09: the SWE ladder)
+jax[cuda13] == 0.10.0
+pyomp == 0.5.1
+nanobind == 2.12.0
+pybind11 == 3.0.4
+
+# CuPy and CUDA kernels (notebooks 00-02, 10-12: ported accelerated-python exercises)
+cupy-cuda13x == 13.6.0
+numba-cuda[cu13] == 0.28.2
+cuda-cccl[test-cu13] == 0.4.5
+
+# NVIDIA developer tools (notebooks 10-12: Nsight Systems / Nsight Compute profiling)
+nvtx == 0.2.14
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa5124ebea193f64302058b327f2034ccd8e
+
+# Distributed computing (notebook 03: mpi4py)
+mpi4py == 4.1.1
+
+# Python/C++ Interop (notebook 14)
+cffi == 2.0.0
+memory_profiler == 0.61.0
+
+# Testing
+pytest == 9.0.3

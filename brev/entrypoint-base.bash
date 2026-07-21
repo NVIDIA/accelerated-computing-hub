@@ -4,5 +4,8 @@
 
 set -euo pipefail
 
-# Switch to user and run user-level entrypoint
-exec gosu "${ACH_TARGET_USER}" /accelerated-computing-hub/brev/entrypoint-base-user.bash "$@"
+if [ "$(id -u)" = "0" ]; then
+    exec gosu "${ACH_TARGET_USER}" /accelerated-computing-hub/brev/entrypoint-base-user.bash "$@"
+else
+    exec /accelerated-computing-hub/brev/entrypoint-base-user.bash "$@"
+fi

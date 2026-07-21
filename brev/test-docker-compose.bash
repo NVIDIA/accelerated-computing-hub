@@ -1,8 +1,8 @@
 #! /bin/bash
 #
-# Test a Docker Compose file by starting and stopping containers.
+# Test a Docker/Podman Compose file by starting and stopping containers.
 #
-# This script validates Docker Compose configurations by attempting to start,
+# This script validates Docker/Podman Compose configurations by attempting to start,
 # inspect, and cleanly stop containers.
 #
 # Usage:
@@ -32,7 +32,7 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> [test-args...]
 
-Test a Docker Compose file by starting and stopping containers.
+Test a Docker/Podman Compose file by starting and stopping containers.
 
 Options:
   --mount       Bind-mount local repo into the container
@@ -50,7 +50,7 @@ Examples:
   $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml
 
 Requirements:
-  - Docker and Docker Compose must be installed
+  - Docker Compose or Podman Compose must be installed
 EOF
     exit 1
 }
@@ -66,7 +66,7 @@ fi
 
 # Check argument
 if [ $# -lt 1 ]; then
-    echo -e "${RED}Error: Tutorial name or Docker Compose file path is required${NC}"
+    echo -e "${RED}Error: Tutorial name or Docker/Podman Compose file path is required${NC}"
     usage
 fi
 
@@ -105,23 +105,153 @@ fi
 
 # Validate docker-compose file exists
 if [ ! -f "${COMPOSE_FILE}" ]; then
-    echo -e "${RED}Error: Docker Compose file not found: ${COMPOSE_FILE}${NC}"
+    echo -e "${RED}Error: Docker/Podman Compose file not found: ${COMPOSE_FILE}${NC}"
     exit 1
 fi
 
+is_podman() {
+    [ "${ACH_CONTAINER_ENGINE}" = "podman" ]
+}
+
+setup_test_volume() {
+    export ACH_PODMAN_BIND_REPO=0
+    if [ "${MOUNT}" = "true" ] && is_podman; then
+        export ACH_PODMAN_BIND_REPO=1
+        echo "🔧 Using direct Podman bind mount for local repo"
+        echo ""
+    else
+        setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
+    fi
+}
+
+start_services() {
+    local up_args=(up -d)
+
+    # Rootless Podman consumes the image published by GitHub CI; never build it
+    # on the target system. Docker development runs may still build with --mount.
+    if [ "${MOUNT}" != "true" ] || is_podman; then
+        up_args+=(--no-build)
+    fi
+    if is_podman; then
+        up_args+=(base)
+    else
+        up_args+=(--quiet-pull)
+    fi
+
+    compose -f "${COMPOSE_FILE}" "${up_args[@]}"
+}
+
+wait_for_services() {
+    if ! is_podman; then
+        echo "⏳ Waiting for containers to initialize..."
+        sleep 5
+        return
+    fi
+
+    echo "⏳ Waiting for base service tests to finish..."
+    BASE_CONTAINER=$(container ps -aq \
+        --filter "name=${ACH_TUTORIAL}[-_]base" | head -n 1)
+    if [ -z "${BASE_CONTAINER}" ]; then
+        echo -e "${RED}❌ Could not find the base service container${NC}"
+        return 1
+    fi
+    if ! container wait --condition=stopped "${BASE_CONTAINER}" >/dev/null; then
+        return 1
+    fi
+    if ! BASE_EXIT_CODE=$(container inspect --format '{{.State.ExitCode}}' \
+        "${BASE_CONTAINER}"); then
+        return 1
+    fi
+    echo "Base service exited with code: ${BASE_EXIT_CODE}"
+    echo ""
+    [ "${BASE_EXIT_CODE}" -eq 0 ]
+}
+
+services_started_successfully() {
+    [ "${START_FAILED:-1}" -eq 0 ] || return 1
+
+    if is_podman; then
+        local state
+        local exit_code
+
+        [ "${WAIT_FAILED:-1}" -eq 0 ] || return 1
+        [ -n "${BASE_CONTAINER:-}" ] || return 1
+        state=$(container inspect --format '{{.State.Status}}' "${BASE_CONTAINER}" 2>/dev/null || true)
+        exit_code=$(container inspect --format '{{.State.ExitCode}}' "${BASE_CONTAINER}" 2>/dev/null || true)
+        [ "${state}" = "exited" ] && [ "${exit_code}" = "0" ]
+    else
+        compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"
+    fi
+}
+
+restart_services() {
+    if is_podman; then
+        echo "🔄 Skipping service restart test for one-shot Podman base service"
+        return 0
+    fi
+
+    if ! compose -f "${COMPOSE_FILE}" restart; then
+        echo ""
+        echo -e "${RED}❌ Failed to restart services${NC}"
+        echo ""
+        echo "📋 Container logs after failed restart:"
+        echo "--------------------------------------------------------------------------------"
+        compose -f "${COMPOSE_FILE}" logs --tail=50
+        echo "--------------------------------------------------------------------------------"
+        echo ""
+        return 1
+    fi
+
+    echo ""
+    echo -e "${GREEN}✅ Services restarted successfully${NC}"
+    echo ""
+    echo "⏳ Waiting for services to stabilize..."
+    sleep 5
+
+    for i in 1 2 3; do
+        if compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+            echo -e "${YELLOW}⚠️  Detected restarting service(s), waiting...${NC}"
+            sleep 5
+        fi
+    done
+    echo ""
+
+    echo "📊 Container status after restart:"
+    compose -f "${COMPOSE_FILE}" ps
+    echo ""
+    if compose -f "${COMPOSE_FILE}" ps | grep -qE "Exit|Restarting|restarting"; then
+        echo -e "${RED}⚠️  Warning: Some containers are not running after restart${NC}"
+        echo ""
+        echo "📋 Container logs after restart:"
+        echo "--------------------------------------------------------------------------------"
+        compose -f "${COMPOSE_FILE}" logs
+        echo "--------------------------------------------------------------------------------"
+        echo ""
+        return 1
+    fi
+
+    echo -e "${GREEN}✅ All containers running healthy after restart${NC}"
+    echo ""
+}
+
+ORIGINAL_COMPOSE_FILE="${COMPOSE_FILE}"
 echo "================================================================================"
-echo "Testing Docker Compose: ${COMPOSE_FILE}"
+echo "Testing Docker/Podman Compose: ${ORIGINAL_COMPOSE_FILE}"
 echo "================================================================================"
 echo ""
 
 # Stop any existing containers first
 echo "🛑 Stopping any existing containers..."
-docker compose -f "${COMPOSE_FILE}" down &>/dev/null || true
+compose -f "${COMPOSE_FILE}" down &>/dev/null || true
 echo ""
 
 # Set up volume (cleanup + optional bind mount)
 setup_dev_env "${REPO_ROOT}"
-setup_docker_volume "${ACH_TUTORIAL}" "${MOUNT}"
+setup_test_volume
+COMPOSE_FILE=$(prepare_compose_file "${COMPOSE_FILE}")
+if [ "${COMPOSE_FILE}" != "${ORIGINAL_COMPOSE_FILE}" ]; then
+    echo "Using Podman-compatible Compose file: ${COMPOSE_FILE}"
+fi
 
 export ACH_RUN_TESTS=1
 export ACH_TEST_ARGS="$*"
@@ -129,39 +259,43 @@ export ACH_TEST_ARGS="$*"
 # Start container
 echo "📦 Starting containers..."
 echo ""
-if docker compose -f "${COMPOSE_FILE}" up -d --quiet-pull; then
+if start_services; then
+    START_FAILED=0
     echo ""
     echo -e "${GREEN}✅ Containers started successfully${NC}"
     echo ""
 
     # Wait for containers to initialize, checking for restart loops
-    echo "⏳ Waiting for containers to initialize..."
-    sleep 5
+    if wait_for_services; then
+        WAIT_FAILED=0
+    else
+        WAIT_FAILED=1
+    fi
 
     # Check multiple times to catch restart loops
     for i in 1 2 3; do
-        if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+        if compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
             echo -e "${YELLOW}⚠️  Detected restarting service(s), waiting...${NC}"
             sleep 5
         fi
     done
 
     # Final check for restart-looping services
-    if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
+    if compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
         echo -e "${RED}❌ Service(s) stuck in restart loop${NC}"
         echo ""
         echo "📊 Container status:"
-        docker compose -f "${COMPOSE_FILE}" ps
+        compose -f "${COMPOSE_FILE}" ps
         echo ""
         echo "📋 Container logs:"
         echo "--------------------------------------------------------------------------------"
-        docker compose -f "${COMPOSE_FILE}" logs --tail=100
+        compose -f "${COMPOSE_FILE}" logs --tail=100
         echo "--------------------------------------------------------------------------------"
         echo ""
 
         # Clean up
         echo "🛑 Stopping containers..."
-        docker compose -f "${COMPOSE_FILE}" down || true
+        compose -f "${COMPOSE_FILE}" down || true
         echo ""
         echo "================================================================================"
         echo -e "${RED}❌ TEST FAILED: ${COMPOSE_FILE}${NC}"
@@ -169,83 +303,35 @@ if docker compose -f "${COMPOSE_FILE}" up -d --quiet-pull; then
         exit 1
     fi
     echo ""
+else
+    START_FAILED=1
 fi
 
-if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
+if services_started_successfully; then
     # Show container status
     echo "📊 Container status:"
-    docker compose -f "${COMPOSE_FILE}" ps
+    compose -f "${COMPOSE_FILE}" ps
     echo ""
 
     # Capture and display logs
     echo "📋 Container logs:"
     echo "--------------------------------------------------------------------------------"
-    docker compose -f "${COMPOSE_FILE}" logs
+    compose -f "${COMPOSE_FILE}" logs
     echo "--------------------------------------------------------------------------------"
     echo ""
 
     # Test restart functionality
     echo "🔄 Testing service restart..."
     echo ""
-    if docker compose -f "${COMPOSE_FILE}" restart; then
-        echo ""
-        echo -e "${GREEN}✅ Services restarted successfully${NC}"
-        echo ""
-
-        # Wait for services to stabilize, checking for restart loops
-        echo "⏳ Waiting for services to stabilize..."
-        sleep 5
-
-        # Check multiple times to catch restart loops
-        for i in 1 2 3; do
-            if docker compose -f "${COMPOSE_FILE}" ps 2>/dev/null | grep -qE "Restarting|restarting"; then
-                echo -e "${YELLOW}⚠️  Detected restarting service(s), waiting...${NC}"
-                sleep 5
-            fi
-        done
-        echo ""
-
-        # Verify containers are still running after restart
-        echo "📊 Container status after restart:"
-        docker compose -f "${COMPOSE_FILE}" ps
-        echo ""
-
-        # Check if any containers are not in running state or stuck restarting
-        if docker compose -f "${COMPOSE_FILE}" ps | grep -qE "Exit|Restarting|restarting"; then
-            echo -e "${RED}⚠️  Warning: Some containers are not running after restart${NC}"
-            echo ""
-
-            # Show logs for troubleshooting
-            echo "📋 Container logs after restart:"
-            echo "--------------------------------------------------------------------------------"
-            docker compose -f "${COMPOSE_FILE}" logs
-            echo "--------------------------------------------------------------------------------"
-            echo ""
-
-            RESTART_FAILED=1
-        else
-            echo -e "${GREEN}✅ All containers running healthy after restart${NC}"
-            echo ""
-            RESTART_FAILED=0
-        fi
+    if restart_services; then
+        RESTART_FAILED=0
     else
-        echo ""
-        echo -e "${RED}❌ Failed to restart services${NC}"
-        echo ""
-
-        # Show logs for troubleshooting
-        echo "📋 Container logs after failed restart:"
-        echo "--------------------------------------------------------------------------------"
-        docker compose -f "${COMPOSE_FILE}" logs --tail=50
-        echo "--------------------------------------------------------------------------------"
-        echo ""
-
         RESTART_FAILED=1
     fi
 
     # Stop containers
     echo "🛑 Stopping containers..."
-    if docker compose -f "${COMPOSE_FILE}" down; then
+    if compose -f "${COMPOSE_FILE}" down; then
         echo -e "${GREEN}✅ Containers stopped successfully${NC}"
         echo ""
 
@@ -267,13 +353,13 @@ else
     # Try to capture any logs that might be available
     echo "📋 Attempting to capture logs from failed startup:"
     echo "--------------------------------------------------------------------------------"
-    docker compose -f "${COMPOSE_FILE}" logs || true
+    compose -f "${COMPOSE_FILE}" logs || true
     echo "--------------------------------------------------------------------------------"
     echo ""
 
     # Try to clean up
     echo "🛑 Attempting cleanup..."
-    docker compose -f "${COMPOSE_FILE}" down || true
+    compose -f "${COMPOSE_FILE}" down || true
     echo ""
 
     RETURN_CODE=1

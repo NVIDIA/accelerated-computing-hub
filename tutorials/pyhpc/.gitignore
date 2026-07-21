@@ -1,0 +1,40 @@
+# Artifacts generated when the tutorial is run.
+#
+# SWE ladder (notebooks 04-09):
+notebooks/build/
+notebooks/CMakeLists.txt
+notebooks/swe_step.cpython-*.so
+notebooks/timings.json
+
+# Kernel / asynchrony notebooks (10-12): %%writefile scripts, Nsight
+# profiler reports, the downloaded text corpus, and rendered plots.
+# Patterns are applied at the notebooks/ root and under solutions/, since
+# executing the solution notebooks (e.g. in CI) writes the same artifacts there.
+notebooks/*.py
+notebooks/solutions/*.py
+!notebooks/swe_core.py
+!notebooks/mpi4py_launcher.py
+notebooks/*.nsys-rep
+notebooks/solutions/*.nsys-rep
+notebooks/*.sqlite
+notebooks/solutions/*.sqlite
+notebooks/*.ncu-rep
+notebooks/solutions/*.ncu-rep
+notebooks/books__15m.txt
+notebooks/solutions/books__15m.txt
+notebooks/test.png
+notebooks/solutions/test.png
+
+# Generated C/C++ from %%writefile cells (nanobind / cffi / cppjit / interop
+# exercises). The checked-in tutorial source is re-included below.
+notebooks/solutions/*.c
+notebooks/solutions/*.cpp
+notebooks/solutions/*.cxx
+notebooks/solutions/*.hpp
+notebooks/solutions/*.hxx
+!notebooks/solutions/swe_step.cpp
+!notebooks/solutions/swe_thrust_solver.cpp
+
+__pycache__/
+*.egg-info/
+*.log

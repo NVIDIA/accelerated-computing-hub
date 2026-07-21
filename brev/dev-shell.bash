@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# This script starts an interactive shell in a Docker container for a tutorial.
+# This script starts an interactive shell in a container for a tutorial.
 #
 # Usage:
 #   ./brev/dev-shell.bash [--mount|--no-mount] <tutorial-name|docker-compose-file> <service-name>
@@ -29,7 +29,7 @@ usage() {
     cat << EOF
 Usage: $(basename "$0") [--mount|--no-mount] <tutorial-name|docker-compose-file> <service-name>
 
-Start an interactive shell in a Docker container for a tutorial.
+Start an interactive shell in a container for a tutorial.
 
 Options:
   --mount       Bind-mount local repo into the container (default)
@@ -46,7 +46,7 @@ Examples:
   $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml jupyter
 
 Requirements:
-  - Docker and Docker Compose must be installed
+  - Docker Compose or Podman Compose must be installed
 EOF
     exit 1
 }
@@ -101,13 +101,15 @@ fi
 
 # Validate docker-compose file exists
 if [ ! -f "${COMPOSE_FILE}" ]; then
-    echo -e "${RED}Error: Docker Compose file not found: ${COMPOSE_FILE}${NC}"
+    echo -e "${RED}Error: Docker/Podman Compose file not found: ${COMPOSE_FILE}${NC}"
     exit 1
 fi
+setup_container_engine
+COMPOSE_FILE=$(prepare_compose_file "${COMPOSE_FILE}")
 
 echo "================================================================================"
 echo "Starting interactive shell for: ${ACH_TUTORIAL} (service: ${SERVICE})"
-echo "Docker Compose file: ${COMPOSE_FILE}"
+echo "Docker/Podman Compose file: ${COMPOSE_FILE}"
 echo "================================================================================"
 echo ""
 
@@ -119,7 +121,13 @@ echo "🚀 Starting interactive shell as ${ACH_USER}..."
 echo "   (Type 'exit' or press Ctrl+D to exit the shell)"
 echo ""
 
-docker compose -f "${COMPOSE_FILE}" run --rm -it \
+# Podman development consumes the published image. Pull it before `run` so a
+# missing image cannot make podman-compose fall back to the build stanza.
+if [ "${ACH_CONTAINER_ENGINE}" = "podman" ]; then
+    compose -f "${COMPOSE_FILE}" pull base "${SERVICE}"
+fi
+
+compose -f "${COMPOSE_FILE}" run --rm -it \
     --entrypoint "/accelerated-computing-hub/brev/entrypoint.bash" \
     "${SERVICE}" shell
 
