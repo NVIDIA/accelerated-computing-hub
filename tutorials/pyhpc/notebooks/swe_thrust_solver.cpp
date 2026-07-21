@@ -4,6 +4,8 @@
 // interior cells with a __device__ lambda for the Rusanov flux step
 
 
+#define NVTX_DISABLE
+
 #include <cuda_runtime.h>
 #include <thrust/execution_policy.h>
 #include <thrust/for_each.h>
