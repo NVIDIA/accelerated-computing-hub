@@ -27,8 +27,16 @@ TUTORIAL_ROOT=/accelerated-computing-hub/tutorials/pyhpc
 
 if [ $# -gt 0 ]; then
     if [[ "$1" == -* ]] || [[ "$1" == */* ]] || [[ "$1" == *.py ]]; then
-        echo "Running: pytest $@"
-        pytest "$@"
+        PYTEST_ARGS=()
+        for ARG in "$@"; do
+            if [[ "${ARG}" != -* ]] && [[ "${ARG}" == */* || "${ARG}" == *.py ]] && [ ! -e "${ARG}" ] && [ -e "${TUTORIAL_ROOT}/${ARG}" ]; then
+                PYTEST_ARGS+=("${TUTORIAL_ROOT}/${ARG}")
+            else
+                PYTEST_ARGS+=("${ARG}")
+            fi
+        done
+        echo "Running: pytest ${PYTEST_ARGS[*]}"
+        pytest "${PYTEST_ARGS[@]}"
     else
         echo "Running: pytest ${TUTORIAL_ROOT}/test/test_notebooks.py -k \"$*\""
         pytest "${TUTORIAL_ROOT}/test/test_notebooks.py" -k "$*"

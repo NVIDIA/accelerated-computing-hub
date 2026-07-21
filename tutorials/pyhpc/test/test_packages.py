@@ -10,6 +10,7 @@ so a broken image is caught before the much slower notebook suite.
 import subprocess
 import sys
 import warnings
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -126,7 +127,7 @@ def test_nsightful():
 
 
 def test_mpi4py():
-    """mpi4py runs under mpirun with multiple ranks and reduces correctly."""
+    """mpi4py runs with multiple local ranks and reduces correctly."""
     program = (
         "from mpi4py import MPI\n"
         "comm = MPI.COMM_WORLD\n"
@@ -135,9 +136,13 @@ def test_mpi4py():
         "if comm.Get_rank() == 0:\n"
         "    print('mpi4py ranks:', comm.Get_size())\n"
     )
+
+    launcher = Path(__file__).resolve().parents[1] / "notebooks" / "mpi4py_launcher.py"
+    command = [sys.executable, str(launcher), "-n", "4", sys.executable, "-c", program]
+
     result = subprocess.run(
-        ["mpirun", "--oversubscribe", "-n", "4", sys.executable, "-c", program],
+        command,
         capture_output=True, text=True, timeout=120,
     )
-    assert result.returncode == 0, f"mpirun failed:\n{result.stdout}\n{result.stderr}"
+    assert result.returncode == 0, f"MPI launcher failed:\n{result.stdout}\n{result.stderr}"
     assert "mpi4py ranks: 4" in result.stdout
