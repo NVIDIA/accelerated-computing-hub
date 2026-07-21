@@ -121,6 +121,12 @@ echo "🚀 Starting interactive shell as ${ACH_USER}..."
 echo "   (Type 'exit' or press Ctrl+D to exit the shell)"
 echo ""
 
+# Podman development consumes the published image. Pull it before `run` so a
+# missing image cannot make podman-compose fall back to the build stanza.
+if [ "${ACH_CONTAINER_ENGINE}" = "podman" ]; then
+    compose -f "${COMPOSE_FILE}" pull base "${SERVICE}"
+fi
+
 compose -f "${COMPOSE_FILE}" run --rm -it \
     --entrypoint "/accelerated-computing-hub/brev/entrypoint.bash" \
     "${SERVICE}" shell

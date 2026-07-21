@@ -298,7 +298,6 @@ jobs:
             --type all
 
       - name: Generate CSCS EDF
-        if: contains(matrix.architectures, 'arm64')
         run: |
           brev/generate-cscs-edf.bash \
             --output "artifacts/branch-latest/${TUTORIAL_NAME}/brev/cscs.toml" \
