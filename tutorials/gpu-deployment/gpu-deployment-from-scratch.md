@@ -501,7 +501,6 @@ To be able to visualize the file, we can download it an use [nsight-systems](htt
 
 Further reading:
 - [Nsight Documentation](https://developer.nvidia.com/nsight-systems/get-started)
-- [Jupyter Lab Nsight extension](https://pypi.org/project/jupyterlab-nvidia-nsight/)
 - [Towards Data Science community guide](https://medium.com/data-science/profiling-cuda-using-nsight-systems-a-numba-example-fc65003f8c52)
 
 
