@@ -3,81 +3,15 @@
 UID_="$(id -u)"
 GID_="$(id -g)"
 
-LEGACY_ARM_NSYS=0
-case "$(uname -m)" in
-  aarch64|arm64) LEGACY_ARM_NSYS=1 ;;
-esac
-
-is_executable_command() {
-  local candidate=$1
-  local resolved
-
-  if [[ "${candidate}" == */* ]]; then
-    [ -x "${candidate}" ]
-    return
-  fi
-
-  resolved=$(command -v -- "${candidate}" 2>/dev/null) || return 1
-  [[ "${resolved}" == /* ]] && [ -x "${resolved}" ]
-}
-
-SUBCOMMAND=${1:-}
-if [ "$#" -gt 0 ]; then
-  shift
-fi
-
-ARGS=()
-if [ -n "${SUBCOMMAND}" ]; then
-  ARGS+=("${SUBCOMMAND}")
-fi
-
-BEFORE_APPLICATION=1
-while [ "$#" -gt 0 ]; do
-  case "$1" in
-    --cuda-event-trace=false)
-      if [ "${LEGACY_ARM_NSYS}" = "1" ] && [ "${SUBCOMMAND}" = "profile" ] && [ "${BEFORE_APPLICATION}" = "1" ]; then
-        # Nsight Systems CLI 2024.x on Linux ARM64 does not support this newer
-        # option. Its default behavior is acceptable for the tutorial profiles.
-        shift
-      else
-        ARGS+=("$1")
-        shift
-      fi
-      ;;
-    --force-overwrite|--quiet|--type)
-      if { [ "${SUBCOMMAND}" = "export" ] || { [ "${SUBCOMMAND}" = "profile" ] && [ "${BEFORE_APPLICATION}" = "1" ]; }; } && [ "$#" -gt 1 ]; then
-        ARGS+=("$1=$2")
-        shift 2
-      else
-        ARGS+=("$1")
-        shift
-      fi
-      ;;
-    *)
-      if [ "${SUBCOMMAND}" = "profile" ] && [ "${BEFORE_APPLICATION}" = "1" ]; then
-        if [ "$1" = "--" ]; then
-          BEFORE_APPLICATION=0
-        elif [[ "$1" != -* ]] && is_executable_command "$1"; then
-          BEFORE_APPLICATION=0
-        fi
-      fi
-      ARGS+=("$1")
-      shift
-      ;;
-  esac
-done
-
 if [ "${ACH_ROOTLESS_PODMAN:-}" = "1" ]; then
-  exec "${ACH_NSYS_PATH}" "${ARGS[@]}"
-fi
-
-if sudo -E -n true >/dev/null 2>&1; then
+  exec "${ACH_NSYS_PATH}" "$@"
+elif sudo -E -n true >/dev/null 2>&1; then
   exec sudo -E -n setpriv \
     --reuid="$UID_" --regid="$GID_" --init-groups \
     --inh-caps=+sys_admin,+sys_ptrace \
     --ambient-caps=+sys_admin,+sys_ptrace \
     -- \
-    "$ACH_NSYS_PATH" "${ARGS[@]}"
+    "$ACH_NSYS_PATH" "$@"
+else
+  exec "$ACH_NSYS_PATH" "$@"
 fi
-
-exec "$ACH_NSYS_PATH" "${ARGS[@]}"

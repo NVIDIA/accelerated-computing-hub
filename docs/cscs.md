@@ -66,15 +66,8 @@ The driver runs:
 - the full notebook ladder, including `03__mpi4py`
 - direct `nsys` and `ncu` command-line smoke checks
 
-The PyHPC image builds `mpi4py` against MPICH for CSCS. Notebook 03 uses the
-repository's `mpi4py_launcher.py` helper so the examples run with local
-MPICH/Hydra ranks inside the one-rank notebook container step. The helper
-forces Hydra's `fork` launcher, avoiding nested use of CSCS's host `srun`
-binary from inside the Ubuntu container.
-
-The CppJIT/Thrust SWE solver defines `NVTX_DISABLE` before including Thrust.
-This avoids an intermittent AArch64 clang-repl relocation failure in Thrust's
-NVTX annotation symbols on CSCS while preserving the GPU Thrust implementation.
+The PyHPC image builds `mpi4py` against MPICH. Notebook 03 runs local ranks with
+`mpirun.mpich -launcher fork`, avoiding nested use of the host `srun` launcher.
 
 For debugging, the individual commands are below.
 
