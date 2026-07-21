@@ -30,6 +30,10 @@ on:
 env:
   ACH_TUTORIALS_FILTER: ${{ github.event.inputs.tutorials_filter || 'pyhpc' }}
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   discover-tutorials:
     runs-on: linux-amd64-cpu4
@@ -68,7 +72,8 @@ jobs:
 
   build-and-push:
     needs: discover-tutorials
-    runs-on: linux-amd64-cpu4
+    runs-on: linux-amd64-cpu16
+    timeout-minutes: 360
     defaults:
       run:
         working-directory: ${{ github.workspace }}
@@ -116,7 +121,7 @@ jobs:
 
       - name: Set up Python (for HPCCM)
         if: env.HAS_HPCCM == 'true'
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
@@ -225,8 +230,8 @@ jobs:
           DOCKER_BUILDKIT: 1
           BUILDKIT_PROGRESS: plain
         with:
-          timeout_minutes: 60
-          max_attempts: 3
+          timeout_minutes: 165
+          max_attempts: 2
           retry_wait_seconds: 30
           command: |
             cd ${{ matrix.tutorial }}/brev
@@ -234,31 +239,60 @@ jobs:
             # Show buildx version and check for cache images
             docker buildx version
             echo "Checking for existing cache images..."
-            docker manifest inspect "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}" > /dev/null 2>&1 && echo "✓ Branch cache exists" || echo "✗ Branch cache not found"
-            docker manifest inspect "${IMAGE_NAME}:buildcache-main" > /dev/null 2>&1 && echo "✓ Main cache exists" || echo "✗ Main cache not found"
+            docker manifest inspect \
+              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64" \
+              > /dev/null 2>&1 && echo "Branch cache exists" || \
+              echo "Branch cache not found"
+            docker manifest inspect "${IMAGE_NAME}:buildcache-main-amd64" \
+              > /dev/null 2>&1 && echo "Main cache exists" || \
+              echo "Main cache not found"
 
             # Nightly scheduled builds and manual purge builds skip cache-from to rebuild from scratch.
+            CACHE_FROM_FLAGS=()
             if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name == 'workflow_dispatch' && inputs.purge_cache }}" = "true" ]; then
-              CACHE_FROM_FLAGS=""
               echo "Purge build: skipping cache-from to rebuild from scratch."
             else
-              CACHE_FROM_FLAGS="--set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH} --set base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
+              CACHE_FROM_FLAGS=(
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main-amd64"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main"
+              )
+            fi
+
+            if [ "${TUTORIAL_NAME}" = "pyhpc" ]; then
+              TAG_FLAGS=(
+                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-amd64"
+              )
+              BUILD_ARG_FLAGS=(
+                --set "base.args.LLVM_PARALLEL_LINK_JOBS=2"
+                --set "base.args.LLVM_TARGETS_TO_BUILD=X86;NVPTX"
+              )
+            else
+              TAG_FLAGS=(
+                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
+                --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
+              )
+              BUILD_ARG_FLAGS=()
+              if [ "${GIT_BRANCH_NAME}" = "main" ]; then
+                TAG_FLAGS+=(--set "base.tags=${IMAGE_NAME}:latest")
+              fi
             fi
 
             docker buildx bake \
               --progress=plain \
               --allow=fs.read=* \
               --set "base.output=type=registry" \
-              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest" \
-              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
-              $([ "${GIT_BRANCH_NAME}" = "main" ] && echo "--set base.tags=${IMAGE_NAME}:latest") \
-              $CACHE_FROM_FLAGS \
-              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH},mode=max,image-manifest=true,compression=zstd,compression-level=3" \
+              "${TAG_FLAGS[@]}" \
+              "${BUILD_ARG_FLAGS[@]}" \
+              "${CACHE_FROM_FLAGS[@]}" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-amd64,mode=max,image-manifest=true,compression=zstd,compression-level=3" \
               --set "base.platform=linux/amd64" \
               -f docker-compose.yml \
               base
 
       - name: Create pending commit status for test
+        if: env.TUTORIAL_NAME != 'pyhpc'
         run: |
           gh api \
             --method POST \
@@ -272,6 +306,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Trigger test workflow
+        if: env.TUTORIAL_NAME != 'pyhpc'
         run: |
           echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
           gh workflow run test-brev-tutorial-docker-images.yml \
@@ -292,3 +327,213 @@ jobs:
           echo "Disk usage by directory:"
           du -sh /var/lib/docker/* 2>/dev/null || true
           du -sh /var/lib/buildkit/* 2>/dev/null || true
+
+  build-pyhpc-arm64:
+    needs: discover-tutorials
+    if: contains(fromJson(needs.discover-tutorials.outputs.tutorials), 'tutorials/pyhpc')
+    runs-on: linux-arm64-cpu16
+    timeout-minutes: 360
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify native ARM64 runner
+        run: |
+          test "$(uname -m)" = "aarch64"
+
+      - name: Set image and branch variables
+        run: |
+          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | \
+            sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
+          GIT_SHA=${{ github.sha }}
+          GIT_SHORT_SHA=${GIT_SHA::7}
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/pyhpc-tutorial"
+          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> "$GITHUB_ENV"
+          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> "$GITHUB_ENV"
+          echo "GIT_SHA=${GIT_SHA}" >> "$GITHUB_ENV"
+          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> "$GITHUB_ENV"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-config: /etc/buildkit/buildkitd.toml
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prune Docker build cache (nightly or manual purge)
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.purge_cache)
+        run: |
+          echo "Purging Docker build cache to rebuild from scratch."
+          docker buildx prune --all --force
+          docker system prune --all --force
+
+      - name: Build and push ARM64 image (with retry)
+        uses: nick-fields/retry@v3
+        env:
+          DOCKER_BUILDKIT: 1
+          BUILDKIT_PROGRESS: plain
+        with:
+          timeout_minutes: 165
+          max_attempts: 2
+          retry_wait_seconds: 30
+          command: |
+            cd tutorials/pyhpc/brev
+
+            docker buildx version
+            echo "Checking for ARM64 cache images..."
+            docker manifest inspect \
+              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64" \
+              > /dev/null 2>&1 && echo "Branch cache exists" || \
+              echo "Branch cache not found"
+            docker manifest inspect "${IMAGE_NAME}:buildcache-main-arm64" \
+              > /dev/null 2>&1 && echo "Main cache exists" || \
+              echo "Main cache not found"
+
+            CACHE_FROM_FLAGS=()
+            if [ "${{ github.event_name }}" = "schedule" ] || \
+               [ "${{ github.event_name == 'workflow_dispatch' && inputs.purge_cache }}" = "true" ]; then
+              echo "Purge build: skipping cache-from to rebuild from scratch."
+            else
+              CACHE_FROM_FLAGS=(
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64"
+                --set "base.cache-from=type=registry,ref=${IMAGE_NAME}:buildcache-main-arm64"
+              )
+            fi
+
+            docker buildx bake \
+              --progress=plain \
+              --allow=fs.read=* \
+              --set "base.output=type=registry" \
+              --set "base.tags=${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}-arm64" \
+              --set "base.args.LLVM_PARALLEL_LINK_JOBS=1" \
+              --set "base.args.LLVM_TARGETS_TO_BUILD=AArch64;NVPTX" \
+              "${CACHE_FROM_FLAGS[@]}" \
+              --set "base.cache-to=type=registry,ref=${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-arm64,mode=max,image-manifest=true,compression=zstd,compression-level=3" \
+              --set "base.platform=linux/arm64" \
+              -f docker-compose.yml \
+              base
+
+      - name: Check disk space after build
+        if: always()
+        run: |
+          df -h /
+          du -sh /var/lib/docker/* 2>/dev/null || true
+          du -sh /var/lib/buildkit/* 2>/dev/null || true
+
+  publish-pyhpc-manifest:
+    needs:
+      - discover-tutorials
+      - build-and-push
+      - build-pyhpc-arm64
+    if: contains(fromJson(needs.discover-tutorials.outputs.tutorials), 'tutorials/pyhpc')
+    runs-on: linux-amd64-cpu4
+    timeout-minutes: 30
+    permissions:
+      actions: write
+      contents: read
+      packages: write
+      statuses: write
+
+    steps:
+      - name: Set image and branch variables
+        run: |
+          GIT_BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          DOCKER_TAG_BRANCH=$(echo "${GIT_BRANCH_NAME}" | \
+            sed 's/[^a-zA-Z0-9._-]/-/g' | tr '[:upper:]' '[:lower:]')
+          GIT_SHA=${{ github.sha }}
+          GIT_SHORT_SHA=${GIT_SHA::7}
+          IMAGE_NAME="ghcr.io/${{ github.repository_owner }}/pyhpc-tutorial"
+          echo "GIT_BRANCH_NAME=${GIT_BRANCH_NAME}" >> "$GITHUB_ENV"
+          echo "DOCKER_TAG_BRANCH=${DOCKER_TAG_BRANCH}" >> "$GITHUB_ENV"
+          echo "GIT_SHA=${GIT_SHA}" >> "$GITHUB_ENV"
+          echo "GIT_SHORT_SHA=${GIT_SHORT_SHA}" >> "$GITHUB_ENV"
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> "$GITHUB_ENV"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-config: /etc/buildkit/buildkitd.toml
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish and verify multi-architecture image
+        run: |
+          set -euo pipefail
+
+          verify_platforms() {
+            local image=$1
+            local expected
+            local platforms
+            expected=$(printf 'linux/amd64\nlinux/arm64')
+            platforms=$(docker buildx imagetools inspect "${image}" --raw | \
+              jq -r '.manifests[] | select(.platform != null) | select(.platform.os != null and .platform.architecture != null) | select(.platform.os != "unknown" and .platform.architecture != "unknown") | "\(.platform.os)/\(.platform.architecture)"' | \
+              sort -u)
+            if [ "${platforms}" != "${expected}" ]; then
+              echo "Unexpected platforms in ${image}:" >&2
+              echo "${platforms}" >&2
+              exit 1
+            fi
+          }
+
+          COMMIT_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
+          AMD64_IMAGE="${COMMIT_IMAGE}-amd64"
+          ARM64_IMAGE="${COMMIT_IMAGE}-arm64"
+
+          docker buildx imagetools create \
+            --tag "${COMMIT_IMAGE}" \
+            "${AMD64_IMAGE}" \
+            "${ARM64_IMAGE}"
+          verify_platforms "${COMMIT_IMAGE}"
+
+          LATEST_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
+          TAG_FLAGS=(--tag "${LATEST_IMAGE}")
+          if [ "${GIT_BRANCH_NAME}" = "main" ]; then
+            TAG_FLAGS+=(--tag "${IMAGE_NAME}:latest")
+          fi
+          docker buildx imagetools create \
+            "${TAG_FLAGS[@]}" \
+            "${COMMIT_IMAGE}"
+          verify_platforms "${LATEST_IMAGE}"
+
+      - name: Create pending commit status for test
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/statuses/${GIT_SHA} \
+            -f state='pending' \
+            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
+            -f description='Test started' \
+            -f context='Test Brev Tutorial Docker Images / test-tutorial (tutorials/pyhpc)'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger test workflow
+        run: |
+          gh workflow run test-brev-tutorial-docker-images.yml \
+            --ref ${{ github.ref_name }} \
+            -f tutorial=pyhpc \
+            -f git_sha=${GIT_SHA} \
+            -f workflow_run_id=${{ github.run_id }}
+          echo "PyHPC test workflow triggered successfully"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
