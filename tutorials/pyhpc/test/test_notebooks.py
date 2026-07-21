@@ -3,9 +3,8 @@ Test that the tutorial notebooks execute without errors.
 
 The notebooks run as an ordered ladder (00 to 13). For each rung we prefer
 the filled-in solution notebook when one exists, and otherwise fall back to
-the exercise notebook (the intro/reference notebook 04, the synthesis
-notebook 09, and the mpi4py walkthrough 03 have no separate solution and are
-complete as written).
+the exercise notebook (the intro/reference notebook 04 and synthesis notebook
+09 have no separate solution and are complete as written).
 
 Ordering matters for the SWE sub-ladder: notebooks 04 to 08 each append a
 row to timings.json and 09 reads them, so 04-08 must run before 09. pytest
