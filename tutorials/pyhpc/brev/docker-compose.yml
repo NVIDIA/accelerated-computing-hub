@@ -48,6 +48,8 @@ services:
     build:
       context: ../../..
       dockerfile: *dockerfile
+      args:
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04}
     restart: "no"
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]

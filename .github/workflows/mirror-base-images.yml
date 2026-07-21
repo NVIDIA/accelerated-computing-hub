@@ -1,6 +1,12 @@
 name: Mirror Base Images to GHCR
 
 on:
+  push:
+    branches:
+      - main
+      - "event/**"
+    paths:
+      - .github/workflows/mirror-base-images.yml
   schedule:
     # Nightly build at 11 PM EST (4 AM UTC).
     - cron: '0 4 * * *'
@@ -21,67 +27,85 @@ jobs:
     strategy:
       matrix:
         image:
-          - source: pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
+          - source: docker.io/pytorch/pytorch:2.9.0-cuda12.8-cudnn9-runtime
             target_name: pytorch-2.9.0-cuda12.8-cudnn9-runtime
           - source: nvcr.io/nvidia/cuda:13.1.0-devel-ubuntu22.04
             target_name: nvidia-cuda-13.1.0-devel-ubuntu22.04
       fail-fast: false
 
     steps:
+      - name: Install skopeo
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends skopeo
+
       - name: Log in to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          printf '%s' "${{ secrets.GITHUB_TOKEN }}" | \
+            skopeo login ghcr.io --username "${{ github.actor }}" --password-stdin
 
       - name: Set target image name
         run: |
+          SOURCE_IMAGE="${{ matrix.image.source }}"
           TARGET_IMAGE="ghcr.io/${{ github.repository_owner }}/mirrors/${{ matrix.image.target_name }}"
+          echo "SOURCE_IMAGE=${SOURCE_IMAGE}" >> $GITHUB_ENV
           echo "TARGET_IMAGE=${TARGET_IMAGE,,}" >> $GITHUB_ENV
-          echo "Will mirror ${{ matrix.image.source }} -> ${TARGET_IMAGE,,}"
+          echo "Will mirror ${SOURCE_IMAGE} -> ${TARGET_IMAGE,,}"
 
-      - name: Check if image already exists in GHCR
+      - name: Check whether mirror has every source platform
         id: check_image
-        continue-on-error: true
         run: |
-          if docker manifest inspect ${TARGET_IMAGE} > /dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Image already exists in GHCR"
+          platform_set() {
+            local image=$1
+            local raw
+            raw=$(skopeo inspect --raw "docker://${image}")
+            if jq -e '.manifests != null' <<< "${raw}" > /dev/null; then
+              jq -r '.manifests[].platform | "\(.os)/\(.architecture)" + (if .variant then "/\(.variant)" else "" end)' \
+                <<< "${raw}" | sort -u
+            else
+              skopeo inspect "docker://${image}" | \
+                jq -r '.Os + "/" + .Architecture + (if .Variant then "/" + .Variant else "" end)'
+            fi
+          }
+
+          source_platforms=$(platform_set "${SOURCE_IMAGE}")
+          if target_platforms=$(platform_set "${TARGET_IMAGE}" 2>/dev/null) && \
+             [ "${source_platforms}" = "${target_platforms}" ]; then
+            echo "copy_required=false" >> $GITHUB_OUTPUT
+            echo "Mirror platform set is current:"
+            echo "${target_platforms}"
           else
-            echo "exists=false" >> $GITHUB_OUTPUT
-            echo "Image does not exist in GHCR"
+            echo "copy_required=true" >> $GITHUB_OUTPUT
+            echo "Mirror is missing or has a different platform set."
+            echo "Source platforms:"
+            echo "${source_platforms}"
+            echo "Target platforms:"
+            echo "${target_platforms:-<missing>}"
           fi
 
-      - name: Pull source image from Docker Hub
-        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
-        env:
-          BUILDKIT_PROGRESS: quiet
+      - name: Copy every source platform to GHCR
+        if: steps.check_image.outputs.copy_required == 'true' || github.event.inputs.force_pull == 'true'
         run: |
-          echo "Pulling ${{ matrix.image.source }} from Docker Hub..."
-          docker pull --quiet ${{ matrix.image.source }}
-
-      - name: Tag image for GHCR
-        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
-        run: |
-          docker tag ${{ matrix.image.source }} ${TARGET_IMAGE}
-
-      - name: Push to GHCR
-        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
-        run: |
-          echo "Pushing ${TARGET_IMAGE} to GHCR..."
-          docker push --quiet ${TARGET_IMAGE}
-          echo "✓ Successfully mirrored ${{ matrix.image.source }}"
+          skopeo copy --all "docker://${SOURCE_IMAGE}" "docker://${TARGET_IMAGE}"
 
       - name: Skipped (image exists)
-        if: steps.check_image.outputs.exists == 'true' && github.event.inputs.force_pull != 'true'
+        if: steps.check_image.outputs.copy_required != 'true' && github.event.inputs.force_pull != 'true'
         run: |
-          echo "⊘ Skipping mirror - image already exists in GHCR"
+          echo "Skipping mirror: every source platform already exists"
           echo "Use workflow_dispatch with force_pull=true to update"
 
       - name: Verify mirrored image
-        if: steps.check_image.outputs.exists != 'true' || github.event.inputs.force_pull == 'true'
         run: |
-          docker pull --quiet ${TARGET_IMAGE}
-          docker images ${TARGET_IMAGE}
-          echo "✓ Image verified successfully"
+          source_platforms=$(skopeo inspect --raw "docker://${SOURCE_IMAGE}" | \
+            jq -r 'if .manifests then [.manifests[].platform | "\(.os)/\(.architecture)" + (if .variant then "/\(.variant)" else "" end)] | sort | unique | .[] else empty end')
+          target_platforms=$(skopeo inspect --raw "docker://${TARGET_IMAGE}" | \
+            jq -r 'if .manifests then [.manifests[].platform | "\(.os)/\(.architecture)" + (if .variant then "/\(.variant)" else "" end)] | sort | unique | .[] else empty end')
+          if [ -n "${source_platforms}" ] && [ "${source_platforms}" != "${target_platforms}" ]; then
+            echo "Source platforms:" >&2
+            echo "${source_platforms}" >&2
+            echo "Target platforms:" >&2
+            echo "${target_platforms:-<single-platform manifest>}" >&2
+            exit 1
+          fi
+          skopeo inspect "docker://${TARGET_IMAGE}" > /dev/null
+          echo "Mirrored image verified successfully"
