@@ -1,77 +1,53 @@
-# CSCS rootless containers
+# CSCS containers
 
-CSCS compute nodes do not provide a Docker daemon. Use rootless Podman for
-image builds and CSCS Slurm Container Engine EDF files for runs with `srun`.
+CSCS compute nodes do not provide a Docker daemon. GitHub Actions builds the
+PyHPC image natively for `linux/amd64` and `linux/arm64` and publishes a single
+multi-architecture image to GHCR. Daint pulls the ARM64 member through the CSCS
+Slurm Container Engine; do not build the image on Daint.
 
-On Daint, build PyHPC images for ARM64/SBSA. If the registry image is not
-multi-arch, build on a compute node and import the result to squashfs before the
-allocation exits. CSCS recommends placing rootless Podman storage on `/dev/shm`
-because compute-node local Podman state is temporary.
+The event image is public and requires no registry credentials:
 
-The GitHub image workflow currently publishes `linux/amd64`. Mirroring the CUDA
-base for both architectures makes ARM64 builds possible, but does not make that
-final PyHPC image multi-arch; use the Daint build/import flow below.
+```text
+ghcr.io/nvidia/pyhpc-tutorial:event-2026-07-cscs-summer-school-latest
+```
 
-## Build and import on Daint
+Wait for the event branch's **Build and Push Brev Tutorial Docker Images**
+workflow to succeed before starting a Daint run.
 
-From the repository checkout, set the account and workspace paths once:
+## Use the published image on Daint
+
+From the repository checkout, set the account and EDF path:
 
 ```bash
 export CSCS_ACCOUNT="YOUR_ACCOUNT"
-export ACH_ROOT="${SCRATCH}/ach-cscs-pyhpc"
 export ACH_REPO="$(git rev-parse --show-toplevel)"
-mkdir -p "${ACH_ROOT}/images" "${ACH_ROOT}/edf" "${ACH_ROOT}/logs"
+export CSCS_EDF="${ACH_REPO}/tutorials/pyhpc/brev/cscs.toml"
 ```
 
-Build the PyHPC image on a compute node and import it to a persistent squashfs:
+The committed EDF selects the public event image without bind-mounting the
+checkout, so the source and dependencies always come from the same CI build.
+Slurm Container Engine selects and caches the ARM64 manifest automatically.
+
+Confirm the published image resolves to ARM64 on Daint:
 
 ```bash
-srun -A "${CSCS_ACCOUNT}" -p normal -t 02:00:00 -N1 -n1 bash -lc '
-  set -euo pipefail
-
-  storage_base="/dev/shm/${USER}/pyhpc-podman-${SLURM_JOB_ID}"
-  storage_conf="${storage_base}/storage.conf"
-  mkdir -p "${storage_base}/runroot" "${storage_base}/root"
-  {
-    echo "[storage]"
-    echo "driver = \"overlay\""
-    echo "runroot = \"${storage_base}/runroot\""
-    echo "graphroot = \"${storage_base}/root\""
-  } > "${storage_conf}"
-  export CONTAINERS_STORAGE_CONF="${storage_conf}"
-
-  cd "${ACH_REPO}"
-  podman build --pull=newer \
-    --build-arg LLVM_PARALLEL_LINK_JOBS=1 \
-    --build-arg "LLVM_TARGETS_TO_BUILD=AArch64;NVPTX" \
-    -t pyhpc-cscs:test \
-    -f tutorials/pyhpc/brev/dockerfile .
-
-  output="${ACH_ROOT}/images/pyhpc-cscs.sqsh"
-  partial="${output}.partial-${SLURM_JOB_ID}"
-  trap "rm -f \"${partial}\"" EXIT
-  rm -f "${partial}"
-  if ! enroot import -x mount -o "${partial}" podman://pyhpc-cscs:test; then
-    echo "enroot import returned nonzero; validating its output" >&2
-  fi
-  unsquashfs -ll -strict-errors "${partial}" >/dev/null
-  mv -f "${partial}" "${output}"
-  trap - EXIT
-'
+srun -A "${CSCS_ACCOUNT}" -p normal -t 00:10:00 -N1 -n1 \
+  --environment="${CSCS_EDF}" \
+  bash -lc 'test "$(dpkg --print-architecture)" = arm64'
 ```
 
-Generate an EDF for the imported image:
+For a reproducible run, generate a no-mount EDF pinned to the CI commit tag:
 
 ```bash
-cd "${ACH_REPO}"
-./brev/generate-cscs-edf.bash --mount \
-  --image "${ACH_ROOT}/images/pyhpc-cscs.sqsh" \
-  --output "${ACH_ROOT}/edf/pyhpc-cscs.toml" \
+./brev/generate-cscs-edf.bash \
+  --tag "event-2026-07-cscs-summer-school-git-<seven-character-git-sha>" \
+  --output "${SCRATCH}/pyhpc-cscs-pinned.toml" \
   pyhpc
 ```
 
-The generator writes `PMIX_MCA_gds=hash` and `PMIX_MCA_psec=native`, which are
-the PMIx settings used for clean Slurm MPI runs on Daint.
+The committed and generated EDFs set `PMIX_MCA_gds=hash` and
+`PMIX_MCA_psec=native`, which are the PMIx settings used for clean Slurm MPI
+runs on Daint.
 
 ## Run tests
 
@@ -80,7 +56,7 @@ Run the CSCS validation driver from the Daint login node:
 ```bash
 cd "${ACH_REPO}"
 CSCS_ACCOUNT="${CSCS_ACCOUNT}" \
-CSCS_EDF="${ACH_ROOT}/edf/pyhpc-cscs.toml" \
+CSCS_EDF="${CSCS_EDF}" \
   tutorials/pyhpc/brev/test-cscs.bash
 ```
 
@@ -106,7 +82,7 @@ Run the package smoke tests:
 
 ```bash
 srun -A "${CSCS_ACCOUNT}" -p normal -t 00:20:00 -N1 -n1 \
-  --environment="${ACH_ROOT}/edf/pyhpc-cscs.toml" \
+  --environment="${CSCS_EDF}" \
   env ACH_RUN_TESTS=1 ACH_TEST_ARGS="test/test_packages.py" \
   /accelerated-computing-hub/brev/entrypoint.bash base
 ```
@@ -115,7 +91,7 @@ Run the MPI package smoke test directly:
 
 ```bash
 srun -A "${CSCS_ACCOUNT}" -p normal -t 00:10:00 -N1 -n1 \
-  --environment="${ACH_ROOT}/edf/pyhpc-cscs.toml" \
+  --environment="${CSCS_EDF}" \
   pytest -q /accelerated-computing-hub/tutorials/pyhpc/test/test_packages.py \
   -k mpi4py -s
 ```
@@ -124,7 +100,7 @@ Run the profiling notebooks:
 
 ```bash
 srun -A "${CSCS_ACCOUNT}" -p normal -t 01:00:00 -N1 -n1 \
-  --environment="${ACH_ROOT}/edf/pyhpc-cscs.toml" \
+  --environment="${CSCS_EDF}" \
   env ACH_RUN_TESTS=1 ACH_TEST_ARGS="10 or 11 or 12" \
   /accelerated-computing-hub/brev/entrypoint.bash base
 ```
@@ -133,7 +109,7 @@ Run the profilers directly when debugging notebook profiling failures:
 
 ```bash
 srun -A "${CSCS_ACCOUNT}" -p normal -t 00:20:00 -N1 -n1 \
-  --environment="${ACH_ROOT}/edf/pyhpc-cscs.toml" bash -lc '
+  --environment="${CSCS_EDF}" bash -lc '
     set -euo pipefail
     cd /tmp
     cat > profile_smoke.py << "PY"
