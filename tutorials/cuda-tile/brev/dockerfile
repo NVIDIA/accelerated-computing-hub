@@ -1,4 +1,4 @@
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+FROM nvidia/cuda:13.3.0-devel-ubuntu22.04
 
 ENV ACH_TUTORIAL=cuda-tile \
     PYTHON_VERSION=3.12 \
@@ -49,11 +49,6 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && ln -s /usr/local/bin/pip /usr/bin/pip \
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
-
-# Install PyTorch with CUDA 13.0 support.
-RUN pip install --no-cache-dir --root-user-action=ignore \
-    --index-url https://download.pytorch.org/whl/cu130 \
-    torch==2.10.0
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
