@@ -7,8 +7,7 @@ This tutorial tours the high-performance Python landscape: the NumPy and CuPy ar
 - [Docker Compose file](./brev/docker-compose.yml) for creating a Brev Launchable or running locally.
 
 Brev Launchables of this tutorial should use:
-- L40S, L4, or T4 instances for the single-GPU notebooks.
-- 4xL4, 2xL4, or 2xL40S instances to give the distributed (mpi4py) notebook multiple ranks.
+- L40S, L4, or T4 instances. The mpi4py notebook runs multiple local CPU ranks.
 - A recent NVIDIA driver. The image ships a CUDA 13.1 toolkit, so the host driver must support CUDA 13.
 - Crusoe or any other provider with Flexible Ports.
 
@@ -51,7 +50,7 @@ Notebooks 04-09 are the Shallow Water Equations "ladder": an intro plus NumPy ba
 
 | # | Notebook | Link | Solution |
 |---|----------|------|----------|
-| 10 | Power Iteration - CuPy - Asynchrony | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/10__power_iteraiton__cupy__asynchrony.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/10__power_iteraiton__cupy__asynchrony__SOLUTION.ipynb) |
+| 10 | Power Iteration - CuPy - Asynchrony | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/10__power_iteration__cupy__asynchrony.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/10__power_iteration__cupy__asynchrony__SOLUTION.ipynb) |
 | 11 | Copy - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/11__copy__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/11__copy__kernel_authoring__SOLUTION.ipynb) |
 | 12 | Book Histogram - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/12__book_histogram__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/12__book_histogram__kernel_authoring__SOLUTION.ipynb) |
 

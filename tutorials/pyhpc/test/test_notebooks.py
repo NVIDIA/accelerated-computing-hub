@@ -46,7 +46,7 @@ LADDER_STEMS = [
     "07__swe__nanobind",
     "08__swe__cppjit__thrust",
     "09__swe__synthesis",
-    "10__power_iteraiton__cupy__asynchrony",
+    "10__power_iteration__cupy__asynchrony",
     "11__copy__kernel_authoring",
     "12__book_histogram__kernel_authoring",
     "13__cpp_interop",

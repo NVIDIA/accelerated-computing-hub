@@ -33,7 +33,7 @@ RUN case "$(dpkg --print-architecture)" in \
  && cmake --build /src/llvm-build --target install \
  && rm -rf /src/llvm /src/llvm-build
 
-# Stage 2: Tutorial image 
+# Stage 2: Tutorial image
 FROM ${CUDA_BASE_IMAGE}
 
 ENV ACH_TUTORIAL=pyhpc \

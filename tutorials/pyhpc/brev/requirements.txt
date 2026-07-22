@@ -30,7 +30,7 @@ nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa51
 # Distributed computing (notebook 03: mpi4py)
 mpi4py == 4.1.1
 
-# Python/C++ Interop (notebook 14)
+# Python/C++ Interop (notebook 13)
 cffi == 2.0.0
 memory_profiler == 0.61.0
 
