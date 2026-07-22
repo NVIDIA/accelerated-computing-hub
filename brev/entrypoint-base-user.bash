@@ -11,14 +11,22 @@ export HOME="${ACH_TARGET_HOME}"
 # services can read them.
 TURN_CREDENTIALS_FILE="/accelerated-computing-hub/.turn-credentials"
 
-if [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
+if { [ -n "${TURN_USERNAME:-}" ] && [ -z "${TURN_PASSWORD:-}" ]; } || \
+   { [ -z "${TURN_USERNAME:-}" ] && [ -n "${TURN_PASSWORD:-}" ]; }; then
+  echo "Error: TURN_USERNAME and TURN_PASSWORD must be set together" >&2
+  exit 1
+fi
+
+if [ -z "${TURN_USERNAME:-}" ] && [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
   TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)"
   TURN_PASSWORD="$(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 32)"
 
   echo "TURN_USERNAME=${TURN_USERNAME}" > "${TURN_CREDENTIALS_FILE}"
   echo "TURN_PASSWORD=${TURN_PASSWORD}" >> "${TURN_CREDENTIALS_FILE}"
+fi
 
-  chmod 644 "${TURN_CREDENTIALS_FILE}"
+if [ -f "${TURN_CREDENTIALS_FILE}" ]; then
+  chmod 600 "${TURN_CREDENTIALS_FILE}"
 fi
 
 # Run per-tutorial start tests if they exist.

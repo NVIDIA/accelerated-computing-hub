@@ -8,6 +8,7 @@
 #include <thrust/execution_policy.h>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
+#include <cmath>
 
 __device__ inline void rusanov_face(double hL, double hR, double huL, double huR,
                                     double g, double& Fh, double& Fhu) {
@@ -15,8 +16,8 @@ __device__ inline void rusanov_face(double hL, double hR, double huL, double huR
     const double hL_s = hL > DRY ? hL : DRY;
     const double hR_s = hR > DRY ? hR : DRY;
     const double uL = huL / hL_s, uR = huR / hR_s;
-    const double cL = sqrt(g * hL_s), cR = sqrt(g * hR_s);
-    const double a  = fmax(fabs(uL) + cL, fabs(uR) + cR);
+    const double cL = ::sqrt(g * hL_s), cR = ::sqrt(g * hR_s);
+    const double a  = ::fmax(::fabs(uL) + cL, ::fabs(uR) + cR);
     Fh  = 0.5 * (huL + huR) - 0.5 * a * (hR - hL);
     Fhu = 0.5 * (huL * uL + 0.5 * g * hL * hL + huR * uR + 0.5 * g * hR * hR)
         - 0.5 * a * (huR - huL);

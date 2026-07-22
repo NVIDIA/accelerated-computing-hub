@@ -141,11 +141,70 @@ def add_rootless_gpu_access(data):
             service["environment"] = environment
 
 
-def use_host_network_for_base(data):
-    """Avoid rootless veth creation for the one-shot Podman test service."""
-    base = (data.get("services") or {}).get("base")
-    if base is not None:
-        base["network_mode"] = "host"
+def use_host_network(data, all_services=False):
+    """Avoid rootless veth creation where the host cannot create one."""
+    services = data.get("services") or {}
+    selected = services.values() if all_services else (services.get("base"),)
+    for service in selected:
+        if service is None:
+            continue
+        service["network_mode"] = "host"
+        service.pop("ports", None)
+
+    if all_services:
+        jupyter = services.get("jupyter")
+        if jupyter is not None:
+            environment = jupyter.get("environment") or {}
+            if isinstance(environment, dict):
+                environment = environment.copy()
+                # All services share localhost; socat cannot bind ports already
+                # owned by the Streamers and Compose DNS is unavailable.
+                environment.update(
+                    {
+                        "ACH_PORT_FORWARDS": "",
+                        "JUPYTER_IP": "127.0.0.1",
+                    }
+                )
+                for name in (
+                    "JUPYTER_HTTPS_CERT",
+                    "JUPYTER_HTTPS_KEY",
+                    "JUPYTER_HOST",
+                    "NSYS_HTTP_URL",
+                    "SELKIES_ENABLE_HTTPS",
+                ):
+                    if name in os.environ:
+                        environment[name] = os.environ[name]
+                jupyter["environment"] = environment
+
+        for service_name in ("nsight", "nsys", "ncu"):
+            service = services.get(service_name)
+            if service is None:
+                continue
+            environment = service.get("environment") or {}
+            if not isinstance(environment, dict):
+                continue
+            environment = environment.copy()
+            environment.update(
+                {
+                    "HOST_IP": "127.0.0.1",
+                    "SELKIES_ADDR": "127.0.0.1",
+                    "SELKIES_TURN_HOST": "127.0.0.1",
+                }
+            )
+            for name in (
+                "SELKIES_ENABLE_HTTPS",
+                "SELKIES_HTTPS_CERT",
+                "SELKIES_HTTPS_KEY",
+            ):
+                if name in os.environ:
+                    environment[name] = os.environ[name]
+            if service_name == "ncu":
+                # Host networking also shares the HTTP port and abstract X
+                # socket namespace. Keep NCU separate from NSYS.
+                environment.update(
+                    {"DISPLAY": ":5", "HTTP_PORT": "8081", "TURN_PORT": "3479"}
+                )
+            service["environment"] = environment
 
 
 def prepare(source, destination, repo_root="", bind_repo=False):
@@ -154,7 +213,10 @@ def prepare(source, destination, repo_root="", bind_repo=False):
         data = yaml.safe_load(handle)
 
     strip_podman_incompatible(data)
-    use_host_network_for_base(data)
+    use_host_network(
+        data,
+        all_services=os.environ.get("ACH_PODMAN_HOST_NETWORK") == "1",
+    )
     if bind_repo and repo_root:
         replace_repo_volume(data, repo_root)
     add_rootless_gpu_access(data)

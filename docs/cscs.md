@@ -53,6 +53,116 @@ For a reproducible run, generate a no-mount EDF pinned to the CI commit tag:
 The generated EDF sets `PMIX_MCA_gds=hash` and `PMIX_MCA_psec=native`, which
 are the PMIx settings used for clean Slurm MPI runs on Daint.
 
+## Run JupyterLab and Nsight Streamer for 10 hours
+
+The web deployment uses the image built by GitHub CI; it never builds an image
+on Daint. It bind-mounts the checkout into JupyterLab, Nsight Systems, and
+Nsight Compute, so notebook changes are saved directly under `ACH_REPO` in
+`$SCRATCH` and remain after the job ends.
+
+On a Daint login node, clone the event branch once. If the checkout already
+exists, switch to the event branch and fast-forward it before students begin
+editing notebooks:
+
+```bash
+export ACH_BRANCH="event/2026-07-cscs-summer-school"
+export ACH_REPO="${SCRATCH}/accelerated-computing-hub"
+if [ -d "${ACH_REPO}/.git" ]; then
+  git -C "${ACH_REPO}" fetch origin "${ACH_BRANCH}"
+  git -C "${ACH_REPO}" switch "${ACH_BRANCH}"
+  git -C "${ACH_REPO}" pull --ff-only
+else
+  git clone --branch "${ACH_BRANCH}" \
+    https://github.com/NVIDIA/accelerated-computing-hub.git "${ACH_REPO}"
+fi
+```
+
+Submit the 10-hour job from that checkout:
+
+```bash
+export CSCS_ACCOUNT="YOUR_ACCOUNT"
+export ACH_STATE="${SCRATCH}/ach-pyhpc-web"
+mkdir -p -m 700 "${ACH_STATE}"
+umask 077
+
+cd "${ACH_REPO}"
+JOB_ID=$(sbatch --parsable \
+  --account="${CSCS_ACCOUNT}" --partition=normal --time=10:00:00 \
+  --nodes=1 --ntasks=1 --gpus=1 --signal=B:TERM@60 \
+  --job-name=ach-pyhpc-web \
+  --chdir="${ACH_REPO}" --output="${ACH_STATE}/slurm-%j.log" \
+  --export=ALL,ACH_REPO="${ACH_REPO}",ACH_STATE="${ACH_STATE}",ACH_BRANCH="${ACH_BRANCH}" \
+  tutorials/pyhpc/brev/start-cscs-web.bash)
+echo "JOB_ID=${JOB_ID}"
+tail -F "${ACH_STATE}/slurm-${JOB_ID}.log"
+```
+
+Wait for `READY node=nidXXXXXX`, then copy that node name. `Ctrl-C` only stops
+`tail`; it does not stop the job. The first launch takes several minutes while
+Podman pulls the published tutorial and NVIDIA Streamer images into node memory.
+
+On the workstation where the browser runs, open an SSH tunnel directly to the
+allocated compute node through the two CSCS login hosts:
+
+```bash
+export CSCS_USER="YOUR_CSCS_USERNAME"
+export NODE="nidXXXXXX"
+
+ssh -N \
+  -o ExitOnForwardFailure=yes \
+  -o ServerAliveInterval=30 -o ServerAliveCountMax=3 \
+  -J "${CSCS_USER}@ela.cscs.ch,${CSCS_USER}@daint.alps.cscs.ch" \
+  -L 127.0.0.1:8888:127.0.0.1:8888 \
+  -L 127.0.0.1:8080:127.0.0.1:8080 \
+  -L 127.0.0.1:3478:127.0.0.1:3478 \
+  -L 127.0.0.1:8081:127.0.0.1:8081 \
+  -L 127.0.0.1:3479:127.0.0.1:3479 \
+  "${CSCS_USER}@${NODE}"
+```
+
+Keep that terminal open and visit these URLs. Each uses a job-local self-signed
+certificate, so the browser asks for confirmation once per URL.
+
+- JupyterLab: <https://127.0.0.1:8888>
+- Nsight Systems: <https://127.0.0.1:8080>
+- Nsight Compute: <https://127.0.0.1:8081>
+
+All five forwards are required. Ports 8080 and 8081 carry the HTTPS interface
+and WebSocket signaling; ports 3478 and 3479 carry the Streamers' WebRTC media
+and input data over TURN/TCP. Forwarding only the three HTTPS ports displays the
+pages but does not provide a working desktop.
+
+TURN/TCP works through SSH and has been validated with both Streamers: ICE
+connected through the relay, the input data channels opened, and video frames
+continued to decode. Because the media is TCP inside the SSH TCP connection,
+packet loss can cause head-of-line stalls. A stable wired connection is
+recommended, and keeping only one Nsight Streamer tab active reduces bandwidth.
+If the tunnel drops, reconnect it and reload the browser tabs; the Slurm job and
+saved notebook files continue to exist.
+
+The web applications have no password. The helper binds their HTTPS listeners
+to compute-node loopback, creates private TURN credentials and logs, and expects
+access only through the tunnel. NVIDIA's TURN helper listens on the node's two
+TURN ports but accepts only the random job credentials. Do not change the HTTPS
+listeners to `0.0.0.0` or share the private state directory.
+
+Find or stop the deployment from a Daint login node:
+
+```bash
+squeue --me --name=ach-pyhpc-web \
+  --format='%.18i %.9T %.10M %.10L %.20N'
+scancel --batch --signal=TERM "${JOB_ID}"
+```
+
+The batch-only `TERM` lets the helper remove its containers and node-local image
+stores before the allocation ends. The job also stops automatically after 10
+hours, and its cleanup leaves student work under `ACH_REPO` untouched. After
+the job has stopped, remove only that job's deployment metadata and log:
+
+```bash
+rm -rf "${ACH_STATE:?}/${JOB_ID}" "${ACH_STATE:?}/slurm-${JOB_ID}.log"
+```
+
 ## Run tests
 
 Run the CSCS validation driver from the Daint login node:

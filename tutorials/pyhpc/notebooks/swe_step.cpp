@@ -30,17 +30,30 @@ inline void rusanov_face(double hL, double hR,
 // The caller pre-allocates output buffers and re-applies BCs between
 // steps. Ghost cells are carried through unchanged.
 void cpp_step(
-    nb::ndarray<const double, nb::ndim<1>> h_in,
-    nb::ndarray<const double, nb::ndim<1>> hu_in,
-    nb::ndarray<double, nb::ndim<1>> h_out,
-    nb::ndarray<double, nb::ndim<1>> hu_out,
+    nb::ndarray<const double, nb::ndim<1>, nb::c_contig, nb::device::cpu> h_in,
+    nb::ndarray<const double, nb::ndim<1>, nb::c_contig, nb::device::cpu> hu_in,
+    nb::ndarray<double, nb::ndim<1>, nb::c_contig, nb::device::cpu> h_out,
+    nb::ndarray<double, nb::ndim<1>, nb::c_contig, nb::device::cpu> hu_out,
     double dx, double dt, double g)
 {
+    if (h_in.ndim() != 1 || hu_in.ndim() != 1 ||
+        h_out.ndim() != 1 || hu_out.ndim() != 1) {
+        throw nb::value_error("cpp_step expects h, hu, h_new, and hu_new to be 1-D arrays");
+    }
+
+    const size_t Np2 = h_in.shape(0);
+    if (hu_in.shape(0) != Np2 || h_out.shape(0) != Np2 ||
+        hu_out.shape(0) != Np2) {
+        throw nb::value_error("cpp_step expects h, hu, h_new, and hu_new to have the same length");
+    }
+    if (Np2 < 2) {
+        throw nb::value_error("cpp_step arrays must contain at least two ghost cells");
+    }
+
     const double* h  = h_in.data();
     const double* hu = hu_in.data();
     double* h_new  = h_out.data();
     double* hu_new = hu_out.data();
-    const size_t Np2 = h_in.shape(0);
     const size_t N   = Np2 - 2;
     const double inv = dt / dx;
 
@@ -59,6 +72,7 @@ void cpp_step(
 NB_MODULE(swe_step, m) {
     m.doc() = "1D SWE Rusanov step (nanobind).";
     m.def("cpp_step", &cpp_step,
-          nb::arg("h"), nb::arg("hu"), nb::arg("h_new"), nb::arg("hu_new"),
+          nb::arg("h").noconvert(), nb::arg("hu").noconvert(),
+          nb::arg("h_new").noconvert(), nb::arg("hu_new").noconvert(),
           nb::arg("dx"), nb::arg("dt"), nb::arg("g") = 9.81);
 }
