@@ -22,6 +22,7 @@ RUN apt-get update -y \
     gnupg \
     gosu \
     libglib2.0-0 \
+    socat \
     sudo \
     ffmpeg \
  && apt-get clean -y \
