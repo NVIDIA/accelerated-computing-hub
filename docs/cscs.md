@@ -188,10 +188,14 @@ This second script prints the three URLs, opens the five forwards, and leaves
 the user in a shell on `nidXXXXXX`. Exiting the shell closes the browser access
 but does not stop the Slurm job. Re-run the connection script to reconnect.
 
-All five local ports must be free. Ports 8888, 8080, and 8081 carry HTTPS and
-WebSocket signaling; ports 3478 and 3479 carry the two Streamers' WebRTC media
-and input over TURN/TCP. Forwarding only the HTTPS ports displays the pages but
-does not provide working Streamer desktops.
+The selected local Jupyter port and the four fixed Streamer ports must be free.
+Ports 8888 (the Jupyter default), 8080, and 8081 carry HTTPS and WebSocket
+signaling; ports 3478 and 3479 carry the two Streamers' WebRTC media and input
+over TURN/TCP. Forwarding only the HTTPS ports displays the pages but does not
+provide working Streamer desktops. If only local port 8888 is already in use,
+set `ACH_JUPYTER_LOCAL_PORT` before running either workstation helper; the
+helper prints the resulting JupyterLab URL. The helper keeps the four Streamer
+ports fixed, and its TURN URLs advertise ports 3478 and 3479 to the browser.
 
 TURN/TCP through SSH was validated with both Streamers: ICE connected through
 the relay, input data channels opened, and video frames continued to decode.
