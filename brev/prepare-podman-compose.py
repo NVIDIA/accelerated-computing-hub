@@ -87,16 +87,24 @@ def find_nvidia_devices():
     ]
 
 
-def replace_repo_volume(data, repo_root):
-    """Use the checkout directly when a Podman test requests a bind mount."""
+def replace_repo_volume(data, repo_root, notebooks_root=""):
+    """Bind the runtime checkout and, optionally, a persistent notebook tree."""
     volume_name = "accelerated-computing-hub"
     bind_mount = f"{repo_root}:/accelerated-computing-hub"
+    notebooks_mount = ""
+    if notebooks_root:
+        notebooks_mount = (
+            f"{notebooks_root}:"
+            "/accelerated-computing-hub/tutorials/pyhpc/notebooks"
+        )
     for service in (data.get("services") or {}).values():
         volumes = service.get("volumes") or []
         service["volumes"] = [
             bind_mount if item == f"{volume_name}:/accelerated-computing-hub" else item
             for item in volumes
         ]
+        if notebooks_mount and notebooks_mount not in service["volumes"]:
+            service["volumes"].append(notebooks_mount)
         environment = service.get("environment") or {}
         if isinstance(environment, dict):
             environment.update({"ACH_USER": "root", "ACH_UID": "0", "ACH_GID": "0"})
@@ -218,7 +226,11 @@ def prepare(source, destination, repo_root="", bind_repo=False):
         all_services=os.environ.get("ACH_PODMAN_HOST_NETWORK") == "1",
     )
     if bind_repo and repo_root:
-        replace_repo_volume(data, repo_root)
+        replace_repo_volume(
+            data,
+            repo_root,
+            notebooks_root=os.environ.get("ACH_PODMAN_NOTEBOOKS_ROOT", ""),
+        )
     add_rootless_gpu_access(data)
 
     with open(destination, "w", encoding="utf-8") as handle:
