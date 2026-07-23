@@ -6,8 +6,8 @@ notebooks/CMakeLists.txt
 notebooks/swe_step.cpython-*.so
 notebooks/timings.json
 
-# Kernel / asynchrony notebooks (10-12): %%writefile scripts, Nsight
-# profiler reports, the downloaded text corpus, and rendered plots.
+# MPI, kernel, and asynchrony notebooks (03, 10-12): %%writefile scripts,
+# MPI results, Nsight profiler reports, the downloaded corpus, and plots.
 # Patterns are applied at the notebooks/ root and under solutions/, since
 # executing the solution notebooks (e.g. in CI) writes the same artifacts there.
 notebooks/*.py
@@ -24,6 +24,10 @@ notebooks/books__15m.txt
 notebooks/solutions/books__15m.txt
 notebooks/test.png
 notebooks/solutions/test.png
+
+# MPI notebook (03): verified field saved for the notebook visualization.
+notebooks/heat_equation_result.npz
+notebooks/solutions/heat_equation_result.npz
 
 # Generated C/C++ from %%writefile cells (nanobind / cffi / cppjit / interop
 # exercises). The checked-in tutorial source is re-included below.
