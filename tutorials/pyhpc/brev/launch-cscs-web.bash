@@ -442,6 +442,10 @@ cleanup() {
 }
 trap cleanup EXIT INT TERM
 
+# Daint's short-lived user systemd manager can terminate rootless Podman
+# processes placed in its transient scope. Keep Podman in the Slurm job cgroup.
+unset DBUS_SESSION_BUS_ADDRESS
+
 for store in main nsys ncu; do
     clean_store "${store}"
 done
