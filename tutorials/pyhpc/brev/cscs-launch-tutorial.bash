@@ -13,7 +13,7 @@ web-service job, waits until all three services are ready, prints the job and
 node IDs, and exits.
 
 Options:
-  --account ACCOUNT      Override the user's default Slurm account
+  --account ACCOUNT      Override the user's primary CSCS project
   --repo PATH            Checkout path (default: $SCRATCH/accelerated-computing-hub)
   --branch BRANCH        Release and new-checkout branch
                          (default: event/2026-07-cscs-summer-school)
@@ -265,6 +265,13 @@ login_main() {
     case "${start_timeout}" in
         ''|*[!0-9]*) echo "Error: --start-timeout must be an integer." >&2; return 2 ;;
     esac
+    if [ -z "${account}" ]; then
+        if ! account=$(id -gn "${USER}") || [ -z "${account}" ]; then
+            echo "Error: could not discover the primary CSCS project; use --account." >&2
+            return 2
+        fi
+    fi
+    echo "Using CSCS Slurm account ${account}."
 
     prepare_checkout "${repo}" "${branch}"
     echo "Using checkout branch ${CHECKOUT_BRANCH} with release assets from ${branch}."
@@ -300,9 +307,7 @@ login_main() {
         "--output=${state_dir}/slurm-%j.log"
         "--export=ALL,ACH_REPO=${repo},ACH_RUNTIME_REPO=${runtime_repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
     )
-    if [ -n "${account}" ]; then
-        sbatch_args+=(--account="${account}")
-    fi
+    sbatch_args+=(--account="${account}")
 
     local job_id
     job_id=$(sbatch "${sbatch_args[@]}" "${batch_script}" --batch)
