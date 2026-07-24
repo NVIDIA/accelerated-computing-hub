@@ -93,11 +93,12 @@ From the workstation, start and connect with one command:
 curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev/cscs-run-tutorial.bash | bash
 ```
 
-On its first run, the helper checks out the event branch in
-`${HOME}/accelerated-computing-hub`. It reads the CSCS username from the signed
-SSH certificate and uses the user's default Slurm account. It reuses one Daint
-SSH connection for the launch and compute-node tunnel; if the certificate
-expired, it runs `cscs-key sign` and retries once.
+The helper downloads the three small helper scripts to a temporary directory;
+it does not clone the repository on the workstation. It reads the CSCS username
+from the signed SSH certificate and uses the user's primary CSCS project as the
+Slurm account. It reuses one Daint SSH connection for the launch and
+compute-node tunnel; if the certificate expired, it runs `cscs-key sign` and
+retries once.
 The Daint-side launcher:
 
 - clones the event branch when `$SCRATCH/accelerated-computing-hub` is absent;
@@ -129,7 +130,8 @@ To launch on a Daint login node without the end-to-end helper, copy or download
 After it reports a node, run the workstation-side connection helper:
 
 ```bash
-cd "${HOME}/accelerated-computing-hub/tutorials/pyhpc/brev"
+curl -fsSLO https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev/cscs-connect-tutorial.bash
+chmod +x cscs-connect-tutorial.bash
 ./cscs-connect-tutorial.bash nidXXXXXX
 ```
 
