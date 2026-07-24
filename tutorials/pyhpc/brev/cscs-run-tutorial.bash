@@ -44,42 +44,41 @@ if [ "${1:-}" = -h ] || [ "${1:-}" = --help ]; then
     exit 0
 fi
 
-bootstrap_workstation_checkout() {
+bootstrap_streamed_helpers() {
     local branch=${ACH_BRANCH:-event/2026-07-cscs-summer-school}
-    local checkout=${ACH_WORKSTATION_REPO:-${HOME:?HOME is not set}/accelerated-computing-hub}
+    local base_url=${ACH_CSCS_HELPER_BASE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/tutorials/pyhpc/brev}
+    local helper_dir
+    helper_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-helpers.XXXXXX")
+
+    cleanup_downloads() {
+        rm -f "${helper_dir}/cscs-run-tutorial.bash" \
+            "${helper_dir}/cscs-launch-tutorial.bash" \
+            "${helper_dir}/cscs-connect-tutorial.bash"
+        rmdir "${helper_dir}" >/dev/null 2>&1 || true
+    }
+    trap cleanup_downloads EXIT
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
 
     [ -t 0 ] || cat >/dev/null
-    if [ ! -e "${checkout}" ]; then
-        git clone --depth 1 --branch "${branch}" \
-            https://github.com/NVIDIA/accelerated-computing-hub.git \
-            "${checkout}"
-    elif ! git -C "${checkout}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        echo "Error: ${checkout} exists but is not a Git checkout." >&2
-        exit 1
-    elif [ "$(git -C "${checkout}" branch --show-current)" != "${branch}" ]; then
-        echo "Error: ${checkout} must be on ${branch}." >&2
-        exit 1
-    elif [ -n "$(git -C "${checkout}" status --porcelain=v1 --untracked-files=all)" ]; then
-        echo "Error: ${checkout} has uncommitted changes." >&2
-        exit 1
-    else
-        git -C "${checkout}" pull --ff-only origin "${branch}"
-    fi
-
-    local runner="${checkout}/tutorials/pyhpc/brev/cscs-run-tutorial.bash"
-    if [ ! -x "${runner}" ]; then
-        echo "Error: ${checkout} does not contain the ${branch} web helper." >&2
-        exit 1
-    fi
+    local helper
+    for helper in cscs-run-tutorial.bash cscs-launch-tutorial.bash \
+        cscs-connect-tutorial.bash; do
+        curl --fail --location --retry 3 --silent --show-error \
+            "${base_url}/${helper}" --output "${helper_dir}/${helper}"
+        chmod 700 "${helper_dir}/${helper}"
+    done
     if ! { exec 3</dev/tty; } 2>/dev/null; then
         echo "Error: run this command from an interactive terminal." >&2
         exit 1
     fi
-    exec "${runner}" "$@" <&3 3<&-
+    local status=0
+    "${helper_dir}/cscs-run-tutorial.bash" "$@" <&3 3<&- || status=$?
+    exit "${status}"
 }
 
 if [ -z "${BASH_SOURCE[0]:-}" ]; then
-    bootstrap_workstation_checkout "$@"
+    bootstrap_streamed_helpers "$@"
 fi
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)
