@@ -5,22 +5,28 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-Usage: connect-cscs-web.bash [--user USER] [--daint HOST] NODE
+Usage: cscs-connect-tutorial --user USER [OPTIONS] NODE
 
 Run this script on the workstation with the web browser. It opens the five
 required SSH forwards and, by default, leaves you in a shell on NODE. Exiting
 that shell closes the forwards but does not cancel the Slurm job.
+
+Options:
+  --user USER     CSCS username (or set CSCS_USER)
+  --key PATH      CSCS private key (default: ~/.ssh/cscs-key)
 EOF
 }
 
 user=${CSCS_USER:-}
-daint_host=${ACH_DAINT_HOST:-daint}
+ssh_key=${CSCS_SSH_KEY:-${HOME:?HOME is not set}/.ssh/cscs-key}
+ela_host=${CSCS_ELA_HOST:-ela.cscs.ch}
+daint_host=${CSCS_DAINT_HOST:-daint.alps.cscs.ch}
 jupyter_local_port=${ACH_JUPYTER_LOCAL_PORT:-8888}
 
 while [ "$#" -gt 0 ]; do
     case "$1" in
         --user) user=${2:?--user requires a value}; shift 2 ;;
-        --daint) daint_host=${2:?--daint requires a value}; shift 2 ;;
+        --key) ssh_key=${2:?--key requires a value}; shift 2 ;;
         -h|--help) usage; exit 0 ;;
         --) shift; break ;;
         -*) echo "Error: unknown argument: $1" >&2; usage >&2; exit 2 ;;
@@ -43,9 +49,11 @@ fi
 case "${node}" in
     ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid compute-node name: ${node}" >&2; exit 2 ;;
 esac
-case "${daint_host}" in
-    ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid Daint SSH alias: ${daint_host}" >&2; exit 2 ;;
-esac
+for host in "${ela_host}" "${daint_host}"; do
+    case "${host}" in
+        ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid CSCS hostname: ${host}" >&2; exit 2 ;;
+    esac
+done
 case "${jupyter_local_port}" in
     ''|*[!0-9]*|??????*) echo "Error: ACH_JUPYTER_LOCAL_PORT must be a port number." >&2; exit 2 ;;
 esac
@@ -60,21 +68,60 @@ case "${jupyter_local_port}" in
         ;;
 esac
 
-if [ -z "${user}" ]; then
-    ssh_config=$(ssh -G "${daint_host}" 2>/dev/null)
-    user=$(awk '
-        $1 == "user" && !found { value = $2; found = 1 }
-        END { print value }
-    ' <<< "${ssh_config}")
-fi
 case "${user}" in
     ''|-*|*[!A-Za-z0-9._-]*)
-        echo "Error: set a valid CSCS_USER or configure User for Host ${daint_host}." >&2
+        echo "Error: provide --user or set CSCS_USER." >&2
         exit 2
         ;;
 esac
+case "${ssh_key}" in
+    *$'\n'*|*$'\r'*|*'"'*) echo "Error: invalid CSCS key path." >&2; exit 2 ;;
+esac
+if [ ! -f "${ssh_key}" ]; then
+    echo "Error: CSCS private key not found: ${ssh_key}" >&2
+    exit 2
+fi
+
+config_dir=
+ssh_config=${ACH_CSCS_SSH_CONFIG:-}
+cleanup() {
+    local status=$?
+    trap - EXIT INT TERM
+    if [ -n "${config_dir}" ]; then
+        rm -f "${ssh_config}"
+        rmdir "${config_dir}" >/dev/null 2>&1 || true
+    fi
+    exit "${status}"
+}
+trap cleanup EXIT INT TERM
+
+if [ -z "${ssh_config}" ]; then
+    config_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-config.XXXXXX")
+    ssh_config="${config_dir}/ssh_config"
+    cat > "${ssh_config}" <<EOF
+Host ach-ela
+    HostName ${ela_host}
+    User ${user}
+    IdentityFile "${ssh_key}"
+    IdentitiesOnly yes
+
+Host ach-daint
+    HostName ${daint_host}
+    User ${user}
+    IdentityFile "${ssh_key}"
+    IdentitiesOnly yes
+    ProxyJump ach-ela
+EOF
+    chmod 600 "${ssh_config}"
+elif [ ! -f "${ssh_config}" ]; then
+    echo "Error: internal SSH configuration not found: ${ssh_config}" >&2
+    exit 1
+fi
 
 ssh_args=(
+    -F "${ssh_config}"
+    -i "${ssh_key}"
+    -o IdentitiesOnly=yes
     -o ExitOnForwardFailure=yes
     -o ServerAliveInterval=30
     -o ServerAliveCountMax=6
@@ -85,14 +132,14 @@ ssh_args=(
     -L 127.0.0.1:3479:127.0.0.1:3479
 )
 
-if [ -n "${ACH_DAINT_CONTROL_PATH:-}" ]; then
-    printf -v control_path_q '%q' "${ACH_DAINT_CONTROL_PATH}"
-    printf -v daint_host_q '%q' "${daint_host}"
+if [ -n "${ACH_CSCS_CONTROL_PATH:-}" ]; then
+    printf -v ssh_config_q '%q' "${ssh_config}"
+    printf -v control_path_q '%q' "${ACH_CSCS_CONTROL_PATH}"
     ssh_args+=(
-        -o "ProxyCommand=ssh -S ${control_path_q} -W %h:%p ${daint_host_q}"
+        -o "ProxyCommand=ssh -F ${ssh_config_q} -S ${control_path_q} -W %h:%p ach-daint"
     )
 else
-    ssh_args+=(-J "${daint_host}")
+    ssh_args+=(-J ach-daint)
 fi
 
 cat <<EOF
@@ -103,4 +150,4 @@ The HTTPS services are available while this SSH connection remains open:
 EOF
 
 target="${user}@${node}"
-exec ssh -tt "${ssh_args[@]}" "${target}"
+ssh -tt "${ssh_args[@]}" "${target}"

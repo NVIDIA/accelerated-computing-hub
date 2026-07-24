@@ -55,63 +55,27 @@ are the PMIx settings used for clean Slurm MPI runs on Daint.
 
 ## Set up workstation SSH access
 
-Do this once on the laptop or workstation that runs the browser. Native Linux,
-macOS, and Windows under WSL are supported; the three helper scripts require
-Bash, OpenSSH, Git, and `curl`.
+Do this once on the workstation that runs the browser. On x86_64 Linux or WSL,
+install [`cscs-key`](https://docs.cscs.ch/access/ssh/) with:
 
-1. Ensure the CSCS account belongs to a project with Daint access and has
-   [multi-factor authentication](https://docs.cscs.ch/access/mfa/) configured.
-2. Install [`cscs-key`](https://docs.cscs.ch/access/ssh/#command-line-access).
-   Homebrew users can run `brew install eth-cscs/tap/cscs-key`; the same page
-   links release binaries for Linux, macOS, and Windows.
-3. Create a local key once, then obtain a one-day CSCS-signed certificate. The
-   signing command opens the CSCS login and MFA flow in the browser:
+```bash
+mkdir -p "${HOME}/.local/bin"
+curl -fsSL https://github.com/eth-cscs/cscs-key/releases/download/v1.1.0/cscs-key-v1.1.0-x86_64-unknown-linux-musl.tar.gz |
+  tar -xz -C "${HOME}/.local/bin"
+export PATH="${HOME}/.local/bin:${PATH}"
+```
 
-   ```bash
-   mkdir -p -m 700 "${HOME}/.ssh"
-   ssh-keygen -t ed25519 -f "${HOME}/.ssh/cscs-key"
-   cscs-key sign
-   eval "$(ssh-agent -s)"
-   ssh-add -t 1d "${HOME}/.ssh/cscs-key"
-   ```
+On macOS, use `brew install eth-cscs/tap/cscs-key`. Then create and sign the
+key; `cscs-key sign` opens the CSCS MFA flow in the browser:
 
-   Run the `ssh-agent`/`ssh-add` lines in the terminal that will run the web
-   helper. Repeat them in a later terminal if that terminal does not already
-   share an agent; do not regenerate the private key.
+```bash
+mkdir -p -m 700 "${HOME}/.ssh"
+ssh-keygen -t ed25519 -f "${HOME}/.ssh/cscs-key"
+cscs-key sign
+```
 
-4. Add the following aliases to `~/.ssh/config`, replacing `YOUR_CSCS_USERNAME`:
-
-   ```ssh-config
-   Host ela
-       HostName ela.cscs.ch
-       User YOUR_CSCS_USERNAME
-       IdentityFile ~/.ssh/cscs-key
-       IdentitiesOnly yes
-
-   Host daint
-       HostName daint.alps.cscs.ch
-       User YOUR_CSCS_USERNAME
-       ProxyJump ela
-       IdentityFile ~/.ssh/cscs-key
-       IdentitiesOnly yes
-
-   Host nid*
-       User YOUR_CSCS_USERNAME
-       IdentityFile ~/.ssh/cscs-key
-       IdentitiesOnly yes
-   ```
-
-   Protect the file and test the complete path:
-
-   ```bash
-   chmod 600 "${HOME}/.ssh/config"
-   ssh daint hostname
-   ```
-
-CSCS does not support username/password SSH. If the certificate expires, run
-`cscs-key sign` again; the private key does not need to be regenerated. See the
-official [CSCS SSH instructions](https://docs.cscs.ch/access/ssh/) for account,
-MFA, key-signing, and platform-specific installation details.
+The helpers connect through `ela.cscs.ch` to `daint.alps.cscs.ch` directly; no
+SSH aliases are required. Renew an expired certificate with `cscs-key sign`.
 
 ## Run JupyterLab and Nsight Streamer for 10 hours
 
@@ -123,33 +87,17 @@ ends. A separate managed release checkout supplies runtime scripts and is never
 used for student work; this lets the launcher preserve an older or modified
 student checkout without running stale infrastructure from it.
 
-Download the three web helpers from the event branch onto the workstation:
+From the workstation, start and connect with one command:
 
 ```bash
-mkdir -p "${HOME}/ach-cscs-web"
-cd "${HOME}/ach-cscs-web"
-BASE_URL="https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev"
-for SCRIPT in launch-cscs-web.bash connect-cscs-web.bash run-cscs-web.bash; do
-  curl --fail --location --remote-name "${BASE_URL}/${SCRIPT}"
-  chmod +x "${SCRIPT}"
-done
+curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev/cscs-run-tutorial |
+  bash -s -- --user YOUR_CSCS_USERNAME --account YOUR_CSCS_ACCOUNT
 ```
 
-### Start and connect in one command
-
-This is the recommended path from the workstation:
-
-```bash
-./run-cscs-web.bash --account YOUR_CSCS_ACCOUNT
-```
-
-The end-to-end helper authenticates to `daint` before sending any script, then
-reuses that one SSH control connection for the launch and compute-node tunnel.
-Ela and Daint authentication, MFA, and first-use host confirmation therefore
-happen before job submission and are not requested a second time. Loading the
-private key into `ssh-agent` above also prevents another passphrase prompt when
-the final SSH client authenticates to the compute node. If public-key
-authentication is rejected, the helper runs `cscs-key sign` and retries once.
+On its first run, the helper checks out the event branch in
+`${HOME}/accelerated-computing-hub`. It reuses one Daint SSH connection for the
+launch and compute-node tunnel; if the certificate expired, it runs
+`cscs-key sign` and retries once.
 The Daint-side launcher:
 
 - clones the event branch when `$SCRATCH/accelerated-computing-hub` is absent;
@@ -172,16 +120,17 @@ self-signed certificate, so the browser asks for confirmation once per URL.
 ### Run the launch and connection separately
 
 To launch on a Daint login node without the end-to-end helper, copy or download
-`launch-cscs-web.bash` there and run:
+`cscs-launch-tutorial` there and run:
 
 ```bash
-./launch-cscs-web.bash --account YOUR_CSCS_ACCOUNT
+./cscs-launch-tutorial --account YOUR_CSCS_ACCOUNT
 ```
 
 After it reports a node, run the workstation-side connection helper:
 
 ```bash
-./connect-cscs-web.bash nidXXXXXX
+cd "${HOME}/accelerated-computing-hub/tutorials/pyhpc/brev"
+./cscs-connect-tutorial --user YOUR_CSCS_USERNAME nidXXXXXX
 ```
 
 This second script prints the three URLs, opens the five forwards, and leaves
@@ -207,12 +156,12 @@ The web applications have no password. Their HTTPS listeners bind only to
 compute-node loopback, and the TURN services require random job credentials.
 Access is therefore expected only through the SSH connection.
 
-Find or stop the deployment from the workstation:
+Find or stop the deployment from the compute-node shell or a Daint login shell:
 
 ```bash
-ssh daint squeue --me --name=ach-pyhpc-web \
+squeue --me --name=ach-pyhpc-web \
   --format='%.18i %.9T %.10M %.10L %.20N'
-ssh daint scancel --full --signal=TERM JOB_ID
+scancel --full --signal=TERM JOB_ID
 ```
 
 The job stops automatically after 10 hours. The full-job `TERM` above gives
