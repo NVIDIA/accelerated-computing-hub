@@ -90,14 +90,14 @@ student checkout without running stale infrastructure from it.
 From the workstation, start and connect with one command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev/cscs-run-tutorial |
-  bash -s -- --user YOUR_CSCS_USERNAME --account YOUR_CSCS_ACCOUNT
+curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/event/2026-07-cscs-summer-school/tutorials/pyhpc/brev/cscs-run-tutorial.bash | bash
 ```
 
 On its first run, the helper checks out the event branch in
-`${HOME}/accelerated-computing-hub`. It reuses one Daint SSH connection for the
-launch and compute-node tunnel; if the certificate expired, it runs
-`cscs-key sign` and retries once.
+`${HOME}/accelerated-computing-hub`. It reads the CSCS username from the signed
+SSH certificate and uses the user's default Slurm account. It reuses one Daint
+SSH connection for the launch and compute-node tunnel; if the certificate
+expired, it runs `cscs-key sign` and retries once.
 The Daint-side launcher:
 
 - clones the event branch when `$SCRATCH/accelerated-computing-hub` is absent;
@@ -120,17 +120,17 @@ self-signed certificate, so the browser asks for confirmation once per URL.
 ### Run the launch and connection separately
 
 To launch on a Daint login node without the end-to-end helper, copy or download
-`cscs-launch-tutorial` there and run:
+`cscs-launch-tutorial.bash` there and run:
 
 ```bash
-./cscs-launch-tutorial --account YOUR_CSCS_ACCOUNT
+./cscs-launch-tutorial.bash
 ```
 
 After it reports a node, run the workstation-side connection helper:
 
 ```bash
 cd "${HOME}/accelerated-computing-hub/tutorials/pyhpc/brev"
-./cscs-connect-tutorial --user YOUR_CSCS_USERNAME nidXXXXXX
+./cscs-connect-tutorial.bash nidXXXXXX
 ```
 
 This second script prints the three URLs, opens the five forwards, and leaves

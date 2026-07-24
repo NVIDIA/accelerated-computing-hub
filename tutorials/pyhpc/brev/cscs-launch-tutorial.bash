@@ -6,14 +6,14 @@ umask 077
 
 usage() {
     cat <<'EOF'
-Usage: cscs-launch-tutorial --account ACCOUNT [OPTIONS]
+Usage: cscs-launch-tutorial.bash [OPTIONS]
 
 Run this script on a Daint login node. It prepares the checkout, submits the
 web-service job, waits until all three services are ready, prints the job and
 node IDs, and exits.
 
 Options:
-  --account ACCOUNT      CSCS Slurm account (or set CSCS_ACCOUNT)
+  --account ACCOUNT      Override the user's default Slurm account
   --repo PATH            Checkout path (default: $SCRATCH/accelerated-computing-hub)
   --branch BRANCH        Release and new-checkout branch
                          (default: event/2026-07-cscs-summer-school)
@@ -262,10 +262,6 @@ login_main() {
         echo "Error: run the launcher on a Daint login node, not inside a Slurm job." >&2
         return 1
     fi
-    if [ -z "${account}" ]; then
-        echo "Error: provide --account or set CSCS_ACCOUNT." >&2
-        return 2
-    fi
     case "${start_timeout}" in
         ''|*[!0-9]*) echo "Error: --start-timeout must be an integer." >&2; return 2 ;;
     esac
@@ -291,14 +287,25 @@ login_main() {
         return 1
     fi
 
+    local -a sbatch_args=(
+        --parsable
+        "--partition=${partition}"
+        "--time=${duration}"
+        --nodes=1
+        --ntasks=1
+        --gpus=1
+        --signal=B:TERM@60
+        --job-name=ach-pyhpc-web
+        "--chdir=${repo}"
+        "--output=${state_dir}/slurm-%j.log"
+        "--export=ALL,ACH_REPO=${repo},ACH_RUNTIME_REPO=${runtime_repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
+    )
+    if [ -n "${account}" ]; then
+        sbatch_args+=(--account="${account}")
+    fi
+
     local job_id
-    job_id=$(sbatch --parsable \
-        --account="${account}" --partition="${partition}" --time="${duration}" \
-        --nodes=1 --ntasks=1 --gpus=1 --signal=B:TERM@60 \
-        --job-name=ach-pyhpc-web \
-        --chdir="${repo}" --output="${state_dir}/slurm-%j.log" \
-        --export=ALL,ACH_REPO="${repo}",ACH_RUNTIME_REPO="${runtime_repo}",ACH_STATE="${state_dir}",ACH_RELEASE_BRANCH="${branch}" \
-        "${batch_script}" --batch)
+    job_id=$(sbatch "${sbatch_args[@]}" "${batch_script}" --batch)
     job_id=${job_id%%;*}
     case "${job_id}" in
         ''|*[!0-9]*) echo "Error: sbatch returned an invalid job ID: ${job_id}" >&2; return 1 ;;
