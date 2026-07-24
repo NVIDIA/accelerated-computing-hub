@@ -15,7 +15,8 @@ node IDs, and exits.
 Options:
   --account ACCOUNT      CSCS Slurm account (or set CSCS_ACCOUNT)
   --repo PATH            Checkout path (default: $SCRATCH/accelerated-computing-hub)
-  --branch BRANCH        Release branch and new-checkout branch (default: event)
+  --branch BRANCH        Release and new-checkout branch
+                         (default: event/2026-07-cscs-summer-school)
   --state PATH           Deployment state directory (default: $SCRATCH/ach-pyhpc-web)
   --runtime-repo PATH    Pre-existing release runtime checkout (advanced)
   --partition NAME       Slurm partition (default: normal)
