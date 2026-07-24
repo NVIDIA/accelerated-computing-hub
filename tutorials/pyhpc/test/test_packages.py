@@ -45,7 +45,7 @@ def test_numba_cuda():
 
 
 def test_cuda_cooperative():
-    """cuda.cooperative builds a block-load algorithm (used by notebook 12)."""
+    """cuda.cooperative builds a block-load algorithm (used by notebook 05)."""
     import cuda.coop as coop
 
     block_load = coop.block.load(np.uint8, 128, 4, "striped")

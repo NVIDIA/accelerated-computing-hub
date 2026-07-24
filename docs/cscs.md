@@ -183,10 +183,10 @@ CSCS_EDF="${CSCS_EDF}" \
 The driver runs:
 
 - package smoke tests through the normal tutorial entrypoint
-- the full notebook ladder, including `03__mpi4py`
+- the full notebook ladder, including `06__mpi4py`
 - direct `nsys` and `ncu` command-line smoke checks
 
-The PyHPC image builds `mpi4py` against MPICH. Notebook 03 runs local ranks with
+The PyHPC image builds `mpi4py` against MPICH. Notebook 06 runs local ranks with
 `mpirun.mpich -launcher fork`, avoiding nested use of the host `srun` launcher.
 
 For debugging, the individual commands are below.
@@ -214,7 +214,7 @@ Run the profiling notebooks:
 ```bash
 srun -A "${CSCS_ACCOUNT}" -p normal -t 01:00:00 -N1 -n1 \
   --environment="${CSCS_EDF}" \
-  env ACH_RUN_TESTS=1 ACH_TEST_ARGS="10 or 11 or 12" \
+  env ACH_RUN_TESTS=1 ACH_TEST_ARGS="03 or 04 or 05" \
   /accelerated-computing-hub/brev/entrypoint.bash base
 ```
 
