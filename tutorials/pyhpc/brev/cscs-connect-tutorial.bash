@@ -5,16 +5,34 @@ set -euo pipefail
 
 usage() {
     cat <<'EOF'
-Usage: cscs-connect-tutorial --user USER [OPTIONS] NODE
+Usage: cscs-connect-tutorial.bash [OPTIONS] NODE
 
 Run this script on the workstation with the web browser. It opens the five
 required SSH forwards and, by default, leaves you in a shell on NODE. Exiting
 that shell closes the forwards but does not cancel the Slurm job.
 
 Options:
-  --user USER     CSCS username (or set CSCS_USER)
+  --user USER     Override the username read from the SSH certificate
   --key PATH      CSCS private key (default: ~/.ssh/cscs-key)
 EOF
+}
+
+discover_cscs_user() {
+    local certificate="${1}-cert.pub"
+    [ -f "${certificate}" ] || return 1
+    local details
+    details=$(ssh-keygen -L -f "${certificate}" 2>/dev/null) || return 1
+    awk '
+        $1 == "Principals:" { principals = 1; next }
+        principals && $1 == "Critical" && $2 == "Options:" { exit }
+        principals {
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/[[:space:]]+$/, "", line)
+            if (line != "") { count++; value = line }
+        }
+        END { if (count == 1) print value; else exit 1 }
+    ' <<< "${details}"
 }
 
 user=${CSCS_USER:-}
@@ -68,12 +86,6 @@ case "${jupyter_local_port}" in
         ;;
 esac
 
-case "${user}" in
-    ''|-*|*[!A-Za-z0-9._-]*)
-        echo "Error: provide --user or set CSCS_USER." >&2
-        exit 2
-        ;;
-esac
 case "${ssh_key}" in
     *$'\n'*|*$'\r'*|*'"'*) echo "Error: invalid CSCS key path." >&2; exit 2 ;;
 esac
@@ -81,6 +93,16 @@ if [ ! -f "${ssh_key}" ]; then
     echo "Error: CSCS private key not found: ${ssh_key}" >&2
     exit 2
 fi
+if [ -z "${user}" ]; then
+    user=$(discover_cscs_user "${ssh_key}" || true)
+fi
+case "${user}" in
+    ''|-*|*[!A-Za-z0-9._-]*)
+        echo "Error: could not read one CSCS username from ${ssh_key}-cert.pub." >&2
+        echo "Run 'cscs-key sign --file ${ssh_key}' or use --user." >&2
+        exit 2
+        ;;
+esac
 
 config_dir=
 ssh_config=${ACH_CSCS_SSH_CONFIG:-}

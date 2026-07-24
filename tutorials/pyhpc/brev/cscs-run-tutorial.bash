@@ -6,19 +6,37 @@ umask 077
 
 usage() {
     cat <<'EOF'
-Usage: cscs-run-tutorial --user USER --account ACCOUNT [OPTIONS]
+Usage: cscs-run-tutorial.bash [OPTIONS]
 
 Run this script on the workstation with the web browser. It opens one
-authenticated SSH control connection to Daint, invokes cscs-launch-tutorial
-there, waits for the services, and then invokes cscs-connect-tutorial locally.
+authenticated SSH control connection to Daint, invokes cscs-launch-tutorial.bash
+there, waits for the services, and then invokes cscs-connect-tutorial.bash locally.
 
 Workstation options:
-  --user USER     CSCS username (or set CSCS_USER)
+  --user USER     Override the username read from the SSH certificate
   --key PATH      CSCS private key (default: ~/.ssh/cscs-key)
 
-Other options are passed to cscs-launch-tutorial, including --repo, --branch,
---state, --partition, --time, and --start-timeout.
+Other options are passed to cscs-launch-tutorial.bash, including --repo, --branch,
+--account, --state, --partition, --time, and --start-timeout.
 EOF
+}
+
+discover_cscs_user() {
+    local certificate="${1}-cert.pub"
+    [ -f "${certificate}" ] || return 1
+    local details
+    details=$(ssh-keygen -L -f "${certificate}" 2>/dev/null) || return 1
+    awk '
+        $1 == "Principals:" { principals = 1; next }
+        principals && $1 == "Critical" && $2 == "Options:" { exit }
+        principals {
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/[[:space:]]+$/, "", line)
+            if (line != "") { count++; value = line }
+        }
+        END { if (count == 1) print value; else exit 1 }
+    ' <<< "${details}"
 }
 
 if [ "${1:-}" = -h ] || [ "${1:-}" = --help ]; then
@@ -48,7 +66,7 @@ bootstrap_workstation_checkout() {
         git -C "${checkout}" pull --ff-only origin "${branch}"
     fi
 
-    local runner="${checkout}/tutorials/pyhpc/brev/cscs-run-tutorial"
+    local runner="${checkout}/tutorials/pyhpc/brev/cscs-run-tutorial.bash"
     if [ ! -x "${runner}" ]; then
         echo "Error: ${checkout} does not contain the ${branch} web helper." >&2
         exit 1
@@ -65,8 +83,8 @@ if [ -z "${BASH_SOURCE[0]:-}" ]; then
 fi
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)
-launch_script="${script_dir}/cscs-launch-tutorial"
-connect_script="${script_dir}/cscs-connect-tutorial"
+launch_script="${script_dir}/cscs-launch-tutorial.bash"
+connect_script="${script_dir}/cscs-connect-tutorial.bash"
 for script in "${launch_script}" "${connect_script}"; do
     if [ ! -x "${script}" ]; then
         echo "Error: missing executable sibling script: ${script}" >&2
@@ -86,9 +104,6 @@ while [ "$#" -gt 0 ]; do
         *) launch_args+=("$1"); shift ;;
     esac
 done
-case "${user}" in
-    ''|-*|*[!A-Za-z0-9._-]*) echo "Error: provide --user or set CSCS_USER." >&2; exit 2 ;;
-esac
 for host in "${ela_host}" "${daint_host}"; do
     case "${host}" in
         ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid CSCS hostname: ${host}" >&2; exit 2 ;;
@@ -101,6 +116,16 @@ if [ ! -f "${ssh_key}" ]; then
     echo "Error: CSCS private key not found: ${ssh_key}" >&2
     exit 2
 fi
+if [ -z "${user}" ]; then
+    user=$(discover_cscs_user "${ssh_key}" || true)
+fi
+case "${user}" in
+    ''|-*|*[!A-Za-z0-9._-]*)
+        echo "Error: could not read one CSCS username from ${ssh_key}-cert.pub." >&2
+        echo "Run 'cscs-key sign --file ${ssh_key}' or use --user." >&2
+        exit 2
+        ;;
+esac
 
 control_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-ssh.XXXXXX")
 control_path="${control_dir}/master"
@@ -163,10 +188,10 @@ if ! open_master; then
     fi
 fi
 
-upload_command="umask 077; mkdir -p \"\$HOME/.local/share/accelerated-computing-hub\"; cat > \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial\"; chmod 700 \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial\""
+upload_command="umask 077; mkdir -p \"\$HOME/.local/share/accelerated-computing-hub\"; cat > \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\"; chmod 700 \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\""
 ssh -F "${ssh_config}" -S "${control_path}" ach-daint "${upload_command}" < "${launch_script}"
 
-remote_command="\"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial\""
+remote_command="\"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\""
 for arg in "${launch_args[@]}"; do
     printf -v quoted_arg '%q' "${arg}"
     remote_command+=" ${quoted_arg}"
