@@ -106,17 +106,16 @@ The Daint-side launcher:
   `main` and is completely clean, including untracked files; and
 - leaves any modified or non-`main` checkout unchanged.
 
-It submits the 10-hour job, waits until all three HTTPS services report ready,
+It submits the 10-hour job, waits until all three web services report ready,
 prints `CSCS_WEB_JOB_ID` and `CSCS_WEB_NODE`, and exits. The workstation helper
 then opens all five forwards and leaves the user in a shell on the allocated
 compute node. There is no `tail` process to interrupt.
 
-Keep the compute-node shell open and visit these URLs. Each uses a job-local
-self-signed certificate, so the browser asks for confirmation once per URL.
+Keep the compute-node shell open and visit these URLs:
 
-- JupyterLab: <https://127.0.0.1:8888>
-- Nsight Systems: <https://127.0.0.1:8080>
-- Nsight Compute: <https://127.0.0.1:8081>
+- JupyterLab: <http://127.0.0.1:8888>
+- Nsight Systems: <http://127.0.0.1:8080>
+- Nsight Compute: <http://127.0.0.1:8081>
 
 ### Run the launch and connection separately
 
@@ -140,10 +139,10 @@ the user in a shell on `nidXXXXXX`. Exiting the shell closes the browser access
 but does not stop the Slurm job. Re-run the connection script to reconnect.
 
 The selected local Jupyter port and the four fixed Streamer ports must be free.
-Ports 8888 (the Jupyter default), 8080, and 8081 carry HTTPS and WebSocket
+Ports 8888 (the Jupyter default), 8080, and 8081 carry HTTP and WebSocket
 signaling; ports 3478 and 3479 carry the two Streamers' WebRTC media and input
-over TURN/TCP. Forwarding only the HTTPS ports displays the pages but does not
-provide working Streamer desktops. If only local port 8888 is already in use,
+over TURN/TCP. Forwarding only the three HTTP ports displays the pages but does
+not provide working Streamer desktops. If only local port 8888 is already in use,
 set `ACH_JUPYTER_LOCAL_PORT` before running either workstation helper; the
 helper prints the resulting JupyterLab URL. The helper keeps the four Streamer
 ports fixed, and its TURN URLs advertise ports 3478 and 3479 to the browser.
@@ -154,7 +153,7 @@ Because the media is TCP inside SSH's TCP connection, packet loss can cause
 head-of-line stalls. A stable wired connection is recommended, and keeping only
 one Streamer tab active reduces bandwidth.
 
-The web applications have no password. Their HTTPS listeners bind only to
+The web applications have no password. Their HTTP listeners bind only to
 compute-node loopback, and the TURN services require random job credentials.
 Access is therefore expected only through the SSH connection.
 
@@ -167,8 +166,8 @@ scancel --full --signal=TERM JOB_ID
 ```
 
 The job stops automatically after 10 hours. The full-job `TERM` above gives
-the helper time to remove its containers, private TLS material, and
-node-local image stores while leaving student work in the checkout untouched.
+the helper time to remove its containers and node-local image stores while
+leaving student work in the checkout untouched.
 
 ## Run tests
 

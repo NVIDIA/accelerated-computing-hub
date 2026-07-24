@@ -370,30 +370,14 @@ if [ ! -x "${COMPOSE}" ]; then
         'podman-compose==1.6.0'
 fi
 
-TLS_HOST_DIR="${RUN_STATE}/tls"
-TLS_CONTAINER_DIR="/run/ach-tls"
-rm -rf "${TLS_HOST_DIR}"
-mkdir -m 700 "${TLS_HOST_DIR}"
-openssl req -x509 -newkey rsa:2048 -sha256 -nodes -days 1 \
-    -keyout "${TLS_HOST_DIR}/localhost.key" \
-    -out "${TLS_HOST_DIR}/localhost.crt" \
-    -subj "/CN=localhost" \
-    -addext "subjectAltName=DNS:localhost,IP:127.0.0.1" \
-    >/dev/null 2>&1
-chmod 600 "${TLS_HOST_DIR}/localhost.key" "${TLS_HOST_DIR}/localhost.crt"
-
 TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)"
 TURN_PASSWORD="$(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 32)"
 
 export ACH_PODMAN_HOST_NETWORK=1
 export ACH_PODMAN_NOTEBOOKS_ROOT="${ACH_REPO}/tutorials/pyhpc/notebooks"
-export JUPYTER_HTTPS_CERT="${TLS_CONTAINER_DIR}/localhost.crt"
-export JUPYTER_HTTPS_KEY="${TLS_CONTAINER_DIR}/localhost.key"
 export JUPYTER_HOST=127.0.0.1
-export NSYS_HTTP_URL=https://127.0.0.1:8080
-export SELKIES_ENABLE_HTTPS=true
-export SELKIES_HTTPS_CERT="${TLS_CONTAINER_DIR}/localhost.crt"
-export SELKIES_HTTPS_KEY="${TLS_CONTAINER_DIR}/localhost.key"
+export NSYS_HTTP_URL=http://127.0.0.1:8080
+export SELKIES_ENABLE_HTTPS=false
 
 "${VENV}/bin/python" "${ACH_RUNTIME_REPO}/brev/prepare-podman-compose.py" \
     "${SOURCE_COMPOSE}" "${PODMAN_COMPOSE}" "${ACH_RUNTIME_REPO}" 1
@@ -449,7 +433,6 @@ cleanup() {
     for store in main nsys ncu; do
         clean_store "${store}"
     done
-    rm -rf "${TLS_HOST_DIR}"
     podman unshare rm -rf "${JOB_ROOT}" >/dev/null 2>&1 || true
     exit "${status}"
 }
@@ -492,7 +475,6 @@ start_service() {
             -f "${PODMAN_COMPOSE}" \
             run --rm --no-deps -T \
             -e "TURN_USERNAME=${TURN_USERNAME}" -e "TURN_PASSWORD=${TURN_PASSWORD}" \
-            -v "${TLS_HOST_DIR}:${TLS_CONTAINER_DIR}:ro" \
             "${service}"
     ) >"${log}" 2>&1 &
     local pid=$!
@@ -501,7 +483,7 @@ start_service() {
 
     local deadline=$((SECONDS + 300))
     while [ "${SECONDS}" -lt "${deadline}" ]; do
-        if curl --fail --insecure --silent \
+        if curl --fail --silent \
             --connect-timeout 1 --max-time 2 "${url}" >/dev/null 2>&1; then
             echo "${service} is ready"
             return 0
@@ -517,9 +499,9 @@ start_service() {
     return 1
 }
 
-start_service jupyter main https://127.0.0.1:8888/api/status
-start_service nsys nsys https://127.0.0.1:8080/health
-start_service ncu ncu https://127.0.0.1:8081/health
+start_service jupyter main http://127.0.0.1:8888/api/status
+start_service nsys nsys http://127.0.0.1:8080/health
+start_service ncu ncu http://127.0.0.1:8081/health
 
 echo "READY node=$(hostname -s)"
 echo "Logs: ${RUN_STATE}/{jupyter,nsys,ncu}.log"

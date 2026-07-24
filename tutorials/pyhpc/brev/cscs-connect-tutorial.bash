@@ -165,10 +165,10 @@ else
 fi
 
 cat <<EOF
-The HTTPS services are available while this SSH connection remains open:
-  JupyterLab:     https://127.0.0.1:${jupyter_local_port}
-  Nsight Systems: https://127.0.0.1:8080
-  Nsight Compute: https://127.0.0.1:8081
+The web services are available while this SSH connection remains open:
+  JupyterLab:     http://127.0.0.1:${jupyter_local_port}
+  Nsight Systems: http://127.0.0.1:8080
+  Nsight Compute: http://127.0.0.1:8081
 EOF
 
 target="${user}@${node}"
