@@ -145,6 +145,7 @@ ssh_args=(
     -i "${ssh_key}"
     -o IdentitiesOnly=yes
     -o ExitOnForwardFailure=yes
+    -o StrictHostKeyChecking=accept-new
     -o ServerAliveInterval=30
     -o ServerAliveCountMax=6
     -L "127.0.0.1:${jupyter_local_port}:127.0.0.1:8888"
