@@ -17,7 +17,7 @@ Brev Launchables of this tutorial should use:
 
 ## Notebooks
 
-Each exercise notebook that has a paired solution carries `# TODO:` cells with `...` placeholders; the solution fills them in. The intro/reference notebook (04), the synthesis notebook (09), and the mpi4py walkthrough (03) are complete as written and have no separate solution.
+Each exercise notebook that has a paired solution carries `# TODO:` cells with `...` placeholders; the solution fills them in. The intro/reference notebook (07), the synthesis notebook (12), and the mpi4py walkthrough (06) are complete as written and have no separate solution.
 
 ### Fundamentals
 
@@ -27,32 +27,32 @@ Each exercise notebook that has a paired solution carries `# TODO:` cells with `
 | 01 | CuPy | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/01__cupy.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/01__cupy__SOLUTION.ipynb) |
 | 02 | Power Iteration - CuPy - Memory Spaces | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/02__power_iteration__cupy__memory_spaces.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/02__power_iteration__cupy__memory_spaces__SOLUTION.ipynb) |
 
-### Distributed
-
-| # | Notebook | Link | Solution |
-|---|----------|------|----------|
-| 03 | mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/03__mpi4py.ipynb) |  |
-
-### Programming models and interoperability
-
-Notebooks 04-09 are the Shallow Water Equations "ladder": an intro plus NumPy baseline, four solvers that each re-implement the same timestep with a different tool, and a synthesis that reads the measured timings and compares them. The synthesis notebook collects the per-tool rows from `timings.json` (written by notebooks 04 to 08) and closes with a matched-precision GPU comparison of the JAX and CppJIT device paths.
-
-| # | Notebook | Link | Solution |
-|---|----------|------|----------|
-| 04 | SWE - Intro | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/04__swe__intro.ipynb) |  |
-| 05 | SWE - JAX | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/05__swe__jax.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/05__swe__jax__SOLUTION.ipynb) |
-| 06 | SWE - PyOMP | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/06__swe__pyomp.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/06__swe__pyomp__SOLUTION.ipynb) |
-| 07 | SWE - nanobind | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/07__swe__nanobind.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/07__swe__nanobind__SOLUTION.ipynb) |
-| 08 | SWE - CppJIT - Thrust | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/08__swe__cppjit__thrust.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/08__swe__cppjit__thrust__SOLUTION.ipynb) |
-| 09 | SWE - Synthesis | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/09__swe__synthesis.ipynb) |  |
-
 ### Kernels
 
 | # | Notebook | Link | Solution |
 |---|----------|------|----------|
-| 10 | Power Iteration - CuPy - Asynchrony | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/10__power_iteration__cupy__asynchrony.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/10__power_iteration__cupy__asynchrony__SOLUTION.ipynb) |
-| 11 | Copy - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/11__copy__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/11__copy__kernel_authoring__SOLUTION.ipynb) |
-| 12 | Book Histogram - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/12__book_histogram__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/12__book_histogram__kernel_authoring__SOLUTION.ipynb) |
+| 03 | Power Iteration - CuPy - Asynchrony | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/03__power_iteration__cupy__asynchrony.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/03__power_iteration__cupy__asynchrony__SOLUTION.ipynb) |
+| 04 | Copy - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/04__copy__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/04__copy__kernel_authoring__SOLUTION.ipynb) |
+| 05 | Book Histogram - Kernel Authoring | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/05__book_histogram__kernel_authoring.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/05__book_histogram__kernel_authoring__SOLUTION.ipynb) |
+
+### Distributed
+
+| # | Notebook | Link | Solution |
+|---|----------|------|----------|
+| 06 | mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/06__mpi4py.ipynb) |  |
+
+### Programming models and interoperability
+
+Notebooks 07-12 are the Shallow Water Equations "ladder": an intro plus NumPy baseline, four solvers that each re-implement the same timestep with a different tool, and a synthesis that reads the measured timings and compares them. The synthesis notebook collects the per-tool rows from `timings.json` (written by notebooks 07 to 11) and closes with a matched-precision GPU comparison of the JAX and CppJIT device paths.
+
+| # | Notebook | Link | Solution |
+|---|----------|------|----------|
+| 07 | SWE - Intro | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/07__swe__intro.ipynb) |  |
+| 08 | SWE - JAX | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/08__swe__jax.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/08__swe__jax__SOLUTION.ipynb) |
+| 09 | SWE - PyOMP | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/09__swe__pyomp.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/09__swe__pyomp__SOLUTION.ipynb) |
+| 10 | SWE - nanobind | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/10__swe__nanobind.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/10__swe__nanobind__SOLUTION.ipynb) |
+| 11 | SWE - CppJIT - Thrust | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/11__swe__cppjit__thrust.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/solutions/11__swe__cppjit__thrust__SOLUTION.ipynb) |
+| 12 | SWE - Synthesis | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/pyhpc/notebooks/12__swe__synthesis.ipynb) |  |
 
 ### Python/C++ interoperability
 
@@ -64,7 +64,7 @@ A standalone comparison of several ways to call C and C++ from Python (ctypes, c
 
 ## The Shallow Water Equations problem
 
-A 1D shallow-water bump pulse: a small mound of water at rest splits into two outgoing wave packets. Two conserved fields (`h`, `hu`) advance under a forward-Euler step. This PDE is small enough to read in full while exhibiting nonlinearity, and a fixed number of steps from the initial condition gives a result we can compare across tools. The full specification is in [`04__swe__intro.ipynb`](./notebooks/04__swe__intro.ipynb).
+A 1D shallow-water bump pulse: a small mound of water at rest splits into two outgoing wave packets. Two conserved fields (`h`, `hu`) advance under a forward-Euler step. This PDE is small enough to read in full while exhibiting nonlinearity, and a fixed number of steps from the initial condition gives a result we can compare across tools. The full specification is in [`07__swe__intro.ipynb`](./notebooks/07__swe__intro.ipynb).
 
 ## Running
 
@@ -76,8 +76,8 @@ Locally, with an NVIDIA GPU and a CUDA-13-capable driver:
 docker compose -f tutorials/pyhpc/brev/docker-compose.yml up
 ```
 
-Then open JupyterLab on port 8888. The notebooks are self-contained and can be run in any order, with one exception: the Shallow Water Equations ladder writes `timings.json` as you run notebooks 04 to 08, so run those before the synthesis notebook (09).
+Then open JupyterLab on port 8888. The notebooks are self-contained and can be run in any order, with one exception: the Shallow Water Equations ladder writes `timings.json` as you run notebooks 07 to 11, so run those before the synthesis notebook (12).
 
 ## CppJIT toolchain
 
-Notebook 08 uses CppJIT to automatically bind our Python runtime with CUDA C++, using the clang-repl C++ interpreter and [CppInterOp](https://github.com/compiler-research/CppInterOp). This is currently source built in the [Docker image](./brev/dockerfile) and not a standard `pip install`, so this will only run in the tutorial image. [CppJIT](https://github.com/compiler-research/CppJIT) is the successor to the [cppyy](https://cppyy.readthedocs.io/) automatic bindings tool, and no official CppJIT release is published on PyPI yet (beta release planned for end of summer 2026).
+Notebook 11 uses CppJIT to automatically bind our Python runtime with CUDA C++, using the clang-repl C++ interpreter and [CppInterOp](https://github.com/compiler-research/CppInterOp). This is currently source built in the [Docker image](./brev/dockerfile) and not a standard `pip install`, so this will only run in the tutorial image. [CppJIT](https://github.com/compiler-research/CppJIT) is the successor to the [cppyy](https://cppyy.readthedocs.io/) automatic bindings tool, and no official CppJIT release is published on PyPI yet (beta release planned for end of summer 2026).
