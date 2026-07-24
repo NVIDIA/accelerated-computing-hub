@@ -164,6 +164,7 @@ wait_until_ready() {
     local timeout=$3
     local deadline=0
     local last_state=
+    local next_progress=0
 
     while true; do
         local ready_line=
@@ -193,6 +194,7 @@ wait_until_ready() {
             RUNNING)
                 if [ "${deadline}" -eq 0 ]; then
                     deadline=$((SECONDS + timeout))
+                    next_progress=$((SECONDS + 30))
                 fi
                 if [ -n "${ready_line}" ]; then
                     local node=${ready_line#READY node=}
@@ -200,9 +202,14 @@ wait_until_ready() {
                     printf 'CSCS_WEB_LOG=%s\n' "${log}"
                     return 0
                 fi
+                if [ "${SECONDS}" -ge "${next_progress}" ]; then
+                    echo "Job ${job_id}: RUNNING (services are still starting)"
+                    next_progress=$((SECONDS + 30))
+                fi
                 ;;
             PENDING*|CONFIGURING*|REQUEUED*|RESV_DEL_HOLD*)
                 deadline=0
+                next_progress=0
                 ;;
             COMPLETED*|FAILED*|CANCELLED*|TIMEOUT*|NODE_FAIL*|OUT_OF_MEMORY*|PREEMPTED*|BOOT_FAIL*|DEADLINE*)
                 echo "Error: job ${job_id} entered ${state} before the services became ready." >&2
@@ -222,10 +229,10 @@ wait_until_ready() {
 
 ACTIVE_JOB_ID=
 cancel_active_job() {
-    trap - HUP INT TERM
-    echo "Launcher interrupted; stopping job ${ACTIVE_JOB_ID}." >&2
-    stop_job "${ACTIVE_JOB_ID}" || true
-    exit 130
+    local status=$1
+    trap '' HUP INT TERM PIPE
+    stop_job "${ACTIVE_JOB_ID}" >/dev/null 2>&1 || true
+    exit "${status}"
 }
 
 login_main() {
@@ -317,18 +324,23 @@ login_main() {
     esac
     local log="${state_dir}/slurm-${job_id}.log"
 
+    ACTIVE_JOB_ID=${job_id}
+    trap 'cancel_active_job 129' HUP
+    trap 'cancel_active_job 130' INT
+    trap 'cancel_active_job 143' TERM
+    trap 'cancel_active_job 141' PIPE
     printf 'CSCS_WEB_JOB_ID=%s\n' "${job_id}"
     echo "Waiting for JupyterLab and both Nsight Streamers to become ready..."
-    ACTIVE_JOB_ID=${job_id}
-    trap cancel_active_job HUP INT TERM
     local wait_status=0
     wait_until_ready "${job_id}" "${log}" "${start_timeout}" || wait_status=$?
-    trap - HUP INT TERM
-    ACTIVE_JOB_ID=
     if [ "${wait_status}" -ne 0 ]; then
+        trap - HUP INT TERM PIPE
+        ACTIVE_JOB_ID=
         return "${wait_status}"
     fi
     printf 'CSCS_WEB_REPO=%s\n' "${repo}"
+    trap - HUP INT TERM PIPE
+    ACTIVE_JOB_ID=
 }
 
 batch_main() {

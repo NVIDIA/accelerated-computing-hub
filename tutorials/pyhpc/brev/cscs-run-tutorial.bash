@@ -202,6 +202,11 @@ ssh -F "${ssh_config}" -S "${control_path}" ach-daint "${remote_command}" \
 launch_status=${PIPESTATUS[0]}
 set -e
 if [ "${launch_status}" -ne 0 ]; then
+    partial_job_id=$(sed -n 's/^CSCS_WEB_JOB_ID=//p' "${launch_output}" | tail -n1)
+    echo "Error: the connection to the Daint launcher ended with SSH status ${launch_status} before a ready node was reported." >&2
+    if [ -n "${partial_job_id}" ]; then
+        echo "Submitted job: ${partial_job_id}. Verify that it stopped before retrying." >&2
+    fi
     exit "${launch_status}"
 fi
 
