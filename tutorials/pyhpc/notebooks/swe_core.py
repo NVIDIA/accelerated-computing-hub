@@ -243,19 +243,26 @@ def load_timings():
 MACHINE_PATH = str(HERE / "machine.json")
 
 
+def physical_cores():
+    """Physical core count, falling back to the logical count."""
+    import psutil
+    return psutil.cpu_count(logical=False) or psutil.cpu_count()
+
+
 def machine_report():
     """Document the measurement environment and experimental setup: software versions,
     CPU/GPU identity, clock/governor state."""
     import platform, subprocess
     info = {"python": platform.python_version(), "numpy": np.__version__}
+    # x86 kernels name the CPU in /proc/cpuinfo, aarch64 ones do not.
     try:
-        info["cpu"] = [ln.split(":", 1)[1].strip() for ln in
-                       open("/proc/cpuinfo") if ln.startswith("model name")][0]
-        info["cores_physical_logical"] = "{}/{}".format(
-            len({ln for ln in open("/proc/cpuinfo") if ln.startswith("core id")}) or "?",
-            len([ln for ln in open("/proc/cpuinfo") if ln.startswith("processor")]))
+        info["cpu"] = next(
+            (ln.split(":", 1)[1].strip() for ln in open("/proc/cpuinfo")
+             if ln.split(":", 1)[0].strip() in ("model name", "Model name", "Model")),
+            platform.machine())
     except OSError:
-        pass
+        info["cpu"] = platform.machine()
+    info["cores_physical_logical"] = f"{physical_cores()}/{os.cpu_count()}"
     try:
         info["cpu_governor"] = open(
             "/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor").read().strip()
@@ -298,11 +305,9 @@ def measure_bandwidth_ceilings():
 
     ceilings = {}
     if shutil.which("stream_c"):
-        cores = str(len({ln for ln in open("/proc/cpuinfo")
-                         if ln.startswith("core id")}) or 1)
         ceilings["cpu_stream_triad_1t_gbs"] = bench("stream_c", OMP_NUM_THREADS="1")["Triad"]
         ceilings["cpu_stream_triad_gbs"] = bench(
-            "stream_c", OMP_NUM_THREADS=cores,
+            "stream_c", OMP_NUM_THREADS=str(physical_cores()),
             OMP_PROC_BIND="close", OMP_PLACES="cores")["Triad"]
     if shutil.which("cuda-stream"):
         gpu = bench("cuda-stream")
@@ -332,12 +337,13 @@ def working_set_bytes(n_cells, n_arrays=6, itemsize=8):
 
 
 def llc_mib():
-    """Largest data cache visible to core 0, in MiB (Linux sysfs)."""
+    """Largest cache visible to core 0, in MiB; None if sysfs reports none."""
     import glob
+    scale = {"K": 2**10, "M": 2**20, "G": 2**30}
     sizes = []
     for p in glob.glob("/sys/devices/system/cpu/cpu0/cache/index*/size"):
         s = open(p).read().strip()
-        sizes.append(float(s[:-1]) / 1024 if s.endswith("K") else float(s[:-1]) * 1024)
+        sizes.append(float(s.rstrip("KMG")) * scale.get(s[-1], 1) / 2**20)
     return max(sizes) if sizes else None
 
 
