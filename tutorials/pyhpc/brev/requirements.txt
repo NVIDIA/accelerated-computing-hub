@@ -25,7 +25,7 @@ cuda-cccl[test-cu13] == 0.4.5
 
 # NVIDIA developer tools (notebooks 03-05: Nsight Systems / Nsight Compute profiling)
 nvtx == 0.2.14
-nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@196bc4e292571973969179d7d48e687a2720bb2f
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@1cdeaab47f823aac6e25b05251420f540ab0db42
 
 # Distributed computing (notebook 06: mpi4py)
 mpi4py == 4.1.1
