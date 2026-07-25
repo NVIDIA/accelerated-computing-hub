@@ -357,6 +357,7 @@ fi
 RUN_STATE="${ACH_STATE}/${SLURM_JOB_ID}"
 mkdir -p "${RUN_STATE}" "${ACH_RUNTIME_REPO}/logs"
 chmod 700 "${ACH_STATE}" "${RUN_STATE}"
+SERVICE_EVENTS="${RUN_STATE}/service-events"
 
 SOURCE_COMPOSE="${RUN_STATE}/docker-compose.yml"
 PODMAN_COMPOSE="${RUN_STATE}/docker-compose.podman.yml"
@@ -424,17 +425,23 @@ clean_store() {
 }
 
 pids=()
-cleanup() {
-    local status=$?
-    trap - EXIT INT TERM
-    set +e
+stop_services() {
     if [ "${#pids[@]}" -gt 0 ]; then
-        kill "${pids[@]}" 2>/dev/null
-        wait "${pids[@]}" 2>/dev/null
+        kill "${pids[@]}" 2>/dev/null || true
     fi
     for store in main nsys ncu; do
         clean_store "${store}"
     done
+    for pid in "${pids[@]}"; do
+        wait "${pid}" 2>/dev/null || true
+    done
+    pids=()
+}
+
+cleanup() {
+    local status=$?
+    trap - EXIT INT TERM
+    stop_services
     podman unshare rm -rf "${JOB_ROOT}" >/dev/null 2>&1 || true
     exit "${status}"
 }
@@ -473,26 +480,44 @@ start_service() {
         CONTAINERS_STORAGE_CONF=$(store_conf "${store}")
         export XDG_RUNTIME_DIR
         XDG_RUNTIME_DIR="$(store_root "${store}")/runtime"
-        exec "${COMPOSE}" --podman-run-args=--cgroups=disabled \
+        service_pid=""
+        terminating=0
+        terminate_service() {
+            terminating=1
+            if [ -n "${service_pid}" ] && kill -0 "${service_pid}" 2>/dev/null; then
+                kill -TERM "${service_pid}" 2>/dev/null || true
+            fi
+        }
+        trap terminate_service TERM INT
+
+        "${COMPOSE}" --podman-run-args=--cgroups=disabled \
             -f "${PODMAN_COMPOSE}" \
             run --rm --no-deps -T \
             -e "TURN_USERNAME=${TURN_USERNAME}" -e "TURN_PASSWORD=${TURN_PASSWORD}" \
-            "${service}"
-    ) >"${log}" 2>&1 &
+            "${service}" &
+        service_pid=$!
+        service_status=0
+        wait "${service_pid}" || service_status=$?
+        if [ "${terminating}" -eq 1 ] && kill -0 "${service_pid}" 2>/dev/null; then
+            wait "${service_pid}" || service_status=$?
+        fi
+        printf '%s %s\n' "${service}" "${service_status}" >>"${SERVICE_EVENTS}"
+        exit "${service_status}"
+    ) >>"${log}" 2>&1 &
     local pid=$!
     chmod 600 "${log}"
     pids+=("${pid}")
 
     local deadline=$((SECONDS + 300))
     while [ "${SECONDS}" -lt "${deadline}" ]; do
+        if [ -s "${SERVICE_EVENTS}" ]; then
+            echo "Error: a web service exited while waiting for ${service}; see ${RUN_STATE}/*.log" >&2
+            return 1
+        fi
         if curl --fail --silent \
             --connect-timeout 1 --max-time 2 "${url}" >/dev/null 2>&1; then
             echo "${service} is ready"
             return 0
-        fi
-        if ! kill -0 "${pid}" 2>/dev/null; then
-            echo "Error: ${service} exited; see ${log}" >&2
-            return 1
         fi
         sleep 1
     done
@@ -501,19 +526,49 @@ start_service() {
     return 1
 }
 
-start_service jupyter main http://127.0.0.1:8888/api/status
-start_service nsys nsys http://127.0.0.1:8080/health
-start_service ncu ncu http://127.0.0.1:8081/health
+generation=0
+ready_announced=0
+while true; do
+    generation=$((generation + 1))
+    pids=()
+    : >"${SERVICE_EVENTS}"
+    chmod 600 "${SERVICE_EVENTS}"
+    for service in jupyter nsys ncu; do
+        printf '\n=== Starting service generation %s ===\n' "${generation}" \
+            >>"${RUN_STATE}/${service}.log"
+    done
 
-echo "READY node=$(hostname -s)"
-echo "Logs: ${RUN_STATE}/{jupyter,nsys,ncu}.log"
+    if ! start_service jupyter main http://127.0.0.1:8888/api/status || \
+       ! start_service nsys nsys http://127.0.0.1:8080/health || \
+       ! start_service ncu ncu http://127.0.0.1:8081/health; then
+        echo "Web service generation ${generation} failed during startup; restarting all services." >&2
+        stop_services
+        sleep 5
+        continue
+    fi
+    if [ -s "${SERVICE_EVENTS}" ]; then
+        echo "A web service exited immediately after startup; restarting all services." >&2
+        stop_services
+        sleep 5
+        continue
+    fi
 
-set +e
-wait -n "${pids[@]}"
-status=$?
-set -e
-echo "A web service exited; stopping the deployment." >&2
-exit "${status}"
+    if [ "${ready_announced}" -eq 0 ]; then
+        echo "READY node=$(hostname -s)"
+        echo "Logs: ${RUN_STATE}/{jupyter,nsys,ncu}.log"
+        ready_announced=1
+    else
+        echo "Web service generation ${generation} is ready."
+    fi
+
+    while [ ! -s "${SERVICE_EVENTS}" ]; do
+        sleep 1
+    done
+    read -r exited_service exited_status <"${SERVICE_EVENTS}"
+    echo "${exited_service} exited with status ${exited_status}; restarting JupyterLab and both Nsight Streamers." >&2
+    stop_services
+    sleep 1
+done
 }
 
 if [ "${1:-}" = --batch ]; then
