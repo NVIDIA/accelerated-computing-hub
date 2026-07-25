@@ -106,6 +106,21 @@ RUN apt-get update -y \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
+# Standard memory-bandwidth benchmarks: STREAM (McCalpin) for the CPU and
+# BabelStream v5.0 (CUDA model) for the GPU. Used to record the machine's
+# practical ceilings in machine.json for the SWE tutorial.
+COPY tutorials/${ACH_TUTORIAL}/brev/benchmarks/stream.c /opt/benchmarks/stream.c
+RUN gcc -O3 -fopenmp -DSTREAM_ARRAY_SIZE=50000000 /opt/benchmarks/stream.c \
+      -o /usr/local/bin/stream_c \
+ && git clone --depth 1 --branch v5.0 https://github.com/UoB-HPC/BabelStream \
+      /opt/benchmarks/BabelStream \
+ && cmake -S /opt/benchmarks/BabelStream -B /opt/benchmarks/BabelStream/build \
+      -DMODEL=cuda -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc \
+      -DCUDA_ARCH=all-major \
+ && cmake --build /opt/benchmarks/BabelStream/build -j \
+ && install -m 0755 /opt/benchmarks/BabelStream/build/cuda-stream /usr/local/bin/cuda-stream \
+ && rm -rf /opt/benchmarks/BabelStream
+
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /usr/local/etc/ipython/startup/10-matplotlib-theme.py

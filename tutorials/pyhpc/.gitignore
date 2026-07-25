@@ -1,10 +1,12 @@
 # Artifacts generated when the tutorial is run.
 #
-# SWE ladder (notebooks 07-12):
+# SWE ladder (notebooks 08-14):
 notebooks/build/
 notebooks/CMakeLists.txt
 notebooks/swe_step.cpython-*.so
+notebooks/swe_step_fast.cpp
 notebooks/timings.json
+notebooks/machine.json
 
 # Kernel, asynchrony, and MPI notebooks (03-06): %%writefile scripts,
 # MPI results, Nsight profiler reports, the downloaded corpus, and plots.
@@ -20,6 +22,8 @@ notebooks/*.sqlite
 notebooks/solutions/*.sqlite
 notebooks/*.ncu-rep
 notebooks/solutions/*.ncu-rep
+notebooks/*.qdstrm
+notebooks/solutions/*.qdstrm
 notebooks/books__15m.txt
 notebooks/solutions/books__15m.txt
 notebooks/test.png
@@ -37,7 +41,8 @@ notebooks/solutions/*.cxx
 notebooks/solutions/*.hpp
 notebooks/solutions/*.hxx
 !notebooks/solutions/swe_step.cpp
-!notebooks/solutions/swe_thrust_solver.cpp
+!notebooks/solutions/swe_cub_solver.cpp
+!notebooks/solutions/swe_raw_cuda_solver.cpp
 
 __pycache__/
 *.egg-info/
