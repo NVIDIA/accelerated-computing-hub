@@ -84,6 +84,19 @@ NSIGHT_SYSTEMS_NOTEBOOKS = {
     "tutorials/pyhpc/notebooks/solutions/03__power_iteration__cupy__asynchrony__SOLUTION.ipynb",
 }
 
+NSIGHT_COMPUTE_KERNELSPEC = {
+    "display_name": "Python 3 (Nsight Compute)",
+    "language": "python",
+    "name": "nsightful-ncu",
+}
+
+NSIGHT_COMPUTE_NOTEBOOKS = {
+    "tutorials/pyhpc/notebooks/04__copy__kernel_authoring.ipynb",
+    "tutorials/pyhpc/notebooks/05__book_histogram__kernel_authoring.ipynb",
+    "tutorials/pyhpc/notebooks/solutions/04__copy__kernel_authoring__SOLUTION.ipynb",
+    "tutorials/pyhpc/notebooks/solutions/05__book_histogram__kernel_authoring__SOLUTION.ipynb",
+}
+
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
@@ -113,6 +126,8 @@ def expected_metadata_for_notebook(notebook_path: Path) -> dict:
 
     if relative_path.as_posix() in NSIGHT_SYSTEMS_NOTEBOOKS:
         expected["kernelspec"] = NSIGHT_SYSTEMS_KERNELSPEC
+    elif relative_path.as_posix() in NSIGHT_COMPUTE_NOTEBOOKS:
+        expected["kernelspec"] = NSIGHT_COMPUTE_KERNELSPEC
     return expected
 
 
