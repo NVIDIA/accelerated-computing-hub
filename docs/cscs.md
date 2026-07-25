@@ -102,9 +102,8 @@ retries once.
 The Daint-side launcher:
 
 - clones the event branch when `$SCRATCH/accelerated-computing-hub` is absent;
-- updates an existing checkout to the event branch only when it starts on
-  `main` and is completely clean, including untracked files; and
-- leaves any modified or non-`main` checkout unchanged.
+- switches any existing clean branch to the event branch and updates it; and
+- leaves a dirty checkout unchanged, including when it has untracked files.
 
 It submits the 10-hour job, waits until all three web services report ready,
 prints `CSCS_WEB_JOB_ID` and `CSCS_WEB_NODE`, and exits. The workstation helper
