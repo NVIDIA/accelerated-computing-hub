@@ -109,6 +109,133 @@ if [ ! -f "${COMPOSE_FILE}" ]; then
     exit 1
 fi
 
+test_jupyter_shutdown_restart() {
+    local service
+    local container_id
+    local started_at
+    local state
+    local deadline
+    local all_restarted
+    local restart_group
+    local service_list
+    local -a services=()
+    local -A started_before=()
+
+    # shellcheck disable=SC2016 # Expanded inside the container.
+    if ! restart_group=$(docker compose -f "${COMPOSE_FILE}" exec -T jupyter \
+        sh -c 'printf %s "${ACH_RESTART_COMPOSE_SERVICES:-}"'); then
+        echo "Error: could not read Jupyter restart configuration" >&2
+        return 1
+    fi
+    if [ "${restart_group}" != "1" ]; then
+        echo "Error: Jupyter service-group restart is not enabled" >&2
+        return 1
+    fi
+
+    if ! service_list=$(docker compose -f "${COMPOSE_FILE}" config --services); then
+        echo "Error: could not read Compose services" >&2
+        return 1
+    fi
+    mapfile -t services < <(
+        grep -E '^(jupyter|nsight|nsys|ncu)$' <<<"${service_list}"
+    )
+    if [ "${#services[@]}" -eq 0 ]; then
+        echo "Error: no persistent web services found" >&2
+        return 1
+    fi
+
+    echo "🔄 Testing service-group restart after Jupyter shutdown..."
+    for service in "${services[@]}"; do
+        container_id=$(docker compose -f "${COMPOSE_FILE}" ps -q "${service}")
+        if [ -z "${container_id}" ]; then
+            echo "Error: no running container found for ${service}" >&2
+            return 1
+        fi
+        if ! started_at=$(
+            docker inspect --format '{{.State.StartedAt}}' "${container_id}"
+        ); then
+            echo "Error: could not inspect ${service} container" >&2
+            return 1
+        fi
+        started_before["${service}"]=${started_at}
+    done
+
+    if ! docker compose -f "${COMPOSE_FILE}" exec -T jupyter python3 - <<'PY'
+import http.cookiejar
+import time
+import urllib.error
+import urllib.request
+
+cookies = http.cookiejar.CookieJar()
+opener = urllib.request.build_opener(
+    urllib.request.HTTPCookieProcessor(cookies)
+)
+deadline = time.monotonic() + 60
+while True:
+    try:
+        with opener.open("http://127.0.0.1:8888/lab", timeout=10):
+            break
+    except (OSError, urllib.error.URLError):
+        if time.monotonic() >= deadline:
+            raise
+        time.sleep(1)
+
+xsrf = next(cookie.value for cookie in cookies if cookie.name == "_xsrf")
+request = urllib.request.Request(
+    "http://127.0.0.1:8888/api/shutdown",
+    data=b"",
+    headers={"X-XSRFToken": xsrf},
+    method="POST",
+)
+with opener.open(request, timeout=10) as response:
+    if response.status >= 300:
+        raise RuntimeError(f"Jupyter shutdown returned HTTP {response.status}")
+PY
+    then
+        echo "Error: failed to request Jupyter shutdown" >&2
+        return 1
+    fi
+
+    deadline=$((SECONDS + 90))
+    while [ "${SECONDS}" -lt "${deadline}" ]; do
+        all_restarted=1
+        for service in "${services[@]}"; do
+            container_id=$(docker compose -f "${COMPOSE_FILE}" ps -q "${service}")
+            if [ -z "${container_id}" ]; then
+                all_restarted=0
+                continue
+            fi
+            state=$(docker inspect --format '{{.State.Status}}' \
+                "${container_id}" 2>/dev/null || true)
+            started_at=$(docker inspect --format '{{.State.StartedAt}}' \
+                "${container_id}" 2>/dev/null || true)
+            if [ "${state}" != "running" ] || \
+               [ "${started_at}" = "${started_before[${service}]}" ]; then
+                all_restarted=0
+            fi
+        done
+        if [ "${all_restarted}" -eq 1 ]; then
+            echo -e "${GREEN}✅ Jupyter shutdown restarted the full service group${NC}"
+            echo ""
+            return 0
+        fi
+        sleep 1
+    done
+
+    echo "Error: service group did not restart within 90 seconds" >&2
+    for service in "${services[@]}"; do
+        container_id=$(docker compose -f "${COMPOSE_FILE}" ps -aq "${service}" | head -n 1)
+        if [ -n "${container_id}" ]; then
+            state=$(docker inspect --format '{{.State.Status}}' "${container_id}")
+            started_at=$(docker inspect --format '{{.State.StartedAt}}' "${container_id}")
+            printf '  %s: state=%s started=%s previous=%s\n' \
+                "${service}" "${state}" "${started_at}" "${started_before[${service}]}" >&2
+        fi
+    done
+    docker compose -f "${COMPOSE_FILE}" logs --tail=100 >&2 || true
+    return 1
+}
+
 echo "================================================================================"
 echo "Testing Docker Compose: ${COMPOSE_FILE}"
 echo "================================================================================"
@@ -187,7 +314,8 @@ if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
     # Test restart functionality
     echo "🔄 Testing service restart..."
     echo ""
-    if docker compose -f "${COMPOSE_FILE}" restart; then
+    if test_jupyter_shutdown_restart && \
+       docker compose -f "${COMPOSE_FILE}" restart; then
         echo ""
         echo -e "${GREEN}✅ Services restarted successfully${NC}"
         echo ""
