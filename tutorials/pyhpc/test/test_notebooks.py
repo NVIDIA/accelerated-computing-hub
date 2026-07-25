@@ -75,7 +75,13 @@ def _execute(notebook_path):
     """Execute a notebook cell-by-cell, printing per-cell timing."""
     with open(notebook_path, encoding="utf-8") as f:
         nb = nbformat.read(f, as_version=4)
-    kernel_name = nb.metadata.get("kernelspec", {}).get("name", "python3")
+    stem = notebook_path.name.removesuffix("__SOLUTION.ipynb").removesuffix(".ipynb")
+    if stem == "03__power_iteration__cupy__asynchrony":
+        kernel_name = "nsightful-nsys"
+    elif stem in ("04__copy__kernel_authoring", "05__book_histogram__kernel_authoring"):
+        kernel_name = "nsightful-ncu"
+    else:
+        kernel_name = nb.metadata.get("kernelspec", {}).get("name", "python3")
     client = NotebookClient(
         nb,
         timeout=900,  # seconds per cell

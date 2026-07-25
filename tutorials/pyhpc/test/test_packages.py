@@ -7,6 +7,7 @@ and the C++/CUDA JIT toolchain included). These run fast and fail loudly,
 so a broken image is caught before the much slower notebook suite.
 """
 
+import json
 import subprocess
 import sys
 import warnings
@@ -118,10 +119,18 @@ def test_memory_profiler():
 
 
 def test_nsightful():
-    """nsightful imports and correctly reports a non-interactive context."""
+    """Nsightful imports and both profiler-backed kernels are installed."""
     import nsightful
 
     assert nsightful.notebook.is_interactive_notebook() is False
+
+    result = subprocess.run(
+        [sys.executable, "-m", "jupyter", "kernelspec", "list", "--json"],
+        capture_output=True, text=True, check=True,
+    )
+    kernels = json.loads(result.stdout)["kernelspecs"]
+    assert kernels["nsightful-ncu"]["spec"]["metadata"]["nsightful_profiler"] == "ncu"
+    assert kernels["nsightful-nsys"]["spec"]["metadata"]["nsightful_profiler"] == "nsys"
 
 
 def test_mpi4py():
