@@ -4,9 +4,10 @@
 
 set -euo pipefail
 
-# Keep this root wrapper alive so a clean Jupyter shutdown can restart its
-# sibling Nsight services through the Docker socket. External container stop
-# signals skip the sibling restarts.
+# Keep this wrapper alive so an unrequested Jupyter exit can restart the
+# sibling services before the container restart policy starts Jupyter again.
+# An operator stopping the container sends TERM/INT to this wrapper; that path
+# deliberately does not restart siblings so `compose down` can finish.
 TERMINATING=0
 JUPYTER_PID=""
 
@@ -20,7 +21,11 @@ terminate_jupyter() {
 
 trap terminate_jupyter TERM INT
 
-gosu "${ACH_TARGET_USER}" /accelerated-computing-hub/brev/entrypoint-jupyter-user.bash "$@" &
+if [ "$(id -u)" = "0" ] && [ "${ACH_TARGET_USER}" != "$(id -un)" ]; then
+    gosu "${ACH_TARGET_USER}" /accelerated-computing-hub/brev/entrypoint-jupyter-user.bash "$@" &
+else
+    /accelerated-computing-hub/brev/entrypoint-jupyter-user.bash "$@" &
+fi
 JUPYTER_PID=$!
 
 set +e
@@ -32,10 +37,12 @@ if [ "${TERMINATING}" -eq 1 ] && kill -0 "${JUPYTER_PID}" 2>/dev/null; then
 fi
 set -e
 
-if [ "${TERMINATING}" -eq 0 ] && [ "${JUPYTER_STATUS}" -eq 0 ] && [ -n "${ACH_PORT_FORWARDS:-}" ]; then
-    echo "Jupyter exited cleanly; restarting Nsight services."
-    if ! python3 /accelerated-computing-hub/brev/restart-compose-services.py nsys ncu; then
-        echo "Error: Failed to restart one or more Nsight services." >&2
+if [ "${TERMINATING}" -eq 0 ] && \
+   [ "${ACH_RESTART_COMPOSE_SERVICES:-}" = "1" ] && \
+   [ -S /var/run/docker.sock ]; then
+    echo "Jupyter exited with status ${JUPYTER_STATUS}; restarting sibling services."
+    if ! python3 /accelerated-computing-hub/brev/restart-compose-services.py; then
+        echo "Error: Failed to restart one or more sibling services." >&2
     fi
 fi
 
