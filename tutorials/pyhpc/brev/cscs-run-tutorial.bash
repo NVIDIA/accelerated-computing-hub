@@ -77,7 +77,7 @@ bootstrap_streamed_helpers() {
     exit "${status}"
 }
 
-if [ -z "${BASH_SOURCE[0]:-}" ]; then
+if [ ! -f "${BASH_SOURCE[0]:-}" ]; then
     bootstrap_streamed_helpers "$@"
 fi
 
