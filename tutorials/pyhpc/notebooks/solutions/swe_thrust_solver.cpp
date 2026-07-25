@@ -1,1 +1,0 @@
-../swe_thrust_solver.cpp
