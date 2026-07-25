@@ -79,23 +79,17 @@ NSIGHT_SYSTEMS_KERNELSPEC = {
     "name": "nsightful-nsys",
 }
 
-NSIGHT_SYSTEMS_NOTEBOOKS = {
-    "tutorials/pyhpc/notebooks/03__power_iteration__cupy__asynchrony.ipynb",
-    "tutorials/pyhpc/notebooks/solutions/03__power_iteration__cupy__asynchrony__SOLUTION.ipynb",
-}
-
 NSIGHT_COMPUTE_KERNELSPEC = {
     "display_name": "Python 3 (Nsight Compute)",
     "language": "python",
     "name": "nsightful-ncu",
 }
 
-NSIGHT_COMPUTE_NOTEBOOKS = {
-    "tutorials/pyhpc/notebooks/04__copy__kernel_authoring.ipynb",
-    "tutorials/pyhpc/notebooks/05__book_histogram__kernel_authoring.ipynb",
-    "tutorials/pyhpc/notebooks/solutions/04__copy__kernel_authoring__SOLUTION.ipynb",
-    "tutorials/pyhpc/notebooks/solutions/05__book_histogram__kernel_authoring__SOLUTION.ipynb",
-}
+ALLOWED_KERNELSPECS = (
+    STANDARD_METADATA["kernelspec"],
+    NSIGHT_SYSTEMS_KERNELSPEC,
+    NSIGHT_COMPUTE_KERNELSPEC,
+)
 
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
@@ -118,16 +112,14 @@ def is_solution_notebook(notebook_path: Path) -> bool:
 def expected_metadata_for_notebook(notebook_path: Path) -> dict:
     expected = dict(STANDARD_METADATA)
     try:
-        relative_path = notebook_path.resolve().relative_to(
-            Path(__file__).resolve().parent.parent
-        )
-    except ValueError:
+        with open(notebook_path, "r", encoding="utf-8") as f:
+            metadata = json.load(f).get("metadata", {})
+    except (OSError, json.JSONDecodeError):
         return expected
 
-    if relative_path.as_posix() in NSIGHT_SYSTEMS_NOTEBOOKS:
-        expected["kernelspec"] = NSIGHT_SYSTEMS_KERNELSPEC
-    elif relative_path.as_posix() in NSIGHT_COMPUTE_NOTEBOOKS:
-        expected["kernelspec"] = NSIGHT_COMPUTE_KERNELSPEC
+    kernelspec = metadata.get("kernelspec")
+    if kernelspec in ALLOWED_KERNELSPECS:
+        expected["kernelspec"] = kernelspec
     return expected
 
 
