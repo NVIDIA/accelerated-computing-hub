@@ -25,9 +25,9 @@ x-config:
       - accelerated-computing-hub:/accelerated-computing-hub
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      BREV_ENV_ID: ${BREV_ENV_ID:-}
       ACH_TUTORIAL: *tutorial-name
       ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+      ACH_RESTART_COMPOSE_SERVICES: "1"
       ACH_USER: ${ACH_USER:-ach}
       ACH_UID: ${ACH_UID:-1000}
       ACH_GID: ${ACH_GID:-1000}
