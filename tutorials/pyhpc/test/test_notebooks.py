@@ -3,12 +3,11 @@ Test that the tutorial notebooks execute without errors.
 
 The notebooks run as an ordered ladder (00 to 13). For each rung we prefer
 the filled-in solution notebook when one exists, and otherwise fall back to
-the exercise notebook (the intro/reference notebook 07, the synthesis
-notebook 12, and the mpi4py walkthrough 06 have no separate solution and are
-complete as written).
+the exercise notebook (the intro/reference notebook 08 and the mpi4py
+walkthrough 06 have no separate solution and are complete as written).
 
-Ordering matters for the SWE sub-ladder: notebooks 07 to 11 each append a
-row to timings.json and 12 reads them, so 07-11 must run before 12. pytest
+Ordering matters for the SWE sub-ladder: notebooks 08 to 13 each write
+their rows to timings.json and 14 reads them, so they must run before 14. pytest
 executes the parametrized cases in list order, so listing the rungs 00..13
 in order is sufficient.
 """
@@ -43,13 +42,14 @@ LADDER_STEMS = [
     "04__copy__kernel_authoring",
     "05__book_histogram__kernel_authoring",
     "06__mpi4py",
-    "07__swe__intro",
-    "08__swe__jax",
-    "09__swe__pyomp",
-    "10__swe__nanobind",
-    "11__swe__cppjit__thrust",
-    "12__swe__synthesis",
-    "13__cpp_interop",
+    "07__cpp_interop",
+    "08__swe__intro",
+    "09__swe__jax",
+    "10__swe__pyomp",
+    "11__swe__nanobind",
+    "12__swe__cppjit__cub",
+    "13__swe__mpi4py",
+    "14__swe__synthesis",
 ]
 ladder = [(stem, _runnable_notebook(stem)) for stem in LADDER_STEMS]
 ladder = [(stem, nb) for stem, nb in ladder if nb is not None]
