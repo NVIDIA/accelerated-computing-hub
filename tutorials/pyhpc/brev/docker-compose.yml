@@ -6,7 +6,7 @@ x-config:
   working-dir: &working-dir /accelerated-computing-hub/tutorials/pyhpc/notebooks
   large: &large true
   architectures: [amd64, arm64]
-  default-jupyter-url: &default-jupyter-url "/lab/tree/accelerated-computing-hub/tutorials/pyhpc/notebooks/syllabi/pyhpc__cupy_mpi4py_jax_cppinterop_kernels__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/pyhpc/notebooks"
+  default-jupyter-url: &default-jupyter-url "/lab/tree/accelerated-computing-hub/tutorials/pyhpc/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/pyhpc/notebooks"
   gpu-config: &gpu-config
     privileged: true
     ulimits:
