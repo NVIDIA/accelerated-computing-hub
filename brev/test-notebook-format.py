@@ -73,6 +73,17 @@ STANDARD_METADATA = {
     },
 }
 
+NSIGHT_SYSTEMS_KERNELSPEC = {
+    "display_name": "Python 3 (Nsight Systems)",
+    "language": "python",
+    "name": "nsightful-nsys",
+}
+
+NSIGHT_SYSTEMS_NOTEBOOKS = {
+    "tutorials/pyhpc/notebooks/03__power_iteration__cupy__asynchrony.ipynb",
+    "tutorials/pyhpc/notebooks/solutions/03__power_iteration__cupy__asynchrony__SOLUTION.ipynb",
+}
+
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
@@ -89,6 +100,20 @@ NC = "\033[0m"  # No Color
 
 def is_solution_notebook(notebook_path: Path) -> bool:
     return "SOLUTION" in notebook_path.name
+
+
+def expected_metadata_for_notebook(notebook_path: Path) -> dict:
+    expected = dict(STANDARD_METADATA)
+    try:
+        relative_path = notebook_path.resolve().relative_to(
+            Path(__file__).resolve().parent.parent
+        )
+    except ValueError:
+        return expected
+
+    if relative_path.as_posix() in NSIGHT_SYSTEMS_NOTEBOOKS:
+        expected["kernelspec"] = NSIGHT_SYSTEMS_KERNELSPEC
+    return expected
 
 
 def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
@@ -147,7 +172,7 @@ def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
 
     # -- Detect original metadata problems before nbformat.read() -----------
     actual_metadata = raw.get("metadata", {})
-    expected_metadata = dict(STANDARD_METADATA)
+    expected_metadata = expected_metadata_for_notebook(notebook_path)
     metadata_diffs = diff_metadata(actual_metadata, expected_metadata, "metadata")
     if metadata_diffs:
         problems.extend(metadata_diffs)
