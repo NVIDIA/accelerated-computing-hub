@@ -33,14 +33,26 @@ jobs:
             const pullRequests = context.payload.workflow_run.pull_requests;
             let prNumber;
             if (pullRequests && pullRequests.length > 0) {
-              prNumber = pullRequests[0].number;
-            } else {
-              try {
-                prNumber = parseInt(fs.readFileSync('pr_number', 'utf8').trim());
-              } catch (e) {
-                console.log('No PR number found, skipping comment.');
+              const pullRequest = pullRequests[0];
+              const currentRepo = process.env.GITHUB_REPOSITORY;
+              const currentPullPrefix =
+                `${process.env.GITHUB_API_URL}/repos/${currentRepo}/pulls/`;
+              const baseRepo = pullRequest.base?.repo?.full_name;
+              if ((pullRequest.url && !pullRequest.url.startsWith(currentPullPrefix)) ||
+                  (baseRepo && baseRepo !== currentRepo)) {
+                console.log('Associated pull request belongs to another repository; skipping.');
                 return;
               }
+              prNumber = pullRequests[0].number;
+            } else {
+              const mirror = context.payload.workflow_run.head_branch.match(
+                /^pull-request\/([1-9]\d*)$/
+              );
+              if (!mirror) {
+                console.log('Workflow run is not associated with a pull request; skipping.');
+                return;
+              }
+              prNumber = Number(mirror[1]);
             }
             if (!prNumber || isNaN(prNumber)) {
               console.log('No valid PR number found, skipping comment.');
@@ -54,6 +66,14 @@ jobs:
               console.log('No unsigned commits found, skipping comment.');
               return;
             }
+
+            const { data: pullRequest } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+            const baseCloneUrl = pullRequest.base.repo.clone_url;
+            const baseRef = pullRequest.base.ref;
 
             const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${{ github.event.workflow_run.id }}`;
 
@@ -85,7 +105,8 @@ jobs:
 
             2. **Re-sign your commits:**
                \`\`\`bash
-               git rebase -i origin/main --exec "git commit --amend --no-edit -S"
+               git fetch ${baseCloneUrl} ${baseRef}
+               git rebase -i FETCH_HEAD --exec "git commit --amend --no-edit -S"
                git push --force-with-lease
                \`\`\`
 
