@@ -57,28 +57,30 @@ prepare_checkout() {
             return 1
         fi
 
-        if [ "${branch}" = main ] && [ -z "${status}" ]; then
+        if [ -z "${status}" ]; then
             local remote_ref="refs/remotes/origin/${requested_branch}"
-            echo "Updating the clean main checkout to ${requested_branch} in ${repo}..."
+            echo "Updating the clean checkout to ${requested_branch} in ${repo} (current=${branch})..."
             git -C "${repo}" fetch origin \
                 "+refs/heads/${requested_branch}:${remote_ref}"
-            if [ "${requested_branch}" = main ]; then
-                git -C "${repo}" merge --ff-only "${remote_ref}"
-            elif git -C "${repo}" show-ref --verify --quiet \
+            if git -C "${repo}" show-ref --verify --quiet \
                 "refs/heads/${requested_branch}"; then
-                if ! git -C "${repo}" merge-base --is-ancestor \
+                if git -C "${repo}" merge-base --is-ancestor \
                     "refs/heads/${requested_branch}" "${remote_ref}"; then
+                    git -C "${repo}" switch "${requested_branch}"
+                    git -C "${repo}" merge --ff-only "${remote_ref}"
+                elif git -C "${repo}" merge-base --is-ancestor \
+                    "${remote_ref}" "refs/heads/${requested_branch}"; then
+                    git -C "${repo}" switch "${requested_branch}"
+                else
                     echo "Error: local ${requested_branch} cannot fast-forward to origin/${requested_branch}." >&2
-                    echo "The checkout is still on main; resolve it manually or use a different --repo path." >&2
+                    echo "The checkout remains on ${branch}; resolve it manually or use a different --repo path." >&2
                     return 1
                 fi
-                git -C "${repo}" switch "${requested_branch}"
-                git -C "${repo}" merge --ff-only "${remote_ref}"
             else
                 git -C "${repo}" switch -c "${requested_branch}" "${remote_ref}"
             fi
         else
-            echo "Leaving the existing checkout unchanged (branch=${branch}; only clean main is updated)."
+            echo "Leaving the dirty checkout unchanged (branch=${branch})."
         fi
     fi
 
