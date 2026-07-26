@@ -7,6 +7,7 @@ and the C++/CUDA JIT toolchain included). These run fast and fail loudly,
 so a broken image is caught before the much slower notebook suite.
 """
 
+import importlib.util
 import json
 import subprocess
 import sys
@@ -123,6 +124,7 @@ def test_nsightful():
     import nsightful
 
     assert nsightful.notebook.is_interactive_notebook() is False
+    assert importlib.util.find_spec("jupyterlab_nvidia_nsight") is None
 
     result = subprocess.run(
         [sys.executable, "-m", "jupyter", "kernelspec", "list", "--json"],

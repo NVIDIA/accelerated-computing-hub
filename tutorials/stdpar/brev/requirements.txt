@@ -18,7 +18,6 @@ conan
 # Jupyter
 jupyter
 jupyter-server-proxy
-jupyterlab-nvidia-nsight
 jupyterlab-execute-time
 
 # NVIDIA devtools
