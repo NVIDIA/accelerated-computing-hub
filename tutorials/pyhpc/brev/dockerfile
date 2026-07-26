@@ -163,8 +163,7 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # Install profiler-backed kernels for in-place notebook cell profiling.
-RUN nsightful-ncu install --sys-prefix \
-      '--profiler-args=--set full --clock-control none --kernel-name regex:(copy_blocked|copy_optimized|histogram_global|histogram_localized)' \
+RUN nsightful-ncu install --sys-prefix '--profiler-args=--set full --clock-control none' \
  && nsightful-nsys install --sys-prefix '--profiler-args=--trace=cuda,nvtx,osrt'
 
 # Disable unnecessary default Jupyter extensions.
