@@ -52,7 +52,7 @@ prepare_checkout() {
         fi
 
         local status
-        if ! status=$(git -C "${repo}" status --porcelain=v1 --untracked-files=all); then
+        if ! status=$(git -C "${repo}" status --porcelain=v1 --untracked-files=no); then
             echo "Error: could not inspect the existing checkout: ${repo}" >&2
             return 1
         fi
@@ -113,7 +113,7 @@ prepare_runtime_checkout() {
         return 1
     fi
     local status
-    if ! status=$(git -C "${repo}" status --porcelain=v1 --untracked-files=all); then
+    if ! status=$(git -C "${repo}" status --porcelain=v1 --untracked-files=no); then
         echo "Error: could not inspect managed runtime checkout: ${repo}" >&2
         return 1
     fi
