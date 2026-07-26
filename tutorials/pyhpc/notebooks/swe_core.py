@@ -365,6 +365,129 @@ def run_cmd(cmd, cwd=None):
         print(r.stdout.strip().splitlines()[-1])
 
 
+# --- Presentation helpers ---------------------------------------------------
+#
+# Cosmetic utility functions that receive measurements or derived quantities.
+
+_MARKERS = ("o-", "s-", "d-", "v-", "^-", "D-", "p-", "x-", "+-")
+
+
+def plot_rate_sweep(x, series, xlabel, title, ylabel="throughput [Mcells/s]",
+                    boundaries=(), logy=True, from_zero=False):
+    """Plot one line per named series against x on a log-x axis.
+
+    boundaries is a sequence of (x, label) verticals, drawn where a caller-
+    computed regime changes (e.g. cache to DRAM)."""
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots(figsize=(7.5, 4))
+    for (name, ys), marker in zip(series.items(), _MARKERS):
+        ax.plot(x, ys, marker, label=name)
+    ax.set_xscale("log")
+    if logy:
+        ax.set_yscale("log")
+    elif from_zero:
+        ax.set_ylim(0, max(max(ys) for ys in series.values()) * 1.15)
+    for xb, label in boundaries:
+        ax.axvline(xb, ls=":", color="#666", lw=1)
+        ax.text(xb, ax.get_ylim()[0], f" {label}", rotation=90, va="bottom",
+                ha="left", fontsize=8, color="#444")
+    ax.set(xlabel=xlabel, ylabel=ylabel, title=title)
+    ax.legend(ncol=2, fontsize=8)
+    ax.grid(alpha=0.3, which="both")
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_cold_warm(labels, cold_s, warm_s, title):
+    """Grouped cold-vs-warm bars on a log time axis."""
+    import matplotlib.pyplot as plt
+    x, w = np.arange(len(labels)), 0.38
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.bar(x - w / 2, [t * 1e3 for t in cold_s], w,
+           label="cold (first call)", color="#c33")
+    ax.bar(x + w / 2, [t * 1e3 for t in warm_s], w,
+           label="warm (median)", color="#5a8")
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.set_yscale("log")
+    ax.set(ylabel="time [ms, log]", title=title)
+    ax.legend()
+    ax.grid(alpha=0.3, axis="y")
+    plt.tight_layout()
+    plt.show()
+
+
+def plot_compile_share(labels, cold_s, warm_s, title):
+    """Stacked bars splitting each first call into execution and one-time compile."""
+    import matplotlib.pyplot as plt
+    warm_ms = [t * 1e3 for t in warm_s]
+    comp_ms = [max(c - w, 0.0) * 1e3 for c, w in zip(cold_s, warm_s)]
+    total = [w + c for w, c in zip(warm_ms, comp_ms)]
+    ex_frac = [w / t for w, t in zip(warm_ms, total)]
+    cm_frac = [c / t for c, t in zip(comp_ms, total)]
+    x = np.arange(len(labels))
+    fig, ax = plt.subplots(figsize=(7, 4))
+    ax.bar(x, ex_frac, width=0.55, color="#27a", label="execution (time per run)")
+    ax.bar(x, cm_frac, width=0.55, bottom=ex_frac, color="#c33",
+           label="XLA compile (one-time)")
+    for xi, (cf, warm) in enumerate(zip(cm_frac, warm_ms)):
+        ax.text(xi, 1.02, f"{cf * 100:.0f}% compile\n{warm:,.0f} ms run",
+                ha="center", va="bottom", fontsize=8)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.set_ylim(0, 1.3)
+    ax.set_yticks([0, .25, .5, .75, 1.])
+    ax.set_yticklabels(["0%", "25%", "50%", "75%", "100%"])
+    ax.set(ylabel="share of the first-call time", title=title)
+    ax.legend(loc="lower right", fontsize=8)
+    plt.tight_layout()
+    plt.show()
+
+
+def animate_pulse(n_cells=256, length=20.0, n_steps=2500, skip=40):
+    """Animate the bump-pulse height over n_steps, as embedded HTML."""
+    import matplotlib.pyplot as plt
+    from matplotlib.animation import FuncAnimation
+    from IPython.display import HTML
+    dx = length / n_cells
+    h, hu = bump_ic(n_cells, L=length)
+    dt = fixed_dt(1.1, dx)
+    frames = [(0, h[1:-1].copy())]
+    for step in range(1, n_steps + 1):
+        apply_bc_reflective(h, hu)
+        h, hu = step_numpy(h, hu, dx, dt)
+        if step % skip == 0:
+            frames.append((step, h[1:-1].copy()))
+    xs = (np.arange(n_cells) + 0.5) * dx
+    fig, ax = plt.subplots(figsize=(8, 3.6))
+    line, = ax.plot(xs, frames[0][1], color="#27a", linewidth=2)
+    ax.set_xlim(0, length)
+    ax.set_ylim(0.93, 1.13)
+    ax.set(xlabel="x  [m]", ylabel="h  [m]",
+           title="1D bump pulse - water height over time")
+    ax.grid(alpha=0.3)
+    stamp = ax.text(0.02, 0.95, "", transform=ax.transAxes, fontsize=10,
+                    verticalalignment="top")
+
+    def _update(idx):
+        step, frame = frames[idx]
+        line.set_ydata(frame)
+        stamp.set_text(f"step {step:4d}   t = {step * dt:.3f} s")
+        return line, stamp
+
+    anim = FuncAnimation(fig, _update, frames=len(frames), interval=80, blit=True)
+    plt.close(fig)
+    return HTML(anim.to_jshtml())
+
+
+def require_stages(by_stage, stages, key="sweep"):
+    """Raise unless every stage carries `key`, naming the notebooks to re-run."""
+    missing = [s for s in stages if key not in by_stage.get(s, {})]
+    if missing:
+        raise SystemExit(f"no {key} recorded for: {', '.join(missing)}."
+                         " Re-run those notebooks, then this one.")
+
+
 # --- Self-test --------------------------------------------------------------
 
 def smoke(N=256, n_steps=100):
