@@ -429,8 +429,13 @@ stop_services() {
     if [ "${#pids[@]}" -gt 0 ]; then
         kill "${pids[@]}" 2>/dev/null || true
     fi
+    local -a cleanup_pids=()
     for store in main nsys ncu; do
-        clean_store "${store}"
+        clean_store "${store}" &
+        cleanup_pids+=("$!")
+    done
+    for pid in "${cleanup_pids[@]}"; do
+        wait "${pid}" 2>/dev/null || true
     done
     for pid in "${pids[@]}"; do
         wait "${pid}" 2>/dev/null || true
@@ -469,10 +474,9 @@ with_store main "${COMPOSE}" --podman-run-args=--cgroups=disabled \
     -e "TURN_USERNAME=${TURN_USERNAME}" -e "TURN_PASSWORD=${TURN_PASSWORD}" \
     base
 
-start_service() {
+launch_service() {
     local service=$1
     local store=$2
-    local url=$3
     local log="${RUN_STATE}/${service}.log"
 
     (
@@ -507,6 +511,12 @@ start_service() {
     local pid=$!
     chmod 600 "${log}"
     pids+=("${pid}")
+}
+
+wait_for_service() {
+    local service=$1
+    local url=$2
+    local log="${RUN_STATE}/${service}.log"
 
     local deadline=$((SECONDS + 300))
     while [ "${SECONDS}" -lt "${deadline}" ]; do
@@ -526,6 +536,16 @@ start_service() {
     return 1
 }
 
+start_services() {
+    launch_service jupyter main
+    launch_service nsys nsys
+    launch_service ncu ncu
+
+    wait_for_service jupyter http://127.0.0.1:8888/api/status &&
+        wait_for_service nsys http://127.0.0.1:8080/health &&
+        wait_for_service ncu http://127.0.0.1:8081/health
+}
+
 generation=0
 ready_announced=0
 while true; do
@@ -538,9 +558,7 @@ while true; do
             >>"${RUN_STATE}/${service}.log"
     done
 
-    if ! start_service jupyter main http://127.0.0.1:8888/api/status || \
-       ! start_service nsys nsys http://127.0.0.1:8080/health || \
-       ! start_service ncu ncu http://127.0.0.1:8081/health; then
+    if ! start_services; then
         echo "Web service generation ${generation} failed during startup; restarting all services." >&2
         stop_services
         sleep 5
