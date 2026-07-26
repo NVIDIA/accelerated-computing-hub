@@ -281,7 +281,7 @@ def machine_report():
         if q.returncode == 0:
             (info["gpu"], info["driver"], info["gpu_mem"], info["gpu_sm_clock"],
              info["gpu_sm_clock_max"], info["gpu_temp_c"]) = \
-                [s.strip() for s in q.stdout.strip().split(",")]
+                [s.strip() for s in q.stdout.splitlines()[0].split(",")]
     except (OSError, subprocess.TimeoutExpired):
         pass
     w = max(len(k) for k in info)

@@ -137,12 +137,14 @@ Host ach-ela
     User ${user}
     IdentityFile "${ssh_key}"
     IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
 
 Host ach-daint
     HostName ${daint_host}
     User ${user}
     IdentityFile "${ssh_key}"
     IdentitiesOnly yes
+    StrictHostKeyChecking accept-new
     ProxyJump ach-ela
 EOF
 chmod 600 "${ssh_config}"
@@ -191,7 +193,7 @@ upload_command="umask 077; mkdir -p \"\$HOME/.local/share/accelerated-computing-
 ssh -F "${ssh_config}" -S "${control_path}" ach-daint "${upload_command}" < "${launch_script}"
 
 remote_command="\"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\""
-for arg in "${launch_args[@]}"; do
+for arg in ${launch_args[@]+"${launch_args[@]}"}; do
     printf -v quoted_arg '%q' "${arg}"
     remote_command+=" ${quoted_arg}"
 done
