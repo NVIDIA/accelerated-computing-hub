@@ -163,8 +163,14 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # Install profiler-backed kernels for in-place notebook cell profiling.
-RUN nsightful-ncu install --sys-prefix '--profiler-args=--set full --clock-control none' \
- && nsightful-nsys install --sys-prefix '--profiler-args=--trace=cuda,nvtx,osrt'
+RUN nsightful-ncu install --prefix /usr/local '--profiler-args=--set full --clock-control none' \
+ && nsightful-nsys install --prefix /usr/local '--profiler-args=--trace=cuda,nvtx,osrt' \
+ && chmod -R a+rX /usr/local/share/jupyter/kernels/nsightful-ncu \
+                    /usr/local/share/jupyter/kernels/nsightful-nsys \
+ && su -s /bin/sh nobody -c 'HOME=/tmp python -m jupyter kernelspec list --json' \
+      | grep -q 'nsightful-ncu' \
+ && su -s /bin/sh nobody -c 'HOME=/tmp python -m jupyter kernelspec list --json' \
+      | grep -q 'nsightful-nsys'
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
