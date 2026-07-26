@@ -9,8 +9,10 @@ so a broken image is caught before the much slower notebook suite.
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
+import tempfile
 import warnings
 
 import numpy as np
@@ -133,6 +135,49 @@ def test_nsightful():
     kernels = json.loads(result.stdout)["kernelspecs"]
     assert kernels["nsightful-ncu"]["spec"]["metadata"]["nsightful_profiler"] == "ncu"
     assert kernels["nsightful-nsys"]["spec"]["metadata"]["nsightful_profiler"] == "nsys"
+
+
+def test_matplotlib_follows_jupyter_theme():
+    """Matplotlib is imported lazily and follows the configured Jupyter theme."""
+    startup = "/usr/local/etc/ipython/startup/10-matplotlib-theme.py"
+    imports = [
+        "import matplotlib",
+        "import matplotlib.pyplot as plt",
+        "from matplotlib.pyplot import plot",
+    ]
+    assert os.path.isfile(startup)
+
+    with tempfile.TemporaryDirectory() as home:
+        settings_dir = os.path.join(
+            home,
+            ".jupyter/lab/user-settings/@jupyterlab/apputils-extension",
+        )
+        os.makedirs(settings_dir)
+        with open(
+            os.path.join(settings_dir, "themes.jupyterlab-settings"),
+            "w",
+            encoding="utf-8",
+        ) as settings:
+            json.dump({"theme": "JupyterLab Dark"}, settings)
+
+        env = os.environ.copy()
+        env["HOME"] = home
+        for statement in imports:
+            program = (
+                "import sys\n"
+                "assert 'matplotlib' not in sys.modules\n"
+                f"{statement}\n"
+                "import matplotlib\n"
+                "assert matplotlib.rcParams['text.color'] == 'white'\n"
+            )
+            result = subprocess.run(
+                [sys.executable, "-m", "IPython", "--quick", "-c", program],
+                capture_output=True,
+                text=True,
+                env=env,
+            )
+
+            assert result.returncode == 0, result.stderr
 
 
 def test_mpi4py():

@@ -108,6 +108,7 @@ RUN apt-get update -y \
 
 # Copy only requirements.txt first for better Docker layer caching.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /usr/local/etc/ipython/startup/10-matplotlib-theme.py
 
 # Install Python packages. Build mpi4py against MPICH so notebook-local MPI
 # launches work inside CSCS Slurm Container Engine steps.
