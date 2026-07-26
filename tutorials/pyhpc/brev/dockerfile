@@ -163,7 +163,6 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 # Install profiler-backed kernels for in-place notebook cell profiling.
-# The JupyterLab Nsight extension remains installed for the streamer tiles.
 RUN nsightful-ncu install --sys-prefix \
       '--profiler-args=--set full --clock-control none --kernel-name regex:(copy_blocked|copy_optimized|histogram_global|histogram_localized)' \
  && nsightful-nsys install --sys-prefix '--profiler-args=--trace=cuda,nvtx,osrt'
