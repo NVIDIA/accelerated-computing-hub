@@ -58,27 +58,87 @@ __global__ void swe_update_kernel(const double* __restrict__ H, const double* __
     if (i == N) { HN[Np2 - 1] = H[N]; HUN[Np2 - 1] = -HU[N]; }
 }
 
-void gpu_swe_solve_raw(const double* h0, const double* hu0,
-                       double* h_out, double* hu_out,
-                       long Np2, double dx, double dt, double g, long n_steps) {
+// Device-resident state for one grid size, as in swe_cub_solver.cpp.
+struct SweRawState {
+    double* h0  = nullptr;   // pristine initial condition
+    double* hu0 = nullptr;
+    double* h   = nullptr;   // working state
+    double* hu  = nullptr;
+    double* hn  = nullptr;   // second buffer
+    double* hun = nullptr;
+    double* Fh  = nullptr;   // face fluxes
+    double* Fhu = nullptr;
+    long    Np2 = 0;
+};
+
+static SweRawState g_raw;
+
+static void gpu_swe_release_raw() {
+    if (g_raw.h0)  CUDA_CHECK_RAW(cudaFree(g_raw.h0));
+    if (g_raw.hu0) CUDA_CHECK_RAW(cudaFree(g_raw.hu0));
+    if (g_raw.h)   CUDA_CHECK_RAW(cudaFree(g_raw.h));
+    if (g_raw.hu)  CUDA_CHECK_RAW(cudaFree(g_raw.hu));
+    if (g_raw.hn)  CUDA_CHECK_RAW(cudaFree(g_raw.hn));
+    if (g_raw.hun) CUDA_CHECK_RAW(cudaFree(g_raw.hun));
+    if (g_raw.Fh)  CUDA_CHECK_RAW(cudaFree(g_raw.Fh));
+    if (g_raw.Fhu) CUDA_CHECK_RAW(cudaFree(g_raw.Fhu));
+    g_raw = SweRawState{};
+}
+
+// Allocate for this grid size and upload the initial condition. A repeat call
+// at the resident size does nothing.
+void gpu_swe_init_raw(const double* h0, const double* hu0, long Np2) {
     if (Np2 < 2) {
         std::fprintf(stderr, "Np2 < 2\n");
         std::abort();
     }
+    if (g_raw.Np2 == Np2) return;
+    gpu_swe_release_raw();
+
+    const long   N      = Np2 - 2;
+    const size_t bytes  = Np2 * sizeof(double);
+    const size_t fbytes = (N + 1) * sizeof(double);
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.h0,  bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.hu0, bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.h,   bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.hu,  bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.hn,  bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.hun, bytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.Fh,  fbytes));
+    CUDA_CHECK_RAW(cudaMalloc(&g_raw.Fhu, fbytes));
+    CUDA_CHECK_RAW(cudaMemcpy(g_raw.h0,  h0,  bytes, cudaMemcpyHostToDevice));
+    CUDA_CHECK_RAW(cudaMemcpy(g_raw.hu0, hu0, bytes, cudaMemcpyHostToDevice));
+    g_raw.Np2 = Np2;
+}
+
+// Copy the result of the last solve back to the host.
+void gpu_swe_fetch_raw(double* h_out, double* hu_out) {
+    if (g_raw.Np2 == 0) {
+        std::fprintf(stderr, "gpu_swe_fetch_raw before gpu_swe_init_raw\n");
+        std::abort();
+    }
+    const size_t bytes = g_raw.Np2 * sizeof(double);
+    CUDA_CHECK_RAW(cudaMemcpy(h_out,  g_raw.h,  bytes, cudaMemcpyDeviceToHost));
+    CUDA_CHECK_RAW(cudaMemcpy(hu_out, g_raw.hu, bytes, cudaMemcpyDeviceToHost));
+}
+
+// Integrate n_steps from the initial condition. Everything stays on the device.
+void gpu_swe_steps_raw(double dx, double dt, double g, long n_steps) {
+    if (g_raw.Np2 == 0) {
+        std::fprintf(stderr, "gpu_swe_steps_raw before gpu_swe_init_raw\n");
+        std::abort();
+    }
+    const long   Np2    = g_raw.Np2;
     const long   N      = Np2 - 2;
     const double inv    = dt / dx;
     const size_t bytes  = Np2 * sizeof(double);
-    const size_t fbytes = (N + 1) * sizeof(double);
 
-    double *h, *hu, *hn, *hun, *Fh, *Fhu;
-    CUDA_CHECK_RAW(cudaMalloc(&h,   bytes));
-    CUDA_CHECK_RAW(cudaMalloc(&hu,  bytes));
-    CUDA_CHECK_RAW(cudaMalloc(&hn,  bytes));
-    CUDA_CHECK_RAW(cudaMalloc(&hun, bytes));
-    CUDA_CHECK_RAW(cudaMalloc(&Fh,  fbytes));
-    CUDA_CHECK_RAW(cudaMalloc(&Fhu, fbytes));
-    CUDA_CHECK_RAW(cudaMemcpy(h,  h0,  bytes, cudaMemcpyHostToDevice));
-    CUDA_CHECK_RAW(cudaMemcpy(hu, hu0, bytes, cudaMemcpyHostToDevice));
+    // Restart from the initial condition so repeated timings do equal work.
+    CUDA_CHECK_RAW(cudaMemcpy(g_raw.h,  g_raw.h0,  bytes, cudaMemcpyDeviceToDevice));
+    CUDA_CHECK_RAW(cudaMemcpy(g_raw.hu, g_raw.hu0, bytes, cudaMemcpyDeviceToDevice));
+
+    double *h = g_raw.h, *hu = g_raw.hu, *hn = g_raw.hn, *hun = g_raw.hun;
+    double *Fh = g_raw.Fh, *Fhu = g_raw.Fhu;
 
     const int block   = 256;
     const int grid_c  = (int)((N + block - 1) / block);
@@ -91,11 +151,8 @@ void gpu_swe_solve_raw(const double* h0, const double* hu0,
         double *t = h; h = hn; hn = t; t = hu; hu = hun; hun = t;
     }
 
-    CUDA_CHECK_RAW(cudaMemcpy(h_out,  h,  bytes, cudaMemcpyDeviceToHost));
-    CUDA_CHECK_RAW(cudaMemcpy(hu_out, hu, bytes, cudaMemcpyDeviceToHost));
+    // Store the buffers in whichever order the swaps left them.
+    g_raw.h = h; g_raw.hu = hu; g_raw.hn = hn; g_raw.hun = hun;
     CUDA_CHECK_RAW(cudaDeviceSynchronize());
     CUDA_CHECK_RAW(cudaGetLastError());
-    CUDA_CHECK_RAW(cudaFree(h));  CUDA_CHECK_RAW(cudaFree(hu));
-    CUDA_CHECK_RAW(cudaFree(hn)); CUDA_CHECK_RAW(cudaFree(hun));
-    CUDA_CHECK_RAW(cudaFree(Fh)); CUDA_CHECK_RAW(cudaFree(Fhu));
 }

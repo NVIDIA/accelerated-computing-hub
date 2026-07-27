@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // 1D shallow-water Rusanov step, solved entirely on the GPU with CUB.
 //
-// Fields live in device memory, copied in once before the time
-// loop and back after it. Each step runs two cub::DeviceFor::Bulk passes:
-// the first computes every face flux once, the second updates the cells
-// from the stored fluxes.
+// Fields live in device memory for the lifetime of the solver: gpu_swe_init
+// allocates and uploads, gpu_swe_steps integrates, gpu_swe_fetch copies the
+// result back. Each step runs two cub::DeviceFor::Bulk passes: the first
+// computes every face flux once, the second updates the cells from the
+// stored fluxes.
 
 #include <climits>
 #include <cstdio>
@@ -35,9 +36,36 @@ __device__ inline void rusanov_face(double hL, double hR, double huL, double huR
         - 0.5 * a * (huR - huL);
 }
 
-void gpu_swe_solve(const double* h0, const double* hu0,
-                   double* h_out, double* hu_out,
-                   long Np2, double dx, double dt, double g, long n_steps) {
+// Device-resident state for one grid size.
+struct SweCubState {
+    double* h0  = nullptr;   // pristine initial condition
+    double* hu0 = nullptr;
+    double* h   = nullptr;   // working state
+    double* hu  = nullptr;
+    double* hn  = nullptr;   // second buffer
+    double* hun = nullptr;
+    double* Fh  = nullptr;   // face fluxes
+    double* Fhu = nullptr;
+    long    Np2 = 0;
+};
+
+static SweCubState g_cub;
+
+static void gpu_swe_release() {
+    if (g_cub.h0)  CUDA_CHECK(cudaFree(g_cub.h0));
+    if (g_cub.hu0) CUDA_CHECK(cudaFree(g_cub.hu0));
+    if (g_cub.h)   CUDA_CHECK(cudaFree(g_cub.h));
+    if (g_cub.hu)  CUDA_CHECK(cudaFree(g_cub.hu));
+    if (g_cub.hn)  CUDA_CHECK(cudaFree(g_cub.hn));
+    if (g_cub.hun) CUDA_CHECK(cudaFree(g_cub.hun));
+    if (g_cub.Fh)  CUDA_CHECK(cudaFree(g_cub.Fh));
+    if (g_cub.Fhu) CUDA_CHECK(cudaFree(g_cub.Fhu));
+    g_cub = SweCubState{};
+}
+
+// Allocate for this grid size and upload the initial condition. A repeat call
+// at the resident size does nothing.
+void gpu_swe_init(const double* h0, const double* hu0, long Np2) {
     if (Np2 < 2) {
         std::fprintf(stderr, "Np2 < 2\n");
         std::abort();
@@ -47,20 +75,53 @@ void gpu_swe_solve(const double* h0, const double* hu0,
         std::fprintf(stderr, "N too large for 32-bit indexing\n");
         std::abort();
     }
+    if (g_cub.Np2 == Np2) return;
+    gpu_swe_release();
+
     const int    N      = static_cast<int>(Np2 - 2);
-    const double inv    = dt / dx;
     const size_t bytes  = Np2 * sizeof(double);
     const size_t fbytes = (N + 1) * sizeof(double);
+    CUDA_CHECK(cudaMalloc(&g_cub.h0,  bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.hu0, bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.h,   bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.hu,  bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.hn,  bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.hun, bytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.Fh,  fbytes));
+    CUDA_CHECK(cudaMalloc(&g_cub.Fhu, fbytes));
+    CUDA_CHECK(cudaMemcpy(g_cub.h0,  h0,  bytes, cudaMemcpyHostToDevice));
+    CUDA_CHECK(cudaMemcpy(g_cub.hu0, hu0, bytes, cudaMemcpyHostToDevice));
+    g_cub.Np2 = Np2;
+}
 
-    double *h, *hu, *hn, *hun, *Fh, *Fhu;
-    CUDA_CHECK(cudaMalloc(&h,   bytes));
-    CUDA_CHECK(cudaMalloc(&hu,  bytes));
-    CUDA_CHECK(cudaMalloc(&hn,  bytes));
-    CUDA_CHECK(cudaMalloc(&hun, bytes));
-    CUDA_CHECK(cudaMalloc(&Fh,  fbytes));
-    CUDA_CHECK(cudaMalloc(&Fhu, fbytes));
-    CUDA_CHECK(cudaMemcpy(h,  h0,  bytes, cudaMemcpyHostToDevice));
-    CUDA_CHECK(cudaMemcpy(hu, hu0, bytes, cudaMemcpyHostToDevice));
+// Copy the result of the last solve back to the host.
+void gpu_swe_fetch(double* h_out, double* hu_out) {
+    if (g_cub.Np2 == 0) {
+        std::fprintf(stderr, "gpu_swe_fetch before gpu_swe_init\n");
+        std::abort();
+    }
+    const size_t bytes = g_cub.Np2 * sizeof(double);
+    CUDA_CHECK(cudaMemcpy(h_out,  g_cub.h,  bytes, cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(hu_out, g_cub.hu, bytes, cudaMemcpyDeviceToHost));
+}
+
+// Integrate n_steps from the initial condition. Everything stays on the device.
+void gpu_swe_steps(double dx, double dt, double g, long n_steps) {
+    if (g_cub.Np2 == 0) {
+        std::fprintf(stderr, "gpu_swe_steps before gpu_swe_init\n");
+        std::abort();
+    }
+    const int    N      = static_cast<int>(g_cub.Np2 - 2);
+    const long   Np2    = g_cub.Np2;
+    const double inv    = dt / dx;
+    const size_t bytes  = Np2 * sizeof(double);
+
+    // Restart from the initial condition so repeated timings do equal work.
+    CUDA_CHECK(cudaMemcpy(g_cub.h,  g_cub.h0,  bytes, cudaMemcpyDeviceToDevice));
+    CUDA_CHECK(cudaMemcpy(g_cub.hu, g_cub.hu0, bytes, cudaMemcpyDeviceToDevice));
+
+    double *h = g_cub.h, *hu = g_cub.hu, *hn = g_cub.hn, *hun = g_cub.hun;
+    double *Fh = g_cub.Fh, *Fhu = g_cub.Fhu;
 
     for (long s = 0; s < n_steps; ++s) {
         double *H = h, *HU = hu, *HN = hn, *HUN = hun, *FH = Fh, *FHU = Fhu;
@@ -86,11 +147,8 @@ void gpu_swe_solve(const double* h0, const double* hu0,
         double *t = h; h = hn; hn = t; t = hu; hu = hun; hun = t;
     }
 
-    CUDA_CHECK(cudaMemcpy(h_out,  h,  bytes, cudaMemcpyDeviceToHost));
-    CUDA_CHECK(cudaMemcpy(hu_out, hu, bytes, cudaMemcpyDeviceToHost));
+    // Store the buffers in whichever order the swaps left them.
+    g_cub.h = h; g_cub.hu = hu; g_cub.hn = hn; g_cub.hun = hun;
     CUDA_CHECK(cudaDeviceSynchronize());
     CUDA_CHECK(cudaGetLastError());
-    CUDA_CHECK(cudaFree(h));  CUDA_CHECK(cudaFree(hu));
-    CUDA_CHECK(cudaFree(hn)); CUDA_CHECK(cudaFree(hun));
-    CUDA_CHECK(cudaFree(Fh)); CUDA_CHECK(cudaFree(Fhu));
 }
