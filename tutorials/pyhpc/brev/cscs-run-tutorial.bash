@@ -47,13 +47,15 @@ fi
 bootstrap_streamed_helpers() {
     local branch=${ACH_BRANCH:-event/2026-07-cscs-summer-school}
     local base_url=${ACH_CSCS_HELPER_BASE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/tutorials/pyhpc/brev}
+    local prepare_url=${ACH_CSCS_PREPARE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/brev/prepare-podman-compose.py}
     local helper_dir
     helper_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-helpers.XXXXXX")
 
     cleanup_downloads() {
         rm -f "${helper_dir}/cscs-run-tutorial.bash" \
             "${helper_dir}/cscs-launch-tutorial.bash" \
-            "${helper_dir}/cscs-connect-tutorial.bash"
+            "${helper_dir}/cscs-connect-tutorial.bash" \
+            "${helper_dir}/prepare-podman-compose.py"
         rmdir "${helper_dir}" >/dev/null 2>&1 || true
     }
     trap cleanup_downloads EXIT
@@ -68,6 +70,9 @@ bootstrap_streamed_helpers() {
             "${base_url}/${helper}" --output "${helper_dir}/${helper}"
         chmod 700 "${helper_dir}/${helper}"
     done
+    curl --fail --location --retry 3 --silent --show-error \
+        "${prepare_url}" --output "${helper_dir}/prepare-podman-compose.py"
+    chmod 700 "${helper_dir}/prepare-podman-compose.py"
     if ! { exec 3</dev/tty; } 2>/dev/null; then
         echo "Error: run this command from an interactive terminal." >&2
         exit 1
@@ -84,12 +89,17 @@ fi
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)
 launch_script="${script_dir}/cscs-launch-tutorial.bash"
 connect_script="${script_dir}/cscs-connect-tutorial.bash"
+prepare_script="${script_dir}/prepare-podman-compose.py"
 for script in "${launch_script}" "${connect_script}"; do
     if [ ! -x "${script}" ]; then
         echo "Error: missing executable sibling script: ${script}" >&2
         exit 1
     fi
 done
+if [ ! -x "${prepare_script}" ]; then
+    echo "Error: missing executable sibling script: ${prepare_script}" >&2
+    exit 1
+fi
 
 user=${CSCS_USER:-}
 ssh_key=${CSCS_SSH_KEY:-${HOME:?HOME is not set}/.ssh/cscs-key}
@@ -191,6 +201,8 @@ fi
 
 upload_command="umask 077; mkdir -p \"\$HOME/.local/share/accelerated-computing-hub\"; cat > \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\"; chmod 700 \"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\""
 ssh -F "${ssh_config}" -S "${control_path}" ach-daint "${upload_command}" < "${launch_script}"
+upload_command="umask 077; cat > \"\$HOME/.local/share/accelerated-computing-hub/prepare-podman-compose.py\"; chmod 700 \"\$HOME/.local/share/accelerated-computing-hub/prepare-podman-compose.py\""
+ssh -F "${ssh_config}" -S "${control_path}" ach-daint "${upload_command}" < "${prepare_script}"
 
 remote_command="\"\$HOME/.local/share/accelerated-computing-hub/cscs-launch-tutorial.bash\""
 for arg in ${launch_args[@]+"${launch_args[@]}"}; do
