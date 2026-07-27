@@ -18,7 +18,6 @@ Options:
   --branch BRANCH        Release and new-checkout branch
                          (default: event/2026-07-cscs-summer-school)
   --state PATH           Deployment state directory (default: $SCRATCH/ach-pyhpc-web)
-  --runtime-repo PATH    Pre-existing release runtime checkout (advanced)
   --partition NAME       Slurm partition (default: normal)
   --time DURATION        Slurm duration (default: 10:00:00)
   --start-timeout SEC    Time to wait for READY (default: 1800)
@@ -89,40 +88,6 @@ prepare_checkout() {
         echo "Error: the checkout must be on a branch: ${repo}" >&2
         return 1
     fi
-}
-
-prepare_runtime_checkout() {
-    local repo=$1
-    local branch=$2
-
-    if [ ! -e "${repo}" ]; then
-        mkdir -p "$(dirname "${repo}")"
-        echo "Cloning the ${branch} runtime into ${repo}..."
-        git clone --depth 1 --branch "${branch}" \
-            https://github.com/NVIDIA/accelerated-computing-hub.git "${repo}"
-        return
-    fi
-    if ! git -C "${repo}" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        echo "Error: managed runtime path is not a Git checkout: ${repo}" >&2
-        return 1
-    fi
-    local runtime_branch
-    runtime_branch=$(git -C "${repo}" branch --show-current)
-    if [ "${runtime_branch}" != "${branch}" ]; then
-        echo "Error: managed runtime checkout is on ${runtime_branch}, expected ${branch}: ${repo}" >&2
-        return 1
-    fi
-    local status
-    if ! status=$(git -C "${repo}" status --porcelain=v1 --untracked-files=no); then
-        echo "Error: could not inspect managed runtime checkout: ${repo}" >&2
-        return 1
-    fi
-    if [ -n "${status}" ]; then
-        echo "Error: managed runtime checkout is unexpectedly modified: ${repo}" >&2
-        return 1
-    fi
-    echo "Fast-forwarding the managed ${branch} runtime..."
-    git -C "${repo}" pull --ff-only origin "${branch}"
 }
 
 queue_state() {
@@ -240,7 +205,6 @@ login_main() {
     local repo=${ACH_REPO:-${SCRATCH:?SCRATCH is not set}/accelerated-computing-hub}
     local branch=${ACH_BRANCH:-event/2026-07-cscs-summer-school}
     local state_dir=${ACH_STATE:-${SCRATCH}/ach-pyhpc-web}
-    local runtime_repo=${ACH_RUNTIME_REPO:-}
     local partition=${CSCS_PARTITION:-normal}
     local duration=${CSCS_TIME:-10:00:00}
     local start_timeout=${ACH_START_TIMEOUT:-1800}
@@ -251,7 +215,6 @@ login_main() {
             --repo) repo=${2:?--repo requires a value}; shift 2 ;;
             --branch) branch=${2:?--branch requires a value}; shift 2 ;;
             --state) state_dir=${2:?--state requires a value}; shift 2 ;;
-            --runtime-repo) runtime_repo=${2:?--runtime-repo requires a value}; shift 2 ;;
             --partition) partition=${2:?--partition requires a value}; shift 2 ;;
             --time) duration=${2:?--time requires a value}; shift 2 ;;
             --start-timeout) start_timeout=${2:?--start-timeout requires a value}; shift 2 ;;
@@ -280,14 +243,6 @@ login_main() {
 
     mkdir -p "${state_dir}"
     chmod 700 "${state_dir}"
-    if [ -z "${runtime_repo}" ]; then
-        local runtime_name=${branch//\//-}
-        runtime_repo="${state_dir}/runtime-${runtime_name}"
-        prepare_runtime_checkout "${runtime_repo}" "${branch}"
-    elif [ ! -f "${runtime_repo}/brev/prepare-podman-compose.py" ]; then
-        echo "Error: --runtime-repo is not an accelerated-computing-hub checkout: ${runtime_repo}" >&2
-        return 1
-    fi
 
     local batch_script
     batch_script=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)/$(basename "${BASH_SOURCE[0]}")
@@ -307,7 +262,7 @@ login_main() {
         --job-name=ach-pyhpc-web
         "--chdir=${repo}"
         "--output=${state_dir}/slurm-%j.log"
-        "--export=ALL,ACH_REPO=${repo},ACH_RUNTIME_REPO=${runtime_repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
+        "--export=ALL,ACH_REPO=${repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
     )
     sbatch_args+=(--account="${account}")
 
@@ -340,29 +295,28 @@ if [ -z "${SLURM_JOB_ID:-}" ]; then
 fi
 
 ACH_REPO=${ACH_REPO:?ACH_REPO is not set}
-ACH_RUNTIME_REPO=${ACH_RUNTIME_REPO:?ACH_RUNTIME_REPO is not set}
 ACH_STATE=${ACH_STATE:-${SCRATCH:?SCRATCH is not set}/ach-pyhpc-web}
 ACH_RELEASE_BRANCH=${ACH_RELEASE_BRANCH:?ACH_RELEASE_BRANCH is not set}
 COMPOSE_URL=${ACH_COMPOSE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_RELEASE_BRANCH}/tutorials/pyhpc/brev/docker-compose.yml}
+PREPARE_URL=${ACH_PREPARE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${ACH_RELEASE_BRANCH}/brev/prepare-podman-compose.py}
 
-if [ ! -f "${ACH_RUNTIME_REPO}/brev/prepare-podman-compose.py" ]; then
-    echo "Error: ACH_RUNTIME_REPO is not an accelerated-computing-hub checkout: ${ACH_RUNTIME_REPO}" >&2
-    exit 1
-fi
 if [ ! -d "${ACH_REPO}/tutorials/pyhpc/notebooks" ]; then
     echo "Error: student checkout has no PyHPC notebooks: ${ACH_REPO}" >&2
     exit 1
 fi
 
 RUN_STATE="${ACH_STATE}/${SLURM_JOB_ID}"
-mkdir -p "${RUN_STATE}" "${ACH_RUNTIME_REPO}/logs"
+mkdir -p "${RUN_STATE}"
 chmod 700 "${ACH_STATE}" "${RUN_STATE}"
 SERVICE_EVENTS="${RUN_STATE}/service-events"
 
 SOURCE_COMPOSE="${RUN_STATE}/docker-compose.yml"
 PODMAN_COMPOSE="${RUN_STATE}/docker-compose.podman.yml"
+PREPARE_SCRIPT="${RUN_STATE}/prepare-podman-compose.py"
 curl --fail --location --retry 3 --silent --show-error \
     "${COMPOSE_URL}" --output "${SOURCE_COMPOSE}"
+curl --fail --location --retry 3 --silent --show-error \
+    "${PREPARE_URL}" --output "${PREPARE_SCRIPT}"
 
 PYTHON=$(command -v python3.11 || command -v python3)
 VENV="${RUN_STATE}/venv"
@@ -377,13 +331,12 @@ TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)
 TURN_PASSWORD="$(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 32)"
 
 export ACH_PODMAN_HOST_NETWORK=1
-export ACH_PODMAN_NOTEBOOKS_ROOT="${ACH_REPO}/tutorials/pyhpc/notebooks"
 export JUPYTER_HOST=127.0.0.1
 export NSYS_HTTP_URL=http://127.0.0.1:8080
 export SELKIES_ENABLE_HTTPS=false
 
-"${VENV}/bin/python" "${ACH_RUNTIME_REPO}/brev/prepare-podman-compose.py" \
-    "${SOURCE_COMPOSE}" "${PODMAN_COMPOSE}" "${ACH_RUNTIME_REPO}" 1
+"${VENV}/bin/python" "${PREPARE_SCRIPT}" \
+    "${SOURCE_COMPOSE}" "${PODMAN_COMPOSE}" "${ACH_REPO}" 1
 
 JOB_ROOT="/dev/shm/${USER}/ach-pyhpc-web-${SLURM_JOB_ID}"
 mkdir -p "${JOB_ROOT}"
