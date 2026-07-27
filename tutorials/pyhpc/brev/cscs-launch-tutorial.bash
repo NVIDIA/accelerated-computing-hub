@@ -19,6 +19,7 @@ Options:
                          (default: event/2026-07-cscs-summer-school)
   --state PATH           Deployment state directory (default: $SCRATCH/ach-pyhpc-web)
   --partition NAME       Slurm partition (default: normal)
+  --reservation NAME     Slurm reservation (default: $CSCS_RESERVATION, if set)
   --time DURATION        Slurm duration (default: 10:00:00)
   --start-timeout SEC    Time to wait for READY (default: 1800)
   -h, --help             Show this help
@@ -206,6 +207,7 @@ login_main() {
     local branch=${ACH_BRANCH:-event/2026-07-cscs-summer-school}
     local state_dir=${ACH_STATE:-${SCRATCH}/ach-pyhpc-web}
     local partition=${CSCS_PARTITION:-normal}
+    local reservation=${CSCS_RESERVATION:-}
     local duration=${CSCS_TIME:-10:00:00}
     local start_timeout=${ACH_START_TIMEOUT:-1800}
 
@@ -216,6 +218,7 @@ login_main() {
             --branch) branch=${2:?--branch requires a value}; shift 2 ;;
             --state) state_dir=${2:?--state requires a value}; shift 2 ;;
             --partition) partition=${2:?--partition requires a value}; shift 2 ;;
+            --reservation) reservation=${2:?--reservation requires a value}; shift 2 ;;
             --time) duration=${2:?--time requires a value}; shift 2 ;;
             --start-timeout) start_timeout=${2:?--start-timeout requires a value}; shift 2 ;;
             -h|--help) usage; return 0 ;;
@@ -265,6 +268,9 @@ login_main() {
         "--export=ALL,ACH_REPO=${repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
     )
     sbatch_args+=(--account="${account}")
+    if [ -n "${reservation}" ]; then
+        sbatch_args+=(--reservation="${reservation}")
+    fi
 
     local job_id
     job_id=$(sbatch "${sbatch_args[@]}" "${batch_script}" --batch)
