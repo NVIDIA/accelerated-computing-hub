@@ -33,6 +33,8 @@ import json, os, time
 from pathlib import Path
 import numpy as np
 
+os.environ.setdefault("CPPINTEROP_EXTRA_INTERPRETER_ARGS", "-O3")
+
 g       = 9.81     # gravitational acceleration, m/s²
 DRY_TOL = 1e-6     # depth below this is clamped (to avoid division by 0)
 
@@ -186,17 +188,224 @@ def save_timing(result, grid_str, tool, hardware, dtype, steps=None, **extra):
     path.write_text(json.dumps(records, indent=2))
 
 
-SWEEP_SIZES = ((16_384, 1000), (262_144, 500), (1_048_576, 200),
-               (4_194_304, 100), (16_777_216, 50))
+# --- Problem sizing -----------------------------------------------------------
+#
+# Sizes are derived from the machine: core count, cache sizes, free memory.
+
+CANONICAL_WORK = 200_000_000   # cells x steps in the headline run
+SWEEP_WORK     = 200_000_000   # cells x steps at each sweep point
+CELLS_PER_CORE = 15_000        # enough work per thread to amortise a fork/join
+MIN_STEPS      = 20            # below this a step-rate measurement is noise
+MAX_STEPS      = 1000
 
 
-def timed_sweep(fn, warmup=1, repeats=3):
-    """Rate fn(n_cells, n_steps) at every benchmark sweep point, for timings.json."""
-    out = []
-    for n, steps in SWEEP_SIZES:
+def _pow2_at_least(x):
+    return max(1 << max(int(max(x, 1) - 1).bit_length(), 0), 1024)
+
+
+def _pow2_nearest(x):
+    up = _pow2_at_least(x)
+    down = max(up // 2, 1024)
+    return down if (x - down) < (up - x) else up
+
+
+def canonical_size():
+    """Headline (n_cells, n_steps): the value NB 08 recorded, else derived."""
+    fixed = load_machine().get("canonical")
+    return tuple(fixed) if fixed else _derive_canonical()
+
+
+def _derive_canonical():
+    """Headline (n_cells, n_steps): enough cells per core to amortise a
+    parallel region, capped to keep the NumPy reference quick."""
+    n = _pow2_nearest(physical_cores() * CELLS_PER_CORE)
+    n = min(n, _pow2_at_least(_cell_budget()))
+    steps = int(min(MAX_STEPS, max(MIN_STEPS, CANONICAL_WORK // n)))
+    return n, steps
+
+
+def _derive_sweep():
+    """[(n_cells, n_steps)] spanning cache-resident to DRAM-resident.
+
+    Runs from an eighth of the smaller cache boundary to eight times the
+    larger one, with `n * steps` held near constant."""
+    per_cell = working_set_bytes(1)
+    boundaries = [m * 2**20 / per_cell
+                  for m in (device_l2_mib(), llc_total_mib()) if m]
+    lo = _pow2_at_least(min(boundaries) / 8) if boundaries else 16_384
+    hi = _pow2_at_least(max(boundaries) * 8) if boundaries else 16_777_216
+    hi = min(hi, _pow2_at_least(_cell_budget()))
+    sizes, n = [], lo
+    while n <= max(hi, lo):
+        sizes.append((n, int(min(MAX_STEPS, max(MIN_STEPS, SWEEP_WORK // n)))))
+        n *= 4
+    return tuple(sizes)
+
+
+def _cell_budget(fraction=0.4, bytes_per_cell=200):
+    """Cells that fit in `fraction` of the tighter of host and device memory.
+
+    The 200 B/cell allowance covers `step_numpy`'s temporaries."""
+    host, dev = free_bytes()
+    limits = [b for b in (host, dev) if b]
+    return (min(limits) * fraction / bytes_per_cell) if limits else 16_777_216
+
+
+def free_bytes():
+    """(host, device) available memory in bytes; either is None if unknown."""
+    host = dev = None
+    try:
+        for line in open("/proc/meminfo"):
+            if line.startswith("MemAvailable:"):
+                host = int(line.split()[1]) * 1024
+                break
+    except OSError:
+        pass
+    try:
+        import cupy
+        dev = int(cupy.cuda.runtime.memGetInfo()[0])
+    except Exception:
+        pass
+    return host, dev
+
+
+def device_l2_mib():
+    """GPU L2 cache in MiB; None when no CUDA device is visible."""
+    try:
+        import cupy
+        return cupy.cuda.runtime.getDeviceProperties(0)["l2CacheSize"] / 2**20
+    except Exception:
+        return None
+
+
+def llc_total_mib():
+    """Last-level cache summed over every instance, in MiB; None if unknown."""
+    import glob
+    scale = {"K": 2**10, "M": 2**20, "G": 2**30}
+    found = []
+    for d in glob.glob("/sys/devices/system/cpu/cpu*/cache/index*/"):
+        try:
+            level = int(open(d + "level").read())
+            shared = open(d + "shared_cpu_list").read().strip()
+            size = open(d + "size").read().strip()
+        except (OSError, ValueError):
+            continue
+        found.append((level, shared,
+                      float(size.rstrip("KMG")) * scale.get(size[-1], 1) / 2**20))
+    if not found:
+        return None
+    top = max(f[0] for f in found)
+    return sum({shared: mib for level, shared, mib in found
+                if level == top}.values())
+
+
+_SWEEP_SIZES = None
+
+
+def sweep_points():
+    """Sweep points: the list NB 08 recorded, else derived once and cached."""
+    fixed = load_machine().get("sweep")
+    if fixed:
+        return tuple(tuple(p) for p in fixed)
+    global _SWEEP_SIZES
+    if _SWEEP_SIZES is None:
+        _SWEEP_SIZES = _derive_sweep()
+    return _SWEEP_SIZES
+
+
+def sweep_sizes():
+    """Derive sweep points from the machine, ignoring any recorded list."""
+    return _derive_sweep()
+
+
+def __getattr__(name):
+    # Deriving SWEEP_SIZES imports CuPy, so resolve it on first use.
+    if name == "SWEEP_SIZES":
+        return sweep_points()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def by_size(build):
+    """Memoise `build(n_cells)` so a timed loop excludes the setup it returns.
+
+    The warmup call pays for the setup; the timed calls reuse it."""
+    cache = {}
+
+    def get(n):
+        if n not in cache:
+            cache[n] = build(n)
+        return cache[n]
+
+    get.cache = cache
+    return get
+
+
+def timed_sweep(fn, warmup=1, repeats=3, budget_s=120.0):
+    """Rate fn(n_cells, n_steps) at every sweep point, for timings.json.
+
+    Every tool runs the identical (cells, steps) at each point. Do not vary the
+    step count per tool: throughput is N / (fixed/steps + per_step), so fewer
+    steps reads slower for a reason unrelated to the kernel.
+
+    A tool that cannot reach the larger sizes inside `budget_s` stops early and
+    the skipped sizes are named."""
+    out, dropped, spent = [], [], 0.0
+    points = sweep_points()
+    for i, (n, steps) in enumerate(points):
+        if out:
+            last = out[-1]
+            per_run = last["median_s"] * (n * steps) / (last["n"] * last["steps"])
+            if spent + per_run * (warmup + repeats) > budget_s:
+                dropped = [m for m, _ in points[i:]]
+                break
+        t0 = time.perf_counter()
         r = timed_run(fn, n, steps, warmup=warmup, repeats=repeats)
+        spent += time.perf_counter() - t0
         out.append({"n": n, "steps": steps, "median_s": r["median_s"]})
+    if dropped:
+        print(f"  sweep stopped after N = {out[-1]['n']:,}; "
+              f"{', '.join(f'{m:,}' for m in dropped)} would overrun the "
+              f"{budget_s:.0f} s budget")
     return out
+
+
+def sweep_table(runners, budget_s=60.0, warmup=1, repeats=3):
+    """Rate every {label: fn(n_cells, n_steps)} at each sweep point, printing a
+    row per size and returning {label: (n_cells, Mcells/s)}.
+
+    A runner that has spent `budget_s` sits out the remaining sizes, so a slow
+    tool cannot stall the sweep."""
+    rates = {k: ([], []) for k in runners}
+    spent = dict.fromkeys(runners, 0.0)
+    for n, steps in sweep_points():
+        row = []
+        for name, fn in runners.items():
+            if spent[name] > budget_s:
+                continue
+            t0 = time.perf_counter()
+            r = timed_run(fn, n, steps, warmup=warmup, repeats=repeats)
+            spent[name] += time.perf_counter() - t0
+            rate = n * steps / r["median_s"] / 1e6
+            rates[name][0].append(n)
+            rates[name][1].append(rate)
+            row.append(f"{name} {rate:7.0f}")
+        print(f"N={n:>10,} steps={steps:>4}   " + "   ".join(row) + "   Mcells/s")
+    return rates
+
+
+def sweep_series(by_stage, names):
+    """Read the recorded sweeps into {label: (n_cells, Mcells/s)}, print the
+    table, and return (sorted sizes, series)."""
+    rate = {names[s]: ([p["n"] for p in by_stage[s]["sweep"]],
+                       [p["n"] * p["steps"] / p["median_s"] / 1e6
+                        for p in by_stage[s]["sweep"]]) for s in names}
+    sizes = sorted({n for xs, _ in rate.values() for n in xs})
+    print(f'{"N":>11}' + "".join(f"{names[s]:>14}" for s in names) + "   Mcells/s")
+    for n in sizes:
+        cells = [f'{ys[xs.index(n)]:>14.0f}' if n in xs else f'{"-":>14}'
+                 for xs, ys in (rate[names[s]] for s in names)]
+        print(f"{n:>11,}" + "".join(cells))
+    return sizes, rate
 
 
 def save_sweep(stage, fn, warmup=1, repeats=3):
@@ -210,26 +419,42 @@ def save_sweep(stage, fn, warmup=1, repeats=3):
     Path(TIMINGS_PATH).write_text(json.dumps(records, indent=2))
 
 
-def breakdown_run(fn, n, steps, ic_s, transfer_s, warmup=1, repeats=3):
-    """Split fn(n, steps)'s end-to-end median into components [s]: compute
-    from the step-count slope, ic and transfers as measured by the caller,
-    alloc_other as the remainder."""
-    t1 = timed_run(fn, n, steps,     warmup=warmup, repeats=repeats)["median_s"]
-    t2 = timed_run(fn, n, 2 * steps, warmup=warmup, repeats=repeats)["median_s"]
-    compute = t2 - t1
-    return {"total_s": t1, "compute_s": compute, "ic_s": ic_s,
-            "transfer_s": transfer_s,
-            "alloc_other_s": max(t1 - compute - ic_s - transfer_s, 0.0)}
-
-
 def save_breakdown(stage, breakdown, n, steps):
-    """Attach a `breakdown_run` result to an existing timings.json row.
+    """Attach a `nsys_breakdown` result to an existing timings.json row.
 
     Like `save_sweep`, run from the notebook that owns the stage."""
     records = load_timings()
     row = next(r for r in records if r.get("stage") == stage)
     row["breakdown"] = {"n": n, "steps": steps, **breakdown}
     Path(TIMINGS_PATH).write_text(json.dumps(records, indent=2))
+
+
+def nsys_breakdown(report, wall_s):
+    """Split `wall_s` into GPU kernels, memory copies and host time [s].
+
+    Kernel and copy times come from `nsys stats` on `report`, so the report must
+    cover exactly the call that `wall_s` measured. Host time is the remainder:
+    the interpreter, the launches and any wait the device did not fill."""
+    import subprocess
+    out = subprocess.run(
+        ["nsys", "stats", "--force-export=true",
+         "--report", "cuda_gpu_kern_sum",
+         "--report", "cuda_gpu_mem_time_sum", str(report)],
+        capture_output=True, text=True).stdout
+    totals, section = {}, None
+    for line in out.splitlines():
+        if "(cuda_gpu_kern_sum)" in line:
+            section = "kernel_s"
+        elif "(cuda_gpu_mem_time_sum)" in line:
+            section = "memcpy_s"
+        elif section:
+            f = line.split()
+            if len(f) > 2 and f[0].replace(".", "", 1).isdigit():
+                totals[section] = totals.get(section, 0) + int(f[1].replace(",", ""))
+    kernel = totals.get("kernel_s", 0) / 1e9
+    memcpy = totals.get("memcpy_s", 0) / 1e9
+    return {"total_s": wall_s, "kernel_s": kernel, "memcpy_s": memcpy,
+            "host_s": max(wall_s - kernel - memcpy, 0.0)}
 
 
 def load_timings():
@@ -290,36 +515,20 @@ def machine_report():
     return info
 
 
-def measure_bandwidth_ceilings():
-    """Run the standard bandwidth benchmarks: STREAM (CPU) and BabelStream (GPU)
-    Saves best-rate roofs in GB/s to machine.json. Required binaries are installed in the tutorial image."""
-    import shutil, subprocess
+def save_sizing(extra=None):
+    """Fix this machine's problem sizes and record them in machine.json.
 
-    def bench(cmd, **env):
-        """Return {kernel: GB/s} from a STREAM-format results table."""
-        out = subprocess.run([cmd], capture_output=True, text=True, timeout=300,
-                             env={**os.environ, **env}).stdout
-        return {p[0].rstrip(":"): round(float(p[1]) / 1e3, 1)
-                for line in out.splitlines()
-                if (p := line.split()) and p[0].rstrip(":") in ("Copy", "Triad")}
-
-    ceilings = {}
-    if shutil.which("stream_c"):
-        ceilings["cpu_stream_triad_1t_gbs"] = bench("stream_c", OMP_NUM_THREADS="1")["Triad"]
-        ceilings["cpu_stream_triad_gbs"] = bench(
-            "stream_c", OMP_NUM_THREADS=str(physical_cores()),
-            OMP_PROC_BIND="close", OMP_PLACES="cores")["Triad"]
-    if shutil.which("cuda-stream"):
-        gpu = bench("cuda-stream")
-        ceilings["gpu_stream_triad_gbs"] = gpu["Triad"]
-        ceilings["gpu_stream_copy_gbs"] = gpu["Copy"]
-    for k, v in ceilings.items():
-        print(f"  {k:<26} {v:8.1f} GB/s")
-    if not ceilings:
-        print("  stream_c / cuda-stream not found - run inside the tutorial image")
-    else:
-        Path(MACHINE_PATH).write_text(json.dumps(ceilings, indent=2))
-    return ceilings
+    NB 08 settles them once, so every rung sweeps the same sizes."""
+    record = dict(load_machine())
+    record.update(extra or {})
+    record["canonical"] = list(_derive_canonical())
+    record["sweep"] = [list(p) for p in _derive_sweep()]
+    Path(MACHINE_PATH).write_text(json.dumps(record, indent=2))
+    n, steps = record["canonical"]
+    print(f"  canonical                  N = {n:,} cells, {steps} steps")
+    print("  sweep                      "
+          + ", ".join(f"{m:,}" for m, _ in record["sweep"]))
+    return record
 
 
 def to_mib(nbytes):
@@ -348,7 +557,7 @@ def llc_mib():
 
 
 def load_machine():
-    """Return the ceilings measured by `measure_bandwidth_ceilings` ({} if absent)."""
+    """Return machine.json's contents ({} if absent)."""
     path = Path(MACHINE_PATH)
     return json.loads(path.read_text()) if path.exists() else {}
 
@@ -377,16 +586,20 @@ def plot_rate_sweep(x, series, xlabel, title, ylabel="throughput [Mcells/s]",
     """Plot one line per named series against x on a log-x axis.
 
     boundaries is a sequence of (x, label) verticals, drawn where a caller-
-    computed regime changes (e.g. cache to DRAM)."""
+    computed regime changes (e.g. cache to DRAM). A series may be a plain list
+    of y values against the shared x, or its own (xs, ys) pair when a tool
+    could not afford every size."""
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(7.5, 4))
-    for (name, ys), marker in zip(series.items(), _MARKERS):
-        ax.plot(x, ys, marker, label=name)
+    series = {k: (v if isinstance(v, tuple) else (x[:len(v)], v))
+              for k, v in series.items()}
+    for (name, (xs, ys)), marker in zip(series.items(), _MARKERS):
+        ax.plot(xs, ys, marker, label=name)
     ax.set_xscale("log")
     if logy:
         ax.set_yscale("log")
     elif from_zero:
-        ax.set_ylim(0, max(max(ys) for ys in series.values()) * 1.15)
+        ax.set_ylim(0, max(max(ys) for _, ys in series.values()) * 1.15)
     for xb, label in boundaries:
         ax.axvline(xb, ls=":", color="#666", lw=1)
         ax.text(xb, ax.get_ylim()[0], f" {label}", rotation=90, va="bottom",
