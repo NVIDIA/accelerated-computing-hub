@@ -66,11 +66,15 @@ prepare_checkout() {
                 "refs/heads/${requested_branch}"; then
                 if git -C "${repo}" merge-base --is-ancestor \
                     "refs/heads/${requested_branch}" "${remote_ref}"; then
-                    git -C "${repo}" switch "${requested_branch}"
+                    if [ "${branch}" != "${requested_branch}" ]; then
+                        git -C "${repo}" switch "${requested_branch}"
+                    fi
                     git -C "${repo}" merge --ff-only "${remote_ref}"
                 elif git -C "${repo}" merge-base --is-ancestor \
                     "${remote_ref}" "refs/heads/${requested_branch}"; then
-                    git -C "${repo}" switch "${requested_branch}"
+                    if [ "${branch}" != "${requested_branch}" ]; then
+                        git -C "${repo}" switch "${requested_branch}"
+                    fi
                 else
                     echo "Error: local ${requested_branch} cannot fast-forward to origin/${requested_branch}." >&2
                     echo "The checkout remains on ${branch}; resolve it manually or use a different --repo path." >&2
