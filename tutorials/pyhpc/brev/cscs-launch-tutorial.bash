@@ -249,8 +249,14 @@ login_main() {
 
     local batch_script
     batch_script=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)/$(basename "${BASH_SOURCE[0]}")
+    local prepare_source
+    prepare_source=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)/prepare-podman-compose.py
     if [ ! -x "${batch_script}" ]; then
         echo "Error: run an executable launcher file, not a pipe or process substitution." >&2
+        return 1
+    fi
+    if [ ! -f "${prepare_source}" ]; then
+        echo "Error: missing compose adapter: ${prepare_source}" >&2
         return 1
     fi
 
@@ -265,7 +271,7 @@ login_main() {
         --job-name=ach-pyhpc-web
         "--chdir=${repo}"
         "--output=${state_dir}/slurm-%j.log"
-        "--export=ALL,ACH_REPO=${repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch}"
+        "--export=ALL,ACH_REPO=${repo},ACH_STATE=${state_dir},ACH_RELEASE_BRANCH=${branch},ACH_PREPARE_SOURCE=${prepare_source}"
     )
     sbatch_args+=(--account="${account}")
     if [ -n "${reservation}" ]; then
@@ -304,7 +310,7 @@ ACH_REPO=${ACH_REPO:?ACH_REPO is not set}
 ACH_STATE=${ACH_STATE:-${SCRATCH:?SCRATCH is not set}/ach-pyhpc-web}
 ACH_RELEASE_BRANCH=${ACH_RELEASE_BRANCH:?ACH_RELEASE_BRANCH is not set}
 COMPOSE_URL=${ACH_COMPOSE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_RELEASE_BRANCH}/tutorials/pyhpc/brev/docker-compose.yml}
-PREPARE_SOURCE=$(cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P)/prepare-podman-compose.py
+ACH_PREPARE_SOURCE=${ACH_PREPARE_SOURCE:?ACH_PREPARE_SOURCE is not set}
 
 if [ ! -d "${ACH_REPO}/tutorials/pyhpc/notebooks" ]; then
     echo "Error: student checkout has no PyHPC notebooks: ${ACH_REPO}" >&2
@@ -321,11 +327,11 @@ PODMAN_COMPOSE="${RUN_STATE}/docker-compose.podman.yml"
 PREPARE_SCRIPT="${RUN_STATE}/prepare-podman-compose.py"
 curl --fail --location --retry 3 --silent --show-error \
     "${COMPOSE_URL}" --output "${SOURCE_COMPOSE}"
-if [ ! -f "${PREPARE_SOURCE}" ]; then
-    echo "Error: missing compose adapter: ${PREPARE_SOURCE}" >&2
+if [ ! -f "${ACH_PREPARE_SOURCE}" ]; then
+    echo "Error: missing compose adapter: ${ACH_PREPARE_SOURCE}" >&2
     exit 1
 fi
-cp "${PREPARE_SOURCE}" "${PREPARE_SCRIPT}"
+cp "${ACH_PREPARE_SOURCE}" "${PREPARE_SCRIPT}"
 
 PYTHON=$(command -v python3.11 || command -v python3)
 VENV="${RUN_STATE}/venv"
