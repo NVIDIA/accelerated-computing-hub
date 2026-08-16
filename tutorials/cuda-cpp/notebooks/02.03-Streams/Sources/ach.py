@@ -3,7 +3,12 @@ from IPython.display import HTML
 import numpy as np
 import glob
 import os
-from jupyter_dark_detect import is_dark
+try:
+    from jupyter_dark_detect import is_dark
+except ImportError:
+    # Optional theming dependency; assume a light theme when unavailable.
+    def is_dark():
+        return False
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 plt.style.use('dark_background' if is_dark() else 'default')
