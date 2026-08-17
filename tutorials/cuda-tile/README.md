@@ -15,3 +15,6 @@ Brev Launchables of this tutorial should use:
 | # | Topic | Solution | Technologies |
 |---|-------|----------|--------------|
 | 01 | [cuTile Python Intro: Vector Add](notebooks/01__cutile_python_intro__vector_add.ipynb) | - | cuTile Python |
+| 02 | [cuTile Python: Matrix Add](notebooks/02__cutile_python__matrix_add.ipynb) | - | cuTile Python |
+| 03 | [cuTile Python: Transpose](notebooks/03__cutile_python__transpose.ipynb) | - | cuTile Python |
+| 04 | [cuTile Python: Activation Functions](notebooks/04__cutile_python__activation_functions.ipynb) | - | cuTile Python |
