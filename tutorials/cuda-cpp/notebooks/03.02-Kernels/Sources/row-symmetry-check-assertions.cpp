@@ -4,7 +4,7 @@
 __global__ void symmetry_check_kernel(ach::temperature_grid_f temp, int row) {
   int column = blockIdx.x * blockDim.x + threadIdx.x;
 
-  if (abs(temp(row, column) - temp(temp.extent(0) - 1 - row, column)) > 0.1) {
+  if (fabsf(temp(row, column) - temp(temp.extent(0) - 1 - row, column)) > 0.1) {
     printf("Error: asymmetry in %d / %d\n", column, temp.extent(1));
   }
 }
