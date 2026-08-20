@@ -1,6 +1,6 @@
 # CUDA Tile Tutorial
 
-This tutorial teaches youthe CUDA Tile programming model and how to use cuTile Python, cuTile C++, and Tile IR.
+This tutorial teaches you the CUDA Tile programming model and how to use cuTile Python, cuTile C++, and Tile IR.
 
 You'll find the following content:
 
@@ -8,7 +8,7 @@ You'll find the following content:
 - [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/cuda-tile-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
 
 Brev Launchables of this tutorial should use:
-- 1xB300, 1xB200, or 1xRTX Pro 6000 instances (a Blackwell GPU is required).
+- 1xA10G or newer Ampere, Ada, Hopper, or Blackwell GPU instances.
 
 ## Notebooks
 
