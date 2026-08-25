@@ -16,10 +16,15 @@ jupyterlab
 jupyterlab-execute-time
 
 # CUDA
-cuda-tile
-cuda-python == 13.*
-cupy-cuda13x == 13.6.0
-numba-cuda[cu13] == 0.20.0
+numpy>=2.4.6,<3
+numba-cuda>=0.30.4,<0.31
+cupy>=14.1.1,<15
+cutile-python>=1.4.0,<2
+
+#cuda-tile
+#cuda-python == 13.*
+#cupy-cuda13x == 13.6.0
+#numba-cuda[cu13] == 0.20.0
 nvmath-python[cu13]
 cuda-cccl[test-cu13]
 
