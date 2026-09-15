@@ -14,3 +14,11 @@
 | Chapter 8: Intro to cuML | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_08_Intro_to_cuML.ipynb)|
 | Chapter 9: Intro to cuGraph | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_09_Intro_to_cuGraph.ipynb)|
 | Chapter 10: Developer Tools | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_10_Developer_Tools.ipynb)|
+
+## Multi-GPU communication
+
+| Notebook | Link |
+| ----------- | ----------- |
+| NVSHMEM4Py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_nvshmem4py.ipynb) |
+| NVSHMEM4Py Device APIs | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_nvshmem4py_device.ipynb) |
+| Custom AlltoAllV with NVSHMEM and NCCL | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/Accelerated_Python_User_Guide/notebooks/Chapter_Custom_Collectives_NVSHMEM_NCCL.ipynb) |
