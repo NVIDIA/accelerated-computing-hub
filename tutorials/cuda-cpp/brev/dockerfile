@@ -6,7 +6,6 @@ ENV ACH_TUTORIAL=cuda-cpp \
     ACH_NCU_PATH=/usr/local/cuda/bin/ncu \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
-    CUPY_CACHE_DIR=/tmp/cupy_cache \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
