@@ -30,7 +30,7 @@
 - Delete the two secure links for port 3478 and 3479 if they exist.
 - Rename the secure link for port 8888 to "jupyter".
 - Rename the secure link for port 8080 to "nsys" if it exists.
-- Rename the secure link for port 8080 to "ncu" if it exists.
+- Rename the secure link for port 8081 to "ncu" if it exists.
 - Click "TCP/UDP Ports".
 - Select "Port or port range" textbox and input "3478-3479".
 - Click "Add Rule".
