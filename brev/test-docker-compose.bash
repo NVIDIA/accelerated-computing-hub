@@ -236,6 +236,155 @@ PY
     return 1
 }
 
+test_cupy_cache_isolation() {
+    local configured_cache
+    local cupy_available
+
+    echo "🧪 Testing CuPy cache isolation..."
+
+    if ! cupy_available=$(docker compose -f "${COMPOSE_FILE}" exec -T \
+        jupyter python3 -c \
+        'import importlib.util; print(int(importlib.util.find_spec("cupy") is not None))'); then
+        echo "Error: could not inspect the Jupyter Python environment" >&2
+        return 1
+    fi
+    if [ "${cupy_available}" != "1" ]; then
+        echo "CuPy is not installed; skipping cache isolation test."
+        echo ""
+        return 0
+    fi
+
+    if ! configured_cache=$(docker compose -f "${COMPOSE_FILE}" exec -T \
+        jupyter sh -c 'printf %s "${CUPY_CACHE_DIR:-}"'); then
+        echo "Error: could not inspect the Jupyter cache configuration" >&2
+        return 1
+    fi
+    if [ -n "${configured_cache}" ]; then
+        echo "Error: Jupyter configures shared CuPy cache ${configured_cache}" >&2
+        return 1
+    fi
+
+    # Compose exec runs as root, while Jupyter runs as ACH_TARGET_USER. Compile
+    # one unique kernel as each identity so a shared private cache entry fails.
+    if docker compose -f "${COMPOSE_FILE}" exec -T jupyter bash -s <<'BASH'
+set -euo pipefail
+
+JUPYTER_PID=""
+DEADLINE=$((SECONDS + 30))
+while [ "${SECONDS}" -lt "${DEADLINE}" ] && [ -z "${JUPYTER_PID}" ]; do
+    for COMM in /proc/[0-9]*/comm; do
+        PROC_DIR=${COMM%/comm}
+        COMM_NAME=$(cat "${COMM}" 2>/dev/null || true)
+        CMDLINE=$(tr '\0' ' ' < "${PROC_DIR}/cmdline" 2>/dev/null || true)
+        if [ "${COMM_NAME}" = "jupyter-lab" ] || \
+           [[ "${CMDLINE}" = *" -m jupyter lab "* ]]; then
+            JUPYTER_PID=${COMM#/proc/}
+            JUPYTER_PID=${JUPYTER_PID%/comm}
+            break
+        fi
+    done
+    [ -n "${JUPYTER_PID}" ] || sleep 1
+done
+if [ -z "${JUPYTER_PID}" ]; then
+    echo "Error: could not find the Jupyter process" >&2
+    exit 1
+fi
+
+JUPYTER_ENV=$(tr '\0' '\n' < "/proc/${JUPYTER_PID}/environ")
+TARGET_USER=$(sed -n 's/^ACH_TARGET_USER=//p' <<<"${JUPYTER_ENV}" | head -n 1)
+TARGET_HOME=$(sed -n 's/^ACH_TARGET_HOME=//p' <<<"${JUPYTER_ENV}" | head -n 1)
+JUPYTER_HOME=$(sed -n 's/^HOME=//p' <<<"${JUPYTER_ENV}" | head -n 1)
+
+if grep -q '^CUPY_CACHE_DIR=' <<<"${JUPYTER_ENV}"; then
+    echo "Error: the Jupyter process overrides CuPy's per-user cache" >&2
+    exit 1
+fi
+if [ -z "${TARGET_USER}" ] || [ -z "${TARGET_HOME}" ] || \
+   [ -z "${JUPYTER_HOME}" ]; then
+    echo "Error: could not determine the Jupyter runtime user" >&2
+    exit 1
+fi
+if [ "${JUPYTER_HOME}" != "${TARGET_HOME}" ]; then
+    echo "Error: Jupyter HOME is ${JUPYTER_HOME}, expected ${TARGET_HOME}" >&2
+    exit 1
+fi
+
+ROOT_UID=$(id -u root)
+ROOT_GID=$(id -g root)
+TARGET_UID=$(id -u "${TARGET_USER}")
+TARGET_GID=$(id -g "${TARGET_USER}")
+if [ "${TARGET_UID}" -eq 0 ]; then
+    echo "Jupyter runs as root; skipping cross-user cache test."
+    exit 0
+fi
+KERNEL_NAME="ach_cupy_cache_test_${RANDOM}_$$"
+TEST_SCRIPT=$(mktemp /tmp/test-cupy-cache-isolation.XXXXXX.py)
+trap 'rm -f "${TEST_SCRIPT}"' EXIT
+chmod 0644 "${TEST_SCRIPT}"
+
+cat > "${TEST_SCRIPT}" <<'PY'
+import os
+
+import cupy as cp
+
+kernel_name = os.environ["ACH_CUPY_TEST_KERNEL_NAME"]
+source = f'''extern "C" __global__
+void {kernel_name}(int* output) {{
+    output[0] = 42;
+}}
+'''
+kernel = cp.RawKernel(source, kernel_name)
+output = cp.empty(1, dtype=cp.int32)
+kernel((1,), (1,), (output,))
+cp.cuda.runtime.deviceSynchronize()
+assert int(output.get()[0]) == 42
+
+cache_dir = os.environ.get("CUPY_CACHE_DIR")
+if cache_dir is None:
+    cache_dir = os.path.expanduser("~/.cupy/kernel_cache")
+print(os.path.realpath(cache_dir))
+PY
+
+ROOT_CACHE=$(
+    timeout 120s env ACH_CUPY_TEST_KERNEL_NAME="${KERNEL_NAME}" \
+        python3 "${TEST_SCRIPT}" | tail -n 1
+)
+TARGET_CACHE=$(
+    timeout 120s gosu "${TARGET_USER}" env \
+        ACH_CUPY_TEST_KERNEL_NAME="${KERNEL_NAME}" HOME="${JUPYTER_HOME}" \
+        python3 "${TEST_SCRIPT}" | tail -n 1
+)
+
+if [ "${ROOT_CACHE}" = "${TARGET_CACHE}" ]; then
+    echo "Error: root and ${TARGET_USER} share CuPy cache ${ROOT_CACHE}" >&2
+    exit 1
+fi
+
+ROOT_OWNER=$(stat -c '%u:%g' "${ROOT_CACHE}")
+TARGET_OWNER=$(stat -c '%u:%g' "${TARGET_CACHE}")
+if [ "${ROOT_OWNER}" != "${ROOT_UID}:${ROOT_GID}" ]; then
+    echo "Error: root CuPy cache is owned by ${ROOT_OWNER}" >&2
+    exit 1
+fi
+if [ "${TARGET_OWNER}" != "${TARGET_UID}:${TARGET_GID}" ]; then
+    echo "Error: ${TARGET_USER} CuPy cache is owned by ${TARGET_OWNER}" >&2
+    exit 1
+fi
+
+echo "root cache: ${ROOT_CACHE} (${ROOT_OWNER})"
+echo "${TARGET_USER} cache: ${TARGET_CACHE} (${TARGET_OWNER})"
+BASH
+    then
+        echo -e "${GREEN}✅ CuPy caches are isolated by runtime user${NC}"
+        echo ""
+        return 0
+    fi
+
+    echo -e "${RED}❌ CuPy cache isolation failed${NC}" >&2
+    echo "" >&2
+    return 1
+}
+
 echo "================================================================================"
 echo "Testing Docker Compose: ${COMPOSE_FILE}"
 echo "================================================================================"
@@ -311,6 +460,11 @@ if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
     echo "--------------------------------------------------------------------------------"
     echo ""
 
+    CUPY_CACHE_FAILED=0
+    if ! test_cupy_cache_isolation; then
+        CUPY_CACHE_FAILED=1
+    fi
+
     # Test restart functionality
     echo "🔄 Testing service restart..."
     echo ""
@@ -350,6 +504,8 @@ if docker compose -f "${COMPOSE_FILE}" ps | grep -q "Up\|running"; then
             echo "--------------------------------------------------------------------------------"
             echo ""
 
+            RESTART_FAILED=1
+        elif [ "${CUPY_CACHE_FAILED}" -eq 1 ]; then
             RESTART_FAILED=1
         else
             echo -e "${GREEN}✅ All containers running healthy after restart${NC}"
