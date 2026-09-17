@@ -133,24 +133,18 @@ jobs:
         run: |
           COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
 
-          # Extract all unique images from the compose file
-          # The main image is defined with a YAML anchor like: image: &image ghcr.io/...
-          MAIN_IMAGE=$(grep "image: &image" "$COMPOSE_FILE" | sed 's/.*image: &image //')
-          if [ -z "$MAIN_IMAGE" ]; then
-            # Fallback: try to find any ghcr.io image reference
-            MAIN_IMAGE=$(grep -o 'ghcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
+          mapfile -t IMAGES < <(
+            docker compose -f "$COMPOSE_FILE" config --images | sort -u
+          )
+          if [ "${#IMAGES[@]}" -eq 0 ]; then
+            echo "No service images found in $COMPOSE_FILE" >&2
+            exit 1
           fi
 
-          # Extract the nsight image (nvcr.io)
-          NSIGHT_IMAGE=$(grep -o 'nvcr.io/[^"]*' "$COMPOSE_FILE" | head -1)
-
-          echo "Pre-pulling main image: $MAIN_IMAGE"
-          docker pull "$MAIN_IMAGE"
-
-          if [ -n "$NSIGHT_IMAGE" ]; then
-            echo "Pre-pulling nsight image: $NSIGHT_IMAGE"
-            docker pull "$NSIGHT_IMAGE"
-          fi
+          for IMAGE in "${IMAGES[@]}"; do
+            echo "Pre-pulling image: $IMAGE"
+            docker pull "$IMAGE"
+          done
 
           echo "All images pulled successfully"
 

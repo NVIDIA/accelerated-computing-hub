@@ -1,0 +1,57 @@
+# Artifacts generated when the tutorial is run.
+#
+# SWE ladder (notebooks 08-14):
+/build/
+/CMakeLists.txt
+/swe_step.cpython-*.so
+/swe_step_fast.cpp
+/timings.json
+/machine.json
+
+# Kernel, asynchrony, and MPI notebooks (03-06): %%writefile scripts,
+# MPI results, Nsight profiler reports, the downloaded corpus, and plots.
+# Patterns are applied at this course root and under solutions/, since
+# executing the solution notebooks (e.g. in CI) writes the same artifacts there.
+/*.py
+/solutions/*.py
+!/swe_core.py
+!/solutions/swe_core.py
+/*.nsys-rep
+/solutions/*.nsys-rep
+/*.sqlite
+/solutions/*.sqlite
+/*.ncu-rep
+/solutions/*.ncu-rep
+/*.qdstrm
+/solutions/*.qdstrm
+/books__15m.txt
+/solutions/books__15m.txt
+/test.png
+/solutions/test.png
+
+# MPI notebook (06): verified field saved for the notebook visualization.
+/heat_equation_result.npz
+/solutions/heat_equation_result.npz
+
+# Generated C/C++ from %%writefile cells (nanobind / cffi / cppjit / interop
+# exercises). The checked-in tutorial source is re-included below.
+/*.c
+/*.cpp
+/*.cxx
+/*.hpp
+/*.hxx
+/solutions/*.c
+/solutions/*.cpp
+/solutions/*.cxx
+/solutions/*.hpp
+/solutions/*.hxx
+!/swe_step.cpp
+!/swe_cub_solver.cpp
+!/swe_raw_cuda_solver.cpp
+!/solutions/swe_step.cpp
+!/solutions/swe_cub_solver.cpp
+!/solutions/swe_raw_cuda_solver.cpp
+
+__pycache__/
+*.egg-info/
+*.log

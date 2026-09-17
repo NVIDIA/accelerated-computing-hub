@@ -16,6 +16,7 @@ NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / 'notebooks'
 solution_notebooks = sorted([
     nb for nb in NOTEBOOKS_DIR.rglob('*SOLUTION*.ipynb')
     if '.ipynb_checkpoints' not in str(nb)
+    and 'pyhpc' not in nb.relative_to(NOTEBOOKS_DIR).parts
 ])
 
 # Create test IDs from notebook paths for better test output

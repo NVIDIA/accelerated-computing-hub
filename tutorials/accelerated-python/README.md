@@ -3,6 +3,7 @@
 This modular tutorial contains content on all things related to accelerated Python:
 
 - [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
+- [PyHPC course notebooks](./notebooks/pyhpc) covering CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability.
 - [Slides](./slides) containing the lecture content for the lessons.
 - [Syllabi](./notebooks/syllabi) that select a subset of the notebooks for a particular learning objective.
 - [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
@@ -10,6 +11,7 @@ This modular tutorial contains content on all things related to accelerated Pyth
 Brev Launchables of this tutorial should use:
 - L40S, L4, or T4 instances (for non-distributed notebooks).
 - 4xL4 or 2xL4 instances (for distributed notebooks).
+- A host driver with CUDA 13 support.
 - Crusoe or any other provider with Flexible Ports.
 
 ## Syllabi
@@ -17,6 +19,19 @@ Brev Launchables of this tutorial should use:
 - [CUDA Python - CuPy, cuDF, CCCL, & Kernels - 8 Hours](./notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb).
 - [CUDA Python - cuda.core & CCCL - 2 Hours](./notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb)
 - [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
+- [PyHPC - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](./notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb)
+
+## Upgrading an existing deployment
+
+The merged course initializes a new Docker repository volume named
+`accelerated-python_accelerated-computing-hub-v2`. Existing volumes named
+`accelerated-python_accelerated-computing-hub` or
+`pyhpc_accelerated-computing-hub` are deliberately left untouched. Before
+removing either old volume, copy any edited notebooks from the former
+Accelerated Python tree and move any former `tutorials/pyhpc/notebooks` work
+into `tutorials/accelerated-python/notebooks/pyhpc` in the new deployment.
+Do not run `docker compose down --volumes` against the old deployment until
+that work has been backed up and verified.
 
 ## Notebooks
 

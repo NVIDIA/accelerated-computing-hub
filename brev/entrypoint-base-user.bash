@@ -11,14 +11,27 @@ export HOME="${ACH_TARGET_HOME}"
 # services can read them.
 TURN_CREDENTIALS_FILE="/accelerated-computing-hub/.turn-credentials"
 
-if [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
+write_turn_credentials() {
+  (umask 077; printf 'TURN_USERNAME=%q\nTURN_PASSWORD=%q\n' \
+    "${TURN_USERNAME}" "${TURN_PASSWORD}" > "${TURN_CREDENTIALS_FILE}")
+}
+
+if { [ -n "${TURN_USERNAME:-}" ] && [ -z "${TURN_PASSWORD:-}" ]; } || \
+   { [ -z "${TURN_USERNAME:-}" ] && [ -n "${TURN_PASSWORD:-}" ]; }; then
+  echo "Error: TURN_USERNAME and TURN_PASSWORD must be set together" >&2
+  exit 1
+fi
+
+if [ -n "${TURN_USERNAME:-}" ]; then
+  write_turn_credentials
+elif [ ! -f "${TURN_CREDENTIALS_FILE}" ]; then
   TURN_USERNAME="turn_$(openssl rand -base64 24 | tr -dc 'a-zA-Z0-9' | head -c 16)"
   TURN_PASSWORD="$(openssl rand -base64 48 | tr -dc 'a-zA-Z0-9' | head -c 32)"
+  write_turn_credentials
+fi
 
-  echo "TURN_USERNAME=${TURN_USERNAME}" > "${TURN_CREDENTIALS_FILE}"
-  echo "TURN_PASSWORD=${TURN_PASSWORD}" >> "${TURN_CREDENTIALS_FILE}"
-
-  chmod 644 "${TURN_CREDENTIALS_FILE}"
+if [ -f "${TURN_CREDENTIALS_FILE}" ]; then
+  chmod 600 "${TURN_CREDENTIALS_FILE}"
 fi
 
 # Run per-tutorial start tests if they exist.
@@ -40,8 +53,28 @@ if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
       echo "=========================================="
     } | tee -a "${LOG_FILE}"
 
-    # Run tests with output to both console and log file
-    if bash "${TEST_SCRIPT}" ${ACH_TEST_ARGS:-} 2>&1 | tee -a "${LOG_FILE}"; then
+    # Run tests with output to both console and log file. Development helpers
+    # encode a NUL-delimited argv so expressions such as `-k "05 or 06"`
+    # remain one argument. Keep accepting the legacy space-delimited form for
+    # generated definitions and callers that pass simple arguments.
+    TEST_ARGS=()
+    case "${ACH_TEST_ARGS:-}" in
+      nul-base64:*)
+        TEST_ARGS_FILE=$(mktemp)
+        if ! printf '%s' "${ACH_TEST_ARGS#nul-base64:}" | \
+          base64 --decode > "${TEST_ARGS_FILE}"; then
+          rm -f "${TEST_ARGS_FILE}"
+          echo "Error: ACH_TEST_ARGS contains invalid base64 data" >&2
+          exit 2
+        fi
+        mapfile -d '' -t TEST_ARGS < "${TEST_ARGS_FILE}"
+        rm -f "${TEST_ARGS_FILE}"
+        ;;
+      *)
+        read -r -a TEST_ARGS <<< "${ACH_TEST_ARGS:-}"
+        ;;
+    esac
+    if bash "${TEST_SCRIPT}" "${TEST_ARGS[@]}" 2>&1 | tee -a "${LOG_FILE}"; then
       {
         echo "=========================================="
         echo "Tests completed successfully for: ${ACH_TUTORIAL}"

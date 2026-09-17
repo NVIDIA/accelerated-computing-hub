@@ -1,21 +1,61 @@
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+# Stage 1: LLVM builder
+ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-devel-ubuntu22.04
+FROM ${CUDA_BASE_IMAGE} AS llvm-builder
+ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
+ARG LLVM_TAG=isc2026
+ARG LLVM_COMMIT=4ff26eab5ce99a62e385fdd81f3a761daeec6013
+ENV DEBIAN_FRONTEND=noninteractive
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
+ && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries \
+ && apt-get update -y \
+ && apt-get install -y --no-install-recommends \
+    git cmake ninja-build lld build-essential ca-certificates python3 python3-dev \
+ && rm -rf /var/lib/apt/lists/*
+RUN case "$(dpkg --print-architecture)" in \
+      amd64) native_llvm_target=X86; default_link_jobs=2 ;; \
+      arm64) native_llvm_target=AArch64; default_link_jobs=1 ;; \
+      *) echo "Unsupported LLVM build architecture" >&2; exit 1 ;; \
+    esac \
+ && llvm_targets="${native_llvm_target};NVPTX" \
+ && link_jobs="${default_link_jobs}" \
+ && git clone --depth 1 --branch ${LLVM_TAG} ${LLVM_REPO} /src/llvm \
+ && test "$(git -C /src/llvm rev-parse HEAD)" = "${LLVM_COMMIT}" \
+ && cmake -S /src/llvm/llvm -B /src/llvm-build -G Ninja \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DLLVM_ENABLE_PROJECTS="clang;lld" \
+      -DLLVM_TARGETS_TO_BUILD="${llvm_targets}" \
+      -DLLVM_ENABLE_ASSERTIONS=OFF \
+      -DLLVM_USE_LINKER=lld \
+      -DLLVM_INSTALL_UTILS=ON \
+      -DLLVM_INCLUDE_TESTS=OFF \
+      -DCLANG_ENABLE_STATIC_ANALYZER=OFF \
+      -DCLANG_ENABLE_ARCMT=OFF \
+      -DLLVM_PARALLEL_LINK_JOBS="${link_jobs}" \
+      -DCMAKE_INSTALL_PREFIX=/opt/llvm \
+ && cmake --build /src/llvm-build --target install \
+ && rm -rf /src/llvm /src/llvm-build
+
+# Stage 2: Tutorial image
+FROM ${CUDA_BASE_IMAGE}
 
 ENV ACH_TUTORIAL=accelerated-python \
     PYTHON_VERSION=3.12 \
     NSIGHT_SYSTEMS_VERSION=2026.1.1 \
-    NSIGHT_SYSTEMS_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
-    NSIGHT_COMPUTE_VERSION=2025.4.1 \
-    NSIGHT_COMPUTE_DEB_FILE=debian12/x86_64/nsight-compute-2025.4.1_2025.4.1.2-1_amd64.deb \
+    NSIGHT_SYSTEMS_AMD64_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
+    NSIGHT_SYSTEMS_ARM64_DEB_FILE=2026_1/nsight-systems-cli-2026.1.1_2026.1.1.204-1_arm64.deb \
+    NSIGHT_COMPUTE_VERSION=2026.1.1 \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
-    VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys \
     ACH_NCU_PATH=/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu
+
+RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
+ && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -40,7 +80,7 @@ RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
 
 # Install Python
 RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
- && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] https://ppa.launchpadcontent.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
  && apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION} \
@@ -49,53 +89,192 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
  && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
  && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -sf /usr/bin/python${PYTHON_VERSION}-config /usr/bin/python3-config \
  && ln -s /usr/local/bin/pip /usr/bin/pip \
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch with CUDA 13.0 support.
-RUN pip install --no-cache-dir --root-user-action=ignore \
-    --index-url https://download.pytorch.org/whl/cu130 \
-    torch==2.10.0
-
-# Copy only requirements.txt first for better Docker layer caching.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
-
-# Install Python packages.
-RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
- && rm -f /opt/requirements.txt
-
-# Upgrade numba-cuda and cuda-cccl to the versions needed by the tutorial
-# notebooks. cuDF and cuML's published metadata still declares
-# numba-cuda<0.23, but they work fine with newer numba-cuda at runtime, so
-# we bypass the declared constraint with --no-deps --force-reinstall.
-RUN pip install --no-cache-dir --root-user-action=ignore \
-    --no-deps --force-reinstall \
-    "numba-cuda[cu13] == 0.28.2" \
-    "cuda-cccl[test-cu13] == 0.4.5"
-
-# Install MPI.
+# Install the native build tools and both MPI implementations. Accelerated
+# Python uses OpenMPI by default, while the PyHPC kernels select MPICH for
+# notebook-local launches in CSCS Slurm Container Engine steps.
 RUN apt-get update -y \
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    build-essential \
+    cmake \
+    ninja-build \
+    mpich \
+    libmpich-dev \
     openmpi-bin \
     libopenmpi-dev \
+ && update-alternatives --set mpi /usr/bin/mpicc.openmpi \
+ && update-alternatives --set mpirun /usr/bin/mpirun.openmpi \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
-# Install Nsight Systems and Nsight Compute.
-RUN curl -L -O https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${NSIGHT_SYSTEMS_DEB_FILE} \
- && dpkg -i ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
- && rm -f ${NSIGHT_SYSTEMS_DEB_FILE##*/} \
- && curl -L -O https://developer.download.nvidia.com/compute/cuda/repos/${NSIGHT_COMPUTE_DEB_FILE} \
- && dpkg -i ${NSIGHT_COMPUTE_DEB_FILE##*/} \
- && rm -f ${NSIGHT_COMPUTE_DEB_FILE##*/} \
- && mkdir -p /usr/local/nvidia/bin \
- && ln -s /opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/nsys /usr/local/nvidia/bin/nsys \
- && ln -s /opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}/ncu /usr/local/nvidia/bin/ncu
+# Standard memory-bandwidth benchmarks: STREAM (McCalpin) for the CPU and
+# BabelStream v5.0 (CUDA model) for the GPU. Used to record the machine's
+# practical ceilings in machine.json for the SWE tutorial.
+COPY tutorials/${ACH_TUTORIAL}/brev/benchmarks/stream.c /opt/benchmarks/stream.c
+RUN gcc -O3 -fopenmp -DSTREAM_ARRAY_SIZE=50000000 /opt/benchmarks/stream.c \
+      -o /usr/local/bin/stream_c \
+ && git clone --depth 1 --branch v5.0 https://github.com/UoB-HPC/BabelStream \
+      /opt/benchmarks/BabelStream \
+ && cmake -S /opt/benchmarks/BabelStream -B /opt/benchmarks/BabelStream/build \
+      -DMODEL=cuda -DCMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc \
+      -DCUDA_ARCH=all-major \
+ && cmake --build /opt/benchmarks/BabelStream/build -j \
+ && install -m 0755 /opt/benchmarks/BabelStream/build/cuda-stream /usr/local/bin/cuda-stream \
+ && rm -rf /opt/benchmarks/BabelStream
+
+# Copy only dependency inputs first for better Docker layer caching. The
+# PyHPC kernel gets its own IPython startup directory without duplicating the
+# Python package environment.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /opt/pyhpc-ipython/profile_default/startup/10-matplotlib-theme.py
+
+# CUDA 13.2.1 is the newest toolkit in the stable PyTorch 2.14 build matrix.
+# Install the shared Accelerated Python/PyHPC package stack, then discard the
+# CUDA toolkit payload duplicated by Python wheels. The image already contains
+# the matching development toolkit; only RAPIDS' newer nvJitLink is retained.
+RUN pip install --no-cache-dir --root-user-action=ignore \
+      --index-url https://pypi.org/simple \
+      --extra-index-url https://download.pytorch.org/whl/cu132 \
+      "torch==2.14.0+cu132" -r /opt/requirements.txt \
+ && rm -rf "/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13" \
+ && pip install --no-cache-dir --root-user-action=ignore \
+      --no-deps --force-reinstall "nvidia-nvjitlink==13.4.92" \
+ && find "/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13/lib" \
+      -name 'libnvJitLink.so*' -print -quit | grep -q . \
+ && multiarch="$(dpkg-architecture -qDEB_HOST_MULTIARCH)" \
+ && ln -sfn libmpich.so.12 "/usr/lib/${multiarch}/libmpi.so.12" \
+ && mkdir -p /opt/pyhpc-mpi/bin \
+ && for tool in mpirun mpiexec mpicc mpicxx; do \
+      ln -sfn "/usr/bin/${tool}.mpich" "/opt/pyhpc-mpi/bin/${tool}"; \
+    done \
+ && ln -sfn /usr/bin/hydra_pmi_proxy /opt/pyhpc-mpi/bin/hydra_pmi_proxy \
+ && python -c 'from mpi4py import MPI; assert MPI.get_vendor()[0] == "Open MPI", MPI.get_vendor()' \
+ && MPI4PY_MPIABI=mpich PATH="/opt/pyhpc-mpi/bin:${PATH}" \
+      python -c 'from mpi4py import MPI; assert MPI.get_vendor()[0] == "MPICH", MPI.get_vendor()' \
+ && python -m ipykernel install \
+      --prefix=/usr/local --name=pyhpc --display-name="Python 3 (PyHPC)" \
+ && python -m pip check \
+ && rm -f /opt/requirements.txt
+
+# Install Nsight Systems and retain the Nsight Compute CLI from the CUDA base
+# image. Keep only the files needed to profile the native architecture.
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "${arch}" in \
+      amd64) \
+        nsys_file="${NSIGHT_SYSTEMS_AMD64_DEB_FILE}"; \
+        ncu_native_target="linux-desktop-glibc_2_11_3-x64"; \
+        ;; \
+      arm64) \
+        nsys_file="${NSIGHT_SYSTEMS_ARM64_DEB_FILE}"; \
+        ncu_native_target="linux-desktop-t210-a64"; \
+        ;; \
+      *) \
+        echo "Unsupported architecture for Nsight packages: ${arch}" >&2; \
+        exit 1; \
+        ;; \
+    esac; \
+    nsys_url="https://developer.nvidia.com/downloads/assets/tools/secure/nsight-systems/${nsys_file}"; \
+    nsys_deb="${nsys_file##*/}"; \
+    curl -fL -o "${nsys_deb}" "${nsys_url}"; \
+    apt-get update -y; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "./${nsys_deb}"; \
+    rm -f "${nsys_deb}"; \
+    ncu_root="/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}"; \
+    test -x "${ncu_root}/ncu"; \
+    find "${ncu_root}/target" -mindepth 1 -maxdepth 1 \
+      ! -name "${ncu_native_target}" -exec rm -rf {} +; \
+    rm -rf "${ncu_root}/host" "${ncu_root}/docs" "${ncu_root}/extras"; \
+    rm -rf "/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/documentation"; \
+    test -x "${ACH_NSYS_PATH}"; \
+    test -x "${ACH_NCU_PATH}"; \
+    mkdir -p /usr/local/nvidia/bin; \
+    ln -sfn "${ACH_NSYS_PATH}" /usr/local/nvidia/bin/nsys; \
+    ln -sfn "${ACH_NCU_PATH}" /usr/local/nvidia/bin/ncu; \
+    apt-get clean -y; \
+    rm -rf /var/lib/apt/lists/*
+
+# Install profiler-backed kernels for in-place notebook cell profiling. Use an
+# explicit system-wide prefix so every runtime user sees the same kernels, and
+# fail the image build if either kernelspec is missing.
+RUN nsightful-ncu install --prefix=/usr/local '--profiler-args=--set full --clock-control none' \
+ && nsightful-nsys install --prefix=/usr/local '--profiler-args=--trace=cuda,nvtx,osrt' \
+ && python -c 'import json; from pathlib import Path; root = Path("/usr/local/share/jupyter/kernels"); env = {"IPYTHONDIR": "/opt/pyhpc-ipython", "MPI4PY_MPIABI": "mpich", "PATH": "/opt/pyhpc-mpi/bin:${PATH}"}; paths = [root / name / "kernel.json" for name in ("pyhpc", "nsightful-ncu", "nsightful-nsys")]; [path.write_text(json.dumps(dict(json.loads(path.read_text()), env=env), indent=2) + "\n") for path in paths]' \
+ && chmod -R a+rwX /opt/pyhpc-ipython \
+ && chmod -R a+rX /usr/local/share/jupyter/kernels/pyhpc /usr/local/share/jupyter/kernels/nsightful-ncu /usr/local/share/jupyter/kernels/nsightful-nsys \
+ && gosu nobody test -w /opt/pyhpc-ipython \
+ && gosu nobody env HOME=/tmp python -c 'from jupyter_client.kernelspec import KernelSpecManager; specs = KernelSpecManager().get_all_specs(); names = {"pyhpc", "nsightful-ncu", "nsightful-nsys"}; missing = names - specs.keys(); assert not missing, f"missing kernelspecs: {sorted(missing)}"; expected = {"IPYTHONDIR": "/opt/pyhpc-ipython", "MPI4PY_MPIABI": "mpich", "PATH": "/opt/pyhpc-mpi/bin:${PATH}"}; assert all(specs[name]["spec"].get("env") == expected for name in names)'
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
  && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
+
+# LLVM, CppInterOP, CppJIT
+ARG CPPJIT_REPO=https://github.com/aaronj0/cppjit-compres.git
+ARG CPPJIT_TAG=isc2026
+ARG CPPJIT_COMMIT=9fa5620dcf79a2804ed3e96bd58ce38e7de2a769
+ENV CUDA=/usr/local/cuda-13.2 \
+    CPPJIT=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/cppjit
+
+RUN set -eux; \
+    case "$(dpkg --print-architecture)" in \
+      amd64) cuda_target="x86_64-linux" ;; \
+      arm64) cuda_target="sbsa-linux" ;; \
+      *) echo "Unsupported CUDA target architecture: $(dpkg --print-architecture)" >&2; exit 1 ;; \
+    esac; \
+    test -d "${CUDA}/targets/${cuda_target}"; \
+    ln -sfn "${cuda_target}" "${CUDA}/targets/native-linux"
+
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    zlib1g-dev libzstd-dev \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN --mount=type=bind,from=llvm-builder,source=/opt/llvm,target=/opt/llvm,readonly \
+    git clone --depth 1 --branch ${CPPJIT_TAG} ${CPPJIT_REPO} /opt/cppjit-src \
+ && test "$(git -C /opt/cppjit-src rev-parse HEAD)" = "${CPPJIT_COMMIT}" \
+ && pip install --no-cache-dir --root-user-action=ignore /opt/cppjit-src \
+      --config-settings=cmake.define.LLVM_DIR=/opt/llvm/lib/cmake/llvm \
+      --config-settings=cmake.define.Clang_DIR=/opt/llvm/lib/cmake/clang \
+ && rm -f "${CPPJIT}/cppyy_backend/lib/libclangCppInterOp.so.21.1" \
+ && strip --strip-unneeded "${CPPJIT}/cppyy_backend/lib/libclangCppInterOp.so" \
+ && rm -rf /opt/cppjit-src
+
+# CppJIT embeds Clang and only needs its resource headers at runtime. Mounting
+# the full LLVM install for the build avoids carrying another multi-gigabyte
+# compiler toolchain in the final image.
+COPY --from=llvm-builder /opt/llvm/lib/clang /opt/llvm/lib/clang
+
+# Backport LLVM ab048ac so Clang's CUDA wrapper defines the macro introduced by
+# CUDA 13.2 before it includes math_functions.hpp. This keeps CppJIT compatible
+# with both Ubuntu 22.04 and glibc 2.42 or newer.
+COPY tutorials/${ACH_TUTORIAL}/brev/clang-cuda-13.2-rsqrt.inc /tmp/clang-cuda-13.2-rsqrt.inc
+RUN wrapper=$(find /opt/llvm/lib/clang -name __clang_cuda_runtime_wrapper.h -print -quit) \
+ && test -n "${wrapper}" \
+ && sed -i \
+      -e '0,/#undef __CUDACC__/{' \
+      -e '/#undef __CUDACC__/r /tmp/clang-cuda-13.2-rsqrt.inc' \
+      -e '}' \
+      "${wrapper}" \
+ && grep -q '#define _NV_RSQRT_SPECIFIER' "${wrapper}" \
+ && rm -f /tmp/clang-cuda-13.2-rsqrt.inc
+
+ENV CPPJIT_ENABLE_CUDA=1
+ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/native-linux/include/cccl:${CUDA}/targets/native-linux/include
+ENV LD_LIBRARY_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13/lib:${CUDA}/lib64:${CUDA}/targets/native-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+
+# Build-time sanity check
+RUN test -f ${CUDA}/nvvm/libdevice/libdevice.10.bc \
+ && test -d /opt/llvm/lib/clang \
+ && CPPJIT_OFFLOAD_ARCH=sm_80 python -c "import cppjit, os; assert cppjit.CUDA_ENABLED; p=os.path.dirname(cppjit.__file__); \
+assert p=='${CPPJIT}', p; \
+assert os.path.exists(p+'/cppyy_backend/lib/libclangCppInterOp.so'), 'CppInterOp .so missing'; \
+print('cppjit layer OK at', p)"
 
 COPY --chmod=0777 . /accelerated-computing-hub
 

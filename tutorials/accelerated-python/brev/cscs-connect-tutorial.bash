@@ -1,0 +1,176 @@
+#!/usr/bin/env bash
+# Open the five CSCS web-service forwards and an interactive compute-node shell.
+
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: cscs-connect-tutorial.bash [OPTIONS] NODE
+
+Run this script on the workstation with the web browser. It opens the five
+required SSH forwards and, by default, leaves you in a shell on NODE. Exiting
+that shell closes the forwards but does not cancel the Slurm job.
+
+Options:
+  --user USER     Override the username read from the SSH certificate
+  --key PATH      CSCS private key (default: ~/.ssh/cscs-key)
+EOF
+}
+
+discover_cscs_user() {
+    local certificate="${1}-cert.pub"
+    [ -f "${certificate}" ] || return 1
+    local details
+    details=$(ssh-keygen -L -f "${certificate}" 2>/dev/null) || return 1
+    awk '
+        $1 == "Principals:" { principals = 1; next }
+        principals && $1 == "Critical" && $2 == "Options:" { exit }
+        principals {
+            line = $0
+            sub(/^[[:space:]]+/, "", line)
+            sub(/[[:space:]]+$/, "", line)
+            if (line != "") { count++; value = line }
+        }
+        END { if (count == 1) print value; else exit 1 }
+    ' <<< "${details}"
+}
+
+user=${CSCS_USER:-}
+ssh_key=${CSCS_SSH_KEY:-${HOME:?HOME is not set}/.ssh/cscs-key}
+ela_host=${CSCS_ELA_HOST:-ela.cscs.ch}
+daint_host=${CSCS_DAINT_HOST:-daint.alps.cscs.ch}
+jupyter_local_port=${ACH_JUPYTER_LOCAL_PORT:-8888}
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --user) user=${2:?--user requires a value}; shift 2 ;;
+        --key) ssh_key=${2:?--key requires a value}; shift 2 ;;
+        -h|--help) usage; exit 0 ;;
+        --) shift; break ;;
+        -*) echo "Error: unknown argument: $1" >&2; usage >&2; exit 2 ;;
+        *) break ;;
+    esac
+done
+
+if [ "$#" -eq 0 ]; then
+    echo "Error: NODE is required." >&2
+    usage >&2
+    exit 2
+fi
+node=$1
+shift
+if [ "$#" -ne 0 ]; then
+    echo "Error: unexpected argument after NODE: $1" >&2
+    usage >&2
+    exit 2
+fi
+case "${node}" in
+    ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid compute-node name: ${node}" >&2; exit 2 ;;
+esac
+for host in "${ela_host}" "${daint_host}"; do
+    case "${host}" in
+        ''|-*|*[!A-Za-z0-9._-]*) echo "Error: invalid CSCS hostname: ${host}" >&2; exit 2 ;;
+    esac
+done
+case "${jupyter_local_port}" in
+    ''|*[!0-9]*|??????*) echo "Error: ACH_JUPYTER_LOCAL_PORT must be a port number." >&2; exit 2 ;;
+esac
+if [ "${jupyter_local_port}" -lt 1 ] || [ "${jupyter_local_port}" -gt 65535 ]; then
+    echo "Error: ACH_JUPYTER_LOCAL_PORT is outside 1-65535." >&2
+    exit 2
+fi
+case "${jupyter_local_port}" in
+    8080|8081|3478|3479)
+        echo "Error: ACH_JUPYTER_LOCAL_PORT conflicts with a fixed Streamer port." >&2
+        exit 2
+        ;;
+esac
+
+case "${ssh_key}" in
+    *$'\n'*|*$'\r'*|*'"'*) echo "Error: invalid CSCS key path." >&2; exit 2 ;;
+esac
+if [ ! -f "${ssh_key}" ]; then
+    echo "Error: CSCS private key not found: ${ssh_key}" >&2
+    exit 2
+fi
+if [ -z "${user}" ]; then
+    user=$(discover_cscs_user "${ssh_key}" || true)
+fi
+case "${user}" in
+    ''|-*|*[!A-Za-z0-9._-]*)
+        echo "Error: could not read one CSCS username from ${ssh_key}-cert.pub." >&2
+        echo "Run 'cscs-key sign --file ${ssh_key}' or use --user." >&2
+        exit 2
+        ;;
+esac
+
+config_dir=
+ssh_config=${ACH_CSCS_SSH_CONFIG:-}
+cleanup() {
+    local status=$?
+    trap - EXIT INT TERM
+    if [ -n "${config_dir}" ]; then
+        rm -f "${ssh_config}"
+        rmdir "${config_dir}" >/dev/null 2>&1 || true
+    fi
+    exit "${status}"
+}
+trap cleanup EXIT INT TERM
+
+if [ -z "${ssh_config}" ]; then
+    config_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-config.XXXXXX")
+    ssh_config="${config_dir}/ssh_config"
+    cat > "${ssh_config}" <<EOF
+Host ach-ela
+    HostName ${ela_host}
+    User ${user}
+    IdentityFile "${ssh_key}"
+    IdentitiesOnly yes
+
+Host ach-daint
+    HostName ${daint_host}
+    User ${user}
+    IdentityFile "${ssh_key}"
+    IdentitiesOnly yes
+    ProxyJump ach-ela
+EOF
+    chmod 600 "${ssh_config}"
+elif [ ! -f "${ssh_config}" ]; then
+    echo "Error: internal SSH configuration not found: ${ssh_config}" >&2
+    exit 1
+fi
+
+ssh_args=(
+    -F "${ssh_config}"
+    -i "${ssh_key}"
+    -o IdentitiesOnly=yes
+    -o ExitOnForwardFailure=yes
+    -o StrictHostKeyChecking=accept-new
+    -o ServerAliveInterval=30
+    -o ServerAliveCountMax=6
+    -L "127.0.0.1:${jupyter_local_port}:127.0.0.1:8888"
+    -L 127.0.0.1:8080:127.0.0.1:8080
+    -L 127.0.0.1:3478:127.0.0.1:3478
+    -L 127.0.0.1:8081:127.0.0.1:8081
+    -L 127.0.0.1:3479:127.0.0.1:3479
+)
+
+if [ -n "${ACH_CSCS_CONTROL_PATH:-}" ]; then
+    printf -v ssh_config_q '%q' "${ssh_config}"
+    printf -v control_path_q '%q' "${ACH_CSCS_CONTROL_PATH}"
+    ssh_args+=(
+        -o "ProxyCommand=ssh -F ${ssh_config_q} -S ${control_path_q} -W %h:%p ach-daint"
+    )
+else
+    ssh_args+=(-J ach-daint)
+fi
+
+cat <<EOF
+The web services are available while this SSH connection remains open:
+  JupyterLab:     http://127.0.0.1:${jupyter_local_port}
+  Nsight Systems: http://127.0.0.1:8080
+  Nsight Compute: http://127.0.0.1:8081
+EOF
+
+target="${user}@${node}"
+ssh -tt "${ssh_args[@]}" "${target}"
