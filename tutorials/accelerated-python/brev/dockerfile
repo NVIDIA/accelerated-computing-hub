@@ -207,7 +207,8 @@ RUN nsightful-ncu install --prefix=/usr/local '--profiler-args=--set full --cloc
  && chmod -R a+rwX /opt/pyhpc-ipython \
  && chmod -R a+rX /usr/local/share/jupyter/kernels/pyhpc /usr/local/share/jupyter/kernels/nsightful-ncu /usr/local/share/jupyter/kernels/nsightful-nsys \
  && gosu nobody test -w /opt/pyhpc-ipython \
- && gosu nobody env HOME=/tmp python -c 'from jupyter_client.kernelspec import KernelSpecManager; specs = KernelSpecManager().get_all_specs(); names = {"pyhpc", "nsightful-ncu", "nsightful-nsys"}; missing = names - specs.keys(); assert not missing, f"missing kernelspecs: {sorted(missing)}"; expected = {"IPYTHONDIR": "/opt/pyhpc-ipython", "MPI4PY_MPIABI": "mpich", "PATH": "/opt/pyhpc-mpi/bin:${PATH}"}; assert all(specs[name]["spec"].get("env") == expected for name in names)'
+ && gosu nobody env HOME=/tmp python -m jupyter kernelspec list --json \
+      | python -c 'import json, sys; specs = json.load(sys.stdin)["kernelspecs"]; names = {"pyhpc", "nsightful-ncu", "nsightful-nsys"}; missing = names - specs.keys(); assert not missing, f"missing kernelspecs: {sorted(missing)}"; expected = {"IPYTHONDIR": "/opt/pyhpc-ipython", "MPI4PY_MPIABI": "mpich", "PATH": "/opt/pyhpc-mpi/bin:${PATH}"}; assert all(specs[name]["spec"].get("env") == expected for name in names)'
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
