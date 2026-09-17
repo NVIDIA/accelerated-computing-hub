@@ -74,9 +74,8 @@ RUN chmod -R a+rwX /accelerated-computing-hub \
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
 
-# Setup Git.
-RUN git config --unset-all "http.https://github.com/.extraheader" || { code=$?; [ "$code" = 5 ] || exit "$code"; } \
- && git config --global --add safe.directory "/accelerated-computing-hub"
+# Trust a development checkout when it is bind-mounted over the image snapshot.
+RUN git config --global --add safe.directory "/accelerated-computing-hub"
 
 # Set default user to ach (can be overriden with docker run --user)
 USER ach
