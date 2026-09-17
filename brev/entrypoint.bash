@@ -16,10 +16,29 @@ if [ -z "${SERVICE}" ]; then
     exit 1
 fi
 
-# Install gosu if not present
-if ! command -v gosu &> /dev/null; then
-    apt-get update -y
-    apt-get install -y gosu
+# Rootless Podman receives the host driver as individual bind-mounted files.
+# Create the soname links expected by CUDA without changing Docker entrypoints.
+if [ "${ACH_ROOTLESS_PODMAN:-}" = "1" ]; then
+    for library_link in ${ACH_NVIDIA_LIBRARY_LINKS:-}; do
+        library=${library_link%%:*}
+        soname=${library_link#*:}
+        if [[ "${library}" = /* ]]; then
+            paths=("${library}")
+        else
+            # Backward compatibility with adapters that passed a library stem.
+            paths=("/usr/lib/"*-linux-gnu/"${library}".so.* /usr/lib64/"${library}".so.*)
+        fi
+        for path in "${paths[@]}"; do
+            if [ -f "${path}" ] && [ ! -L "${path}" ]; then
+                ln -sf "$(basename "${path}")" "$(dirname "${path}")/${soname}" 2>/dev/null || true
+                break
+            fi
+        done
+    done
+
+    if [ -n "${ACH_NVIDIA_LIB_DIRS:-}" ]; then
+        export LD_LIBRARY_PATH="${ACH_NVIDIA_LIB_DIRS}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+    fi
 fi
 
 # Create user if running as root and user doesn't exist
@@ -53,23 +72,36 @@ if [ "$(id -u)" = "0" ]; then
     # Setup user environment (one-time setup, not on every shell)
     export HOME="${ACH_TARGET_HOME}"
 
+    # Streamer containers do not include gosu. Rootless Podman deliberately
+    # uses root for a directly bind-mounted checkout, so no user switch is
+    # needed in that case.
+    if [ "${TARGET_USER}" = "$(id -un)" ]; then
+        run_as_target() { "$@"; }
+    else
+        if ! command -v gosu &> /dev/null; then
+            apt-get update -y
+            apt-get install -y gosu
+        fi
+        run_as_target() { gosu "${TARGET_USER}" "$@"; }
+    fi
+
     # Setup Jupyter configuration directories
-    gosu "${TARGET_USER}" mkdir -p "${HOME}/.jupyter"
-    gosu "${TARGET_USER}" mkdir -p "${HOME}/.local/share/jupyter"
-    gosu "${TARGET_USER}" mkdir -p "${HOME}/.ipython/profile_default/startup"
-    gosu "${TARGET_USER}" mkdir -p "${HOME}/.local/state"
+    run_as_target mkdir -p "${HOME}/.jupyter"
+    run_as_target mkdir -p "${HOME}/.local/share/jupyter"
+    run_as_target mkdir -p "${HOME}/.ipython/profile_default/startup"
+    run_as_target mkdir -p "${HOME}/.local/state"
 
     # Link Jupyter server config if not already present
     if [ ! -e "${HOME}/.jupyter/jupyter_server_config.py" ]; then
-        gosu "${TARGET_USER}" ln -sf /accelerated-computing-hub/brev/jupyter-server-config.py "${HOME}/.jupyter/jupyter_server_config.py"
+        run_as_target ln -sf /accelerated-computing-hub/brev/jupyter-server-config.py "${HOME}/.jupyter/jupyter_server_config.py"
     fi
 
     # Link IPython startup scripts if not already present
     if [ ! -e "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py" ]; then
-        gosu "${TARGET_USER}" ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
+        run_as_target ln -sf /accelerated-computing-hub/brev/ipython-startup-add-cwd-to-path.py "${HOME}/.ipython/profile_default/startup/00-add-cwd-to-path.py"
     fi
     # Setup Git safe directory (run as target user)
-    gosu "${TARGET_USER}" git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
+    run_as_target git config --global --add safe.directory "/accelerated-computing-hub" 2>/dev/null || true
 
     # Ensure logs directory exists and is writable by the target user.
     mkdir -p /accelerated-computing-hub/logs
@@ -78,6 +110,13 @@ if [ "$(id -u)" = "0" ]; then
     # Relax profiling permissions so Nsight tools can run as non-root.
     sysctl -w kernel.perf_event_paranoid=0 > /dev/null 2>&1 || true
     sysctl -w kernel.kptr_restrict=0 > /dev/null 2>&1 || true
+else
+    export ACH_TARGET_USER="${ACH_TARGET_USER:-$(id -un)}"
+    export ACH_TARGET_HOME="${ACH_TARGET_HOME:-${HOME:-}}"
+    if [ -z "${ACH_TARGET_HOME}" ]; then
+        export ACH_TARGET_HOME="$(getent passwd "$(id -u)" | cut -d: -f6 || true)"
+    fi
+    export HOME="${ACH_TARGET_HOME:-/tmp}"
 fi
 
 # Dispatch to service-specific entrypoint

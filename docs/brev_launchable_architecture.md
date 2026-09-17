@@ -92,7 +92,7 @@ For each syllabus, a Docker Compose file is automatically generated on the [`gen
 
 | Service   | Docker Image | Description |
 |-----------|--------------|-------------|
-| `base`    | Tutorial     | Performs one-time initialization tasks when a Launchable is deployed, such as updating the Git repository to the latest commit and populating the Docker volume. |
+| `base`    | Tutorial     | Performs one-time initialization tasks when a Launchable is deployed, such as populating the shared repository volume and running requested validation. |
 | `jupyter` | Tutorial     | Runs the JupyterLab server and executes notebook content. |
 | `nsys`    | [NVIDIA Nsight Streamer (nsys)](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-nsys) | Runs the WebRTC server for Nsight Systems. |
 | `ncu`     | [NVIDIA Nsight Streamer (ncu)](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-ncu) | Runs the WebRTC server for Nsight Compute. |
@@ -105,7 +105,7 @@ For each syllabus, a Docker Compose file is automatically generated on the [`gen
 
 ## Docker Volumes
 
-- `/accelerated-computing-hub`: A Git checkout of the ACH repository mounted by all services.
+- `/accelerated-computing-hub`: A shared ACH repository snapshot mounted by all services. Image-backed volumes omit `.git` metadata so build credentials and local history cannot be published; bind-mounted development sessions retain the caller's checkout.
 
 ## Docker Ports
 

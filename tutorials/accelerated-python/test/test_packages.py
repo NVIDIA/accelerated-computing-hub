@@ -3,15 +3,86 @@ Startup tests for accelerated-python tutorial.
 These tests validate that key packages are installed and functional.
 """
 
-import pytest
+import importlib.util
+from importlib.metadata import version as distribution_version
+import os
+import subprocess
+import sys
+
 import numpy as np
+
+
+def test_dependency_versions():
+    """Critical Python CUDA packages match the resolved CUDA 13.2 stack."""
+    expected = {
+        "torch": "2.14.0+cu132",
+        "cuda-toolkit": "13.2.1",
+        "cuda-core": "1.2.0",
+        "cuda-cccl": "1.1.1",
+        "cupy-cuda13x": "14.2.0",
+        "nvmath-python": "1.0.0",
+        "nvidia-nvjitlink": "13.4.92",
+        "numba-cuda": "0.30.4",
+        "scipy": "1.17.1",
+    }
+    for distribution, expected_version in expected.items():
+        assert distribution_version(distribution) == expected_version
+
+    nvcc = subprocess.run(
+        ["nvcc", "--version"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "release 13.2" in nvcc.stdout
+
+
+def test_system_environment():
+    """The shared system environment uses the current stack and OpenMPI."""
+    import jax
+    import llvmlite
+    import numba
+
+    assert sys.prefix == sys.base_prefix == "/usr"
+    assert numba.__version__ == "0.63.1"
+    assert llvmlite.__version__ == "0.46.0"
+    assert jax.__version__ == "0.11.1"
+    assert importlib.util.find_spec("numba.openmp") is not None
+
+    program = (
+        "from mpi4py import MPI\n"
+        "assert MPI.get_vendor()[0] == 'Open MPI'\n"
+        "assert MPI.COMM_WORLD.Get_size() == 2\n"
+    )
+    default_mpi_env = os.environ.copy()
+    default_mpi_env.pop("MPI4PY_MPIABI", None)
+    result = subprocess.run(
+        [
+            "/usr/bin/mpirun.openmpi",
+            "--mca",
+            "plm",
+            "isolated",
+            "--oversubscribe",
+            "-n",
+            "2",
+            sys.executable,
+            "-c",
+            program,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env=default_mpi_env,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
 
 def test_cuda_python():
     """Test that cuda-python works by querying device properties using cuda.core."""
-    from cuda.core.experimental import system, Device
+    from cuda.core import system, Device
 
     # Check CUDA driver version
-    driver_version = system.get_driver_version()
+    driver_version = system.get_kernel_mode_driver_version()
     assert driver_version is not None
     assert len(str(driver_version)) > 0
 
@@ -84,7 +155,13 @@ def test_cuda_compute():
 
     # Use cuda.compute to reduce (sum) the array
     # reduce_into computes a reduction and stores result in d_output
-    compute.reduce_into(d_input, d_output, compute.OpKind.PLUS, n, h_init)
+    compute.reduce_into(
+        d_in=d_input,
+        d_out=d_output,
+        op=compute.OpKind.PLUS,
+        num_items=n,
+        h_init=h_init,
+    )
 
     result = float(d_output.get()[0])
 
@@ -92,11 +169,70 @@ def test_cuda_compute():
     assert np.isclose(result, float(n), rtol=1e-5)
 
 
+def test_cuda_compute_algorithms():
+    """The keyword-only cuda.compute 1.1 APIs execute representative work."""
+    import cuda.compute as compute
+    import cupy as cp
+
+    d_input = cp.asarray([3, 1, 4, 1], dtype=cp.int32)
+    h_init = np.asarray([0], dtype=np.int32)
+
+    d_scan = cp.empty_like(d_input)
+    compute.inclusive_scan(
+        d_in=d_input,
+        d_out=d_scan,
+        op=compute.OpKind.PLUS,
+        init_value=h_init,
+        num_items=d_input.size,
+    )
+    np.testing.assert_array_equal(d_scan.get(), [3, 4, 8, 9])
+
+    d_merge = cp.empty_like(d_input)
+    compute.merge_sort(
+        d_in_keys=d_input,
+        d_out_keys=d_merge,
+        op=compute.OpKind.LESS,
+        num_items=d_input.size,
+    )
+    np.testing.assert_array_equal(d_merge.get(), [1, 1, 3, 4])
+
+    d_radix = cp.empty_like(d_input)
+    compute.radix_sort(
+        d_in_keys=d_input,
+        d_out_keys=d_radix,
+        order=compute.SortOrder.DESCENDING,
+        num_items=d_input.size,
+    )
+    np.testing.assert_array_equal(d_radix.get(), [4, 3, 1, 1])
+
+    def double(value):
+        return value * 2
+
+    d_unary = cp.empty_like(d_input)
+    compute.unary_transform(
+        d_in=d_input,
+        d_out=d_unary,
+        op=double,
+        num_items=d_input.size,
+    )
+    np.testing.assert_array_equal(d_unary.get(), [6, 2, 8, 2])
+
+    d_binary = cp.empty_like(d_input)
+    compute.binary_transform(
+        d_in1=d_input,
+        d_in2=d_input,
+        d_out=d_binary,
+        op=compute.OpKind.PLUS,
+        num_items=d_input.size,
+    )
+    np.testing.assert_array_equal(d_binary.get(), [6, 2, 8, 2])
+
+
 def test_cuda_cooperative():
-    """Test that cuda.coop works by using block load cooperative algorithm."""
+    """Test cuda.coop._experimental with a block-load algorithm."""
     import warnings
     from numba.core.errors import NumbaPerformanceWarning
-    import cuda.coop as coop
+    from cuda.coop._experimental import block
     from numba import cuda
     import cupy as cp
 
@@ -112,7 +248,9 @@ def test_cuda_cooperative():
     items_per_block = threads_per_block * items_per_thread
 
     # Create a cooperative block load algorithm
-    block_load = coop.block.load(cp.float32, threads_per_block, items_per_thread, 'striped')
+    block_load = block.make_load(
+        cp.float32, threads_per_block, items_per_thread, "striped"
+    )
 
     # Define a kernel that uses the cooperative block load
     @cuda.jit(link=block_load.files)
@@ -171,6 +309,16 @@ def test_cupy():
     assert cp.allclose(c, expected)
 
 
+def test_nvmath():
+    """nvmath uses the system CUDA libraries for a GPU matrix product."""
+    import cupy as cp
+    import nvmath
+
+    identity = cp.eye(2, dtype=cp.float32)
+    result = nvmath.linalg.advanced.matmul(identity, identity)
+    assert cp.allclose(result, identity)
+
+
 def test_pytorch():
     """Test that PyTorch works by performing tensor operations and checking CUDA."""
     import torch
@@ -212,4 +360,4 @@ def test_pytorch():
 def test_nsightful():
     from nsightful.notebook import is_interactive_notebook
 
-    assert is_interactive_notebook() == False, "nsightful interactive notebook check failed"
+    assert not is_interactive_notebook(), "nsightful interactive notebook check failed"

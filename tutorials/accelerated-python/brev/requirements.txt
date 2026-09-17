@@ -1,36 +1,66 @@
 # Arrays
-numpy == 2.2.6
+# PyOMP 0.5 requires Numba 0.63, which supports NumPy versions below 2.4.
+numpy == 2.3.5
 
 # Scientific/numeric
+# CuPy 14.2 supports SciPy versions below 1.18.
 scipy == 1.17.1
-matplotlib == 3.10.8
-opencv-python-headless == 4.13.0.92
+matplotlib == 3.11.2
+opencv-python-headless == 5.0.0.93
 
 # Dark mode detection
 jupyter-dark-detect == 0.1.0
 
 # Jupyter
 jupyter == 1.1.1
-jupyter-server-proxy == 4.4.0
-jupyterlab == 4.5.10
+jupyter-server-proxy == 4.5.0
+jupyterlab == 4.6.3
 jupyterlab-execute-time == 3.3.0
 
 # CUDA
-cuda-python == 13.1.1
-nvmath-python[cu13] == 0.8.0
-cupy-cuda13x == 13.6.0
-cuda-cccl == 0.4.5
+cuda-python == 13.2.0
+cuda-core == 1.2.0
+nvmath-python[sysctk13] == 1.0.0
+cupy-cuda13x == 14.2.0
+cuda-cccl[test-sysctk13] == 1.1.1
+numba-cuda == 0.30.4
+# Keep the CUDA toolkit metapackage on the version used by both the PyTorch
+# build and the system image. This also documents the resolver constraint
+# shared by PyTorch and RAPIDS.
+cuda-toolkit == 13.2.1
+# RAPIDS 26.8 requires a newer nvJitLink than CUDA 13.2 ships. CUDA libraries
+# are minor-version compatible within a major release, so retain only this
+# newer component from the Python CUDA wheels and use the system toolkit for
+# the rest.
+nvidia-nvjitlink == 13.4.92
 
 # RAPIDS
-cudf-cu13 == 26.2.1
-cuml-cu13 == 26.2.0
+cudf-cu13 == 26.8.1
+cuml-cu13 == 26.8.0
+
+# PyHPC programming models and interop. RAPIDS 26.8 supports this same Numba
+# stack, so these packages no longer need a second Python environment.
+jax[cuda13-local] == 0.11.1
+numba == 0.63.1
+llvmlite == 0.46.0
+pyomp == 0.5.1
+nanobind == 3.0.1
+pybind11 == 3.1.0
+cffi == 2.1.1
+memory_profiler == 0.61.0
 
 # NVIDIA developer tools
-nvtx == 0.2.14
-nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@454dfa5124ebea193f64302058b327f2034ccd8e
+nvtx == 0.2.16
+nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@a41989403430168e02ac3cfdc4060bca4ebb8040
 
-# Distributed computing
-mpi4py == 4.1.1
+# Distributed computing. The manylinux wheel contains both OpenMPI and MPICH
+# extension modules; the PyHPC kernels select MPICH through MPI4PY_MPIABI.
+mpi4py == 4.1.2
+
+# Runtime and notebook execution utilities
+psutil == 7.2.2
+nbformat == 5.11.1
+nbconvert == 7.17.1
 
 # Testing
-pytest == 9.0.3
+pytest == 9.1.1

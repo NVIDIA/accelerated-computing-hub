@@ -3,14 +3,20 @@ RAPIDS tests for accelerated-python tutorial.
 These tests validate that cuDF and cuML are installed and functional.
 """
 
-import pytest
+from importlib.metadata import version as distribution_version
+
 import numpy as np
+
+
+def test_rapids_versions():
+    """The installed RAPIDS distributions match the resolved stack."""
+    assert distribution_version("cudf-cu13") == "26.8.1"
+    assert distribution_version("cuml-cu13") == "26.8.0"
 
 
 def test_cudf():
     """Test that cuDF works by performing DataFrame operations."""
     import cudf
-    import pandas as pd
 
     # Create a cuDF DataFrame
     df = cudf.DataFrame({

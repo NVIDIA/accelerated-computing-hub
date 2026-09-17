@@ -17,8 +17,9 @@ metadata policy.  Canonical format means:
     the required ``name`` field).
   - nbformat 4, nbformat_minor 5.
 
-If a notebook has any non-standard kernelspec (or none), --fix replaces it
-with the default.
+PyHPC notebooks may use the course and profiler kernelspecs. If any other
+notebook has a non-standard kernelspec (or none), --fix replaces it with the
+default.
 
 Usage:
   ./brev/test-notebook-format.py                       # check all tutorials
@@ -73,6 +74,32 @@ STANDARD_METADATA = {
     },
 }
 
+NSIGHT_SYSTEMS_KERNELSPEC = {
+    "display_name": "Python 3 (Nsight Systems)",
+    "language": "python",
+    "name": "nsightful-nsys",
+}
+
+NSIGHT_COMPUTE_KERNELSPEC = {
+    "display_name": "Python 3 (Nsight Compute)",
+    "language": "python",
+    "name": "nsightful-ncu",
+}
+
+PYHPC_KERNELSPEC = {
+    "display_name": "Python 3 (PyHPC)",
+    "language": "python",
+    "name": "pyhpc",
+}
+
+ALLOWED_KERNELSPECS = (
+    STANDARD_METADATA["kernelspec"],
+    NSIGHT_SYSTEMS_KERNELSPEC,
+    NSIGHT_COMPUTE_KERNELSPEC,
+    PYHPC_KERNELSPEC,
+)
+PYHPC_PATH_PARTS = ("tutorials", "accelerated-python", "notebooks", "pyhpc")
+
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
@@ -89,6 +116,29 @@ NC = "\033[0m"  # No Color
 
 def is_solution_notebook(notebook_path: Path) -> bool:
     return "SOLUTION" in notebook_path.name
+
+
+def is_pyhpc_notebook(notebook_path: Path) -> bool:
+    parts = notebook_path.parts
+    width = len(PYHPC_PATH_PARTS)
+    return any(
+        tuple(parts[index : index + width]) == PYHPC_PATH_PARTS
+        for index in range(len(parts) - width + 1)
+    )
+
+
+def expected_metadata_for_notebook(notebook_path: Path) -> dict:
+    expected = dict(STANDARD_METADATA)
+    try:
+        with open(notebook_path, "r", encoding="utf-8") as f:
+            metadata = json.load(f).get("metadata", {})
+    except (OSError, json.JSONDecodeError):
+        return expected
+
+    kernelspec = metadata.get("kernelspec")
+    if is_pyhpc_notebook(notebook_path) and kernelspec in ALLOWED_KERNELSPECS:
+        expected["kernelspec"] = kernelspec
+    return expected
 
 
 def diff_metadata(actual: dict, expected: dict, path: str = "") -> list[str]:
@@ -147,7 +197,7 @@ def canonicalize_notebook(notebook_path: Path) -> tuple[str, list[str]]:
 
     # -- Detect original metadata problems before nbformat.read() -----------
     actual_metadata = raw.get("metadata", {})
-    expected_metadata = dict(STANDARD_METADATA)
+    expected_metadata = expected_metadata_for_notebook(notebook_path)
     metadata_diffs = diff_metadata(actual_metadata, expected_metadata, "metadata")
     if metadata_diffs:
         problems.extend(metadata_diffs)
@@ -446,7 +496,7 @@ def main():
             f"{total_passed} passed out of {total_passed + total_failed} total{NC}"
         )
         if not args.fix:
-            print(f"\nRun with --fix to automatically rewrite to canonical format.")
+            print("\nRun with --fix to automatically rewrite to canonical format.")
         return 0 if args.fix else 1
 
 
