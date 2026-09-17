@@ -203,6 +203,8 @@ COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /opt/pyh
 # Install the shared Accelerated Python/PyHPC package stack, then discard the
 # CUDA toolkit payload duplicated by Python wheels. The image already contains
 # the matching development toolkit; only RAPIDS' newer nvJitLink is retained.
+# PyTorch's ARM64 cuSPARSELt 0.8.1 wheel is named for aarch64 but its embedded
+# tag says sbsa; normalize that tag so pip validates the installed wheel.
 RUN pip install --no-cache-dir --root-user-action=ignore \
       --index-url https://pypi.org/simple \
       --extra-index-url https://download.pytorch.org/whl/cu132 \
@@ -224,6 +226,14 @@ RUN pip install --no-cache-dir --root-user-action=ignore \
       python -c 'from mpi4py import MPI; assert MPI.get_vendor()[0] == "MPICH", MPI.get_vendor()' \
  && python -m ipykernel install \
       --prefix=/usr/local --name=pyhpc --display-name="Python 3 (PyHPC)" \
+ && if [ "$(dpkg --print-architecture)" = arm64 ]; then \
+      wheel_metadata="$(find "/usr/local/lib/python${PYTHON_VERSION}/dist-packages" \
+        -path '*/nvidia_cusparselt_cu13-*.dist-info/WHEEL' -print -quit)"; \
+      test -n "${wheel_metadata}"; \
+      grep -qx 'Tag: py3-none-manylinux2014_sbsa' "${wheel_metadata}"; \
+      sed -i 's/^Tag: py3-none-manylinux2014_sbsa$/Tag: py3-none-manylinux2014_aarch64/' \
+        "${wheel_metadata}"; \
+    fi \
  && python -m pip check \
  && rm -f /opt/requirements.txt
 
