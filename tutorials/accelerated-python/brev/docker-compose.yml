@@ -52,7 +52,7 @@ services:
       context: ../../..
       dockerfile: *dockerfile
       args:
-        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvcr.io/nvidia/cuda:13.2.1-devel-ubuntu22.04}
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04}
     restart: "no"
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]

@@ -1,5 +1,5 @@
 # Stage 1: LLVM builder
-ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-devel-ubuntu22.04
+ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
 FROM ${CUDA_BASE_IMAGE} AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
 ARG LLVM_TAG=isc2026
@@ -38,12 +38,28 @@ RUN case "$(dpkg --print-architecture)" in \
 # Stage 2: Tutorial image
 FROM ${CUDA_BASE_IMAGE}
 
+# Match the development packages and exported build environment from NVIDIA's
+# CUDA 13.2.1 devel image. Starting from the runtime image lets us install and
+# prune Nsight Compute in one layer instead of hiding its full payload later.
+ENV NV_CUDA_CUDART_DEV_VERSION=13.2.75-1 \
+    NV_NVML_DEV_VERSION=13.2.82-1 \
+    NV_LIBCUSPARSE_DEV_VERSION=12.7.10.1-1 \
+    NV_LIBNPP_DEV_VERSION=13.1.0.48-1 \
+    NV_LIBNPP_DEV_PACKAGE=libnpp-dev-13-2=13.1.0.48-1 \
+    NV_LIBCUBLAS_DEV_VERSION=13.4.0.1-1 \
+    NV_LIBCUBLAS_DEV_PACKAGE_NAME=libcublas-dev-13-2 \
+    NV_LIBCUBLAS_DEV_PACKAGE=libcublas-dev-13-2=13.4.0.1-1 \
+    NV_CUDA_NSIGHT_COMPUTE_VERSION=13.2.1-1 \
+    NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE=cuda-nsight-compute-13-2=13.2.1-1 \
+    LIBRARY_PATH=/usr/local/cuda/lib64/stubs
+
 ENV ACH_TUTORIAL=accelerated-python \
     PYTHON_VERSION=3.12 \
     NSIGHT_SYSTEMS_VERSION=2026.1.1 \
     NSIGHT_SYSTEMS_AMD64_DEB_FILE=2026_1/NsightSystems-linux-cli-public-2026.1.1.204-3717666.deb \
     NSIGHT_SYSTEMS_ARM64_DEB_FILE=2026_1/nsight-systems-cli-2026.1.1_2026.1.1.204-1_arm64.deb \
     NSIGHT_COMPUTE_VERSION=2026.1.1 \
+    NSIGHT_COMPUTE_PACKAGE_VERSION=2026.1.1.2-1 \
     OMPI_ALLOW_RUN_AS_ROOT=1 \
     OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
     PIP_ROOT_USER_ACTION=ignore \
@@ -56,6 +72,57 @@ ENV ACH_NSYS_PATH=/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/bin/n
 
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
  && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries
+
+# Recreate the pinned CUDA development environment without inheriting the full
+# Nsight Compute package. Pin the complete dependency closure because NVIDIA's
+# repository continues to publish newer patch builds under the CUDA 13.2 name.
+RUN set -eux; \
+    case "$(dpkg --print-architecture)" in \
+      amd64) cuda_arch_dev_package="cuda-sandbox-dev-13-2=13.2.82-1" ;; \
+      arm64) cuda_arch_dev_package="libcudla-dev-13-2=13.2.75-1" ;; \
+      *) echo "Unsupported CUDA development architecture" >&2; exit 1 ;; \
+    esac; \
+    apt-get update -y; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends --no-upgrade \
+    "${cuda_arch_dev_package}" \
+    "cuda-cccl-13-2=13.2.75-1" \
+    "cuda-command-line-tools-13-2=${NV_CUDA_LIB_VERSION}" \
+    "cuda-compiler-13-2=${NV_CUDA_LIB_VERSION}" \
+    "cuda-crt-13-2=13.2.78-1" \
+    "cuda-cudart-dev-13-2=${NV_CUDA_CUDART_DEV_VERSION}" \
+    "cuda-culibos-dev-13-2=13.2.75-1" \
+    "cuda-cuobjdump-13-2=13.2.78-1" \
+    "cuda-cupti-13-2=13.2.75-1" \
+    "cuda-cupti-dev-13-2=13.2.75-1" \
+    "cuda-cuxxfilt-13-2=13.2.78-1" \
+    "cuda-driver-dev-13-2=13.2.75-1" \
+    "cuda-gdb-13-2=13.2.75-1" \
+    "cuda-minimal-build-13-2=${NV_CUDA_LIB_VERSION}" \
+    "cuda-libraries-dev-13-2=${NV_CUDA_LIB_VERSION}" \
+    "cuda-nvcc-13-2=13.2.78-1" \
+    "cuda-nvdisasm-13-2=13.2.78-1" \
+    "cuda-nvml-dev-13-2=${NV_NVML_DEV_VERSION}" \
+    "cuda-nvprune-13-2=13.2.78-1" \
+    "cuda-nvrtc-dev-13-2=13.2.78-1" \
+    "cuda-profiler-api-13-2=13.2.75-1" \
+    "cuda-sanitizer-13-2=13.2.76-1" \
+    "cuda-tileiras-13-2=13.2.78-1" \
+    "${NV_LIBNPP_DEV_PACKAGE}" \
+    "libcusparse-dev-13-2=${NV_LIBCUSPARSE_DEV_VERSION}" \
+    "${NV_LIBCUBLAS_DEV_PACKAGE}" \
+    "libcufft-dev-13-2=12.2.0.46-1" \
+    "libcufile-dev-13-2=1.17.1.22-1" \
+    "libcuobjclient-dev-13-2=1.1.1.22-1" \
+    "libcurand-dev-13-2=10.4.2.55-1" \
+    "libcusolver-dev-13-2=12.2.0.1-1" \
+    "libnvfatbin-dev-13-2=13.2.78-1" \
+    "libnvjitlink-dev-13-2=13.2.78-1" \
+    "libnvjpeg-dev-13-2=13.1.0.48-1" \
+    "libnvptxcompiler-13-2=13.2.78-1" \
+    "libnvvm-13-2=13.2.78-1" \
+ && apt-mark hold "${NV_LIBCUBLAS_DEV_PACKAGE_NAME}" \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -160,8 +227,10 @@ RUN pip install --no-cache-dir --root-user-action=ignore \
  && python -m pip check \
  && rm -f /opt/requirements.txt
 
-# Install Nsight Systems and retain the Nsight Compute CLI from the CUDA base
-# image. Keep only the files needed to profile the native architecture.
+# Install Nsight Systems and Nsight Compute, then remove everything except the
+# Nsight Compute CLI files needed to profile the native architecture. Keeping
+# installation and pruning in one layer prevents discarded files from taking
+# space in the final image.
 RUN set -eux; \
     arch="$(dpkg --print-architecture)"; \
     case "${arch}" in \
@@ -182,13 +251,23 @@ RUN set -eux; \
     nsys_deb="${nsys_file##*/}"; \
     curl -fL -o "${nsys_deb}" "${nsys_url}"; \
     apt-get update -y; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "./${nsys_deb}"; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      "./${nsys_deb}" \
+      "${NV_CUDA_NSIGHT_COMPUTE_DEV_PACKAGE}" \
+      "nsight-compute-${NSIGHT_COMPUTE_VERSION}=${NSIGHT_COMPUTE_PACKAGE_VERSION}"; \
     rm -f "${nsys_deb}"; \
     ncu_root="/opt/nvidia/nsight-compute/${NSIGHT_COMPUTE_VERSION}"; \
+    ncu_desktop="/usr/share/applications/nsight-compute-${NSIGHT_COMPUTE_VERSION}.desktop"; \
     test -x "${ncu_root}/ncu"; \
     find "${ncu_root}/target" -mindepth 1 -maxdepth 1 \
       ! -name "${ncu_native_target}" -exec rm -rf {} +; \
     rm -rf "${ncu_root}/host" "${ncu_root}/docs" "${ncu_root}/extras"; \
+    rm -f "${ncu_root}/ncu-ui" /usr/local/cuda-13.2/bin/ncu-ui "${ncu_desktop}"; \
+    test "$(find "${ncu_root}/target" -mindepth 1 -maxdepth 1 -type d -printf '%f\n')" = "${ncu_native_target}"; \
+    for removed in host docs extras ncu-ui; do test ! -e "${ncu_root}/${removed}"; done; \
+    test ! -e /usr/local/cuda-13.2/bin/ncu-ui; \
+    test ! -e "${ncu_desktop}"; \
+    "${ncu_root}/ncu" --version | grep -F "${NSIGHT_COMPUTE_VERSION}"; \
     rm -rf "/opt/nvidia/nsight-systems-cli/${NSIGHT_SYSTEMS_VERSION}/documentation"; \
     test -x "${ACH_NSYS_PATH}"; \
     test -x "${ACH_NCU_PATH}"; \
