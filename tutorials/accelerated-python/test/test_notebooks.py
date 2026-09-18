@@ -6,7 +6,9 @@ produce incomplete or misleading results.
 """
 
 import pytest
+from functools import cache
 from pathlib import Path
+import subprocess
 import time
 import nbformat
 from nbclient import NotebookClient
@@ -16,6 +18,25 @@ from nbclient.exceptions import CellExecutionError
 NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / 'notebooks'
 ORDERED_APPLICATION_SOLUTIONS_DIR = NOTEBOOKS_DIR / 'applications' / 'solutions'
 ORDERED_APPLICATION_PREFIXES = tuple(f'{number}__swe__' for number in range(81, 88))
+CUDA_TILE_PREFIXES = tuple(f'{number}__cutile_python' for number in range(44, 48))
+
+
+@cache
+def gpu_supports_cuda_tile():
+    """Return whether TileIRAs 13.2 supports the first visible GPU."""
+    result = subprocess.run(
+        [
+            'nvidia-smi',
+            '--query-gpu=compute_cap',
+            '--format=csv,noheader',
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return False
+    major = int(result.stdout.splitlines()[0].strip().split('.', maxsplit=1)[0])
+    return major in {8, 10, 12}
 
 
 def is_ordered_application_solution(notebook_path):
@@ -34,6 +55,52 @@ solution_notebooks = sorted([
 
 # Create test IDs from notebook paths for better test output
 notebook_ids = [nb.relative_to(NOTEBOOKS_DIR).as_posix() for nb in solution_notebooks]
+
+
+def test_cuda_tile_lessons_have_exercises_and_solutions():
+    """Every CUDA Tile lesson has a learner exercise and a separate answer."""
+    kernels_dir = NOTEBOOKS_DIR / 'kernels'
+    solutions_dir = kernels_dir / 'solutions'
+
+    for prefix in CUDA_TILE_PREFIXES:
+        exercises = sorted(kernels_dir.glob(f'{prefix}*.ipynb'))
+        solutions = sorted(solutions_dir.glob(f'{prefix}*__SOLUTION.ipynb'))
+        assert len(exercises) == 1, prefix
+        assert len(solutions) == 1, prefix
+
+        with exercises[0].open(encoding='utf-8') as handle:
+            exercise_notebook = nbformat.read(handle, as_version=4)
+        with solutions[0].open(encoding='utf-8') as handle:
+            solution_notebook = nbformat.read(handle, as_version=4)
+
+        exercise_markdown = '\n'.join(
+            cell.source
+            for cell in exercise_notebook.cells
+            if cell.cell_type == 'markdown'
+        )
+        exercise_code = '\n'.join(
+            cell.source
+            for cell in exercise_notebook.cells
+            if cell.cell_type == 'code'
+        )
+        solution_markdown = '\n'.join(
+            cell.source
+            for cell in solution_notebook.cells
+            if cell.cell_type == 'markdown'
+        )
+        solution_code = '\n'.join(
+            cell.source
+            for cell in solution_notebook.cells
+            if cell.cell_type == 'code'
+        )
+
+        assert '## Exercise:' in exercise_markdown
+        assert 'TODO' in exercise_code
+        assert '### Solution' not in exercise_markdown
+        assert '## Exercise:' in solution_markdown
+        assert 'TODO' not in solution_code
+
+    assert not (NOTEBOOKS_DIR.parent.parent / 'cuda-tile').exists()
 
 
 def extract_cell_outputs(nb, cell_times=None):
@@ -87,6 +154,13 @@ def test_solution_notebook_executes(notebook_path):
 
     Uses nbclient to execute all cells in the notebook.
     """
+    if (
+        notebook_path.parent.name == 'solutions'
+        and notebook_path.name.startswith(CUDA_TILE_PREFIXES)
+        and not gpu_supports_cuda_tile()
+    ):
+        pytest.skip('TileIRAs 13.2 requires an Ampere, Ada, or Blackwell GPU')
+
     print(f"\n=== Starting notebook: {notebook_path.name} ===")
     check_gpu_state()
     notebook_start = time.time()

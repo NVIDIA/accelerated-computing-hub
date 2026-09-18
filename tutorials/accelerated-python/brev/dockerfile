@@ -200,9 +200,10 @@ COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /opt/pyhpc-ipython/profile_default/startup/10-matplotlib-theme.py
 
 # CUDA 13.2.1 is the newest toolkit in the stable PyTorch 2.14 build matrix.
-# Install the shared Accelerated Python/PyHPC package stack, then discard the
-# CUDA toolkit payload duplicated by Python wheels. The image already contains
-# the matching development toolkit; only RAPIDS' newer nvJitLink is retained.
+# Install the shared Accelerated Python/PyHPC/CUDA Tile package stack, then
+# discard the CUDA toolkit payload duplicated by Python wheels. The image
+# already contains the matching development toolkit and TileIRAs compiler;
+# only RAPIDS' newer nvJitLink is retained.
 # PyTorch's ARM64 cuSPARSELt 0.8.1 wheel is named for aarch64 but its embedded
 # tag says sbsa; normalize that tag so pip validates the installed wheel.
 RUN pip install --no-cache-dir --root-user-action=ignore \

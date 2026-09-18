@@ -36,6 +36,7 @@ Examples:
 """
 
 import argparse
+import copy
 import json
 import sys
 import warnings
@@ -110,6 +111,18 @@ SPECIAL_KERNELSPECS = {
     "applications/solutions/86__swe__mpi4py__SOLUTION.ipynb": PYHPC_KERNELSPEC,
 }
 
+CUDA_TILE_NOTEBOOK_PREFIXES = (
+    "kernels/44__cutile_python",
+    "kernels/45__cutile_python",
+    "kernels/46__cutile_python",
+    "kernels/47__cutile_python",
+    "kernels/solutions/44__cutile_python",
+    "kernels/solutions/45__cutile_python",
+    "kernels/solutions/46__cutile_python",
+    "kernels/solutions/47__cutile_python",
+    "syllabi/cuda_tile__cutile_python.ipynb",
+)
+
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
 
@@ -142,10 +155,14 @@ def accelerated_python_notebook_path(notebook_path: Path) -> str | None:
 
 
 def expected_metadata_for_notebook(notebook_path: Path) -> dict:
-    expected = dict(STANDARD_METADATA)
+    expected = copy.deepcopy(STANDARD_METADATA)
     relative_path = accelerated_python_notebook_path(notebook_path)
     if relative_path in SPECIAL_KERNELSPECS:
         expected["kernelspec"] = SPECIAL_KERNELSPECS[relative_path]
+    if relative_path and relative_path.startswith(CUDA_TILE_NOTEBOOK_PREFIXES):
+        # TileIRAs 13.2 supports Ampere, Ada, and Blackwell, but not the T4
+        # requested by the default Colab metadata.
+        expected["colab"]["gpuType"] = "A100"
     return expected
 
 
