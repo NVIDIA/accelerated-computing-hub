@@ -274,7 +274,7 @@ jobs:
       ARCHITECTURES: ${{ matrix.architectures }}
     permissions:
       actions: write
-      contents: write
+      contents: read
       packages: write
       statuses: write
     strategy:
@@ -311,6 +311,7 @@ jobs:
           name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
           path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
           retention-days: 30
+          overwrite: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -370,48 +371,13 @@ jobs:
             verify_platforms "${IMAGE_NAME}:latest"
           fi
 
-      - name: Push branch-latest deployment files to generated branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git fetch origin generated:generated
-          git checkout generated
-          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
-          rm -rf "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-          cp -r "artifacts/branch-latest/${TUTORIAL_NAME}" "${GIT_BRANCH_NAME}/tutorials/"
-          git add "${GIT_BRANCH_NAME}/tutorials/${TUTORIAL_NAME}"
-
-          # PyHPC is now a course inside accelerated-python. Remove deployment
-          # files from the former standalone tutorial when publishing either
-          # this event branch or main after the PR merges.
-          if [ "${TUTORIAL_NAME}" = "accelerated-python" ]; then
-            git rm -r --ignore-unmatch \
-              "${GIT_BRANCH_NAME}/tutorials/pyhpc"
-          fi
-
-          if git diff --staged --quiet; then
-            echo "No changes to commit for ${TUTORIAL_NAME}"
-          else
-            git commit -m "Update docker-compose for ${GIT_BRANCH_NAME}/${TUTORIAL_NAME}"
-            for i in {1..5}; do
-              if git push origin generated; then
-                echo "Successfully pushed to generated branch"
-                break
-              fi
-              if [ "${i}" -eq 5 ]; then
-                echo "Failed to push generated branch after ${i} attempts" >&2
-                exit 1
-              fi
-              echo "Push failed (attempt ${i}/5), pulling and retrying..."
-              git pull --rebase origin generated
-              sleep 2
-            done
-          fi
-
-          git checkout "${GITHUB_REF#refs/heads/}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload branch-latest deployment files
+        uses: actions/upload-artifact@v4
+        with:
+          name: branch-latest-deployment-${{ env.TUTORIAL_NAME }}
+          path: artifacts/branch-latest/
+          retention-days: 30
+          overwrite: true
 
       - name: Create pending commit status for test
         run: |
@@ -437,3 +403,90 @@ jobs:
           echo "Test workflow triggered successfully"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-deployment-files:
+    needs:
+      - discover-tutorials
+      - publish-and-test
+    # Publish deployments for successful matrix entries even when an
+    # unrelated tutorial failed to publish.
+    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' }}
+    runs-on: linux-amd64-cpu4
+    timeout-minutes: 10
+    env:
+      GIT_BRANCH_NAME: ${{ github.ref_name }}
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download branch-latest deployment files
+        uses: actions/download-artifact@v4
+        with:
+          pattern: branch-latest-deployment-*
+          path: artifacts/branch-latest
+          merge-multiple: true
+
+      - name: Push branch-latest deployment files to generated branch
+        run: |
+          set -euo pipefail
+
+          shopt -s nullglob
+          tutorial_dirs=(artifacts/branch-latest/*)
+          if [ "${#tutorial_dirs[@]}" -eq 0 ]; then
+            echo "No successful tutorial deployments were downloaded" >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin generated:generated
+          git checkout generated
+          mkdir -p "${GIT_BRANCH_NAME}/tutorials"
+
+          for tutorial_dir in "${tutorial_dirs[@]}"; do
+            tutorial_name=$(basename "${tutorial_dir}")
+            target_dir="${GIT_BRANCH_NAME}/tutorials/${tutorial_name}"
+            rm -rf "${target_dir}"
+            cp -r "${tutorial_dir}" "${GIT_BRANCH_NAME}/tutorials/"
+            git add --all "${target_dir}"
+          done
+
+          # PyHPC is now a course inside accelerated-python. Remove deployment
+          # files from the former standalone tutorial when publishing either
+          # this event branch or main after the PR merges.
+          if [ -d "artifacts/branch-latest/accelerated-python" ]; then
+            git rm -r --ignore-unmatch \
+              "${GIT_BRANCH_NAME}/tutorials/pyhpc"
+          fi
+
+          if git diff --staged --quiet; then
+            echo "No deployment changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Update deployment files for ${GIT_BRANCH_NAME}"
+
+          max_attempts=10
+          for ((attempt = 1; attempt <= max_attempts; attempt++)); do
+            if git push origin generated; then
+              echo "Successfully pushed to generated branch"
+              exit 0
+            fi
+
+            if [ "${attempt}" -eq "${max_attempts}" ]; then
+              echo "Failed to push generated branch after ${attempt} attempts" >&2
+              exit 1
+            fi
+
+            # Different branch workflows can still finish together. Back off
+            # before rebasing so their single deployment commits do not retry
+            # in lockstep.
+            delay=$((attempt + RANDOM % (attempt + 3)))
+            echo "Push failed (attempt ${attempt}/${max_attempts}); retrying in ${delay}s"
+            sleep "${delay}"
+            git pull --rebase origin generated
+          done
