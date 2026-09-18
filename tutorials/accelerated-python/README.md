@@ -17,16 +17,19 @@ Brev Launchables of this tutorial should use:
 ## Syllabi
 
 - [CUDA Python - CuPy, cuDF, CCCL, & Kernels - 8 Hours](./notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb).
+- [CUDA Python - CuPy, Kernels, MPI, Interop, & cuTile Python - 8 Hours](./notebooks/syllabi/cuda_python__cupy_kernels_mpi_interop_cutile_python__8_hours.ipynb).
 - [CUDA Python - cuda.core & CCCL - 2 Hours](./notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb)
 - [CUDA Tile - cuTile Python](./notebooks/syllabi/cuda_tile__cutile_python.ipynb)
 - [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
 - [PyHPC - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](./notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb)
 
-The two-day PyHPC syllabus now selects lessons from the same topic directories
-as every other Accelerated Python course. Self-contained lessons with a Colab
-badge can run on Google Colab. The C++ interoperability and Shallow Water
-Equations applications require the shared tutorial image and checked-in source
-files.
+The two-day PyHPC syllabus and the eight-hour CUDA Python course select lessons
+from the same topic directories as every other Accelerated Python course. The
+eight-hour course follows the PyHPC foundations but replaces the Shallow Water
+Equations case study with CUDA Tile lessons 44 through 47. Self-contained
+lessons with a Colab badge can run on Google Colab. C++ interoperability and
+the Shallow Water Equations applications require the shared tutorial image and
+checked-in source files.
 
 Applications 81 through 87 form one ordered case study. They solve the same 1D
 Shallow Water Equations problem with NumPy, JAX, PyOMP, nanobind, CppJIT/CUB,
