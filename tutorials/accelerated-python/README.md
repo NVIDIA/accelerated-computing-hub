@@ -2,13 +2,14 @@
 
 This modular tutorial contains content on all things related to accelerated Python:
 
-- [Notebooks](./notebooks) containing lessons and exercises organized by topic, including the PyHPC material on CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability. They are intended for self-paced or instructor-led learning and can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
+- [Notebooks](./notebooks) containing lessons and exercises organized by topic, including CUDA Tile and the PyHPC material on CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability. They are intended for self-paced or instructor-led learning and can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
 - [Syllabi](./notebooks/syllabi) that select a subset of the notebooks for a particular learning objective.
 - [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
 
 Brev Launchables of this tutorial should use:
-- L40S, L4, or T4 instances (for non-distributed notebooks).
+- L40S, L4, or T4 instances (for non-distributed notebooks other than CUDA Tile).
+- A10G or newer Ampere, Ada, or Blackwell instances for CUDA Tile notebooks.
 - 4xL4 or 2xL4 instances (for distributed notebooks).
 - A host driver with CUDA 13 support.
 - Crusoe or any other provider with Flexible Ports.
@@ -17,6 +18,7 @@ Brev Launchables of this tutorial should use:
 
 - [CUDA Python - CuPy, cuDF, CCCL, & Kernels - 8 Hours](./notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb).
 - [CUDA Python - cuda.core & CCCL - 2 Hours](./notebooks/syllabi/cuda_python__cuda_core_cccl__2_hours.ipynb)
+- [CUDA Tile - cuTile Python](./notebooks/syllabi/cuda_tile__cutile_python.ipynb)
 - [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
 - [PyHPC - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](./notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb)
 
@@ -88,6 +90,10 @@ that work has been backed up and verified.
 | 41 | Kernel Authoring: Book Histogram | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/41__kernel_authoring__book_histogram.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/41__kernel_authoring__book_histogram__SOLUTION.ipynb) |
 | 42 | Kernel Authoring: Gaussian Blur | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/42__kernel_authoring__gaussian_blur.ipynb) | |
 | 43 | Kernel Authoring: Black and White | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/43__kernel_authoring__black_and_white.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/43__kernel_authoring__black_and_white__SOLUTION.ipynb) |
+| 44 | cuTile Python Intro: Vector Add | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/44__cutile_python_intro__vector_add.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/44__cutile_python_intro__vector_add__SOLUTION.ipynb) |
+| 45 | cuTile Python Tiles: Matrix Add | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/45__cutile_python__matrix_add.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/45__cutile_python__matrix_add__SOLUTION.ipynb) |
+| 46 | cuTile Python: Transpose | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/46__cutile_python__transpose.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/46__cutile_python__transpose__SOLUTION.ipynb) |
+| 47 | cuTile Python: Activation Functions | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/47__cutile_python__activation_functions.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/kernels/solutions/47__cutile_python__activation_functions__SOLUTION.ipynb) |
 
 ### Distributed
 

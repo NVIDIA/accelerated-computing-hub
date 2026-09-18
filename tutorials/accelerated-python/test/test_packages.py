@@ -10,6 +10,24 @@ import subprocess
 import sys
 
 import numpy as np
+import pytest
+
+
+def gpu_supports_cuda_tile():
+    """Return whether TileIRAs 13.2 supports the first visible GPU."""
+    result = subprocess.run(
+        [
+            "nvidia-smi",
+            "--query-gpu=compute_cap",
+            "--format=csv,noheader",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        return False
+    major = int(result.stdout.splitlines()[0].strip().split(".", maxsplit=1)[0])
+    return major in {8, 10, 12}
 
 
 def test_dependency_versions():
@@ -19,8 +37,10 @@ def test_dependency_versions():
         "cuda-toolkit": "13.2.1",
         "cuda-core": "1.2.0",
         "cuda-cccl": "1.1.1",
+        "cuda-tile": "1.4.0",
         "cupy-cuda13x": "14.2.0",
         "nvmath-python": "1.0.0",
+        "nvidia-cuda-tileiras": "13.2.78",
         "nvidia-nvjitlink": "13.4.92",
         "numba-cuda": "0.30.4",
         "scipy": "1.17.1",
@@ -35,6 +55,14 @@ def test_dependency_versions():
         check=True,
     )
     assert "release 13.2" in nvcc.stdout
+
+    tileiras = subprocess.run(
+        ["tileiras", "--version"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert "release 13.2" in tileiras.stdout
 
 
 def test_system_environment():
@@ -139,6 +167,43 @@ def test_numba_cuda():
 
     # Verify result
     assert np.allclose(result, 2.0)
+
+
+@pytest.mark.skipif(
+    not gpu_supports_cuda_tile(),
+    reason="TileIRAs 13.2 requires an Ampere, Ada, or Blackwell GPU",
+)
+def test_cuda_tile():
+    """cuTile Python compiles and runs a kernel with the CUDA 13.2 TileIRAs."""
+    import cuda.tile as ct
+    import cupy as cp
+
+    @ct.kernel
+    def add_kernel(
+        a: ct.Array,
+        b: ct.Array,
+        output: ct.Array,
+        tile_size: ct.Constant[int],
+    ):
+        index = (ct.bid(0),)
+        a_tile = ct.load(a, index=index, shape=(tile_size,))
+        b_tile = ct.load(b, index=index, shape=(tile_size,))
+        ct.store(output, index=index, tile=a_tile + b_tile)
+
+    size = 1024
+    tile_size = 128
+    a = cp.arange(size, dtype=cp.float32)
+    b = cp.full(size, 2, dtype=cp.float32)
+    output = cp.empty_like(a)
+    grid = (ct.cdiv(size, tile_size), 1, 1)
+
+    ct.launch(
+        cp.cuda.get_current_stream(),
+        grid,
+        add_kernel,
+        (a, b, output, tile_size),
+    )
+    cp.testing.assert_array_equal(output, a + b)
 
 
 def test_cuda_compute():

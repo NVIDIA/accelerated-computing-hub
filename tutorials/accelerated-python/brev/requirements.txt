@@ -24,9 +24,13 @@ nvmath-python[sysctk13] == 1.0.0
 cupy-cuda13x == 14.2.0
 cuda-cccl[test-sysctk13] == 1.1.1
 numba-cuda == 0.30.4
+# The TileIRAs extra resolves against the CUDA Toolkit 13.2.1 pin below. The
+# image uses the matching system compiler and removes the duplicate wheel
+# payload with the rest of the Python CUDA toolkit files.
+cuda-tile[tileiras] == 1.4.0
 # Keep the CUDA toolkit metapackage on the version used by both the PyTorch
 # build and the system image. This also documents the resolver constraint
-# shared by PyTorch and RAPIDS.
+# shared by PyTorch, RAPIDS, and CUDA Tile.
 cuda-toolkit == 13.2.1
 # RAPIDS 26.8 requires a newer nvJitLink than CUDA 13.2 ships. CUDA libraries
 # are minor-version compatible within a major release, so retain only this

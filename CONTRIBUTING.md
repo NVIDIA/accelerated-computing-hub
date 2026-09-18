@@ -155,7 +155,7 @@ Use the most specific category path that accurately describes what was changed. 
 
 | Category | When to use |
 |---|---|
-| **`Tutorials/<tutorial>`** | Changes to tutorial content (notebooks, scripts, solutions). Use subcategories to identify the specific module when applicable, e.g. `Tutorials/Accelerated Python/Memory Spaces`, `Tutorials/CUDA Tile/Vector Add`. |
+| **`Tutorials/<tutorial>`** | Changes to tutorial content (notebooks, scripts, solutions). Use subcategories to identify the specific module when applicable, e.g. `Tutorials/Accelerated Python/Memory Spaces`, `Tutorials/Accelerated Python/CUDA Tile`. |
 | **`Docker`** | Changes to Dockerfiles, Docker Compose files, entrypoint scripts, or container configuration that affect multiple tutorials or the shared Docker infrastructure. |
 | **`Brev`** | Changes specific to the Brev deployment configuration or Brev-specific entrypoint behavior. Use subcategories for specific services, e.g. `Brev/Nsight`, `Brev/Entrypoint`. |
 | **`CI`** | Changes to GitHub Actions workflows, CI scripts, or CI configuration. |
