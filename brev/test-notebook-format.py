@@ -121,7 +121,7 @@ CUDA_TILE_NOTEBOOK_PREFIXES = (
     "kernels/solutions/46__cutile_python",
     "kernels/solutions/47__cutile_python",
     "syllabi/cuda_python__cupy_kernels_cutile__8_hours.ipynb",
-    "syllabi/cuda_tile__cutile_python.ipynb",
+    "syllabi/cutile.ipynb",
 )
 
 STANDARD_NBFORMAT = 4

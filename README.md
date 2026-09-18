@@ -10,7 +10,7 @@ The following interactive tutorials are available and can be used on [NVIDIA Bre
 
 | Content | Docker Compose | Brev Instance | Brev Provider |
 |---------|----------------|---------------|---------------|
-| [CUDA Tile - cuTile Python](tutorials/accelerated-python/notebooks/syllabi/cuda_tile__cutile_python.ipynb) | [Generated Compose](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cuda_tile__cutile_python__docker_compose.yml) | A10G or newer Ampere, Ada, or Blackwell GPU | A10G on AWS or any provider with a supported GPU and an R580-or-newer driver |
+| [CUDA Tile - cuTile Python](tutorials/accelerated-python/notebooks/syllabi/cutile.ipynb) | [Generated Compose](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/cutile__docker_compose.yml) | A10G or newer Ampere, Ada, or Blackwell GPU | A10G on AWS or any provider with a supported GPU and an R580-or-newer driver |
 | [CUDA C++ Tutorial](tutorials/cuda-cpp/README.md) | [docker-compose.yml](tutorials/cuda-cpp/brev/docker-compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports |
 | [Standard Parallelism Tutorial](tutorials/stdpar/README.md) | [docker-compose.yml](tutorials/stdpar/brev/docker-compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | GCP, AWS, or any other with Flexible Ports and Linux 6.1.24+, 6.2.11+, or 6.3+ (for HMM) |
 | [Accelerated Python Tutorial](tutorials/accelerated-python/README.md) | [docker-compose.yml](tutorials/accelerated-python/brev/docker-compose.yml) | L40S, L4, or T4; A10G or newer Ampere/Ada/Blackwell for CUDA Tile; 4xL4 or 2xL4 for distributed | Crusoe or any other with Flexible Ports; host driver must support CUDA 13 |
