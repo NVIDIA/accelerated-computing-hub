@@ -4,6 +4,8 @@ x-config:
   dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
   image: &image ghcr.io/nvidia/accelerated-python-tutorial:main-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
+  large: &large true
+  architectures: [amd64, arm64]
   default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/accelerated-python/notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/accelerated-python/notebooks"]
   gpu-config: &gpu-config
     privileged: true
@@ -19,6 +21,7 @@ x-config:
               count: all
               capabilities: [gpu]
   common-env: &common-env
+    BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
     ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
@@ -48,6 +51,8 @@ services:
     build:
       context: ../../..
       dockerfile: *dockerfile
+      args:
+        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04}
     restart: "no"
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]
@@ -68,7 +73,7 @@ services:
       - "0.0.0.0:3478:3478" # TURN
   ncu:
     <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
+    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2026.2.1
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     environment:
       <<: *common-env
@@ -80,3 +85,6 @@ services:
 
 volumes:
   accelerated-computing-hub:
+    # PyHPC moved into this tutorial, so initialize a new repository snapshot
+    # without deleting either tutorial's existing student-work volume.
+    name: ${ACH_VOLUME_NAME:-accelerated-python_accelerated-computing-hub-v2}

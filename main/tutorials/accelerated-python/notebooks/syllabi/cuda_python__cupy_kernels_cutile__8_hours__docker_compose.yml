@@ -6,7 +6,7 @@ x-config:
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
   large: &large true
   architectures: [amd64, arm64]
-  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_cudf_cccl_kernels__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/accelerated-python/notebooks"]
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/accelerated-python/notebooks/syllabi/cuda_python__cupy_kernels_cutile__8_hours.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/accelerated-python/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
