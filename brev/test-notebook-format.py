@@ -17,9 +17,8 @@ metadata policy.  Canonical format means:
     the required ``name`` field).
   - nbformat 4, nbformat_minor 5.
 
-PyHPC notebooks may use the course and profiler kernelspecs. If any other
-notebook has a non-standard kernelspec (or none), --fix replaces it with the
-default.
+The Accelerated Python profiler and MPI notebooks use their required custom
+kernelspecs. Every other notebook uses the standard Python kernelspec.
 
 Usage:
   ./brev/test-notebook-format.py                       # check all tutorials
@@ -92,13 +91,24 @@ PYHPC_KERNELSPEC = {
     "name": "pyhpc",
 }
 
-ALLOWED_KERNELSPECS = (
-    STANDARD_METADATA["kernelspec"],
-    NSIGHT_SYSTEMS_KERNELSPEC,
-    NSIGHT_COMPUTE_KERNELSPEC,
-    PYHPC_KERNELSPEC,
+ACCELERATED_PYTHON_NOTEBOOKS_PARTS = (
+    "tutorials",
+    "accelerated-python",
+    "notebooks",
 )
-PYHPC_PATH_PARTS = ("tutorials", "accelerated-python", "notebooks", "pyhpc")
+
+SPECIAL_KERNELSPECS = {
+    "fundamentals/06__asynchrony__power_iteration.ipynb": NSIGHT_SYSTEMS_KERNELSPEC,
+    "fundamentals/solutions/06__asynchrony__power_iteration__SOLUTION.ipynb": NSIGHT_SYSTEMS_KERNELSPEC,
+    "kernels/40__kernel_authoring__copy.ipynb": NSIGHT_COMPUTE_KERNELSPEC,
+    "kernels/solutions/40__kernel_authoring__copy__SOLUTION.ipynb": NSIGHT_COMPUTE_KERNELSPEC,
+    "kernels/41__kernel_authoring__book_histogram.ipynb": NSIGHT_COMPUTE_KERNELSPEC,
+    "kernels/solutions/41__kernel_authoring__book_histogram__SOLUTION.ipynb": NSIGHT_COMPUTE_KERNELSPEC,
+    "distributed/62__mpi4py__heat_equation.ipynb": PYHPC_KERNELSPEC,
+    "distributed/solutions/62__mpi4py__heat_equation__SOLUTION.ipynb": PYHPC_KERNELSPEC,
+    "applications/86__swe__mpi4py.ipynb": PYHPC_KERNELSPEC,
+    "applications/solutions/86__swe__mpi4py__SOLUTION.ipynb": PYHPC_KERNELSPEC,
+}
 
 STANDARD_NBFORMAT = 4
 STANDARD_NBFORMAT_MINOR = 5
@@ -118,26 +128,24 @@ def is_solution_notebook(notebook_path: Path) -> bool:
     return "SOLUTION" in notebook_path.name
 
 
-def is_pyhpc_notebook(notebook_path: Path) -> bool:
+def accelerated_python_notebook_path(notebook_path: Path) -> str | None:
+    """Return a path relative to the Accelerated Python notebook root."""
     parts = notebook_path.parts
-    width = len(PYHPC_PATH_PARTS)
-    return any(
-        tuple(parts[index : index + width]) == PYHPC_PATH_PARTS
-        for index in range(len(parts) - width + 1)
-    )
+    width = len(ACCELERATED_PYTHON_NOTEBOOKS_PARTS)
+    for index in range(len(parts) - width + 1):
+        if (
+            tuple(parts[index : index + width])
+            == ACCELERATED_PYTHON_NOTEBOOKS_PARTS
+        ):
+            return Path(*parts[index + width :]).as_posix()
+    return None
 
 
 def expected_metadata_for_notebook(notebook_path: Path) -> dict:
     expected = dict(STANDARD_METADATA)
-    try:
-        with open(notebook_path, "r", encoding="utf-8") as f:
-            metadata = json.load(f).get("metadata", {})
-    except (OSError, json.JSONDecodeError):
-        return expected
-
-    kernelspec = metadata.get("kernelspec")
-    if is_pyhpc_notebook(notebook_path) and kernelspec in ALLOWED_KERNELSPECS:
-        expected["kernelspec"] = kernelspec
+    relative_path = accelerated_python_notebook_path(notebook_path)
+    if relative_path in SPECIAL_KERNELSPECS:
+        expected["kernelspec"] = SPECIAL_KERNELSPECS[relative_path]
     return expected
 
 

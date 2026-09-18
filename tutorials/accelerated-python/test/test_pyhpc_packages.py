@@ -92,7 +92,7 @@ def test_numba_cuda():
 
 
 def test_cuda_cooperative():
-    """cuda.coop._experimental builds the block load used by notebook 05."""
+    """cuda.coop._experimental builds the block load used by notebook 41."""
     from cuda.coop._experimental import block
 
     block_load = block.make_load(np.uint8, 128, 4, "striped")

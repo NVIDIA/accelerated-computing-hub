@@ -2,8 +2,7 @@
 
 This modular tutorial contains content on all things related to accelerated Python:
 
-- [Notebooks](./notebooks) containing lessons and exercises, intended for self-paced or instructor-led learning, which can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
-- [PyHPC course notebooks](./notebooks/pyhpc) covering CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability.
+- [Notebooks](./notebooks) containing lessons and exercises organized by topic, including the PyHPC material on CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability. They are intended for self-paced or instructor-led learning and can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
 - [Syllabi](./notebooks/syllabi) that select a subset of the notebooks for a particular learning objective.
 - [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
@@ -21,6 +20,25 @@ Brev Launchables of this tutorial should use:
 - [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
 - [PyHPC - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](./notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb)
 
+The two-day PyHPC syllabus now selects lessons from the same topic directories
+as every other Accelerated Python course. Self-contained lessons with a Colab
+badge can run on Google Colab. The C++ interoperability and Shallow Water
+Equations applications require the shared tutorial image and checked-in source
+files.
+
+Applications 81 through 87 form one ordered case study. They solve the same 1D
+Shallow Water Equations problem with NumPy, JAX, PyOMP, nanobind, CppJIT/CUB,
+and mpi4py. Notebooks 81 through 86 write measurements to `timings.json`; run
+them before notebook 87, which compares the results. CppJIT is built from the
+course's pinned ISC 2026 branch and is available in the tutorial image rather
+than from the public alpha package.
+
+The image has one system Python environment. The `Python 3 (PyHPC)` and Nsight
+profiler kernels only select course-specific startup and MPI settings: MPICH is
+used for local multi-rank exercises, while the default Python kernel continues
+to use OpenMPI. For CSCS Alps/Daint deployment, follow the [CSCS launch
+guide](../../docs/cscs.md).
+
 ## Upgrading an existing deployment
 
 The merged course initializes a new Docker repository volume named
@@ -29,7 +47,8 @@ The merged course initializes a new Docker repository volume named
 `pyhpc_accelerated-computing-hub` are deliberately left untouched. Before
 removing either old volume, copy any edited notebooks from the former
 Accelerated Python tree and move any former `tutorials/pyhpc/notebooks` work
-into `tutorials/accelerated-python/notebooks/pyhpc` in the new deployment.
+into the matching `fundamentals`, `kernels`, `distributed`, or `applications`
+directory under `tutorials/accelerated-python/notebooks` in the new deployment.
 Do not run `docker compose down --volumes` against the old deployment until
 that work has been backed up and verified.
 
@@ -76,3 +95,17 @@ that work has been backed up and verified.
 |---|----------|------|----------|
 | 60 | mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/distributed/60__mpi4py.ipynb) | |
 | 61 | Dask | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/distributed/61__dask.ipynb) | |
+| 62 | mpi4py: Heat Equation | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/distributed/62__mpi4py__heat_equation.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/distributed/solutions/62__mpi4py__heat_equation__SOLUTION.ipynb) |
+
+### Applications
+
+| # | Exercise | Link | Solution |
+|---|----------|------|----------|
+| 80 | C++ Interoperability | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/80__cpp_interop.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/80__cpp_interop__SOLUTION.ipynb) |
+| 81 | Shallow Water Equations: NumPy Baseline | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/81__swe__intro.ipynb) | |
+| 82 | Shallow Water Equations: JAX | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/82__swe__jax.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/82__swe__jax__SOLUTION.ipynb) |
+| 83 | Shallow Water Equations: PyOMP | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/83__swe__pyomp.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/83__swe__pyomp__SOLUTION.ipynb) |
+| 84 | Shallow Water Equations: nanobind | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/84__swe__nanobind.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/84__swe__nanobind__SOLUTION.ipynb) |
+| 85 | Shallow Water Equations: CppJIT and CUB | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/85__swe__cppjit__cub.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/85__swe__cppjit__cub__SOLUTION.ipynb) |
+| 86 | Shallow Water Equations: mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/86__swe__mpi4py.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/solutions/86__swe__mpi4py__SOLUTION.ipynb) |
+| 87 | Shallow Water Equations: Synthesis | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/87__swe__synthesis.ipynb) | |

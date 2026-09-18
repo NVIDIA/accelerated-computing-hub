@@ -69,8 +69,11 @@ run_step "RAPIDS package smoke tests" \
 run_step "PyHPC package smoke tests" \
     run_container_tests "${CSCS_PACKAGE_TIME}" "test/test_pyhpc_packages.py"
 
-run_step "Notebook ladder" \
-    run_container_tests "${CSCS_NOTEBOOK_TIME}" "test/test_pyhpc_notebooks.py"
+run_step "Independent solution notebooks" \
+    run_container_tests "${CSCS_NOTEBOOK_TIME}" "test/test_notebooks.py"
+
+run_step "Ordered SWE application notebooks" \
+    run_container_tests "${CSCS_NOTEBOOK_TIME}" "test/test_swe_notebooks.py"
 
 # Expand the profiling script inside the allocated container, not here.
 # shellcheck disable=SC2016
