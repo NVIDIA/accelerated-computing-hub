@@ -49,7 +49,7 @@ For a reproducible run, generate a no-mount EDF pinned to the CI commit tag:
   --image "ghcr.io/nvidia/accelerated-python-tutorial:main-latest" \
   --tag "main-git-<seven-character-git-sha>" \
   --output "${SCRATCH}/pyhpc-cscs-pinned.toml" \
-  --workdir "/accelerated-computing-hub/tutorials/accelerated-python/notebooks/pyhpc" \
+  --workdir "/accelerated-computing-hub/tutorials/accelerated-python/notebooks" \
   accelerated-python
 ```
 
@@ -204,12 +204,13 @@ CSCS_EDF="${CSCS_EDF}" \
 The driver runs:
 
 - package smoke tests through the normal tutorial entrypoint
-- the full notebook ladder, including `06__mpi4py`
+- every independent solution notebook, including `62__mpi4py__heat_equation`
+- the ordered SWE application sequence, notebooks 81 through 87
 - direct `nsys` and `ncu` command-line smoke checks
 
 The image has one system Python environment. It selects OpenMPI by default;
 the PyHPC and profiler kernels set `IPYTHONDIR=/opt/pyhpc-ipython`,
-`MPI4PY_MPIABI=mpich`, and `PATH=/opt/pyhpc-mpi/bin:${PATH}`. Notebook 06
+`MPI4PY_MPIABI=mpich`, and `PATH=/opt/pyhpc-mpi/bin:${PATH}`. Notebook 62
 therefore runs local MPICH ranks with the `fork` launcher, avoiding nested use
 of the host `srun` launcher.
 
@@ -240,11 +241,11 @@ srun -A "${CSCS_ACCOUNT}" -p normal -t 00:10:00 -N1 -n1 -c4 \
 Run the profiling notebooks one at a time:
 
 ```bash
-for notebook in 03 04 05; do
+for notebook in 06 40 41; do
   srun -A "${CSCS_ACCOUNT}" -p normal -t 01:00:00 -N1 -n1 -c32 --gpus=1 \
     --environment="${CSCS_EDF}" \
     env ACH_RUN_TESTS=1 \
-    ACH_TEST_ARGS="test/test_pyhpc_notebooks.py -k=${notebook}" \
+    ACH_TEST_ARGS="test/test_notebooks.py -k=${notebook}" \
     /accelerated-computing-hub/brev/entrypoint.bash base
 done
 ```

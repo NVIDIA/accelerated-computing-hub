@@ -1,5 +1,8 @@
-"""
-Test that solution notebooks execute without errors.
+"""Test that independent solution notebooks execute without errors.
+
+The SWE application sequence is covered by the ordered notebook runner because
+its notebooks share benchmark state. Running those solutions independently can
+produce incomplete or misleading results.
 """
 
 import pytest
@@ -11,12 +14,22 @@ from nbclient.exceptions import CellExecutionError
 
 # Define the path to the notebooks directory
 NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / 'notebooks'
+ORDERED_APPLICATION_SOLUTIONS_DIR = NOTEBOOKS_DIR / 'applications' / 'solutions'
+ORDERED_APPLICATION_PREFIXES = tuple(f'{number}__swe__' for number in range(81, 88))
 
-# Discover all solution notebooks (excluding checkpoint files)
+
+def is_ordered_application_solution(notebook_path):
+    """Return whether a solution belongs to the stateful SWE sequence."""
+    return (
+        notebook_path.parent == ORDERED_APPLICATION_SOLUTIONS_DIR
+        and notebook_path.name.startswith(ORDERED_APPLICATION_PREFIXES)
+    )
+
+# Discover all independent solution notebooks (excluding checkpoint files)
 solution_notebooks = sorted([
     nb for nb in NOTEBOOKS_DIR.rglob('*SOLUTION*.ipynb')
     if '.ipynb_checkpoints' not in str(nb)
-    and 'pyhpc' not in nb.relative_to(NOTEBOOKS_DIR).parts
+    and not is_ordered_application_solution(nb)
 ])
 
 # Create test IDs from notebook paths for better test output

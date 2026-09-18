@@ -215,7 +215,7 @@ def _pow2_nearest(x):
 
 
 def canonical_size():
-    """Headline (n_cells, n_steps): the value NB 08 recorded, else derived."""
+    """Headline (n_cells, n_steps): the value NB 81 recorded, else derived."""
     fixed = load_machine().get("canonical")
     return tuple(fixed) if fixed else _derive_canonical()
 
@@ -308,7 +308,7 @@ _SWEEP_SIZES = None
 
 
 def sweep_points():
-    """Sweep points: the list NB 08 recorded, else derived once and cached."""
+    """Sweep points: the list NB 81 recorded, else derived once and cached."""
     fixed = load_machine().get("sweep")
     if fixed:
         return tuple(tuple(p) for p in fixed)
@@ -542,7 +542,7 @@ def machine_report():
 def save_sizing(extra=None):
     """Fix this machine's problem sizes and record them in machine.json.
 
-    NB 08 settles them once, so every rung sweeps the same sizes."""
+    NB 81 settles them once, so every rung sweeps the same sizes."""
     record = dict(load_machine())
     record.update(extra or {})
     record["canonical"] = list(_derive_canonical())

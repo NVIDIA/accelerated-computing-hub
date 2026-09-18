@@ -290,7 +290,7 @@ login_main() {
     state_dir=$(realpath -m -- "${state_dir}")
     prepare_checkout "${repo}" "${branch}"
     if [ "${CHECKOUT_NEEDS_FRESH}" = true ] || \
-       [ ! -d "${repo}/tutorials/accelerated-python/notebooks/pyhpc" ]; then
+       [ ! -f "${repo}/tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb" ]; then
         local preserved_repo=${repo}
         local branch_slug=${branch//\//-}
         local sibling_base="${repo}-${branch_slug}"
@@ -323,16 +323,16 @@ login_main() {
                 fi
             fi
 
-            echo "The existing checkout does not contain a safely updatable merged PyHPC course."
+            echo "The existing checkout does not contain a safely updatable integrated PyHPC syllabus."
             echo "Preserving student work in ${preserved_repo}."
             echo "Preparing a sibling checkout at ${repo}."
             prepare_checkout "${repo}" "${branch}"
             if [ "${CHECKOUT_NEEDS_FRESH}" = false ] && \
-               [ -d "${repo}/tutorials/accelerated-python/notebooks/pyhpc" ]; then
+               [ -f "${repo}/tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb" ]; then
                 break
             fi
             if [ "${candidate_existed}" = false ]; then
-                echo "Error: branch ${branch} does not contain the merged PyHPC course." >&2
+                echo "Error: branch ${branch} does not contain the integrated PyHPC syllabus." >&2
                 return 1
             fi
             echo "Preserving the unusable sibling checkout at ${repo}."
@@ -422,8 +422,8 @@ ACH_RELEASE_BRANCH=${ACH_RELEASE_BRANCH:?ACH_RELEASE_BRANCH is not set}
 COMPOSE_URL=${ACH_COMPOSE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_RELEASE_BRANCH}/tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days__docker_compose.yml}
 ACH_PREPARE_SOURCE=${ACH_PREPARE_SOURCE:?ACH_PREPARE_SOURCE is not set}
 
-if [ ! -d "${ACH_REPO}/tutorials/accelerated-python/notebooks/pyhpc" ]; then
-    echo "Error: student checkout has no PyHPC notebooks: ${ACH_REPO}" >&2
+if [ ! -f "${ACH_REPO}/tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb" ]; then
+    echo "Error: student checkout has no integrated PyHPC syllabus: ${ACH_REPO}" >&2
     exit 1
 fi
 
