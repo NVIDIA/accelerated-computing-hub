@@ -25,9 +25,9 @@
 #  Two modes live in this file:
 #
 #      migration-check mode (default, one world)
-#          Mirrors world 0 back into a CPU MjData so the MuJoCo viewer and the
-#          IK solve keep working exactly as in Part 1. Great for proving the
-#          migration; it is not a throughput measurement.
+#          Mirrors world 0 into CPU MjData for rendering and task inspection.
+#          Waypoint IK still uses its command-based scratch state on the CPU.
+#          This checks migration behavior; it is not a throughput measurement.
 #
 #      throughput mode (--benchmark --nworld N)
 #          Keeps everything on device, captures `mjw.step` into a CUDA graph and
@@ -98,7 +98,7 @@ def run_demo(
 
     # Compile the MJCF on the host exactly like Part 1. We keep `mjd` (a CPU
     # MjData) around for two reasons: to seed the GPU state, and to mirror
-    # world 0 back so the viewer and the IK solve keep working.
+    # world 0 back for rendering and task inspection.
     mjm = load_pick_place_model(xml_path, spec)
     # Pin the physics clock BEFORE put_model so the device copy inherits it.
     mjm.opt.timestep = (1.0 / fps) / sim_substeps
@@ -136,9 +136,9 @@ def run_demo(
     print(f"Part 2 — MJWarp | {spec.display_name} | nworld=1 | IK on CPU, mjw.step on GPU | dt={sim_dt:.5f}s")
 
     def simulate_frame() -> None:
-        # IK still runs on the CPU mjd (cheap and exact). Only the dynamics move
-        # to the GPU: push ctrl -> device, step, pull state -> host so the next
-        # IK solve and the viewer see the updated configuration.
+        # Waypoint IK runs on a separate CPU scratch state derived from previous
+        # commands. Mirrored device state supports rendering and task inspection;
+        # this scripted controller does not use measured-state feedback.
         ctrl = controller.step(mjm, mjd, frame_dt)
         for _ in range(sim_substeps):
             mjd.ctrl[: mjm.nu] = ctrl
@@ -150,9 +150,9 @@ def run_demo(
             # TODO Step 5: advance the physics on the GPU.
             # This single call replaces mujoco.mj_step from Part 1.
 
-            # TODO Step 6: mirror world 0 back to the host so the CPU-side IK
-            # and the viewer stay in sync. d.qpos is a Warp array; .numpy()
-            # copies it back, and index [0] selects world 0.
+            # TODO Step 6: mirror world 0 to the host for rendering and task
+            # inspection. d.qpos is a Warp array; .numpy() copies it back,
+            # and index [0] selects world 0.
 
     if headless_steps > 0:
         for _ in range(headless_steps):
