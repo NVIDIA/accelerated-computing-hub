@@ -37,7 +37,7 @@
 #  YOUR TASK
 #  ---------------------------------------------------------------------------
 #  Search this file for "TODO Step" and complete each one, following
-#  07__mujoco_warp.ipynb. Per-step snippets are in solutions/step_NN_*.py and
+#  03__mujoco_warp.ipynb. Per-step snippets are in solutions/step_NN_*.py and
 #  the finished file is solutions/so101_mjwarp_solution.py.
 #
 #  Run it:

@@ -9,7 +9,7 @@
 #  Sweeps `nworld` and reports world-steps per second so you can see where the
 #  GPU stops being latency-bound and starts being genuinely parallel. Nothing
 #  in this file is an exercise; it is the measurement tool used by
-#  07__mujoco_warp.ipynb.
+#  03__mujoco_warp.ipynb.
 #
 #  Run it:
 #      python scaling_study.py
