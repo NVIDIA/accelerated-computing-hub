@@ -58,7 +58,7 @@ def run_demo(
     headless_steps: int = 0,
     test: bool = False,
 ) -> None:
-    """Migration-check mode: one world, mirrored back for the viewer and IK."""
+    """Migration-check mode: one world, mirrored for rendering and inspection."""
     if fps <= 0 or sim_substeps <= 0 or headless_steps < 0:
         raise ValueError("fps and sim_substeps must be positive; headless_steps must be non-negative.")
     if test and headless_steps <= 0:
