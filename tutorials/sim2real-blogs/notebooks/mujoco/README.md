@@ -8,9 +8,9 @@ physics throughput.
 
 | Lesson | Topic |
 | --- | --- |
-| [MuJoCo fundamentals](part1/05__mujoco_fundamentals.ipynb) | Compile MJCF, inspect model and state, control actuators, and render the robot. |
-| [Pick and place](part1/06__pick_and_place.ipynb) | Complete a CPU simulation loop and check that the red cube is stacked on the blue cube. |
-| [MuJoCo Warp](part2/07__mujoco_warp.ipynb) | Upload the compatible model, seed GPU state, validate one world, capture a CUDA graph, and measure a batch. |
+| [MuJoCo fundamentals](part1/01__mujoco_fundamentals.ipynb) | Compile MJCF, inspect model and state, control actuators, and render the robot. |
+| [Pick and place](part1/02__pick_and_place.ipynb) | Complete a CPU simulation loop and check that the red cube is stacked on the blue cube. |
+| [MuJoCo Warp](part2/03__mujoco_warp.ipynb) | Upload the compatible model, seed GPU state, validate one world, capture a CUDA graph, and measure a batch. |
 
 The notebooks patch `TODO` sections in the exercise scripts. The complete,
 runnable programs are in each part's `solutions/` directory; the small
@@ -32,16 +32,16 @@ From a fresh checkout:
 ```bash
 GIT_LFS_SKIP_SMUDGE=1 git clone --filter=blob:none --sparse https://github.com/NVIDIA/accelerated-computing-hub.git
 cd accelerated-computing-hub
-git sparse-checkout set tutorials/warp
+git sparse-checkout set tutorials/sim2real-blogs
 uv venv --python 3.12
-uv pip install --python .venv/bin/python -r tutorials/warp/notebooks/mujoco/requirements.txt
+uv pip install --python .venv/bin/python -r tutorials/sim2real-blogs/notebooks/mujoco/requirements.txt
 source .venv/bin/activate
-cd tutorials/warp/notebooks/mujoco
+cd tutorials/sim2real-blogs/notebooks/mujoco
 ```
 
 Run `jupyter lab` to work through the notebooks, or run the completed examples
 below. On Colab, select a GPU runtime for MuJoCo Warp and run the notebook's setup
-cell first. Brev users can use the existing [Warp environment](../../README.md).
+cell first. Brev users can use the dedicated [Sim2Real Blogs environment](../../README.md).
 
 ## Validate the task
 
@@ -115,7 +115,7 @@ python -m pytest ../../test/test_mujoco.py -v
 The suite exercises the CPU task and checks task failure detection. CUDA tests
 skip when a CUDA device is unavailable. On an NVIDIA GPU, the suite also runs
 the one-world task and a small captured benchmark. First use needs network
-access for the pinned robot assets. The Warp Brev test entrypoint runs this
+access for the pinned robot assets. The Sim2Real Blogs Brev test entrypoint runs this
 suite after checking GPU availability.
 
 ## Attribution

@@ -27,7 +27,7 @@
 #  YOUR TASK
 #  ---------------------------------------------------------------------------
 #  Search this file for "TODO Step" and complete each one, following the
-#  instructions in 06__pick_and_place.ipynb. If you get stuck, the
+#  instructions in 02__pick_and_place.ipynb. If you get stuck, the
 #  snippet for each step is in solutions/step_NN_*.py and the finished file is
 #  solutions/so101_pick_place_solution.py.
 #

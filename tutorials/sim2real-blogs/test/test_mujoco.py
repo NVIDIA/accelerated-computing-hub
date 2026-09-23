@@ -4,7 +4,7 @@
 """CPU task validation and CUDA-only MuJoCo Warp integration checks.
 
 Run from the repository root with the tutorial environment:
-    python -m pytest tutorials/warp/test/test_mujoco.py -v
+    python -m pytest tutorials/sim2real-blogs/test/test_mujoco.py -v
 
 The first task test downloads the pinned SO-101 Menagerie assets unless
 MUJOCO_MENAGERIE_PATH or MUJOCO_MENAGERIE_CACHE already provides them.
