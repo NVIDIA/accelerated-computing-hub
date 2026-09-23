@@ -1,0 +1,9 @@
+# Reproducible environment for the MuJoCo / MuJoCo Warp lessons (Python 3.12).
+# Newton is not needed for these lessons.
+mujoco==3.12.0
+mujoco-warp==3.12.0
+warp-lang==1.17.0
+numpy==2.5.3
+matplotlib==3.11.2
+ipykernel
+jupyterlab

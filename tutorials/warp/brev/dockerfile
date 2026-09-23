@@ -5,6 +5,8 @@ ENV ACH_TUTORIAL=warp \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
+    MUJOCO_GL=egl \
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
     PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
@@ -20,6 +22,8 @@ RUN apt-get update -y \
     lsb-release \
     gosu \
     libglib2.0-0 \
+    libegl1 \
+    libgl1 \
     sudo \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
