@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 import time
@@ -44,6 +45,8 @@ from utils import (  # noqa: E402
     print_asset_setup_help,
 )
 
+from box_task import BoxTask, assert_mjwarp_capacity
+
 SCRIPT_NAME = Path(__file__).name
 
 
@@ -56,6 +59,8 @@ def run_demo(
     nconmax: int | None = None,
     njmax: int | None = None,
     headless_steps: int = 0,
+    box_task: BoxTask | None = None,
+    report_path: Path | None = None,
     test: bool = False,
 ) -> None:
     """Migration-check mode: one world, mirrored for rendering and inspection."""
@@ -87,14 +92,18 @@ def run_demo(
     wp.copy(d.ctrl, wp.array(mjd.ctrl[None, :], dtype=wp.float32, device=device))
     mjw.forward(m, d)
 
-    controller = PickPlaceController(spec=spec)
+    controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
     frame_dt = 1.0 / fps
     sim_dt = frame_dt / sim_substeps
 
     print(f"Loaded: {xml_path}")
     print(f"Part 2 — MJWarp | {spec.display_name} | nworld=1 | IK on CPU, mjw.step on GPU | dt={sim_dt:.5f}s")
 
+    frame_idx = 0
+
     def simulate_frame() -> None:
+        nonlocal frame_idx
+        commanded_phase = controller.phase_name()
         ctrl = controller.step(mjm, mjd, frame_dt)
         for _ in range(sim_substeps):
             mjd.ctrl[: mjm.nu] = ctrl
@@ -105,15 +114,35 @@ def run_demo(
             # Step 5: the one line that defines Part 2.
             mjw.step(m, d)
 
+            if box_task:
+                assert_mjwarp_capacity(d)
+
             # Step 6: device -> host, mirroring world 0.
             mjd.qpos[:] = d.qpos.numpy()[0]
             mjd.qvel[:] = d.qvel.numpy()[0]
+
+        frame_idx += 1
+        if box_task:
+            # Preserve GPU-solved contact forces when importing the observed state.
+            mjw.forward(m, d)
+            assert_mjwarp_capacity(d)
+            mjw.get_data_into(mjd, mjm, d, world_id=0)
+            box_task.observe(mjm, mjd, frame=frame_idx, time=frame_idx / fps, phase=commanded_phase)
 
     if headless_steps > 0:
         for _ in range(headless_steps):
             simulate_frame()
         diagnostics = check_mjwarp_state(d)
         print(f"Solver iteration-limit flags: {diagnostics or 'none'}")
+        if box_task:
+            report = box_task.report()
+            report.update(backend='mujoco_warp', device=str(device))
+            if report_path is not None:
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
+            box_task.assert_complete()
+            print(f"box check: PASS — both cubes grasped, lifted, carried, released and settled; {report['simulation_seconds']:.2f} simulated seconds")
+            return
         # qpos/qvel were mirrored from the device, but derived fields such as
         # xpos are stale until MuJoCo runs another forward pass on the host.
         mujoco.mj_forward(mjm, mjd)
@@ -212,6 +241,9 @@ def benchmark(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Part 2 solution — MJWarp pick & place.")
     add_robot_arg(parser)
+    parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
+    parser.add_argument("--report", type=Path, default=None, help="Save measured --task box results as JSON.")
+    parser.add_argument("--device", default=None, help="CUDA device, for example cuda:0 or cuda:1.")
     parser.add_argument("--menagerie-path", type=Path, default=None)
     parser.add_argument("--fps", type=int, default=50)
     parser.add_argument("--sim-substeps", type=int, default=10)
@@ -219,18 +251,27 @@ def main() -> None:
     parser.add_argument("--njmax", type=int, default=None)
     parser.add_argument("--headless-steps", type=int, default=0)
     parser.add_argument("--benchmark", action="store_true")
-    parser.add_argument("--test", action="store_true", help="Require a completed, settled stack in headless mode.")
+    parser.add_argument("--test", action="store_true", help="Require a completed, settled task in headless mode.")
     parser.add_argument("--nworld", type=int, default=4096)
     parser.add_argument("--steps", type=int, default=200)
     args = parser.parse_args()
     if args.test and (args.headless_steps <= 0 or args.benchmark):
         parser.error("--test requires --headless-steps greater than zero and cannot accompany --benchmark")
+    if args.report and args.task != "box":
+        parser.error("--report requires --task box")
+    if args.benchmark and args.task == "box":
+        parser.error("The checked box task uses a single world; omit --benchmark")
+    if args.device is not None:
+        wp.set_device(args.device)
     spec = get_robot(args.robot)
+    box_task = BoxTask(spec, fps=args.fps) if args.task == "box" else None
+    if box_task:
+        spec = box_task.spec
 
     try:
-        xml_path = resolve_pick_place_scene(
-            args.menagerie_path, explicit=args.menagerie_path is not None, spec=spec
-        )
+        xml_path = (box_task.resolve_scene(args.menagerie_path, explicit=args.menagerie_path is not None)
+                    if box_task else resolve_pick_place_scene(
+                        args.menagerie_path, explicit=args.menagerie_path is not None, spec=spec))
     except (FileNotFoundError, RuntimeError, subprocess.CalledProcessError) as exc:
         print(f"Error resolving assets: {exc}", file=sys.stderr)
         print_asset_setup_help(SCRIPT_NAME)
@@ -255,6 +296,8 @@ def main() -> None:
         nconmax=args.nconmax,
         njmax=args.njmax,
         headless_steps=args.headless_steps,
+        box_task=box_task,
+        report_path=args.report,
         test=args.test,
     )
 

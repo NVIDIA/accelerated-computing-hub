@@ -40,6 +40,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
 import time
@@ -68,6 +69,8 @@ from utils import (
     print_asset_setup_help,
 )
 
+from box_task import BoxTask
+
 SCRIPT_NAME = Path(__file__).name
 
 
@@ -78,6 +81,8 @@ def run_demo(
     fps: int = 50,
     sim_substeps: int = 10,
     headless_steps: int = 0,
+    box_task: BoxTask | None = None,
+    report_path: Path | None = None,
     debug: bool = False,
 ) -> None:
     """Build the model, then run the pick-and-place loop on MuJoCo CPU.
@@ -106,7 +111,7 @@ def run_demo(
 
     # TODO Step 3: create the scripted controller that turns Cartesian
     # waypoints into joint targets (waypoints + IK + gradual gripper close).
-    #   controller = PickPlaceController()
+    #   controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
     controller = None
 
     frame_dt = 1.0 / fps
@@ -117,7 +122,7 @@ def run_demo(
 
     print(f"Loaded: {xml_path}")
     print(f"Part 1 — MuJoCo CPU | {spec.display_name} | actuators={model.nu} | nq={model.nq} | dt={sim_dt:.5f}s")
-    print("Sequence: home -> pick red -> stack on blue")
+    print("Sequence: pick red, then blue -> receiving box" if box_task else "Sequence: home -> pick red -> stack on blue")
     red_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "red_cube")
     blue_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")
     frame_idx = 0
@@ -141,6 +146,7 @@ def run_demo(
     def simulate_frame() -> None:
         # One control frame = one IK solve + several physics substeps.
         nonlocal frame_idx
+        commanded_phase = controller.phase_name()
         ctrl = controller.step(model, data, frame_dt)
 
         # TODO Step 4: advance the physics. For each of the sim_substeps:
@@ -149,12 +155,25 @@ def run_demo(
         # This is the line that defines Part 1 — in Part 2 it becomes
         # mjw.step(m, d).
 
+        if box_task:
+            mujoco.mj_forward(model, data)
+            box_task.observe(model, data, frame=frame_idx + 1, time=(frame_idx + 1) / fps, phase=commanded_phase)
+
         debug_frame()
         frame_idx += 1
 
     if headless_steps > 0:
         for _ in range(headless_steps):
             simulate_frame()
+        if box_task:
+            report = box_task.report()
+            report.update(backend='mujoco', device="cpu")
+            if report_path is not None:
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
+            box_task.assert_complete()
+            print(f"box check: PASS — both cubes grasped, lifted, carried, released and settled; {report['simulation_seconds']:.2f} simulated seconds")
+            return
         # TODO Step 5: report the final cube positions so you can verify the
         # stack succeeded. Read data.xpos[red_body] and data.xpos[blue_body];
         # a good stack has matching XY and a Z gap of roughly 2 * 0.022 m.
@@ -181,18 +200,25 @@ def run_demo(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Part 1 — MuJoCo CPU pick & place.")
     add_robot_arg(parser)
+    parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
+    parser.add_argument("--report", type=Path, default=None, help="Save measured --task box results as JSON.")
     parser.add_argument("--menagerie-path", type=Path, default=None)
     parser.add_argument("--fps", type=int, default=50)
     parser.add_argument("--sim-substeps", type=int, default=10)
     parser.add_argument("--headless-steps", type=int, default=0)
     parser.add_argument("--debug", action="store_true", help="Print gripper/cube telemetry.")
     args = parser.parse_args()
+    if args.report and args.task != "box":
+        parser.error("--report requires --task box")
     spec = get_robot(args.robot)
+    box_task = BoxTask(spec, fps=args.fps) if args.task == "box" else None
+    if box_task:
+        spec = box_task.spec
 
     try:
-        xml_path = resolve_pick_place_scene(
-            args.menagerie_path, explicit=args.menagerie_path is not None, spec=spec
-        )
+        xml_path = (box_task.resolve_scene(args.menagerie_path, explicit=args.menagerie_path is not None)
+                    if box_task else resolve_pick_place_scene(
+                        args.menagerie_path, explicit=args.menagerie_path is not None, spec=spec))
     except (FileNotFoundError, RuntimeError, subprocess.CalledProcessError) as exc:
         print(f"Error resolving assets: {exc}", file=sys.stderr)
         print_asset_setup_help(SCRIPT_NAME)
@@ -204,6 +230,8 @@ def main() -> None:
         fps=args.fps,
         sim_substeps=args.sim_substeps,
         headless_steps=args.headless_steps,
+        box_task=box_task,
+        report_path=args.report,
         debug=args.debug,
     )
 

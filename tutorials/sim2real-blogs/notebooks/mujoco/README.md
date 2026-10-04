@@ -1,8 +1,8 @@
 # SO-101 simulation: from MuJoCo to MuJoCo Warp
 
 These three lessons accompany the second article in the simulation series,
-*How to Use NVIDIA Warp and MJWarp to Accelerate Robotics Simulation and Learning
-Workflows*. Start with a MuJoCo CPU scene, complete an SO-101 pick-and-place
+*[How to Use NVIDIA Warp and MJWarp to Accelerate Robotics Simulation and Learning
+Workflows](https://huggingface.co/blog/nvidia/how-to-use-nvidia-warp-and-mjwarp)*. Start with a MuJoCo CPU scene, complete an SO-101 pick-and-place
 controller, then migrate the physics loop to MuJoCo Warp and measure batched
 physics throughput.
 
@@ -77,6 +77,37 @@ Managed downloads live under `<cache root>/<robot cache name>/<full commit>`;
 the default cache root is `~/.cache`. Reusing a managed checkout requires its
 Git revision to match the requested pin.
 
+## Optional extension: place both cubes in a box
+
+Select `--task box` to grasp the red and blue cubes sequentially, carry them to
+a receiving box, open the gripper and check that both objects settle inside.
+The box has a floor and four walls. Both backends share its scene, controller
+and checks in `box_task.py`; `--task stack` remains the default.
+
+```bash
+python part1/solutions/so101_pick_place_solution.py --task box --robot so101 --headless-steps 2000 --report part1/.generated/reference_box_so101.json
+python part2/solutions/so101_mjwarp_solution.py --task box --robot so101 --headless-steps 2000 --device cuda:0 --report part2/.generated/reference_box_so101_cuda0.json
+```
+
+Use `--robot rebot` for the other arm or `--device cuda:1` to choose a second
+visible GPU. At 50 Hz, the 2,000-frame budget provides 40 simulated seconds;
+the run still has to pass every task check. Box runs check success automatically.
+Completed runs and runs that exhaust the frame budget can write a JSON summary
+with `--report`. An earlier simulation error exits nonzero before that report is
+written.
+
+The checks require loaded contacts on both jaws, sustained whole-object lift,
+airborne carry, opening over the box, release, containment of all cube corners,
+low settled speed and gripper withdrawal. MJWarp checks contact and constraint
+capacities at every physics substep. Its measurements use the contacts and
+forces exported from the GPU simulation.
+
+The two task notebooks include an opt-in cell with `RUN_BOX = False` and
+`REFERENCE = True`. Enable the cell to run the completed solution; choose
+`REFERENCE = False` after filling in the student TODOs. These cells do not
+overwrite exercise files. The box task uses one world and cannot be combined
+with `--benchmark`; use the default stack task for throughput measurements.
+
 ## Measure physics throughput
 
 After the one-world CUDA task passes:
@@ -109,10 +140,11 @@ From this directory, with the environment active:
 
 ```bash
 uv pip install pytest
-python -m pytest ../../test/test_mujoco.py -v
+python -m pytest ../../test -v
 ```
 
-The suite exercises the CPU task and checks task failure detection. CUDA tests
+The suite exercises both CPU tasks and checks failure detection, including lost
+grips, incomplete carries, failed containment and incomplete release. CUDA tests
 skip when a CUDA device is unavailable. On an NVIDIA GPU, the suite also runs
 the one-world task and a small captured benchmark. First use needs network
 access for the pinned robot assets. The Sim2Real Blogs Brev test entrypoint runs this
