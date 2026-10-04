@@ -5,4 +5,4 @@
 # an MjModel plus a scratch MjData for forward kinematics, which is why Parts 2
 # and 3 reuse it unchanged while the physics backend changes underneath.
 
-controller = PickPlaceController()
+controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
