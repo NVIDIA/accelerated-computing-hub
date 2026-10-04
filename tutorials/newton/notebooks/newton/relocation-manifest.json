@@ -1,0 +1,922 @@
+{
+  "schema_version": 1,
+  "original_frozen_manifest_sha256": "ca4d7b2edfc20444a46ccf125af4524ccd5f4fa623616e6f9363a0408cbc26f1",
+  "description": "Relocation of the validated Newton gripper tutorial. Original asset result hashes retain their original Article_2/Article_3 names; this map records the corresponding Hub paths and the explicitly limited path edits. Notebook metadata and instructional Markdown follow Hub conventions.",
+  "files": [
+    {
+      "original_path": "Article_2/part1/pick_place_common.py",
+      "hub_path": "notebooks/mujoco/part1/pick_place_common.py",
+      "frozen_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "source_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "hub_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/robots.py",
+      "hub_path": "notebooks/mujoco/part1/robots.py",
+      "frozen_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "source_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "hub_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/so101_pick_place.py",
+      "hub_path": "notebooks/mujoco/part1/so101_pick_place.py",
+      "frozen_sha256": "fb4de914741d176ad2558344108c7d8663e0a30d47f09d692601a21c070c4474",
+      "source_sha256": "fb4de914741d176ad2558344108c7d8663e0a30d47f09d692601a21c070c4474",
+      "hub_sha256": "fb4de914741d176ad2558344108c7d8663e0a30d47f09d692601a21c070c4474",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/so101_pick_place_solution.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/so101_pick_place_solution.py",
+      "frozen_sha256": "b5f57a53cbd5ae081539e89fb9c460d3ae46b6106013e2fc4f02ccf7ddac5143",
+      "source_sha256": "b5f57a53cbd5ae081539e89fb9c460d3ae46b6106013e2fc4f02ccf7ddac5143",
+      "hub_sha256": "b5f57a53cbd5ae081539e89fb9c460d3ae46b6106013e2fc4f02ccf7ddac5143",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_00_imports.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_00_imports.py",
+      "frozen_sha256": "668ee1bd453a3c2f9db81dc4589d4d72a7f686666f7bf9e2a6b30db8e85af27f",
+      "source_sha256": "668ee1bd453a3c2f9db81dc4589d4d72a7f686666f7bf9e2a6b30db8e85af27f",
+      "hub_sha256": "668ee1bd453a3c2f9db81dc4589d4d72a7f686666f7bf9e2a6b30db8e85af27f",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_01_model_and_data.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_01_model_and_data.py",
+      "frozen_sha256": "167921559e6086316fe3aa78359b5a70452520d949e3236fe6d21c87f9cba5c1",
+      "source_sha256": "167921559e6086316fe3aa78359b5a70452520d949e3236fe6d21c87f9cba5c1",
+      "hub_sha256": "167921559e6086316fe3aa78359b5a70452520d949e3236fe6d21c87f9cba5c1",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_02_home_pose.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_02_home_pose.py",
+      "frozen_sha256": "3b1d9ad7c5da383729066b3769db350b4a67ee842f71a37e90b4970a6eea484f",
+      "source_sha256": "3b1d9ad7c5da383729066b3769db350b4a67ee842f71a37e90b4970a6eea484f",
+      "hub_sha256": "3b1d9ad7c5da383729066b3769db350b4a67ee842f71a37e90b4970a6eea484f",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_03_controller.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_03_controller.py",
+      "frozen_sha256": "1a970ca30c5b937f5fd4dc9774b49040c0538c1e676fba68b8ba47aca2f767bc",
+      "source_sha256": "1a970ca30c5b937f5fd4dc9774b49040c0538c1e676fba68b8ba47aca2f767bc",
+      "hub_sha256": "1a970ca30c5b937f5fd4dc9774b49040c0538c1e676fba68b8ba47aca2f767bc",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_04_step_physics.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_04_step_physics.py",
+      "frozen_sha256": "cb05246e3794c5f386d77ef0e9cf76156cbf70e0b1252d81e23bcbe64de40a48",
+      "source_sha256": "cb05246e3794c5f386d77ef0e9cf76156cbf70e0b1252d81e23bcbe64de40a48",
+      "hub_sha256": "cb05246e3794c5f386d77ef0e9cf76156cbf70e0b1252d81e23bcbe64de40a48",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/solutions/step_05_verify_stack.py",
+      "hub_path": "notebooks/mujoco/part1/solutions/step_05_verify_stack.py",
+      "frozen_sha256": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
+      "source_sha256": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
+      "hub_sha256": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part1/utils.py",
+      "hub_path": "notebooks/mujoco/part1/utils.py",
+      "frozen_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "source_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "hub_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/pick_place_common.py",
+      "hub_path": "notebooks/mujoco/part2/pick_place_common.py",
+      "frozen_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "source_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "hub_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/robots.py",
+      "hub_path": "notebooks/mujoco/part2/robots.py",
+      "frozen_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "source_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "hub_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/scaling_study.py",
+      "hub_path": "notebooks/mujoco/part2/scaling_study.py",
+      "frozen_sha256": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+      "source_sha256": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+      "hub_sha256": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/so101_mjwarp.py",
+      "hub_path": "notebooks/mujoco/part2/so101_mjwarp.py",
+      "frozen_sha256": "f9b102a066d6850a40f9670e9c32ba6e22dddaff24dbd6405dd72723558b3770",
+      "source_sha256": "f9b102a066d6850a40f9670e9c32ba6e22dddaff24dbd6405dd72723558b3770",
+      "hub_sha256": "f9b102a066d6850a40f9670e9c32ba6e22dddaff24dbd6405dd72723558b3770",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/so101_mjwarp_solution.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/so101_mjwarp_solution.py",
+      "frozen_sha256": "291c534ead4a0b2d6696fdeca3c88d2de5ee9fd31646537b4ac33d307fef3d1b",
+      "source_sha256": "291c534ead4a0b2d6696fdeca3c88d2de5ee9fd31646537b4ac33d307fef3d1b",
+      "hub_sha256": "291c534ead4a0b2d6696fdeca3c88d2de5ee9fd31646537b4ac33d307fef3d1b",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_00_imports.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_00_imports.py",
+      "frozen_sha256": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+      "source_sha256": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+      "hub_sha256": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_01_put_model.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_01_put_model.py",
+      "frozen_sha256": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+      "source_sha256": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+      "hub_sha256": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_02_make_data.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_02_make_data.py",
+      "frozen_sha256": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+      "source_sha256": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+      "hub_sha256": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_03_seed_state.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_03_seed_state.py",
+      "frozen_sha256": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+      "source_sha256": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+      "hub_sha256": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_04_push_ctrl.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_04_push_ctrl.py",
+      "frozen_sha256": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+      "source_sha256": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+      "hub_sha256": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_05_mjw_step.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_05_mjw_step.py",
+      "frozen_sha256": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+      "source_sha256": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+      "hub_sha256": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_06_pull_state.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_06_pull_state.py",
+      "frozen_sha256": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+      "source_sha256": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+      "hub_sha256": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/solutions/step_07_cuda_graph.py",
+      "hub_path": "notebooks/mujoco/part2/solutions/step_07_cuda_graph.py",
+      "frozen_sha256": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+      "source_sha256": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+      "hub_sha256": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_2/part2/utils.py",
+      "hub_path": "notebooks/mujoco/part2/utils.py",
+      "frozen_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "source_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "hub_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/clean_table_scene.py",
+      "hub_path": "notebooks/newton/part3/clean_table_scene.py",
+      "frozen_sha256": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+      "source_sha256": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+      "hub_sha256": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/clean_table_task.py",
+      "hub_path": "notebooks/newton/part3/clean_table_task.py",
+      "frozen_sha256": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+      "source_sha256": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+      "hub_sha256": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/clean_the_table.py",
+      "hub_path": "notebooks/newton/part3/clean_the_table.py",
+      "frozen_sha256": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+      "source_sha256": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+      "hub_sha256": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/final_check.py",
+      "hub_path": "notebooks/newton/part3/final_check.py",
+      "frozen_sha256": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+      "source_sha256": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+      "hub_sha256": "40711b18ad19f26441b8ea0bfe26083006271e646e8a796fdd351738fa12302e",
+      "edits": [
+        "Two baseline directory references: Article_2 -> mujoco."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/newton_assets.py",
+      "hub_path": "notebooks/newton/part3/newton_assets.py",
+      "frozen_sha256": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+      "source_sha256": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+      "hub_sha256": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/newton_scene.py",
+      "hub_path": "notebooks/newton/part3/newton_scene.py",
+      "frozen_sha256": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "source_sha256": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "hub_sha256": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/pick_place_common.py",
+      "hub_path": "notebooks/newton/part3/pick_place_common.py",
+      "frozen_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "source_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "hub_sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/robots.py",
+      "hub_path": "notebooks/newton/part3/robots.py",
+      "frozen_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "source_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "hub_sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/so101_newton.py",
+      "hub_path": "notebooks/newton/part3/so101_newton.py",
+      "frozen_sha256": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "source_sha256": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "hub_sha256": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_step_00_add_bin.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_step_00_add_bin.py",
+      "frozen_sha256": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+      "source_sha256": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+      "hub_sha256": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_step_01_add_garment.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_step_01_add_garment.py",
+      "frozen_sha256": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+      "source_sha256": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+      "hub_sha256": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_step_02_add_cable.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_step_02_add_cable.py",
+      "frozen_sha256": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+      "source_sha256": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+      "hub_sha256": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_step_03_build_coupled_solver.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_step_03_build_coupled_solver.py",
+      "frozen_sha256": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+      "source_sha256": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+      "hub_sha256": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_step_04_simulate.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_step_04_simulate.py",
+      "frozen_sha256": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+      "source_sha256": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+      "hub_sha256": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_table_scene_solution.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_table_scene_solution.py",
+      "frozen_sha256": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+      "source_sha256": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+      "hub_sha256": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/clean_the_table_solution.py",
+      "hub_path": "notebooks/newton/part3/solutions/clean_the_table_solution.py",
+      "frozen_sha256": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+      "source_sha256": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+      "hub_sha256": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/newton_scene_solution.py",
+      "hub_path": "notebooks/newton/part3/solutions/newton_scene_solution.py",
+      "frozen_sha256": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3",
+      "source_sha256": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3",
+      "hub_sha256": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/so101_newton_solution.py",
+      "hub_path": "notebooks/newton/part3/solutions/so101_newton_solution.py",
+      "frozen_sha256": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+      "source_sha256": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+      "hub_sha256": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_00_imports.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_00_imports.py",
+      "frozen_sha256": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+      "source_sha256": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+      "hub_sha256": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_01_builder.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_01_builder.py",
+      "frozen_sha256": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+      "source_sha256": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+      "hub_sha256": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_02_add_mjcf.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_02_add_mjcf.py",
+      "frozen_sha256": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+      "source_sha256": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+      "hub_sha256": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_03_joint_targets.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_03_joint_targets.py",
+      "frozen_sha256": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+      "source_sha256": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+      "hub_sha256": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_04_props.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_04_props.py",
+      "frozen_sha256": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+      "source_sha256": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+      "hub_sha256": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_05_finalize.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_05_finalize.py",
+      "frozen_sha256": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+      "source_sha256": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+      "hub_sha256": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_06_state.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_06_state.py",
+      "frozen_sha256": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+      "source_sha256": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+      "hub_sha256": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_07_solver.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_07_solver.py",
+      "frozen_sha256": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+      "source_sha256": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+      "hub_sha256": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_08_substep_loop.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_08_substep_loop.py",
+      "frozen_sha256": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+      "source_sha256": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+      "hub_sha256": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/solutions/step_09_cuda_graph.py",
+      "hub_path": "notebooks/newton/part3/solutions/step_09_cuda_graph.py",
+      "frozen_sha256": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+      "source_sha256": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+      "hub_sha256": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/part3/utils.py",
+      "hub_path": "notebooks/newton/part3/utils.py",
+      "frozen_sha256": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+      "source_sha256": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+      "hub_sha256": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/tools/build_clean_scaffolds.py",
+      "hub_path": "notebooks/newton/tools/build_clean_scaffolds.py",
+      "frozen_sha256": "6062620d37defcc91f49468b2d7c9f5cc79b09ce43eabaad6474c353aa91f28e",
+      "source_sha256": "6062620d37defcc91f49468b2d7c9f5cc79b09ce43eabaad6474c353aa91f28e",
+      "hub_sha256": "6062620d37defcc91f49468b2d7c9f5cc79b09ce43eabaad6474c353aa91f28e",
+      "edits": [],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/tools/render_clean_table.py",
+      "hub_path": "notebooks/newton/tools/render_clean_table.py",
+      "frozen_sha256": "809ebc2c20648d23423893b76f0688128c693a8e749996e13fbe6267cf303cb9",
+      "source_sha256": "061b17d8f506eb0050a574aea0eddb3317fbcbc254e071255ec2f04c4358c1b6",
+      "hub_sha256": "061b17d8f506eb0050a574aea0eddb3317fbcbc254e071255ec2f04c4358c1b6",
+      "edits": [],
+      "source_presentation_amendment": true
+    },
+    {
+      "original_path": "tests/clean_table_report_fixture.py",
+      "hub_path": "test/clean_table_report_fixture.py",
+      "frozen_sha256": "c946f2130c3b5dbf1f54124886b1f8eb41809ec45594a71bb69fc8397790df26",
+      "source_sha256": "c946f2130c3b5dbf1f54124886b1f8eb41809ec45594a71bb69fc8397790df26",
+      "hub_sha256": "c946f2130c3b5dbf1f54124886b1f8eb41809ec45594a71bb69fc8397790df26",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_asset_cache.py",
+      "hub_path": "test/test_asset_cache.py",
+      "frozen_sha256": "66fb320b938b6ec349a520442bc919726998210ab52bf64a3146adcca9393607",
+      "source_sha256": "66fb320b938b6ec349a520442bc919726998210ab52bf64a3146adcca9393607",
+      "hub_sha256": "a86d7d86e2ac22db7f553414a6eb61054749bda77061177fa1c4dc0b9a88d3f2",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_clean_table.py",
+      "hub_path": "test/test_clean_table.py",
+      "frozen_sha256": "628a592b7ca481e1f765bae47ebe940ef053d4aee0d0606653ea05a48c3aedae",
+      "source_sha256": "628a592b7ca481e1f765bae47ebe940ef053d4aee0d0606653ea05a48c3aedae",
+      "hub_sha256": "f8ee0fb5398ac85d28ff43f2aba08e0aad53709a601ba671d1dcf42e7e5e8812",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_final_check.py",
+      "hub_path": "test/test_final_check.py",
+      "frozen_sha256": "d9fb294390d3ae535ba86a96d9694e5fc82f4c5fbd396aeb68f0c18e3f05c965",
+      "source_sha256": "d9fb294390d3ae535ba86a96d9694e5fc82f4c5fbd396aeb68f0c18e3f05c965",
+      "hub_sha256": "6bd9c4e6bb9f09c1878f8d0c8cf95872219d8f2b464fce4ca8c3e6708c0d4b99",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_grasp_evidence.py",
+      "hub_path": "test/test_grasp_evidence.py",
+      "frozen_sha256": "d7bd5374fb09fffe1edd8490372d212aa6b3ba7b4a099503e8e8b663d1aa3bc6",
+      "source_sha256": "d7bd5374fb09fffe1edd8490372d212aa6b3ba7b4a099503e8e8b663d1aa3bc6",
+      "hub_sha256": "1bce0a20c2553ec7b2a7cb98ff42d1134e41df687652ea1ad584e54640f4428c",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_newton_assets.py",
+      "hub_path": "test/test_newton_assets.py",
+      "frozen_sha256": "ebf3f20d031b5ed4caea4163ea5c9265e1f6a8635ac11b834f59ed2c685b853b",
+      "source_sha256": "ebf3f20d031b5ed4caea4163ea5c9265e1f6a8635ac11b834f59ed2c685b853b",
+      "hub_sha256": "7485723e797ba07d524c7185775024b52ba85b78dd6e0155fff98404988874a1",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_newton_migration.py",
+      "hub_path": "test/test_newton_migration.py",
+      "frozen_sha256": "d31a7c4e64d1412310e38026ed69a657a13c0fbd39491a9fc3a6795a5e61ae7c",
+      "source_sha256": "d31a7c4e64d1412310e38026ed69a657a13c0fbd39491a9fc3a6795a5e61ae7c",
+      "hub_sha256": "b6debac6415abef779e769434b4121a5ae9760993f6777c0d7f9558557bebd9d",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_newton_notebooks.py",
+      "hub_path": "test/test_notebooks.py",
+      "frozen_sha256": "b1e4172dc21fd3acd6a7862e0c267c49375ce1ce627116c020de14c45e857d6b",
+      "source_sha256": "b1e4172dc21fd3acd6a7862e0c267c49375ce1ce627116c020de14c45e857d6b",
+      "hub_sha256": "72fb1128aa158de01b8f04cff2e32afb955f049780397ed1ba9221dd0c4ad49e",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_render_clean_table.py",
+      "hub_path": "test/test_render_clean_table.py",
+      "frozen_sha256": "c17b88405c06e8ac8fa828b954888637ea42a8b7a2475db6d2082009bacb6cf1",
+      "source_sha256": "c17b88405c06e8ac8fa828b954888637ea42a8b7a2475db6d2082009bacb6cf1",
+      "hub_sha256": "e1b8dc17adcd880bc4704f003129e3720f57f8e6ed0efd1a542166110aff805a",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "tests/test_tutorial_scaffolds.py",
+      "hub_path": "test/test_tutorial_scaffolds.py",
+      "frozen_sha256": "01216fd8c2f08f2c935a9578f2edb4caf0f76cfc7bf1006a1f01e34b227ea4e7",
+      "source_sha256": "01216fd8c2f08f2c935a9578f2edb4caf0f76cfc7bf1006a1f01e34b227ea4e7",
+      "hub_sha256": "9b58de86c5301cd5bfb4ad8b83cc1836e35bdc3a91d4424fbb7109ffb7e7f4c8",
+      "edits": [
+        "Test fixture paths and renamed notebook paths."
+      ],
+      "source_presentation_amendment": false
+    },
+    {
+      "original_path": "Article_3/requirements.txt",
+      "hub_path": "notebooks/newton/requirements.txt",
+      "frozen_sha256": "7455cb591974aa3f943c138348f87af75701fc5e68a47dafe5b2b5401a4bfbac",
+      "source_sha256": "7455cb591974aa3f943c138348f87af75701fc5e68a47dafe5b2b5401a4bfbac",
+      "hub_sha256": "5775317ec228779e2f2bcb6c9c4e9630185621f33f892884e7727824852031f2",
+      "edits": [
+        "Commented setup instructions use Hub paths; all dependency constraints unchanged."
+      ],
+      "dependency_constraints_unchanged": true
+    },
+    {
+      "original_path": "Article_3/requirements.lock.txt",
+      "hub_path": "notebooks/newton/requirements.lock.txt",
+      "frozen_sha256": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+      "source_sha256": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+      "hub_sha256": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+      "edits": []
+    }
+  ],
+  "notebooks": [
+    {
+      "original_path": "Article_3/part3/01_Notebook_Newton.ipynb",
+      "hub_path": "notebooks/newton/part3/01__newton_fundamentals.ipynb",
+      "cells": [
+        {
+          "id": "65b902cb",
+          "frozen_source_sha256": "9dc17a8ef16b301cd881f9911aa46d60de18513c8f13acb70e63531beb5d9831",
+          "hub_source_sha256": "9270937bfcbd2ddf527a9f7a968057da825a858ce6b1128e3d13fda25d8cfcd8",
+          "edits": [
+            "Working-directory/requirements path strings only."
+          ]
+        },
+        {
+          "id": "56694399",
+          "frozen_source_sha256": "ae2be00a7d84cb94bd57b9bea79eb6732b1591e5787d0230fe5ad50c93f1b62c",
+          "hub_source_sha256": "ae2be00a7d84cb94bd57b9bea79eb6732b1591e5787d0230fe5ad50c93f1b62c",
+          "edits": []
+        },
+        {
+          "id": "f80b62d2",
+          "frozen_source_sha256": "4da5aa8ff1b3e245272655c2a887fff7d17daf672166bb70e9e4c0a449b8ab96",
+          "hub_source_sha256": "4da5aa8ff1b3e245272655c2a887fff7d17daf672166bb70e9e4c0a449b8ab96",
+          "edits": []
+        },
+        {
+          "id": "816a8857",
+          "frozen_source_sha256": "9fd2320b93ffe250a8fa271b2707e36f8e1d87ef3e0541f0fe62dd03a29b8536",
+          "hub_source_sha256": "9fd2320b93ffe250a8fa271b2707e36f8e1d87ef3e0541f0fe62dd03a29b8536",
+          "edits": []
+        },
+        {
+          "id": "2584646f",
+          "frozen_source_sha256": "d3f5b870a2e8448bf671644d55384c37130fc7adb1706db1574e173647dee665",
+          "hub_source_sha256": "d3f5b870a2e8448bf671644d55384c37130fc7adb1706db1574e173647dee665",
+          "edits": []
+        },
+        {
+          "id": "78cb31c2",
+          "frozen_source_sha256": "e66b9ad84b1a275cda9527c2068648b4752348970c5cc697d63be51bc8632241",
+          "hub_source_sha256": "e66b9ad84b1a275cda9527c2068648b4752348970c5cc697d63be51bc8632241",
+          "edits": []
+        },
+        {
+          "id": "9586fd11",
+          "frozen_source_sha256": "a64238f47e81e622b81af684cd1e28ed84aeb5ee05df2bc3ef47beafa549cdaf",
+          "hub_source_sha256": "a64238f47e81e622b81af684cd1e28ed84aeb5ee05df2bc3ef47beafa549cdaf",
+          "edits": []
+        },
+        {
+          "id": "021bafa0",
+          "frozen_source_sha256": "21fbcec0efe7a7334a9ef2b303c6a2a3bfd5a071df9d20209bcd01d0818b0ada",
+          "hub_source_sha256": "21fbcec0efe7a7334a9ef2b303c6a2a3bfd5a071df9d20209bcd01d0818b0ada",
+          "edits": []
+        },
+        {
+          "id": "3116b430",
+          "frozen_source_sha256": "ed0474b9a48f58a75c9718f9bb673d677d766f9e2495995e440c9bd83cefae74",
+          "hub_source_sha256": "ed0474b9a48f58a75c9718f9bb673d677d766f9e2495995e440c9bd83cefae74",
+          "edits": []
+        },
+        {
+          "id": "4e7d99e4",
+          "frozen_source_sha256": "527c23f09010dc53dd0bb9f8e30bf5a80979229560bfdff1e85730aadd481abc",
+          "hub_source_sha256": "527c23f09010dc53dd0bb9f8e30bf5a80979229560bfdff1e85730aadd481abc",
+          "edits": []
+        }
+      ],
+      "hub_file_sha256": "7971b90195af7e9c1db40f454ee95e4d425cfca872c61c08441fc94ee98ae9a9"
+    },
+    {
+      "original_path": "Article_3/part3/02_Notebook_MuJoCo_to_Newton.ipynb",
+      "hub_path": "notebooks/newton/part3/02__mujoco_to_newton.ipynb",
+      "cells": [
+        {
+          "id": "da523e89",
+          "frozen_source_sha256": "4f6d30a8f5d5c193ae62af4746db3b7bcb827bef89fae1b6e040d2add42cce20",
+          "hub_source_sha256": "f9aecc021f05e3aeb6179ba1dd7a333764a689eb38278b4abfb0f4f269c52947",
+          "edits": [
+            "Working-directory/requirements path strings only."
+          ]
+        },
+        {
+          "id": "7d63fe6e",
+          "frozen_source_sha256": "ba222d20a860ba7bcb2544dd24e6f385f7bded9e781614202fff3299a7f0a1a0",
+          "hub_source_sha256": "ba222d20a860ba7bcb2544dd24e6f385f7bded9e781614202fff3299a7f0a1a0",
+          "edits": []
+        },
+        {
+          "id": "447a715c",
+          "frozen_source_sha256": "2f24c807e24a0fba8f36a0e43001682d93adc0c4afe087d1596a53fdf6e2adc3",
+          "hub_source_sha256": "2f24c807e24a0fba8f36a0e43001682d93adc0c4afe087d1596a53fdf6e2adc3",
+          "edits": []
+        },
+        {
+          "id": "e762c206",
+          "frozen_source_sha256": "d84c2633ad2c351e873e84842c82dd93a809e606275f7b38ca37a05f93963bb2",
+          "hub_source_sha256": "d84c2633ad2c351e873e84842c82dd93a809e606275f7b38ca37a05f93963bb2",
+          "edits": []
+        },
+        {
+          "id": "494a9e6e",
+          "frozen_source_sha256": "726b20ea9459a3dfec587e6cc0b8ad12dc848136c56dbc88758994107dda5b0d",
+          "hub_source_sha256": "726b20ea9459a3dfec587e6cc0b8ad12dc848136c56dbc88758994107dda5b0d",
+          "edits": []
+        },
+        {
+          "id": "cc78db57",
+          "frozen_source_sha256": "6714f62fc688382d9c3b4289c59b09ca3c92aed805893687aaea3a8c47c19422",
+          "hub_source_sha256": "6714f62fc688382d9c3b4289c59b09ca3c92aed805893687aaea3a8c47c19422",
+          "edits": []
+        },
+        {
+          "id": "7e0dcf7d",
+          "frozen_source_sha256": "550987fed5872eb2d35dc657da66a72b0aa903782039be650a5bcaeed8695e04",
+          "hub_source_sha256": "550987fed5872eb2d35dc657da66a72b0aa903782039be650a5bcaeed8695e04",
+          "edits": []
+        },
+        {
+          "id": "7c9c99b0",
+          "frozen_source_sha256": "babc14d705d6712b468d763df45a13fc7a25e02f4fa1c85c26808b116897cea5",
+          "hub_source_sha256": "babc14d705d6712b468d763df45a13fc7a25e02f4fa1c85c26808b116897cea5",
+          "edits": []
+        },
+        {
+          "id": "4f8fa66c",
+          "frozen_source_sha256": "87db2c3019b2ff5b9db174c1becc55051cc0529e06d0c0668faa97c22946b278",
+          "hub_source_sha256": "87db2c3019b2ff5b9db174c1becc55051cc0529e06d0c0668faa97c22946b278",
+          "edits": []
+        },
+        {
+          "id": "89269eeb",
+          "frozen_source_sha256": "4cdf6ed5e16a8c3bced4f4e9258fc560b26ec24d896da7623618bb0851cdb435",
+          "hub_source_sha256": "4cdf6ed5e16a8c3bced4f4e9258fc560b26ec24d896da7623618bb0851cdb435",
+          "edits": []
+        },
+        {
+          "id": "d3dc7c0e",
+          "frozen_source_sha256": "d6f17679f30299f98f5edeb7e6b8160c65e4eed7c8ee1bb8dbd95785d38e6b8e",
+          "hub_source_sha256": "d6f17679f30299f98f5edeb7e6b8160c65e4eed7c8ee1bb8dbd95785d38e6b8e",
+          "edits": []
+        }
+      ],
+      "hub_file_sha256": "09dfd6959362c5cd6aaa6dcf0e6306bf350e756e6835e796403a577242433868"
+    },
+    {
+      "original_path": "Article_3/part3/03_Notebook_Clean_the_Table.ipynb",
+      "hub_path": "notebooks/newton/part3/03__clean_the_table.ipynb",
+      "cells": [
+        {
+          "id": "clean-04",
+          "frozen_source_sha256": "8d22874b917df4c40f8b8d1bec2d993ec5abd6d61995642f93711eb12da93e6e",
+          "hub_source_sha256": "5df0bc6bcc7bc16391f39f9bf9fe5a1b946f309302331e808b3b9990ddaebdd9",
+          "edits": [
+            "Working-directory/requirements path strings only."
+          ]
+        },
+        {
+          "id": "clean-06",
+          "frozen_source_sha256": "99542e82853ca1c7169d1898f8a3c5289556b5f7a90adbe4f3a13d168637d569",
+          "hub_source_sha256": "99542e82853ca1c7169d1898f8a3c5289556b5f7a90adbe4f3a13d168637d569",
+          "edits": []
+        },
+        {
+          "id": "clean-08",
+          "frozen_source_sha256": "c76e2852f7d514f938928b4cdd0ef5d1430eaf6762384d068a34e2ea0436ad07",
+          "hub_source_sha256": "c76e2852f7d514f938928b4cdd0ef5d1430eaf6762384d068a34e2ea0436ad07",
+          "edits": []
+        },
+        {
+          "id": "clean-14",
+          "frozen_source_sha256": "69429909a98a991405a5ee8040f92c459df8d10cd33c86a417db2abfbb66c0d7",
+          "hub_source_sha256": "69429909a98a991405a5ee8040f92c459df8d10cd33c86a417db2abfbb66c0d7",
+          "edits": []
+        },
+        {
+          "id": "clean-18",
+          "frozen_source_sha256": "284c4b32550b616e5a1d01eca11f0216e80943012211f260f46ece80549e01d0",
+          "hub_source_sha256": "284c4b32550b616e5a1d01eca11f0216e80943012211f260f46ece80549e01d0",
+          "edits": []
+        },
+        {
+          "id": "clean-20",
+          "frozen_source_sha256": "17377cf6b52849736faa423a18f2c24dc8841b5413772922ef9ef475a6396ef5",
+          "hub_source_sha256": "17377cf6b52849736faa423a18f2c24dc8841b5413772922ef9ef475a6396ef5",
+          "edits": []
+        }
+      ],
+      "hub_file_sha256": "4d2f531d81c7a8427e6f2531361ae0fe4daec4dfc6e47b103768fd009fa0297b"
+    },
+    {
+      "original_path": "Article_3/part3/04_Notebook_Final_Check.ipynb",
+      "hub_path": "notebooks/newton/part3/04__final_check.ipynb",
+      "cells": [
+        {
+          "id": "4330c568",
+          "frozen_source_sha256": "76f8687af4089fb2b93e685d55751f09cd52fdd456872af7cfa985814f358cfc",
+          "hub_source_sha256": "0c12cea8544fc1e5615b70aada827eff6d88e4ab21559f9dea383ea686dd1c21",
+          "edits": [
+            "Working-directory/requirements path strings only."
+          ]
+        },
+        {
+          "id": "5bea97e5",
+          "frozen_source_sha256": "9748650d436284f2b7fe4c5ec75fec7891bb8c000397f5579146e31f5072274f",
+          "hub_source_sha256": "9748650d436284f2b7fe4c5ec75fec7891bb8c000397f5579146e31f5072274f",
+          "edits": []
+        },
+        {
+          "id": "68f6838c",
+          "frozen_source_sha256": "0f1a23fb8b976bc39310ff2e30125e4ab06d50678e173298a751121cfc828b7b",
+          "hub_source_sha256": "0f1a23fb8b976bc39310ff2e30125e4ab06d50678e173298a751121cfc828b7b",
+          "edits": []
+        },
+        {
+          "id": "a895fe9c",
+          "frozen_source_sha256": "d3ccd8d09734d797ae768de636116a9849dfff74244c4ff1f7bb6d3ca8332f70",
+          "hub_source_sha256": "d3ccd8d09734d797ae768de636116a9849dfff74244c4ff1f7bb6d3ca8332f70",
+          "edits": []
+        },
+        {
+          "id": "14957a82",
+          "frozen_source_sha256": "d2b646f3f64b00be6ca6c52beae51bb6490f0e2582fe42d7bffac124ff211c46",
+          "hub_source_sha256": "d2b646f3f64b00be6ca6c52beae51bb6490f0e2582fe42d7bffac124ff211c46",
+          "edits": []
+        }
+      ],
+      "hub_file_sha256": "a4182b5ed98a48b8d44c037739043bd2818fa8be62e63e198bcbd159d90c07aa"
+    }
+  ],
+  "original_validation": "original-validation.json",
+  "asset_manifest": "assets/clean-table-results.json",
+  "assets": [
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-rebot.gif",
+      "sha256": "5afdcff171960d9d5cb1ef3be3c2df8588794fa006b9a610ac926e05dc943ad8"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-rebot.json",
+      "sha256": "2e93562e563b65a94eb506fe832308f17b6f1726f6506fb49a95bf15e1ad73ff"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-rebot.npz",
+      "sha256": "0db2dac423cb28a37027d63f7768e10b62a6b04ced2b6f9129070c03157706eb"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-rebot.png",
+      "sha256": "468b44a8f369297f08438e5b4608cbd3b1cb32739b6bc9812f8755445ee01282"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-results.json",
+      "sha256": "036bf275dd20393458c85243a7a702825976b16ee3929d8366431948faabe70f"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-so101.gif",
+      "sha256": "7dd57b1855e5da443a58b8b7e272f0d1d04638ebb690cd1deb654778c1d44534"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-so101.json",
+      "sha256": "22650a3e68dac6e112dd7216690e9c5c8dc5355238497402f9bc7771f69fbe4c"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-so101.npz",
+      "sha256": "282ac5ebc9863f0761b5294dfbbb86b21e9870c3b1232b0a17dc2dad7aab193c"
+    },
+    {
+      "hub_path": "notebooks/newton/assets/clean-table-so101.png",
+      "sha256": "70c41cba2af6948696af5e5b14df412797c8d22d4c81f87bb2a75d17749c9be5"
+    }
+  ],
+  "summary": {
+    "mapped_source_dependency_files": 68,
+    "part3_python_files": 29,
+    "baseline_python_files": 25,
+    "code_cells": 32,
+    "unchanged_code_cells": 28,
+    "path_adapted_code_cells": 4,
+    "runtime_change": "Only final_check.py has two baseline directory references changed; all simulation/controller/acceptance-gate code is byte-identical.",
+    "renderer": "The already validated portrait-layout presentation amendment is retained byte-identically."
+  }
+}

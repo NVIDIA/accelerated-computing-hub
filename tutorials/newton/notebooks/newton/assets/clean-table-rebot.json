@@ -1,0 +1,371 @@
+{
+  "schema_version": 2,
+  "newton": "1.6.0",
+  "warp": "1.17.0",
+  "device": "cuda:0",
+  "robot": "rebot",
+  "task": "gripper_pick_place_into_bin",
+  "robot_asset_format": "USD",
+  "newton_assets_ref": "f8fb7abcbeba2318814a74f3eeb02780ad7925d6",
+  "frames": 3110,
+  "simulation_seconds": 62.2,
+  "phase": "done",
+  "active_object": "",
+  "failure": null,
+  "tool_withdrawn": true,
+  "tool_clearance_m": 0.1287980149067669,
+  "max_coupling_input_force_norm": 13.579265594482422,
+  "max_soft_contacts": 72,
+  "mujoco_warp_overflow_flags": 1024,
+  "finite": true,
+  "bin_lower": [
+    0.355,
+    0.055,
+    0.21800000000000003
+  ],
+  "bin_upper": [
+    0.585,
+    0.245,
+    0.30300000000000005
+  ],
+  "table_z": 0.21200000000000002,
+  "objects": {
+    "red_cube": {
+      "inside": true,
+      "max_point_speed": 5.481074367708061e-06,
+      "center": [
+        0.4163268804550171,
+        0.11531724780797958,
+        0.23999124765396118
+      ],
+      "bounds_min": [
+        0.38712918754213255,
+        0.08610950093128344,
+        0.21797264379437442
+      ],
+      "bounds_max": [
+        0.44552457336790163,
+        0.14452499468467572,
+        0.26200985151354794
+      ],
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 1.0,
+      "frame": 3110,
+      "time": 62.2,
+      "current_lift_clearance_m": 0.005972643794374399,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 5.74,
+      "lift_time": 7.36,
+      "carry_time": 10.92,
+      "release_command_time": 12.02,
+      "release_time": 12.96,
+      "max_loaded_bilateral_frames": 351,
+      "full_lift_frames": 257,
+      "carry_frames": 180,
+      "min_lift_clearance_m": 0.010659411383934225,
+      "carry_distance_m": 0.26177986331873676,
+      "over_bin_before_release": true,
+      "release_open_fraction": 0.8132098398425363,
+      "detached_settled_frames": 505,
+      "settled_frames": 505,
+      "attempts": 1,
+      "min_jaw_normal_force_N": 28.19258071008704,
+      "grasp_center": [
+        0.4350067973136902,
+        -0.14998443424701693,
+        0.23392683267593384
+      ],
+      "carry_start_center": [
+        0.43525266647338867,
+        -0.15004053711891174,
+        0.24537302553653717
+      ],
+      "carry_center": [
+        0.4088422358036041,
+        0.11040367186069489,
+        0.3769552409648895
+      ],
+      "carry_bounds_min": [
+        0.37375429607569055,
+        0.07962382398832846,
+        0.3473409433777457
+      ],
+      "carry_bounds_max": [
+        0.4439301755315177,
+        0.1411835197330613,
+        0.40656953855203337
+      ],
+      "success": true
+    },
+    "blue_cube": {
+      "inside": true,
+      "max_point_speed": 0.0027184346690773964,
+      "center": [
+        0.5255571007728577,
+        0.12666162848472595,
+        0.23996694386005402
+      ],
+      "bounds_min": [
+        0.49811935761537196,
+        0.09922606143320456,
+        0.21792301195511185
+      ],
+      "bounds_max": [
+        0.5529948439303434,
+        0.15409719553624734,
+        0.26201087576499615
+      ],
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 1.0,
+      "frame": 3110,
+      "time": 62.2,
+      "current_lift_clearance_m": 0.005923011955111829,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 20.6,
+      "lift_time": 22.16,
+      "carry_time": 25.7,
+      "release_command_time": 26.82,
+      "release_time": 27.76,
+      "max_loaded_bilateral_frames": 346,
+      "full_lift_frames": 257,
+      "carry_frames": 180,
+      "min_lift_clearance_m": 0.010648920663390155,
+      "carry_distance_m": 0.2627332391046947,
+      "over_bin_before_release": true,
+      "release_open_fraction": 0.8132089931856502,
+      "detached_settled_frames": 505,
+      "settled_frames": 505,
+      "attempts": 1,
+      "min_jaw_normal_force_N": 24.853858976283266,
+      "grasp_center": [
+        0.5150030851364136,
+        -0.1499747931957245,
+        0.2339648008346557
+      ],
+      "carry_start_center": [
+        0.5152463316917419,
+        -0.149995356798172,
+        0.24529170989990234
+      ],
+      "carry_center": [
+        0.47774025797843933,
+        0.11004704236984253,
+        0.37761199474334717
+      ],
+      "carry_bounds_min": [
+        0.4450642242116063,
+        0.08081036325740099,
+        0.3503072530318647
+      ],
+      "carry_bounds_max": [
+        0.5104162917452724,
+        0.13928372148228407,
+        0.4049167364548296
+      ],
+      "success": true
+    },
+    "cable": {
+      "inside": true,
+      "max_point_speed": 0.00018827672465704381,
+      "center": [
+        0.5574627717336017,
+        0.13368306557337442,
+        0.22509658833344778
+      ],
+      "bounds_min": [
+        0.5184188831260534,
+        0.0856631514118289,
+        0.218095724802801
+      ],
+      "bounds_max": [
+        0.5781079970797733,
+        0.1683241095551543,
+        0.23209734353408926
+      ],
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 1.0,
+      "frame": 3110,
+      "time": 62.2,
+      "current_lift_clearance_m": 0.006095724802800989,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 35.56,
+      "lift_time": 37.22,
+      "carry_time": 40.14,
+      "release_command_time": 41.62,
+      "release_time": 42.56,
+      "max_loaded_bilateral_frames": 325,
+      "full_lift_frames": 244,
+      "carry_frames": 180,
+      "min_lift_clearance_m": 0.01029518818675651,
+      "carry_distance_m": 0.4185994922639025,
+      "over_bin_before_release": true,
+      "release_open_fraction": 0.8129382906925111,
+      "detached_settled_frames": 505,
+      "settled_frames": 505,
+      "attempts": 1,
+      "min_jaw_normal_force_N": 7.512890762188783,
+      "grasp_center": [
+        0.5314415047566095,
+        -0.2392061774929366,
+        0.21908422311147055
+      ],
+      "carry_start_center": [
+        0.5385802686214447,
+        -0.24060894300540278,
+        0.2561736926436425
+      ],
+      "carry_center": [
+        0.5367121994495392,
+        0.17798638095458352,
+        0.4057156741619109
+      ],
+      "carry_bounds_min": [
+        0.5067199368583256,
+        0.15672146164841003,
+        0.36322994922825935
+      ],
+      "carry_bounds_max": [
+        0.5605267700303597,
+        0.21866282174428575,
+        0.43363365873044596
+      ],
+      "success": true
+    },
+    "shirt": {
+      "inside": true,
+      "max_point_speed": 0.00020349770784378052,
+      "center": [
+        0.4652218555702883,
+        0.1816669574555229,
+        0.22173765231581294
+      ],
+      "bounds_min": [
+        0.4094745854381472,
+        0.13305612304247916,
+        0.21799506642855704
+      ],
+      "bounds_max": [
+        0.5113848110195249,
+        0.23569227359257638,
+        0.22837715945206583
+      ],
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 1.0,
+      "frame": 3110,
+      "time": 62.2,
+      "current_lift_clearance_m": 0.0059950664285570165,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 49.56,
+      "lift_time": 51.9,
+      "carry_time": 54.7,
+      "release_command_time": 56.42,
+      "release_time": 57.36,
+      "max_loaded_bilateral_frames": 344,
+      "full_lift_frames": 250,
+      "carry_frames": 180,
+      "min_lift_clearance_m": 0.010866866970434763,
+      "carry_distance_m": 0.27332872741141157,
+      "over_bin_before_release": true,
+      "release_open_fraction": 0.8128731953019791,
+      "detached_settled_frames": 243,
+      "settled_frames": 243,
+      "attempts": 1,
+      "min_jaw_normal_force_N": 4.038342099175737,
+      "grasp_center": [
+        0.46680348199956556,
+        -0.09178610216168796,
+        0.21632187156116262
+      ],
+      "carry_start_center": [
+        0.46753325076664193,
+        -0.09693611334351933,
+        0.2440196105662514
+      ],
+      "carry_center": [
+        0.44460037210408376,
+        0.17542885559446672,
+        0.4073376424172345
+      ],
+      "carry_bounds_min": [
+        0.4008891324046999,
+        0.14928956725634634,
+        0.37434816756285727
+      ],
+      "carry_bounds_max": [
+        0.47652253112755716,
+        0.21556037268601358,
+        0.4333251079078764
+      ],
+      "success": true
+    }
+  },
+  "selected_objects": [
+    "red_cube",
+    "blue_cube",
+    "cable",
+    "shirt"
+  ],
+  "ownership": {
+    "mujoco": "robot, gripper and two cubes",
+    "vbd": "cloth particles and cable bodies/joints"
+  },
+  "material_geometry": {
+    "shirt": "free single-layer shirt with an authored raised fold",
+    "cable_radius_m": 0.007
+  },
+  "coupling": "SolverCoupledProxy (lagged, two-way, gripper joint proxies)",
+  "success": true,
+  "record_sha256": "0db2dac423cb28a37027d63f7768e10b62a6b04ced2b6f9129070c03157706eb"
+}

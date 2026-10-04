@@ -23,6 +23,7 @@ The following interactive tutorials are available and can be used on [NVIDIA Bre
 | [PyHPC Tutorial - NumPy, CuPy, & mpi4py - 4 Hours](tutorials/accelerated-python/notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours__docker_compose.yml) | 4xL4, 2xL4, 2xL40S, or 1x L40S | Crusoe or any other with Flexible Ports; host driver must support CUDA 13 |
 | [PyHPC Tutorial - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb) | [docker-compose.yml](https://github.com/NVIDIA/accelerated-computing-hub/blob/generated/main/tutorials/accelerated-python/notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days__docker_compose.yml) | L40S, L4, or T4 | Crusoe or any other with Flexible Ports; host driver must support CUDA 13 |
 | [GPU Deployment Tutorial](tutorials/gpu-deployment/gpu-deployment-from-scratch.md) | | |
+| [Newton Robot Tasks Tutorial](tutorials/newton/README.md) | [docker-compose.yml](tutorials/newton/brev/docker-compose.yml) | NVIDIA GPU with a CUDA 13.1-compatible driver; local CPU path available | Any provider with Flexible Ports; see tutorial requirements |
 
 ## License
 

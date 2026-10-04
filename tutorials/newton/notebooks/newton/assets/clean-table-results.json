@@ -1,0 +1,1045 @@
+{
+  "schema_version": 2,
+  "description": "Measured physical gripper pick-and-place of four objects. Figures replay exact recorded poses with official robot meshes; no physics is advanced during rendering. These single-device correctness runs are not a throughput benchmark.",
+  "verified_date": "2026-10-04",
+  "platform": "Linux x86-64",
+  "python": "3.12.13",
+  "mujoco": "3.12.0",
+  "mujoco_warp": "3.12.0",
+  "usd_core": "26.3",
+  "newton_usd_schemas": "0.5.0",
+  "controller_hz": 50,
+  "physics_substeps": 10,
+  "vbd_iterations": 20,
+  "coupling_iterations": 2,
+  "cuda_graph": false,
+  "frozen_manifest_sha256": "ca4d7b2edfc20444a46ccf125af4524ccd5f4fa623616e6f9363a0408cbc26f1",
+  "source_sha256": {
+    "Article_2/part1/01_Notebook_MuJoCo_Fundamentals.ipynb": "6121b194778a94c6753b02b3c185a36be110069b98d06a24d299cde89fe222c6",
+    "Article_2/part1/02_Notebook_Pick_and_Place.ipynb": "453152794b12d19facf098822e41f04fb9de68455fb95b4e0552d9bd10960da2",
+    "Article_2/part1/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "Article_2/part1/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "Article_2/part1/so101_pick_place.py": "fb4de914741d176ad2558344108c7d8663e0a30d47f09d692601a21c070c4474",
+    "Article_2/part1/solutions/so101_pick_place_solution.py": "b5f57a53cbd5ae081539e89fb9c460d3ae46b6106013e2fc4f02ccf7ddac5143",
+    "Article_2/part1/solutions/step_00_imports.py": "668ee1bd453a3c2f9db81dc4589d4d72a7f686666f7bf9e2a6b30db8e85af27f",
+    "Article_2/part1/solutions/step_01_model_and_data.py": "167921559e6086316fe3aa78359b5a70452520d949e3236fe6d21c87f9cba5c1",
+    "Article_2/part1/solutions/step_02_home_pose.py": "3b1d9ad7c5da383729066b3769db350b4a67ee842f71a37e90b4970a6eea484f",
+    "Article_2/part1/solutions/step_03_controller.py": "1a970ca30c5b937f5fd4dc9774b49040c0538c1e676fba68b8ba47aca2f767bc",
+    "Article_2/part1/solutions/step_04_step_physics.py": "cb05246e3794c5f386d77ef0e9cf76156cbf70e0b1252d81e23bcbe64de40a48",
+    "Article_2/part1/solutions/step_05_verify_stack.py": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
+    "Article_2/part1/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "Article_2/part2/01_Notebook_MJWarp.ipynb": "e9af0fb6ab6e3362d749614ab13fba68622684ecdd8a1ce9bf7ccf141eaa13fa",
+    "Article_2/part2/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "Article_2/part2/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "Article_2/part2/scaling_study.py": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+    "Article_2/part2/so101_mjwarp.py": "f9b102a066d6850a40f9670e9c32ba6e22dddaff24dbd6405dd72723558b3770",
+    "Article_2/part2/solutions/so101_mjwarp_solution.py": "291c534ead4a0b2d6696fdeca3c88d2de5ee9fd31646537b4ac33d307fef3d1b",
+    "Article_2/part2/solutions/step_00_imports.py": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+    "Article_2/part2/solutions/step_01_put_model.py": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+    "Article_2/part2/solutions/step_02_make_data.py": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+    "Article_2/part2/solutions/step_03_seed_state.py": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+    "Article_2/part2/solutions/step_04_push_ctrl.py": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+    "Article_2/part2/solutions/step_05_mjw_step.py": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+    "Article_2/part2/solutions/step_06_pull_state.py": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+    "Article_2/part2/solutions/step_07_cuda_graph.py": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+    "Article_2/part2/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "Article_3/part3/01_Notebook_Newton.ipynb": "9e5c8a79d048e9245eba63a0c115c27c5f3ae12f057c7e20118f352b109e6611",
+    "Article_3/part3/02_Notebook_MuJoCo_to_Newton.ipynb": "88e283a565594d5113edbd218903c5aad656a7903a3da43eb412b367b45b0b36",
+    "Article_3/part3/03_Notebook_Clean_the_Table.ipynb": "8077579f0b4e08952f048356cb415b608d180aaaac7f02d9a28b3c576cffcf49",
+    "Article_3/part3/04_Notebook_Final_Check.ipynb": "de6812bead542e0acc5a12cb4e60dcba4580e6a5b77d728fc57aa45767ffc7ea",
+    "Article_3/part3/clean_table_scene.py": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+    "Article_3/part3/clean_table_task.py": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+    "Article_3/part3/clean_the_table.py": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+    "Article_3/part3/final_check.py": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+    "Article_3/part3/newton_assets.py": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+    "Article_3/part3/newton_scene.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+    "Article_3/part3/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "Article_3/part3/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "Article_3/part3/so101_newton.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+    "Article_3/part3/solutions/clean_step_00_add_bin.py": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+    "Article_3/part3/solutions/clean_step_01_add_garment.py": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+    "Article_3/part3/solutions/clean_step_02_add_cable.py": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+    "Article_3/part3/solutions/clean_step_03_build_coupled_solver.py": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+    "Article_3/part3/solutions/clean_step_04_simulate.py": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+    "Article_3/part3/solutions/clean_table_scene_solution.py": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+    "Article_3/part3/solutions/clean_the_table_solution.py": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+    "Article_3/part3/solutions/newton_scene_solution.py": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3",
+    "Article_3/part3/solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+    "Article_3/part3/solutions/step_00_imports.py": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+    "Article_3/part3/solutions/step_01_builder.py": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+    "Article_3/part3/solutions/step_02_add_mjcf.py": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+    "Article_3/part3/solutions/step_03_joint_targets.py": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+    "Article_3/part3/solutions/step_04_props.py": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+    "Article_3/part3/solutions/step_05_finalize.py": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+    "Article_3/part3/solutions/step_06_state.py": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+    "Article_3/part3/solutions/step_07_solver.py": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+    "Article_3/part3/solutions/step_08_substep_loop.py": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+    "Article_3/part3/solutions/step_09_cuda_graph.py": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+    "Article_3/part3/utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+    "Article_3/requirements.lock.txt": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+    "Article_3/requirements.txt": "7455cb591974aa3f943c138348f87af75701fc5e68a47dafe5b2b5401a4bfbac",
+    "Article_3/tools/build_clean_scaffolds.py": "6062620d37defcc91f49468b2d7c9f5cc79b09ce43eabaad6474c353aa91f28e",
+    "Article_3/tools/export_blog_docx.py": "ecb2da7693493e3f949c729d6bb9924a9b7b37cb6ed80fff174b384892145d93",
+    "Article_3/tools/render_clean_table.py": "809ebc2c20648d23423893b76f0688128c693a8e749996e13fbe6267cf303cb9",
+    "requirements.txt": "b57c3bac96232dc8082ad2355e08eb3237268259c962298b2c1725d80bace1e3",
+    "shared/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "shared/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "shared/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "tests/clean_table_report_fixture.py": "c946f2130c3b5dbf1f54124886b1f8eb41809ec45594a71bb69fc8397790df26",
+    "tests/test_asset_cache.py": "66fb320b938b6ec349a520442bc919726998210ab52bf64a3146adcca9393607",
+    "tests/test_clean_table.py": "628a592b7ca481e1f765bae47ebe940ef053d4aee0d0606653ea05a48c3aedae",
+    "tests/test_final_check.py": "d9fb294390d3ae535ba86a96d9694e5fc82f4c5fbd396aeb68f0c18e3f05c965",
+    "tests/test_grasp_evidence.py": "d7bd5374fb09fffe1edd8490372d212aa6b3ba7b4a099503e8e8b663d1aa3bc6",
+    "tests/test_newton_assets.py": "ebf3f20d031b5ed4caea4163ea5c9265e1f6a8635ac11b834f59ed2c685b853b",
+    "tests/test_newton_migration.py": "d31a7c4e64d1412310e38026ed69a657a13c0fbd39491a9fc3a6795a5e61ae7c",
+    "tests/test_newton_notebooks.py": "b1e4172dc21fd3acd6a7862e0c267c49375ce1ce627116c020de14c45e857d6b",
+    "tests/test_render_clean_table.py": "c17b88405c06e8ac8fa828b954888637ea42a8b7a2475db6d2082009bacb6cf1",
+    "tests/test_tutorial_scaffolds.py": "01216fd8c2f08f2c935a9578f2edb4caf0f76cfc7bf1006a1f01e34b227ea4e7"
+  },
+  "renderer_sha256": "061b17d8f506eb0050a574aea0eddb3317fbcbc254e071255ec2f04c4358c1b6",
+  "renderer_presentation_amendment": "Three rows by two columns, with labels sized for document reading; recorded states, cameras and validation are unchanged.",
+  "independent_auditor_sha256": "bfba4cfeab41dbf5a938fffb0326f9a9cf8ada11ca28d4485be68968e5fd010b",
+  "artifacts": {
+    "so101": {
+      "report": "clean-table-so101.json",
+      "record": "clean-table-so101.npz",
+      "figure": "clean-table-so101.png",
+      "animation": "clean-table-so101.gif",
+      "sha256": {
+        "clean-table-so101.json": "22650a3e68dac6e112dd7216690e9c5c8dc5355238497402f9bc7771f69fbe4c",
+        "clean-table-so101.npz": "282ac5ebc9863f0761b5294dfbbb86b21e9870c3b1232b0a17dc2dad7aab193c",
+        "clean-table-so101.png": "70c41cba2af6948696af5e5b14df412797c8d22d4c81f87bb2a75d17749c9be5",
+        "clean-table-so101.gif": "7dd57b1855e5da443a58b8b7e272f0d1d04638ebb690cd1deb654778c1d44534"
+      }
+    },
+    "rebot": {
+      "report": "clean-table-rebot.json",
+      "record": "clean-table-rebot.npz",
+      "figure": "clean-table-rebot.png",
+      "animation": "clean-table-rebot.gif",
+      "sha256": {
+        "clean-table-rebot.json": "2e93562e563b65a94eb506fe832308f17b6f1726f6506fb49a95bf15e1ad73ff",
+        "clean-table-rebot.npz": "0db2dac423cb28a37027d63f7768e10b62a6b04ced2b6f9129070c03157706eb",
+        "clean-table-rebot.png": "468b44a8f369297f08438e5b4608cbd3b1cb32739b6bc9812f8755445ee01282",
+        "clean-table-rebot.gif": "5afdcff171960d9d5cb1ef3be3c2df8588794fa006b9a610ac926e05dc943ad8"
+      }
+    }
+  },
+  "runs": [
+    {
+      "schema_version": 2,
+      "newton": "1.6.0",
+      "warp": "1.17.0",
+      "device": "cuda:0",
+      "robot": "so101",
+      "task": "gripper_pick_place_into_bin",
+      "robot_asset_format": "USD",
+      "newton_assets_ref": "f8fb7abcbeba2318814a74f3eeb02780ad7925d6",
+      "frames": 3145,
+      "simulation_seconds": 62.9,
+      "phase": "done",
+      "active_object": "",
+      "failure": null,
+      "tool_withdrawn": true,
+      "tool_clearance_m": 0.07141714170480629,
+      "max_coupling_input_force_norm": 68.5478744506836,
+      "max_soft_contacts": 101,
+      "mujoco_warp_overflow_flags": 0,
+      "finite": true,
+      "bin_lower": [
+        0.19,
+        0.055,
+        0.03
+      ],
+      "bin_upper": [
+        0.42,
+        0.245,
+        0.11499999999999999
+      ],
+      "table_z": 0.024,
+      "objects": {
+        "red_cube": {
+          "inside": true,
+          "max_point_speed": 6.26173186901724e-06,
+          "center": [
+            0.23277604579925537,
+            0.10803093761205673,
+            0.05200614780187607
+          ],
+          "bounds_min": [
+            0.20170223138788074,
+            0.07695365785417452,
+            0.029972639663966797
+          ],
+          "bounds_max": [
+            0.26384986021063,
+            0.13910821736993895,
+            0.07403965593978534
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 0.9999958415505478,
+          "frame": 3145,
+          "time": 62.9,
+          "current_lift_clearance_m": 0.0059726396639667965,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 5.38,
+          "lift_time": 7.28,
+          "carry_time": 10.86,
+          "release_command_time": 12.02,
+          "release_time": 13.040000000000001,
+          "max_loaded_bilateral_frames": 386,
+          "full_lift_frames": 261,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010404530195063912,
+          "carry_distance_m": 0.2564785334306131,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.801223248243332,
+          "detached_settled_frames": 542,
+          "settled_frames": 542,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 45.694982040348634,
+          "grasp_center": [
+            0.2701464593410492,
+            -0.14921408891677856,
+            0.04570235684514046
+          ],
+          "carry_start_center": [
+            0.27712464332580566,
+            -0.13524550199508667,
+            0.057007983326911926
+          ],
+          "carry_center": [
+            0.23511376976966858,
+            0.11776897311210632,
+            0.19624081254005432
+          ],
+          "carry_bounds_min": [
+            0.19974716128201164,
+            0.08393988806458541,
+            0.16546409540163776
+          ],
+          "carry_bounds_max": [
+            0.2704803782573255,
+            0.15159805815962724,
+            0.2270175296784709
+          ],
+          "success": true
+        },
+        "blue_cube": {
+          "inside": true,
+          "max_point_speed": 0.00012117784353904426,
+          "center": [
+            0.3006271719932556,
+            0.1071251779794693,
+            0.05199579149484634
+          ],
+          "bounds_min": [
+            0.2698630180465909,
+            0.07635452811841782,
+            0.029970921594609692
+          ],
+          "bounds_max": [
+            0.3313913259399203,
+            0.1378958278405208,
+            0.074020661395083
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 0.9999958415505478,
+          "frame": 3145,
+          "time": 62.9,
+          "current_lift_clearance_m": 0.005970921594609692,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 20.46,
+          "lift_time": 22.080000000000002,
+          "carry_time": 25.64,
+          "release_command_time": 26.82,
+          "release_time": 27.86,
+          "max_loaded_bilateral_frames": 365,
+          "full_lift_frames": 261,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010439065200655961,
+          "carry_distance_m": 0.2579788971716028,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8151094913482667,
+          "detached_settled_frames": 542,
+          "settled_frames": 542,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 43.61688855758394,
+          "grasp_center": [
+            0.3503115177154541,
+            -0.14894017577171326,
+            0.046216387301683426
+          ],
+          "carry_start_center": [
+            0.3543079197406769,
+            -0.13600562512874603,
+            0.05650906264781952
+          ],
+          "carry_center": [
+            0.30674657225608826,
+            0.11755113303661346,
+            0.1996784806251526
+          ],
+          "carry_bounds_min": [
+            0.27165049130860286,
+            0.08445657800189232,
+            0.1714558511564549
+          ],
+          "carry_bounds_max": [
+            0.34184265320357365,
+            0.1506456880713346,
+            0.22790111009385028
+          ],
+          "success": true
+        },
+        "cable": {
+          "inside": true,
+          "max_point_speed": 0.00011254330456722528,
+          "center": [
+            0.3726384292046227,
+            0.20572508871555328,
+            0.04682674507300059
+          ],
+          "bounds_min": [
+            0.35194738528419256,
+            0.16964646856249155,
+            0.03003561292445378
+          ],
+          "bounds_max": [
+            0.4095273336274703,
+            0.24495767605256746,
+            0.0784001594568059
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 0.9999958415505478,
+          "frame": 3145,
+          "time": 62.9,
+          "current_lift_clearance_m": 0.00603561292445378,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 35.32,
+          "lift_time": 37.160000000000004,
+          "carry_time": 39.78,
+          "release_command_time": 41.62,
+          "release_time": 42.660000000000004,
+          "max_loaded_bilateral_frames": 337,
+          "full_lift_frames": 247,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010294264956536646,
+          "carry_distance_m": 0.21266583794007363,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8155992484138513,
+          "detached_settled_frames": 542,
+          "settled_frames": 542,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 41.201352124379774,
+          "grasp_center": [
+            0.38051243623097736,
+            -0.04959731859465441,
+            0.031179457902908325
+          ],
+          "carry_start_center": [
+            0.38288920621077227,
+            -0.05052555849154789,
+            0.062376045311490706
+          ],
+          "carry_center": [
+            0.366259291768074,
+            0.16148907442887625,
+            0.2086676309506098
+          ],
+          "carry_bounds_min": [
+            0.3370981600652785,
+            0.14009608081998262,
+            0.16192662129983093
+          ],
+          "carry_bounds_max": [
+            0.3963070231554394,
+            0.19855029541588354,
+            0.24629410322008505
+          ],
+          "success": true
+        },
+        "shirt": {
+          "inside": true,
+          "max_point_speed": 0.004844880197197199,
+          "center": [
+            0.3100410710362827,
+            0.16467172415817485,
+            0.03669369387276032
+          ],
+          "bounds_min": [
+            0.2618989984039217,
+            0.1299526880029589,
+            0.029973417753353715
+          ],
+          "bounds_max": [
+            0.35287502012215555,
+            0.20286531350575387,
+            0.046146772569045424
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 0.9999958415505478,
+          "frame": 3145,
+          "time": 62.9,
+          "current_lift_clearance_m": 0.0059734177533537144,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 49.28,
+          "lift_time": 51.88,
+          "carry_time": 54.72,
+          "release_command_time": 56.42,
+          "release_time": 57.96,
+          "max_loaded_bilateral_frames": 395,
+          "full_lift_frames": 251,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.011475898766890168,
+          "carry_distance_m": 0.26405418554977705,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8117047732918171,
+          "detached_settled_frames": 248,
+          "settled_frames": 248,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 1.3101356468638246,
+          "grasp_center": [
+            0.30251636259696063,
+            -0.08931995923904812,
+            0.02767100704505163
+          ],
+          "carry_start_center": [
+            0.2984328729264876,
+            -0.09539382939829547,
+            0.0568563514334314
+          ],
+          "carry_center": [
+            0.2781961584792418,
+            0.16788375850986031,
+            0.22267389332546908
+          ],
+          "carry_bounds_min": [
+            0.2443485150579363,
+            0.13580668368376791,
+            0.17962895729579031
+          ],
+          "carry_bounds_max": [
+            0.31043767533265054,
+            0.19387136003933847,
+            0.25993537507019937
+          ],
+          "success": true
+        }
+      },
+      "selected_objects": [
+        "red_cube",
+        "blue_cube",
+        "cable",
+        "shirt"
+      ],
+      "ownership": {
+        "mujoco": "robot, gripper and two cubes",
+        "vbd": "cloth particles and cable bodies/joints"
+      },
+      "material_geometry": {
+        "shirt": "free single-layer shirt with an authored raised fold",
+        "cable_radius_m": 0.007
+      },
+      "coupling": "SolverCoupledProxy (lagged, two-way, gripper joint proxies)",
+      "success": true,
+      "record_sha256": "282ac5ebc9863f0761b5294dfbbb86b21e9870c3b1232b0a17dc2dad7aab193c"
+    },
+    {
+      "schema_version": 2,
+      "newton": "1.6.0",
+      "warp": "1.17.0",
+      "device": "cuda:0",
+      "robot": "rebot",
+      "task": "gripper_pick_place_into_bin",
+      "robot_asset_format": "USD",
+      "newton_assets_ref": "f8fb7abcbeba2318814a74f3eeb02780ad7925d6",
+      "frames": 3110,
+      "simulation_seconds": 62.2,
+      "phase": "done",
+      "active_object": "",
+      "failure": null,
+      "tool_withdrawn": true,
+      "tool_clearance_m": 0.1287980149067669,
+      "max_coupling_input_force_norm": 13.579265594482422,
+      "max_soft_contacts": 72,
+      "mujoco_warp_overflow_flags": 1024,
+      "finite": true,
+      "bin_lower": [
+        0.355,
+        0.055,
+        0.21800000000000003
+      ],
+      "bin_upper": [
+        0.585,
+        0.245,
+        0.30300000000000005
+      ],
+      "table_z": 0.21200000000000002,
+      "objects": {
+        "red_cube": {
+          "inside": true,
+          "max_point_speed": 5.481074367708061e-06,
+          "center": [
+            0.4163268804550171,
+            0.11531724780797958,
+            0.23999124765396118
+          ],
+          "bounds_min": [
+            0.38712918754213255,
+            0.08610950093128344,
+            0.21797264379437442
+          ],
+          "bounds_max": [
+            0.44552457336790163,
+            0.14452499468467572,
+            0.26200985151354794
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 1.0,
+          "frame": 3110,
+          "time": 62.2,
+          "current_lift_clearance_m": 0.005972643794374399,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 5.74,
+          "lift_time": 7.36,
+          "carry_time": 10.92,
+          "release_command_time": 12.02,
+          "release_time": 12.96,
+          "max_loaded_bilateral_frames": 351,
+          "full_lift_frames": 257,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010659411383934225,
+          "carry_distance_m": 0.26177986331873676,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8132098398425363,
+          "detached_settled_frames": 505,
+          "settled_frames": 505,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 28.19258071008704,
+          "grasp_center": [
+            0.4350067973136902,
+            -0.14998443424701693,
+            0.23392683267593384
+          ],
+          "carry_start_center": [
+            0.43525266647338867,
+            -0.15004053711891174,
+            0.24537302553653717
+          ],
+          "carry_center": [
+            0.4088422358036041,
+            0.11040367186069489,
+            0.3769552409648895
+          ],
+          "carry_bounds_min": [
+            0.37375429607569055,
+            0.07962382398832846,
+            0.3473409433777457
+          ],
+          "carry_bounds_max": [
+            0.4439301755315177,
+            0.1411835197330613,
+            0.40656953855203337
+          ],
+          "success": true
+        },
+        "blue_cube": {
+          "inside": true,
+          "max_point_speed": 0.0027184346690773964,
+          "center": [
+            0.5255571007728577,
+            0.12666162848472595,
+            0.23996694386005402
+          ],
+          "bounds_min": [
+            0.49811935761537196,
+            0.09922606143320456,
+            0.21792301195511185
+          ],
+          "bounds_max": [
+            0.5529948439303434,
+            0.15409719553624734,
+            0.26201087576499615
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 1.0,
+          "frame": 3110,
+          "time": 62.2,
+          "current_lift_clearance_m": 0.005923011955111829,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 20.6,
+          "lift_time": 22.16,
+          "carry_time": 25.7,
+          "release_command_time": 26.82,
+          "release_time": 27.76,
+          "max_loaded_bilateral_frames": 346,
+          "full_lift_frames": 257,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010648920663390155,
+          "carry_distance_m": 0.2627332391046947,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8132089931856502,
+          "detached_settled_frames": 505,
+          "settled_frames": 505,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 24.853858976283266,
+          "grasp_center": [
+            0.5150030851364136,
+            -0.1499747931957245,
+            0.2339648008346557
+          ],
+          "carry_start_center": [
+            0.5152463316917419,
+            -0.149995356798172,
+            0.24529170989990234
+          ],
+          "carry_center": [
+            0.47774025797843933,
+            0.11004704236984253,
+            0.37761199474334717
+          ],
+          "carry_bounds_min": [
+            0.4450642242116063,
+            0.08081036325740099,
+            0.3503072530318647
+          ],
+          "carry_bounds_max": [
+            0.5104162917452724,
+            0.13928372148228407,
+            0.4049167364548296
+          ],
+          "success": true
+        },
+        "cable": {
+          "inside": true,
+          "max_point_speed": 0.00018827672465704381,
+          "center": [
+            0.5574627717336017,
+            0.13368306557337442,
+            0.22509658833344778
+          ],
+          "bounds_min": [
+            0.5184188831260534,
+            0.0856631514118289,
+            0.218095724802801
+          ],
+          "bounds_max": [
+            0.5781079970797733,
+            0.1683241095551543,
+            0.23209734353408926
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 1.0,
+          "frame": 3110,
+          "time": 62.2,
+          "current_lift_clearance_m": 0.006095724802800989,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 35.56,
+          "lift_time": 37.22,
+          "carry_time": 40.14,
+          "release_command_time": 41.62,
+          "release_time": 42.56,
+          "max_loaded_bilateral_frames": 325,
+          "full_lift_frames": 244,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.01029518818675651,
+          "carry_distance_m": 0.4185994922639025,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8129382906925111,
+          "detached_settled_frames": 505,
+          "settled_frames": 505,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 7.512890762188783,
+          "grasp_center": [
+            0.5314415047566095,
+            -0.2392061774929366,
+            0.21908422311147055
+          ],
+          "carry_start_center": [
+            0.5385802686214447,
+            -0.24060894300540278,
+            0.2561736926436425
+          ],
+          "carry_center": [
+            0.5367121994495392,
+            0.17798638095458352,
+            0.4057156741619109
+          ],
+          "carry_bounds_min": [
+            0.5067199368583256,
+            0.15672146164841003,
+            0.36322994922825935
+          ],
+          "carry_bounds_max": [
+            0.5605267700303597,
+            0.21866282174428575,
+            0.43363365873044596
+          ],
+          "success": true
+        },
+        "shirt": {
+          "inside": true,
+          "max_point_speed": 0.00020349770784378052,
+          "center": [
+            0.4652218555702883,
+            0.1816669574555229,
+            0.22173765231581294
+          ],
+          "bounds_min": [
+            0.4094745854381472,
+            0.13305612304247916,
+            0.21799506642855704
+          ],
+          "bounds_max": [
+            0.5113848110195249,
+            0.23569227359257638,
+            0.22837715945206583
+          ],
+          "jaw_contacts": [
+            0,
+            0
+          ],
+          "jaw_normal_forces_N": [
+            0.0,
+            0.0
+          ],
+          "open_fraction": 1.0,
+          "frame": 3110,
+          "time": 62.2,
+          "current_lift_clearance_m": 0.0059950664285570165,
+          "initially_outside_bin": true,
+          "grasped": true,
+          "lifted": true,
+          "carried": true,
+          "release_commanded": true,
+          "released": true,
+          "dropped_before_release": false,
+          "grasp_time": 49.56,
+          "lift_time": 51.9,
+          "carry_time": 54.7,
+          "release_command_time": 56.42,
+          "release_time": 57.36,
+          "max_loaded_bilateral_frames": 344,
+          "full_lift_frames": 250,
+          "carry_frames": 180,
+          "min_lift_clearance_m": 0.010866866970434763,
+          "carry_distance_m": 0.27332872741141157,
+          "over_bin_before_release": true,
+          "release_open_fraction": 0.8128731953019791,
+          "detached_settled_frames": 243,
+          "settled_frames": 243,
+          "attempts": 1,
+          "min_jaw_normal_force_N": 4.038342099175737,
+          "grasp_center": [
+            0.46680348199956556,
+            -0.09178610216168796,
+            0.21632187156116262
+          ],
+          "carry_start_center": [
+            0.46753325076664193,
+            -0.09693611334351933,
+            0.2440196105662514
+          ],
+          "carry_center": [
+            0.44460037210408376,
+            0.17542885559446672,
+            0.4073376424172345
+          ],
+          "carry_bounds_min": [
+            0.4008891324046999,
+            0.14928956725634634,
+            0.37434816756285727
+          ],
+          "carry_bounds_max": [
+            0.47652253112755716,
+            0.21556037268601358,
+            0.4333251079078764
+          ],
+          "success": true
+        }
+      },
+      "selected_objects": [
+        "red_cube",
+        "blue_cube",
+        "cable",
+        "shirt"
+      ],
+      "ownership": {
+        "mujoco": "robot, gripper and two cubes",
+        "vbd": "cloth particles and cable bodies/joints"
+      },
+      "material_geometry": {
+        "shirt": "free single-layer shirt with an authored raised fold",
+        "cable_radius_m": 0.007
+      },
+      "coupling": "SolverCoupledProxy (lagged, two-way, gripper joint proxies)",
+      "success": true,
+      "record_sha256": "0db2dac423cb28a37027d63f7768e10b62a6b04ced2b6f9129070c03157706eb"
+    }
+  ],
+  "independent_audits": [
+    {
+      "status": "PASS",
+      "task": "gripper_pick_place_into_bin",
+      "scope": "full_four_object_task",
+      "full_task_validated": true,
+      "robot": "so101",
+      "device": "cuda:0",
+      "report": "clean-table-so101.json",
+      "recording": "clean-table-so101.npz",
+      "record_sha256": "282ac5ebc9863f0761b5294dfbbb86b21e9870c3b1232b0a17dc2dad7aab193c",
+      "observation_samples": 3146,
+      "objects": {
+        "red_cube": {
+          "grasp_time": 5.38,
+          "lift_time": 7.28,
+          "reported_carry_time": 10.86,
+          "release_time": 13.040000000000001,
+          "continuous_lift_frames": 261,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010404530195063912,
+          "airborne_transport_m": 0.2564785334306131,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 45.694982040348634,
+          "release_open_fraction": 0.801223248243332,
+          "final_settled_frames": 542,
+          "final_window_max_point_speed": 6.2900899138185196e-06
+        },
+        "blue_cube": {
+          "grasp_time": 20.46,
+          "lift_time": 22.080000000000002,
+          "reported_carry_time": 25.64,
+          "release_time": 27.86,
+          "continuous_lift_frames": 261,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010439065200655961,
+          "airborne_transport_m": 0.2579788971716028,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 43.61688855758394,
+          "release_open_fraction": 0.8151094913482667,
+          "final_settled_frames": 542,
+          "final_window_max_point_speed": 0.02353385090827942
+        },
+        "cable": {
+          "grasp_time": 35.32,
+          "lift_time": 37.160000000000004,
+          "reported_carry_time": 39.78,
+          "release_time": 42.660000000000004,
+          "continuous_lift_frames": 247,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010294264956536646,
+          "airborne_transport_m": 0.21266583794007363,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 41.201352124379774,
+          "release_open_fraction": 0.8155992484138513,
+          "final_settled_frames": 542,
+          "final_window_max_point_speed": 0.00019453561981208622
+        },
+        "shirt": {
+          "grasp_time": 49.28,
+          "lift_time": 51.88,
+          "reported_carry_time": 54.72,
+          "release_time": 57.96,
+          "continuous_lift_frames": 251,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.011475898766890168,
+          "airborne_transport_m": 0.26405418554977705,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 1.3101356468638246,
+          "release_open_fraction": 0.8117047732918171,
+          "final_settled_frames": 248,
+          "final_window_max_point_speed": 0.02021217904984951
+        }
+      },
+      "limitations": []
+    },
+    {
+      "status": "PASS",
+      "task": "gripper_pick_place_into_bin",
+      "scope": "full_four_object_task",
+      "full_task_validated": true,
+      "robot": "rebot",
+      "device": "cuda:0",
+      "report": "clean-table-rebot.json",
+      "recording": "clean-table-rebot.npz",
+      "record_sha256": "0db2dac423cb28a37027d63f7768e10b62a6b04ced2b6f9129070c03157706eb",
+      "observation_samples": 3111,
+      "objects": {
+        "red_cube": {
+          "grasp_time": 5.74,
+          "lift_time": 7.36,
+          "reported_carry_time": 10.92,
+          "release_time": 12.96,
+          "continuous_lift_frames": 257,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010659411383934225,
+          "airborne_transport_m": 0.26177986331873676,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 28.19258071008704,
+          "release_open_fraction": 0.8132098398425363,
+          "final_settled_frames": 505,
+          "final_window_max_point_speed": 5.64867787034018e-06
+        },
+        "blue_cube": {
+          "grasp_time": 20.6,
+          "lift_time": 22.16,
+          "reported_carry_time": 25.7,
+          "release_time": 27.76,
+          "continuous_lift_frames": 257,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010648920663390155,
+          "airborne_transport_m": 0.2627332391046947,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 24.853858976283266,
+          "release_open_fraction": 0.8132089931856502,
+          "final_settled_frames": 505,
+          "final_window_max_point_speed": 0.0027184346690773964
+        },
+        "cable": {
+          "grasp_time": 35.56,
+          "lift_time": 37.22,
+          "reported_carry_time": 40.14,
+          "release_time": 42.56,
+          "continuous_lift_frames": 244,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.01029518818675651,
+          "airborne_transport_m": 0.4185994922639025,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 7.512890762188783,
+          "release_open_fraction": 0.8129382906925111,
+          "final_settled_frames": 505,
+          "final_window_max_point_speed": 0.0003793986397795379
+        },
+        "shirt": {
+          "grasp_time": 49.56,
+          "lift_time": 51.9,
+          "reported_carry_time": 54.7,
+          "release_time": 57.36,
+          "continuous_lift_frames": 250,
+          "loaded_carry_frames": 180,
+          "min_lift_clearance_m": 0.010866866970434763,
+          "airborne_transport_m": 0.27332872741141157,
+          "transport_metric": "payload_centroid",
+          "min_carry_jaw_force_N": 4.038342099175737,
+          "release_open_fraction": 0.8128731953019791,
+          "final_settled_frames": 243,
+          "final_window_max_point_speed": 0.0005780805367976427
+        }
+      },
+      "limitations": []
+    }
+  ],
+  "notebook_editorial_amendment": {
+    "description": "Only one Markdown cell in each of notebooks 01, 03 and 04 changed after execution. All 32 full code-cell JSON objects, metadata, IDs and remaining cells are unchanged; source notebooks retain no execution output.",
+    "receipt_sha256": "9aa9ab6bbb2943f93f5572414eac20d4ae7132e39d4015aa3c141c7eea93be77",
+    "source_sha256": {
+      "Article_3/part3/01_Notebook_Newton.ipynb": {
+        "frozen_sha256": "9e5c8a79d048e9245eba63a0c115c27c5f3ae12f057c7e20118f352b109e6611",
+        "current_sha256": "32961858b94eae9f1871ace1da3724b0a187d5f74078172565e8135aa5ccb24b"
+      },
+      "Article_3/part3/03_Notebook_Clean_the_Table.ipynb": {
+        "frozen_sha256": "8077579f0b4e08952f048356cb415b608d180aaaac7f02d9a28b3c576cffcf49",
+        "current_sha256": "1cfdb29787d5f0a748c38303583e351b87eecb9e20bb249274143e246a3238b9"
+      },
+      "Article_3/part3/04_Notebook_Final_Check.ipynb": {
+        "frozen_sha256": "de6812bead542e0acc5a12cb4e60dcba4580e6a5b77d728fc57aa45767ffc7ea",
+        "current_sha256": "2be6933dc28c899dadeeb3ef466d50014428b3258d0b949c4359f1d0408f12f2"
+      }
+    },
+    "code_cells_unchanged": true,
+    "pristine": true,
+    "static_contracts_passed": 10
+  }
+}

@@ -76,3 +76,7 @@ tutorials/accelerated-python/notebooks/applications/solutions/*.hxx
 !tutorials/accelerated-python/notebooks/applications/solutions/swe_cub_solver.cpp
 !tutorials/accelerated-python/notebooks/applications/solutions/swe_raw_cuda_solver.cpp
 !tutorials/accelerated-python/notebooks/applications/solutions/swe_step.cpp
+
+# Newton runtime outputs, model caches and learner backups are not image content.
+tutorials/newton/**/.generated
+tutorials/newton/**/*_original.py
