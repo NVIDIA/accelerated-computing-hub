@@ -1,0 +1,3 @@
+# Local task reports and notebook-created exercise backups.
+.generated/
+*_original.py

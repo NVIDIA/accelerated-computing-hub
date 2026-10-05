@@ -1,0 +1,29 @@
+# Warp
+warp-lang==1.17.0
+
+# Robotics simulation (same versions as notebooks/mujoco/requirements.txt)
+mujoco==3.12.0
+mujoco-warp==3.12.0
+
+# Arrays
+numpy==2.5.3
+
+# Scientific/numeric
+scipy
+
+# Visualization
+matplotlib==3.11.2
+ipympl
+Pillow
+
+# Dark mode detection
+jupyter-dark-detect == 0.1.0
+
+# Jupyter
+jupyter
+jupyter-server-proxy
+jupyterlab
+jupyterlab-execute-time
+
+# Tutorial validation
+pytest
