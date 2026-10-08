@@ -1,0 +1,1961 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "measurement_label": "community_task_measurement_not_official_product_benchmark",
+  "started_utc": "2026-10-08T16:14:40Z",
+  "configuration": {
+    "robot": "so101",
+    "scope": "workflow",
+    "preset": "developer",
+    "worlds": [
+      1,
+      16
+    ],
+    "cpu_threads": 4,
+    "device": "cuda:1",
+    "repeats": 5,
+    "warmups": 1,
+    "nconmax": null,
+    "njmax": null,
+    "max_trajectory_mib": 1024,
+    "timeout": 1800,
+    "order_seed": 0,
+    "cpu_only": false,
+    "preflight": false
+  },
+  "hardware": {
+    "os": "Linux",
+    "os_release": "7.0.0-38-generic",
+    "architecture": "x86_64",
+    "python": "3.12.13",
+    "cpu_model": "AMD Ryzen Threadripper PRO 9985WX 64-Cores",
+    "physical_cpu_cores": 64,
+    "logical_cpu_count": 128,
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "ram_bytes": 264948391936,
+    "cgroup_limits": {
+      "cpuset.cpus.effective": "0-127"
+    },
+    "packages": {
+      "mujoco": "3.12.0",
+      "mujoco-warp": "3.12.0",
+      "warp-lang": "1.17.0",
+      "newton": "1.6.0",
+      "numpy": "2.5.3"
+    },
+    "environment": {
+      "CUDA_VISIBLE_DEVICES": null,
+      "OMP_NUM_THREADS": null,
+      "OPENBLAS_NUM_THREADS": null,
+      "MKL_NUM_THREADS": null,
+      "PXR_WORK_THREAD_LIMIT": "1",
+      "MUJOCO_GL": null
+    },
+    "load": {
+      "load_average_1_5_15_minutes": [
+        0.0,
+        0.080078125,
+        0.18896484375
+      ],
+      "gpus": [
+        {
+          "index": "0",
+          "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+          "driver": "615.71.09",
+          "memory_total_mib": "97887",
+          "memory_used_mib": "20",
+          "utilization_percent": "0",
+          "temperature_c": "32",
+          "power_w": "20.65",
+          "sm_clock_mhz": "180"
+        },
+        {
+          "index": "1",
+          "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+          "driver": "615.71.09",
+          "memory_total_mib": "97887",
+          "memory_used_mib": "22593",
+          "utilization_percent": "0",
+          "temperature_c": "33",
+          "power_w": "13.01",
+          "sm_clock_mhz": "180"
+        }
+      ],
+      "gpu_compute_processes": [
+        {
+          "executable": "llama-server",
+          "gpu_memory_mib": "22328"
+        }
+      ]
+    }
+  },
+  "cuda": {
+    "available": true,
+    "alias": "cuda:1",
+    "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+  },
+  "worker_environment_overrides": {
+    "PXR_WORK_THREAD_LIMIT": "1",
+    "WARP_CACHE_PATH": "<output-dir>/.warp-cache"
+  },
+  "source": {
+    "git_commit": null,
+    "dirty": null,
+    "file_sha256": {
+      "part3/benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+      "part3/benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+      "part3/clean_table_scene.py": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+      "part3/clean_table_task.py": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+      "part3/clean_the_table.py": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+      "part3/final_check.py": "40711b18ad19f26441b8ea0bfe26083006271e646e8a796fdd351738fa12302e",
+      "part3/migration_benchmark.py": "286e1f2381e913e967562b3caca579a95ebc535d77426d55fd6ade68d9ffe3e8",
+      "part3/newton_assets.py": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+      "part3/newton_scene.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "part3/newton_scene_original.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "part3/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "part3/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "part3/so101_newton.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "part3/so101_newton_original.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "part3/solutions/clean_step_00_add_bin.py": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+      "part3/solutions/clean_step_01_add_garment.py": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+      "part3/solutions/clean_step_02_add_cable.py": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+      "part3/solutions/clean_step_03_build_coupled_solver.py": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+      "part3/solutions/clean_step_04_simulate.py": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+      "part3/solutions/clean_table_scene_solution.py": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+      "part3/solutions/clean_the_table_solution.py": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+      "part3/solutions/newton_scene_solution.py": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3",
+      "part3/solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+      "part3/solutions/step_00_imports.py": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+      "part3/solutions/step_01_builder.py": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+      "part3/solutions/step_02_add_mjcf.py": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+      "part3/solutions/step_03_joint_targets.py": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+      "part3/solutions/step_04_props.py": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+      "part3/solutions/step_05_finalize.py": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+      "part3/solutions/step_06_state.py": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+      "part3/solutions/step_07_solver.py": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+      "part3/solutions/step_08_substep_loop.py": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+      "part3/solutions/step_09_cuda_graph.py": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+      "part3/utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+      "requirements.lock.txt": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98"
+    },
+    "aggregate_sha256": "5f43ddbb7afe812ff9d8fda7aa9138ba04c006eba22ec2809714e5ee53e7a73b"
+  },
+  "cases": [
+    {
+      "scope": "workflow",
+      "backend": "mujoco",
+      "robot": "so101",
+      "worlds": 1,
+      "status": "passed",
+      "config": {
+        "robot": "so101",
+        "frames": 600,
+        "substeps": 10,
+        "repeats": 5,
+        "warmups": 1,
+        "device": "cuda:1",
+        "max_trajectory_mib": 1024,
+        "scope": "workflow",
+        "backend": "mujoco",
+        "worlds": 1,
+        "cpu_threads": 1,
+        "nconmax": null,
+        "njmax": null,
+        "case_id": "workflow-mujoco-w1-t1"
+      },
+      "samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 0.2816553970001223,
+          "output_transfer_seconds": 2.6329999855079222e-05,
+          "validation_seconds": 0.0018207119999260613,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.28350243899990346
+        },
+        {
+          "repeat": 1,
+          "simulation_seconds": 0.2818742500001008,
+          "output_transfer_seconds": 1.951000012923032e-05,
+          "validation_seconds": 0.0018125090000467026,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.28370626900027673
+        },
+        {
+          "repeat": 2,
+          "simulation_seconds": 0.2805091420000281,
+          "output_transfer_seconds": 2.0881000182271237e-05,
+          "validation_seconds": 0.0018180070001108106,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.28234803000032116
+        },
+        {
+          "repeat": 3,
+          "simulation_seconds": 0.27978443799997876,
+          "output_transfer_seconds": 2.0360999997137696e-05,
+          "validation_seconds": 0.0018183279998993385,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.28162312699987524
+        },
+        {
+          "repeat": 4,
+          "simulation_seconds": 0.282990128000165,
+          "output_transfer_seconds": 2.0831000028920243e-05,
+          "validation_seconds": 0.0017771649997939676,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.2847881239999879
+        }
+      ],
+      "warmup_samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 0.2876526659999854,
+          "output_transfer_seconds": 3.178800011482963e-05,
+          "validation_seconds": 0.015580975999910152,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 1144,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3295010963135542,
+              0.06382376077075434,
+              0.08968113517809112
+            ],
+            "blue_xyz": [
+              0.3328903352266611,
+              0.062273314627084145,
+              0.04579295119547642
+            ],
+            "xy_error_m": 0.0037270395295113386,
+            "height_difference_m": 0.0438881839826147
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 138,
+                "airborne_carry_m": 0.18991277829613035,
+                "max_cube_clearance_m": 0.15270831624728137,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0037270395295113386,
+                "final_height_difference_m": 0.0438881839826147,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.8875309870816773e-07,
+                "settling_max_angular_speed_rad_s": 2.3715189251567968e-07,
+                "settling_max_point_speed_bound_m_s": 1.9774800403162214e-07,
+                "settling_rms_point_speed_bound_m_s": 1.9764006190732115e-07,
+                "settling_position_diameter_m": 1.849120455833389e-07,
+                "settling_orientation_diameter_deg": 1.322660445345283e-05
+              }
+            ]
+          },
+          "end_to_end_seconds": 0.3032654300000104
+        }
+      ],
+      "timings": {
+        "preparation_seconds": 0.05149372799996854,
+        "backend_setup_seconds": 0.5807673340000292,
+        "warmup_seconds": 0.3032654300000104,
+        "episode_setup_seconds": [
+          {
+            "warmup": true,
+            "seconds": 0.12389073400004236
+          },
+          {
+            "warmup": false,
+            "seconds": 0.10263180599986299
+          },
+          {
+            "warmup": false,
+            "seconds": 0.09190733099990211
+          },
+          {
+            "warmup": false,
+            "seconds": 0.08850007500018364
+          },
+          {
+            "warmup": false,
+            "seconds": 0.08585337700014861
+          },
+          {
+            "warmup": false,
+            "seconds": 0.0879840109998895
+          }
+        ],
+        "case_seconds": 2.351694965999968
+      },
+      "workload": {
+        "task": "scripted_pick_and_place_stack",
+        "frames": 600,
+        "physics_steps": 6000,
+        "simulated_seconds": 12.0,
+        "control_hz": 50,
+        "physics_dt_seconds": 0.002,
+        "controller": "online waypoint inverse kinematics, one CPU rollout thread",
+        "model_equivalence": "workflow-only; Newton reconstructs the scene and actuation",
+        "model_sha256": "0b5e81c5370c616b2c6208216245cfefd9467292c33ca8bbe5e2b93ec494cb30",
+        "controls_sha256": null,
+        "control_policy": "computed online; no prerecorded controls",
+        "rendering": false,
+        "contact_detection": "MuJoCo for all backends",
+        "output_policy": "600 payload pose/velocity observations at 50 Hz, plus final body state; final host transfer separately timed",
+        "output_layout_note": "Native float64 body arrays include the world body; Newton float32 arrays follow Newton body indexing. Native output refreshes final FK.",
+        "timed_scope": "online IK, control updates/transfers, physics stepping, payload history capture in backend memory, CUDA synchronization",
+        "observation_policy": "CPU writes payload history to RAM; CUDA launches one recorder kernel per control frame and downloads once after the episode. Observation overhead is included in simulation_seconds.",
+        "compilation_policy": "Construction, graph capture, and their JIT work are setup; any remaining lazy compilation occurs in full-episode warmups. The on-disk Warp cache may be warm.",
+        "asset_ref": "feadf76d42f8a2162426f7d226a3b539556b3bf5",
+        "source_sha256": {
+          "benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+          "pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+          "robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+          "utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+          "benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19"
+        },
+        "model_mjb_sha256": "0b5e81c5370c616b2c6208216245cfefd9467292c33ca8bbe5e2b93ec494cb30",
+        "model_dimensions": {
+          "nq": 20,
+          "nv": 18,
+          "nu": 6,
+          "nbody": 11,
+          "ngeom": 52
+        },
+        "solver_options": {
+          "integrator": 3,
+          "solver": 2,
+          "cone": 1,
+          "iterations": 10,
+          "ls_iterations": 20,
+          "timestep": 0.002,
+          "tolerance": 1e-08,
+          "ls_tolerance": 0.01,
+          "impratio": 10.0,
+          "gravity": [
+            0.0,
+            0.0,
+            -9.81
+          ]
+        },
+        "payload_history_dtype": "float64",
+        "payload_observations": 600
+      },
+      "diagnostics": {
+        "validation": "controller complete, finite history, lift/carry, table support, last-second settling, final stack; capacity/warning guards",
+        "model_differences": [
+          "Native MuJoCo loads the task MJCF; Newton imports the robot and reconstructs table, cubes, and ground.",
+          "Newton uses coordinate position targets and reconstructed gains; original MuJoCo uses its MJCF actuators.",
+          "Newton explicitly selects elliptic contacts, implicitfast, 100 solver iterations and 50 line-search iterations.",
+          "These workflow rows are excluded from identical-model replay speedups and crossover calculations."
+        ],
+        "actual_capacities": null
+      },
+      "device": "cpu",
+      "device_info": {
+        "device": "cpu",
+        "cuda": false,
+        "cpu_rollout_threads": 1
+      },
+      "case_id": "workflow-mujoco-w1-t1",
+      "summary": {
+        "eligible": true,
+        "repetitions": 5,
+        "median_seconds": 0.2816553970001223,
+        "min_seconds": 0.27978443799997876,
+        "max_seconds": 0.282990128000165,
+        "successful_tasks_per_second": 3.5504379133184716,
+        "world_steps_per_second": 21302.62747991083,
+        "aggregate_real_time_factor": 42.60525495982166,
+        "median_with_transfer_and_validation_seconds": 0.28350243899990346
+      },
+      "process_wall_seconds": 2.6178217570000015,
+      "load_before": {
+        "load_average_1_5_15_minutes": [
+          0.0,
+          0.080078125,
+          0.18896484375
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "33",
+            "power_w": "33.50",
+            "sm_clock_mhz": "2565"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "34",
+            "power_w": "20.54",
+            "sm_clock_mhz": "1912"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      },
+      "load_after": {
+        "load_average_1_5_15_minutes": [
+          0.080078125,
+          0.095703125,
+          0.193359375
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "32",
+            "power_w": "75.09",
+            "sm_clock_mhz": "480"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "34",
+            "power_w": "83.40",
+            "sm_clock_mhz": "2610"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      }
+    },
+    {
+      "scope": "workflow",
+      "backend": "newton_cuda",
+      "robot": "so101",
+      "worlds": 1,
+      "status": "passed",
+      "config": {
+        "robot": "so101",
+        "frames": 600,
+        "substeps": 10,
+        "repeats": 5,
+        "warmups": 1,
+        "device": "cuda:1",
+        "max_trajectory_mib": 1024,
+        "scope": "workflow",
+        "backend": "newton_cuda",
+        "worlds": 1,
+        "cpu_threads": 1,
+        "nconmax": null,
+        "njmax": null,
+        "case_id": "workflow-newton_cuda-w1-t1"
+      },
+      "samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 2.3272867449998103,
+          "output_transfer_seconds": 7.237999989229138e-05,
+          "validation_seconds": 0.0017648759999246977,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290870189666748,
+              0.06120004877448082,
+              0.09000818431377411
+            ],
+            "blue_xyz": [
+              0.33025792241096497,
+              0.06025940552353859,
+              0.04600154981017113
+            ],
+            "xy_error_m": 0.0015019401907920837,
+            "height_difference_m": 0.04400663450360298
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.1852272003889084,
+                "max_cube_clearance_m": 0.15038210153579712,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0015019401907920837,
+                "final_height_difference_m": 0.04400663450360298,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.010148463770747185,
+                "settling_max_angular_speed_rad_s": 0.36555376648902893,
+                "settling_max_point_speed_bound_m_s": 0.024077933092804864,
+                "settling_rms_point_speed_bound_m_s": 0.007389671979121255,
+                "settling_position_diameter_m": 0.00010369684697557039,
+                "settling_orientation_diameter_deg": 0.10929928014280656
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.3291240009996272
+        },
+        {
+          "repeat": 1,
+          "simulation_seconds": 2.326327092999918,
+          "output_transfer_seconds": 7.521399993493105e-05,
+          "validation_seconds": 0.0018007199998919532,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.32890260219573975,
+              0.06120162457227707,
+              0.08996492624282837
+            ],
+            "blue_xyz": [
+              0.3301517963409424,
+              0.060278359800577164,
+              0.04600519314408302
+            ],
+            "xy_error_m": 0.0015533524565398693,
+            "height_difference_m": 0.043959733098745346
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.1852262169122696,
+                "max_cube_clearance_m": 0.15038657188415527,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0015533524565398693,
+                "final_height_difference_m": 0.043959733098745346,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.018792226910591125,
+                "settling_max_angular_speed_rad_s": 0.34346768260002136,
+                "settling_max_point_speed_bound_m_s": 0.02263138292306527,
+                "settling_rms_point_speed_bound_m_s": 0.009237653982475814,
+                "settling_position_diameter_m": 0.0001201881000181803,
+                "settling_orientation_diameter_deg": 0.12491546412540334
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.328203026999745
+        },
+        {
+          "repeat": 2,
+          "simulation_seconds": 2.3288871610000115,
+          "output_transfer_seconds": 7.115800008250517e-05,
+          "validation_seconds": 0.0017528379999021126,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.32943758368492126,
+              0.061121951788663864,
+              0.08997742086648941
+            ],
+            "blue_xyz": [
+              0.3302784264087677,
+              0.0602198950946331,
+              0.04597301408648491
+            ],
+            "xy_error_m": 0.0012331758625805378,
+            "height_difference_m": 0.0440044067800045
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18522615730762482,
+                "max_cube_clearance_m": 0.1503930687904358,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0012331758625805378,
+                "final_height_difference_m": 0.0440044067800045,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.014026794582605362,
+                "settling_max_angular_speed_rad_s": 0.42512696981430054,
+                "settling_max_point_speed_bound_m_s": 0.03022630783310108,
+                "settling_rms_point_speed_bound_m_s": 0.00959727960778923,
+                "settling_position_diameter_m": 0.00013576186693070363,
+                "settling_orientation_diameter_deg": 0.15022456806342224
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.330711156999996
+        },
+        {
+          "repeat": 3,
+          "simulation_seconds": 2.322734624999839,
+          "output_transfer_seconds": 7.563500003016088e-05,
+          "validation_seconds": 0.0018617440000525676,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.3289608359336853,
+              0.061121635138988495,
+              0.08996178954839706
+            ],
+            "blue_xyz": [
+              0.33019232749938965,
+              0.06024628132581711,
+              0.04596671089529991
+            ],
+            "xy_error_m": 0.0015108990482985973,
+            "height_difference_m": 0.04399507865309715
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18522591888904572,
+                "max_cube_clearance_m": 0.15038639307022095,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0015108990482985973,
+                "final_height_difference_m": 0.04399507865309715,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.009347744286060333,
+                "settling_max_angular_speed_rad_s": 0.33899545669555664,
+                "settling_max_point_speed_bound_m_s": 0.022265206085758153,
+                "settling_rms_point_speed_bound_m_s": 0.006707520436340803,
+                "settling_position_diameter_m": 0.00012747004233249824,
+                "settling_orientation_diameter_deg": 0.14270554792398127
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.324672003999922
+        },
+        {
+          "repeat": 4,
+          "simulation_seconds": 2.328147144000013,
+          "output_transfer_seconds": 7.692799999858835e-05,
+          "validation_seconds": 0.0018484330000774207,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.329633504152298,
+              0.06091596186161041,
+              0.08999171108007431
+            ],
+            "blue_xyz": [
+              0.3300268054008484,
+              0.059973690658807755,
+              0.04599584639072418
+            ],
+            "xy_error_m": 0.001021058764308691,
+            "height_difference_m": 0.04399586468935013
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18522796034812927,
+                "max_cube_clearance_m": 0.15038049221038818,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.001021058764308691,
+                "final_height_difference_m": 0.04399586468935013,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.009455622173845768,
+                "settling_max_angular_speed_rad_s": 0.34150511026382446,
+                "settling_max_point_speed_bound_m_s": 0.02246871461831559,
+                "settling_rms_point_speed_bound_m_s": 0.0066053748192510045,
+                "settling_position_diameter_m": 0.00021471456520555775,
+                "settling_orientation_diameter_deg": 0.17311861029094056
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.3300725050000892
+        }
+      ],
+      "warmup_samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 2.377842575999921,
+          "output_transfer_seconds": 7.402299979730742e-05,
+          "validation_seconds": 0.007473926000102438,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 64800,
+          "task_metrics": {
+            "red_xyz": [
+              0.32905006408691406,
+              0.061170391738414764,
+              0.08999331295490265
+            ],
+            "blue_xyz": [
+              0.3302391767501831,
+              0.06027527526021004,
+              0.045997366309165955
+            ],
+            "xy_error_m": 0.0014883623225614429,
+            "height_difference_m": 0.043995946645736694
+          },
+          "overflow_flags": [
+            0
+          ],
+          "capacity_flags": [
+            0
+          ],
+          "iteration_warning_flags": [
+            0
+          ],
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.1852269172668457,
+                "max_cube_clearance_m": 0.1503818780183792,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.0014883623225614429,
+                "final_height_difference_m": 0.043995946645736694,
+                "final_time_s": 11.999495506286621,
+                "settling_max_linear_speed_m_s": 0.009489493444561958,
+                "settling_max_angular_speed_rad_s": 0.3431447446346283,
+                "settling_max_point_speed_bound_m_s": 0.02256506434982529,
+                "settling_rms_point_speed_bound_m_s": 0.008225341894431729,
+                "settling_position_diameter_m": 0.0001143465917188695,
+                "settling_orientation_diameter_deg": 0.14653690557072155
+              }
+            ]
+          },
+          "end_to_end_seconds": 2.3853905249998206
+        }
+      ],
+      "timings": {
+        "preparation_seconds": 1.9531914659999075,
+        "backend_setup_seconds": 31.73306906699986,
+        "warmup_seconds": 2.3853905249998206,
+        "episode_setup_seconds": [
+          {
+            "warmup": true,
+            "seconds": 28.758399463999922
+          },
+          {
+            "warmup": false,
+            "seconds": 0.5608057409999674
+          },
+          {
+            "warmup": false,
+            "seconds": 0.53680002100009
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6564290579999579
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6622145740000178
+          },
+          {
+            "warmup": false,
+            "seconds": 0.5584202089999053
+          }
+        ],
+        "case_seconds": 47.714598174
+      },
+      "workload": {
+        "task": "scripted_pick_and_place_stack",
+        "frames": 600,
+        "physics_steps": 6000,
+        "simulated_seconds": 12.0,
+        "control_hz": 50,
+        "physics_dt_seconds": 0.002,
+        "controller": "online waypoint inverse kinematics, one CPU rollout thread",
+        "model_equivalence": "workflow-only; Newton reconstructs the scene and actuation",
+        "model_sha256": "e9bf27214d043ee2e1ee25baf23dc615cd97a2b9e8ad49b06095dba705d978aa",
+        "controls_sha256": null,
+        "control_policy": "computed online; no prerecorded controls",
+        "rendering": false,
+        "contact_detection": "MuJoCo for all backends",
+        "output_policy": "600 payload pose/velocity observations at 50 Hz, plus final body state; final host transfer separately timed",
+        "output_layout_note": "Native float64 body arrays include the world body; Newton float32 arrays follow Newton body indexing. Native output refreshes final FK.",
+        "timed_scope": "online IK, control updates/transfers, physics stepping, payload history capture in backend memory, CUDA synchronization",
+        "observation_policy": "CPU writes payload history to RAM; CUDA launches one recorder kernel per control frame and downloads once after the episode. Observation overhead is included in simulation_seconds.",
+        "compilation_policy": "Construction, graph capture, and their JIT work are setup; any remaining lazy compilation occurs in full-episode warmups. The on-disk Warp cache may be warm.",
+        "asset_ref": "feadf76d42f8a2162426f7d226a3b539556b3bf5",
+        "source_sha256": {
+          "benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+          "pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+          "robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+          "utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+          "benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+          "solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+          "solutions/newton_scene_solution.py": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3"
+        },
+        "model_mjb_sha256": "e9bf27214d043ee2e1ee25baf23dc615cd97a2b9e8ad49b06095dba705d978aa",
+        "model_dimensions": {
+          "nq": 20,
+          "nv": 18,
+          "nu": 6,
+          "nbody": 9,
+          "ngeom": 34
+        },
+        "solver_options": {
+          "integrator": 3,
+          "solver": 2,
+          "cone": 1,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "timestep": 0.002,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "impratio": 100.0,
+          "gravity": [
+            -0.0,
+            -0.0,
+            -9.8100004196167
+          ]
+        },
+        "payload_history_dtype": "float32",
+        "payload_observations": 600
+      },
+      "diagnostics": {
+        "validation": "controller complete, finite history, lift/carry, table support, last-second settling, final stack; capacity/warning guards",
+        "model_differences": [
+          "Native MuJoCo loads the task MJCF; Newton imports the robot and reconstructs table, cubes, and ground.",
+          "Newton uses coordinate position targets and reconstructed gains; original MuJoCo uses its MJCF actuators.",
+          "Newton explicitly selects elliptic contacts, implicitfast, 100 solver iterations and 50 line-search iterations.",
+          "These workflow rows are excluded from identical-model replay speedups and crossover calculations."
+        ],
+        "actual_capacities": {
+          "nconmax": 128,
+          "njmax": 1024
+        }
+      },
+      "device": "cuda:1",
+      "device_info": {
+        "device": "cuda:1",
+        "cuda": true,
+        "cpu_rollout_threads": 1,
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+        "arch": "120"
+      },
+      "case_id": "workflow-newton_cuda-w1-t1",
+      "summary": {
+        "eligible": true,
+        "repetitions": 5,
+        "median_seconds": 2.3272867449998103,
+        "min_seconds": 2.322734624999839,
+        "max_seconds": 2.3288871610000115,
+        "successful_tasks_per_second": 0.4296849119037463,
+        "world_steps_per_second": 2578.109471422478,
+        "aggregate_real_time_factor": 5.156218942844956,
+        "median_with_transfer_and_validation_seconds": 2.3291240009996272
+      },
+      "process_wall_seconds": 49.38289287900011,
+      "load_before": {
+        "load_average_1_5_15_minutes": [
+          0.080078125,
+          0.095703125,
+          0.193359375
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "32",
+            "power_w": "75.09",
+            "sm_clock_mhz": "480"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "34",
+            "power_w": "83.40",
+            "sm_clock_mhz": "2610"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      },
+      "load_after": {
+        "load_average_1_5_15_minutes": [
+          0.60205078125,
+          0.2373046875,
+          0.2373046875
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "32",
+            "power_w": "20.56",
+            "sm_clock_mhz": "180"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "39",
+            "power_w": "102.76",
+            "sm_clock_mhz": "2865"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      }
+    },
+    {
+      "scope": "workflow",
+      "backend": "newton_cpu",
+      "robot": "so101",
+      "worlds": 1,
+      "status": "passed",
+      "config": {
+        "robot": "so101",
+        "frames": 600,
+        "substeps": 10,
+        "repeats": 5,
+        "warmups": 1,
+        "device": "cuda:1",
+        "max_trajectory_mib": 1024,
+        "scope": "workflow",
+        "backend": "newton_cpu",
+        "worlds": 1,
+        "cpu_threads": 1,
+        "nconmax": null,
+        "njmax": null,
+        "case_id": "workflow-newton_cpu-w1-t1"
+      },
+      "samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 1.6516517840000233,
+          "output_transfer_seconds": 7.270999958564062e-06,
+          "validation_seconds": 0.0024170609999600856,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.654076115999942
+        },
+        {
+          "repeat": 1,
+          "simulation_seconds": 1.5877513870000257,
+          "output_transfer_seconds": 3.876000164382276e-06,
+          "validation_seconds": 0.0018811740001183352,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.5896364370003084
+        },
+        {
+          "repeat": 2,
+          "simulation_seconds": 1.6758047840000927,
+          "output_transfer_seconds": 5.127999884280143e-06,
+          "validation_seconds": 0.0022835879999547615,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.6780934999999317
+        },
+        {
+          "repeat": 3,
+          "simulation_seconds": 1.500746036999999,
+          "output_transfer_seconds": 4.527000101006706e-06,
+          "validation_seconds": 0.002908008000076734,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.5036585720001767
+        },
+        {
+          "repeat": 4,
+          "simulation_seconds": 1.4915930390000085,
+          "output_transfer_seconds": 4.32700016972376e-06,
+          "validation_seconds": 0.0020927769999161683,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.4936901430000944
+        }
+      ],
+      "warmup_samples": [
+        {
+          "repeat": 0,
+          "simulation_seconds": 1.4603345089999493,
+          "output_transfer_seconds": 4.5369999952527e-06,
+          "validation_seconds": 0.003554353000026822,
+          "task_success_count": 1,
+          "task_total_count": 1,
+          "passed": true,
+          "final_host_output_bytes": 416,
+          "payload_history_bytes": 129600,
+          "task_metrics": {
+            "red_xyz": [
+              0.3290976285934448,
+              0.061923328787088394,
+              0.08994835615158081
+            ],
+            "blue_xyz": [
+              0.3302996754646301,
+              0.060297641903162,
+              0.04595734924077988
+            ],
+            "xy_error_m": 0.0020218247082084417,
+            "height_difference_m": 0.043991006910800934
+          },
+          "validation": {
+            "passed": true,
+            "task_success_count": 1,
+            "task_total_count": 1,
+            "worlds": [
+              {
+                "world": 0,
+                "passed": true,
+                "finite": true,
+                "time_progression": true,
+                "lift_frames": 135,
+                "airborne_carry_m": 0.18523815567070773,
+                "max_cube_clearance_m": 0.15043985843123767,
+                "final_stack": true,
+                "blue_supported_on_table_last_1s": true,
+                "settled_last_1s": true,
+                "final_xy_error_m": 0.002021824553490405,
+                "final_height_difference_m": 0.043991006910800934,
+                "final_time_s": 12.000000000000677,
+                "settling_max_linear_speed_m_s": 1.682333813183604e-06,
+                "settling_max_angular_speed_rad_s": 3.186880291764207e-07,
+                "settling_max_point_speed_bound_m_s": 1.690577800007019e-06,
+                "settling_rms_point_speed_bound_m_s": 1.6833077710518822e-06,
+                "settling_position_diameter_m": 0.0,
+                "settling_orientation_diameter_deg": 1.7075472925031877e-06
+              }
+            ]
+          },
+          "end_to_end_seconds": 1.4638933989999714
+        }
+      ],
+      "timings": {
+        "preparation_seconds": 1.810701262000066,
+        "backend_setup_seconds": 13.784220012000105,
+        "warmup_seconds": 1.4638933989999714,
+        "episode_setup_seconds": [
+          {
+            "warmup": true,
+            "seconds": 10.100048712999978
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6753111049999916
+          },
+          {
+            "warmup": false,
+            "seconds": 0.9505797410001833
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6826579829998991
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6852958899999066
+          },
+          {
+            "warmup": false,
+            "seconds": 0.6903265800001464
+          }
+        ],
+        "case_seconds": 24.978108470000052
+      },
+      "workload": {
+        "task": "scripted_pick_and_place_stack",
+        "frames": 600,
+        "physics_steps": 6000,
+        "simulated_seconds": 12.0,
+        "control_hz": 50,
+        "physics_dt_seconds": 0.002,
+        "controller": "online waypoint inverse kinematics, one CPU rollout thread",
+        "model_equivalence": "workflow-only; Newton reconstructs the scene and actuation",
+        "model_sha256": "d46616ec79d5bbb0c709794c8bebe2c11408629bbeb919eda376ea457b0d7c1e",
+        "controls_sha256": null,
+        "control_policy": "computed online; no prerecorded controls",
+        "rendering": false,
+        "contact_detection": "MuJoCo for all backends",
+        "output_policy": "600 payload pose/velocity observations at 50 Hz, plus final body state; final host transfer separately timed",
+        "output_layout_note": "Native float64 body arrays include the world body; Newton float32 arrays follow Newton body indexing. Native output refreshes final FK.",
+        "timed_scope": "online IK, control updates/transfers, physics stepping, payload history capture in backend memory, CUDA synchronization",
+        "observation_policy": "CPU writes payload history to RAM; CUDA launches one recorder kernel per control frame and downloads once after the episode. Observation overhead is included in simulation_seconds.",
+        "compilation_policy": "Construction, graph capture, and their JIT work are setup; any remaining lazy compilation occurs in full-episode warmups. The on-disk Warp cache may be warm.",
+        "asset_ref": "feadf76d42f8a2162426f7d226a3b539556b3bf5",
+        "source_sha256": {
+          "benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+          "pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+          "robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+          "utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+          "benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+          "solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+          "solutions/newton_scene_solution.py": "0b743c8249fc5d8bb801a5720d2cd579fe7a536ce6ecacd113981e8e9fc9d7b3"
+        },
+        "model_mjb_sha256": "d46616ec79d5bbb0c709794c8bebe2c11408629bbeb919eda376ea457b0d7c1e",
+        "model_dimensions": {
+          "nq": 20,
+          "nv": 18,
+          "nu": 6,
+          "nbody": 9,
+          "ngeom": 34
+        },
+        "solver_options": {
+          "integrator": 3,
+          "solver": 2,
+          "cone": 1,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "timestep": 0.002,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "impratio": 100.0,
+          "gravity": [
+            -0.0,
+            -0.0,
+            -9.8100004196167
+          ]
+        },
+        "payload_history_dtype": "float64",
+        "payload_observations": 600
+      },
+      "diagnostics": {
+        "validation": "controller complete, finite history, lift/carry, table support, last-second settling, final stack; capacity/warning guards",
+        "model_differences": [
+          "Native MuJoCo loads the task MJCF; Newton imports the robot and reconstructs table, cubes, and ground.",
+          "Newton uses coordinate position targets and reconstructed gains; original MuJoCo uses its MJCF actuators.",
+          "Newton explicitly selects elliptic contacts, implicitfast, 100 solver iterations and 50 line-search iterations.",
+          "These workflow rows are excluded from identical-model replay speedups and crossover calculations."
+        ],
+        "actual_capacities": null
+      },
+      "device": "cpu",
+      "device_info": {
+        "device": "cpu",
+        "cuda": false,
+        "cpu_rollout_threads": 1,
+        "name": "CPU",
+        "arch": "0"
+      },
+      "case_id": "workflow-newton_cpu-w1-t1",
+      "summary": {
+        "eligible": true,
+        "repetitions": 5,
+        "median_seconds": 1.5877513870000257,
+        "min_seconds": 1.4915930390000085,
+        "max_seconds": 1.6758047840000927,
+        "successful_tasks_per_second": 0.6298215250748094,
+        "world_steps_per_second": 3778.929150448856,
+        "aggregate_real_time_factor": 7.557858300897712,
+        "median_with_transfer_and_validation_seconds": 1.5896364370003084
+      },
+      "process_wall_seconds": 26.400908066000056,
+      "load_before": {
+        "load_average_1_5_15_minutes": [
+          0.60205078125,
+          0.2373046875,
+          0.2373046875
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "32",
+            "power_w": "21.05",
+            "sm_clock_mhz": "180"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "39",
+            "power_w": "102.96",
+            "sm_clock_mhz": "2865"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      },
+      "load_after": {
+        "load_average_1_5_15_minutes": [
+          0.73876953125,
+          0.2998046875,
+          0.25927734375
+        ],
+        "gpus": [
+          {
+            "index": "0",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "20",
+            "utilization_percent": "0",
+            "temperature_c": "32",
+            "power_w": "22.53",
+            "sm_clock_mhz": "180"
+          },
+          {
+            "index": "1",
+            "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+            "driver": "615.71.09",
+            "memory_total_mib": "97887",
+            "memory_used_mib": "22593",
+            "utilization_percent": "0",
+            "temperature_c": "36",
+            "power_w": "13.93",
+            "sm_clock_mhz": "180"
+          }
+        ],
+        "gpu_compute_processes": [
+          {
+            "executable": "llama-server",
+            "gpu_memory_mib": "22328"
+          }
+        ]
+      }
+    }
+  ],
+  "comparisons": [],
+  "finished_utc": "2026-10-08T16:15:59Z"
+}

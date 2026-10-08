@@ -37,10 +37,17 @@ Open the notebooks under `notebooks/newton/part3/` in order:
 | [02 — MuJoCo to Newton](part3/02__mujoco_to_newton.ipynb) | The same two-cube stack, with mapped joint targets and Newton state |
 | [03 — Clean the table](part3/03__clean_the_table.ipynb) | The bin, free cloth, rod, solver ownership and coupled loop for sequential gripper manipulation |
 | [04 — Final check](part3/04__final_check.ipynb) | Both robot profiles, CPU/CUDA selection, and measured grasp-to-release acceptance |
+| [Optional — Migration benchmark](part3/05__migration_benchmark.ipynb) | Repeated CPU/GPU task measurements, hardware metadata, and local/Brev/Colab execution |
 
 Explanations live in the notebooks; exercises live in external Python files. Complete the `TODO Step` markers in your editor and compare with `part3/solutions/`. **`REFERENCE = True`** selects reference scripts directly. Set it to `False` to check your completed exercises. No cell copies a solution over your work, and backup cells preserve existing backups.
 
 An unfinished exercise must fail. Notebook 03 recognizes only the five documented `NotImplementedError` messages for Steps 0–4; missing dependencies, download problems and unrelated exceptions are not expected TODO outcomes. A reference run does not grade student files.
+
+## Measure the migration
+
+After checking the rigid task, use [When is migration worth it?](part3/05__migration_benchmark.ipynb) to compare native MuJoCo with the GPU workflow on your hardware. The notebook runs preflight automatically and waits for `RUN_BENCHMARK = True` before collecting timings. Its small default is one world and 16 worlds, with three repetitions; keep the episode duration and task checks fixed when changing batch size.
+
+The default replay scope uses the same MJCF model and task commands on CPU and GPU. The separate workflow scope includes the host controller and Newton reconstruction, so it does not claim identical model/contact behavior. Both retain raw task checks and timing samples. See [BENCHMARK.md](BENCHMARK.md) for commands, CPU worker counts, output files, Colab's isolated Python 3.12 setup, and Brev instructions. These community measurements do not replace validation on the developer GPU selected for publication.
 
 ## The coupled gripper task
 
@@ -131,7 +138,7 @@ From `tutorials/newton`:
 PXR_WORK_THREAD_LIMIT=1 .venv/bin/python -m unittest discover -s test -v
 .venv/bin/python notebooks/newton/tools/build_clean_scaffolds.py --check
 
-# Execute all four notebooks.
+# Execute all four teaching notebooks.
 PXR_WORK_THREAD_LIMIT=1 NEWTON_NOTEBOOKS_EXECUTE=1 NEWTON_NOTEBOOKS_INCLUDE_FINAL=1 \
   .venv/bin/python -m unittest discover -s test -p test_notebooks.py -v
 ```

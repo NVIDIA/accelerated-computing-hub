@@ -12,8 +12,9 @@ This tutorial is self-contained. It includes the earlier MuJoCo/MJWarp **Python 
 | [MuJoCo to Newton](notebooks/newton/part3/02__mujoco_to_newton.ipynb) | Preserve the two-cube task while mapping joints, controls, states and contacts |
 | [Clean the table](notebooks/newton/part3/03__clean_the_table.ipynb) | Author the box, free cloth and rod; couple solvers; grasp, carry and release all four payloads |
 | [Final check](notebooks/newton/part3/04__final_check.ipynb) | Check both robots and inspect measured grasp-to-release outcomes on the selected device |
+| [When is migration worth it?](notebooks/newton/part3/05__migration_benchmark.ipynb) | Measure native CPU MuJoCo and the GPU workflow with recorded hardware, configuration and task outcomes |
 
-The notebooks default to `REFERENCE = True`, selecting the complete external Python solutions. Set it to `False` after completing the `TODO Step` sections in the starter scripts. Reference runs never copy a solution over your exercise files, and backups preserve existing work. There are no separate solution notebooks: each notebook explicitly chooses the reference or student Python implementation.
+The four teaching notebooks default to `REFERENCE = True`, selecting the complete external Python solutions. Set it to `False` after completing the `TODO Step` sections in the starter scripts. Reference runs never copy a solution over your exercise files, and backups preserve existing work. There are no separate solution notebooks: each lesson explicitly chooses the reference or student Python implementation. The optional benchmark notebook runs preflight first and collects measurements only when enabled.
 
 ## Run locally
 
@@ -44,9 +45,15 @@ brev/dev-start.bash newton
 brev/dev-test.bash newton
 ```
 
-The default test entrypoint runs the regression suite and the first two notebooks. To run all four, set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1` before starting Compose, or run `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1 bash brev/test.bash` inside this tutorial's environment. `brev/test.bash 03` or `04` explicitly selects a long coupled-task notebook; standard pytest paths and flags are also accepted.
+The default test entrypoint runs the regression suite, the first two teaching notebooks and the benchmark preflight. To run all four teaching notebooks, set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1` before starting Compose, or run `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1 bash brev/test.bash` inside this tutorial's environment. `brev/test.bash 03` or `04` explicitly selects a long coupled-task notebook; standard pytest paths and flags are also accepted.
 
 The Docker image built successfully on the verification workstation, and its default suite passed 119 tests, including the first two notebooks; the two long notebook tests were explicitly skipped. A live Brev deployment and Colab have not been validated. The original full physics validation and the relocation/container checks are distinguished in [VERIFICATION.md](notebooks/newton/VERIFICATION.md).
+
+## Measure migration on your hardware
+
+The [benchmark notebook](notebooks/newton/part3/05__migration_benchmark.ipynb) starts with one world and 16 worlds. It runs preflight first; measurement is explicit. Its replay experiment uses the same MJCF model and task commands on native MuJoCo and MuJoCo Warp, comparing CPU serial, CPU worker-pool and GPU batch timings. An optional one-world workflow experiment includes the actual host controller and Newton migration, with its model/contact differences reported separately.
+
+The reports save configuration, hardware/software metadata, repeated samples and task checks as JSON, CSV and Markdown. These are community measurements on the specified machine, not official product benchmarks. The [benchmark guide](notebooks/newton/BENCHMARK.md) explains how to interpret the results and run the same code locally, on an existing Brev instance, or through the notebook's isolated Colab setup. Lower-end GPU and hosted-runtime validation remain explicit follow-up work; included launch code does not establish a tested deployment.
 
 ## Recorded results
 
