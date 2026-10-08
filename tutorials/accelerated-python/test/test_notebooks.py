@@ -16,7 +16,7 @@ from nbclient.exceptions import CellExecutionError
 
 # Define the path to the notebooks directory
 NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / 'notebooks'
-ORDERED_APPLICATION_SOLUTIONS_DIR = NOTEBOOKS_DIR / 'applications' / 'solutions'
+ORDERED_APPLICATION_SOLUTIONS_DIR = NOTEBOOKS_DIR / 'applications' / 'shallow-water-equation' / 'solutions'
 ORDERED_APPLICATION_PREFIXES = tuple(f'{number}__swe__' for number in range(81, 88))
 CUDA_TILE_PREFIXES = tuple(f'{number}__cutile_python' for number in range(44, 48))
 

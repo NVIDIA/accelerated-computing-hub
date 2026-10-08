@@ -107,8 +107,8 @@ SPECIAL_KERNELSPECS = {
     "kernels/solutions/41__kernel_authoring__book_histogram__SOLUTION.ipynb": NSIGHT_COMPUTE_KERNELSPEC,
     "distributed/62__mpi4py__heat_equation.ipynb": PYHPC_KERNELSPEC,
     "distributed/solutions/62__mpi4py__heat_equation__SOLUTION.ipynb": PYHPC_KERNELSPEC,
-    "applications/86__swe__mpi4py.ipynb": PYHPC_KERNELSPEC,
-    "applications/solutions/86__swe__mpi4py__SOLUTION.ipynb": PYHPC_KERNELSPEC,
+    "applications/shallow-water-equation/86__swe__mpi4py.ipynb": PYHPC_KERNELSPEC,
+    "applications/shallow-water-equation/solutions/86__swe__mpi4py__SOLUTION.ipynb": PYHPC_KERNELSPEC,
 }
 
 CUDA_TILE_NOTEBOOK_PREFIXES = (
