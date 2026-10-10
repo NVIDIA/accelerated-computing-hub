@@ -1,3 +1,4 @@
+# Optional earlier stacking exercise. The primary box exercise is box_newton_exercise.py.
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
 # SPDX-License-Identifier: MIT
@@ -248,4 +249,9 @@ class Example:
 if __name__ == "__main__":
     parser = Example.create_parser()
     viewer, args = newton.examples.init(parser)
-    newton.examples.run(Example(viewer, args), args)
+    if args.viewer == "gl" and not args.headless:
+        from viewer_loop import run_stack_gl
+        if not run_stack_gl(viewer, lambda: Example(viewer, args), args):
+            raise SystemExit(130)
+    else:
+        newton.examples.run(Example(viewer, args), args)

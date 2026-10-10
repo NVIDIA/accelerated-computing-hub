@@ -1,9 +1,10 @@
-# Newton Robot Tasks — Newton 1.6.0, Python 3.12.
-# From tutorials/newton, create a dedicated environment:
-#   uv venv --python 3.12 .venv
-#   uv pip install --python .venv/bin/python -r notebooks/newton/requirements.txt
-#   PXR_WORK_THREAD_LIMIT=1 .venv/bin/python -m pytest test/test_newton_migration.py
-# For exact transitive versions and hashes, install requirements.lock.txt instead.
+# Article 3 only — Newton 1.6.0, Python 3.12.
+# Create a separate environment; do not combine this with the root requirements
+# or change Article 2's MuJoCo 3.8 environment.
+# From the repository root:
+#   uv venv --python 3.12 Article_3/.venv
+#   uv pip install --python Article_3/.venv/bin/python -r Article_3/requirements.txt
+#   Article_3/.venv/bin/python -m unittest discover -s tests -p test_newton_migration.py -v
 
 # Version-matched physics/import/viewer stack (CPU and optional NVIDIA CUDA):
 newton[examples]==1.6.0

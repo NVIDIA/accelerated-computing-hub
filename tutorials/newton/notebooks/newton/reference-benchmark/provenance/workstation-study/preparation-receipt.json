@@ -1,0 +1,45 @@
+{
+  "state": "prepared_immutable_not_launched",
+  "prepared_utc": "2026-10-09T16:40:33.845925+00:00",
+  "local_root": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep",
+  "remote_root": "/home/johnny/Projects/blogs-gpu-repair-20261009/reference-full-sweep",
+  "source_sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+  "frozen_source_manifest_sha256": "3c471cac33bc8a85be66e36981315dd161457c0202580c2128c5785c028f1848",
+  "supervisor_sha256": "584dec70a7118e0e029ddfdcaf9c20f08272249314187d8f020317d33c17e448",
+  "plan_sha256": "82f2cc4e699884ffbf5d8c50a52fe03a451d00b328262eaf83c51b9d9aa676ba",
+  "shared_lock": "/home/johnny/Projects/blogs-box-sweep-20261008/supervisor/workstation-benchmark.lock",
+  "job_count": 36,
+  "counts": [
+    1,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "stacks": [
+    "blog2",
+    "blog3"
+  ],
+  "backends": [
+    "cpu",
+    "gpu"
+  ],
+  "warmups": 1,
+  "repeats": 5,
+  "cpu_workers": 32,
+  "device": "cuda:1",
+  "prepare_output_dir": false,
+  "remote_writes": false,
+  "launched": false,
+  "source_modified": false,
+  "launch_dependency": "Root must first accept reference-stage1 full replay smokes; preparation does not imply those passed.",
+  "command": [
+    "/usr/bin/python3",
+    "/home/johnny/Projects/blogs-gpu-repair-20261009/reference-full-sweep/supervisor.py",
+    "/home/johnny/Projects/blogs-gpu-repair-20261009/reference-full-sweep/plan.json"
+  ]
+}

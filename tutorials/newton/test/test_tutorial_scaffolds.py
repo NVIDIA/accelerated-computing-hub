@@ -31,10 +31,12 @@ class TutorialScaffoldTests(unittest.TestCase):
     def test_mjwarp_scaffold_refreshes_host_kinematics_before_check(self) -> None:
         source = (ROOT / "mujoco/part2/so101_mjwarp.py").read_text()
 
-        headless_branch = source.index("if headless_steps > 0:")
-        self.assertIn("mujoco.mj_forward(mjm, mjd)", source[headless_branch:])
-        forward = source.index("mujoco.mj_forward(mjm, mjd)", headless_branch)
-        read_positions = source.index("red = mjd.xpos", headless_branch)
+        completion = source.index("def report_completion()")
+        headless_branch = source.index("if headless_steps > 0:", completion)
+        self.assertIn("report_completion()", source[headless_branch:])
+        forward = source.index("mujoco.mj_forward(mjm, mjd)", completion)
+        read_positions = source.index("red = mjd.xpos", completion)
+        self.assertLess(read_positions, headless_branch)
 
         self.assertLess(forward, read_positions)
 

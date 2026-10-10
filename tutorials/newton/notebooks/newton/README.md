@@ -1,8 +1,8 @@
 # Newton: From Rigid Robots to Coupled Simulation
 
-First build and step a small Newton scene. Then migrate the MuJoCo two-cube stacking task through `SolverMuJoCo`. The advanced exercise uses the robot's **gripper** to pick up two cubes, a free cloth patch and a cable, carry each object to a box, and release it inside. MuJoCo owns the robot and cubes; VBD owns the cloth and cable.
+First build and step a small Newton scene. Then migrate the MuJoCo two-cube receiving-box task through `SolverMuJoCo`. The advanced exercise uses the robot's **gripper** to pick up two cubes, a free cloth patch and a cable, carry each object to a box, and release it inside. MuJoCo owns the robot and cubes; VBD owns the cloth and cable.
 
-The reference task picks and places all four objects with the gripper. See [VERIFICATION.md](VERIFICATION.md) for the tested robot/device combinations and notebook results.
+The advanced coupled task picks and places all four objects with the gripper; the default migration and final-check notebooks use only the two rigid cubes. See [VERIFICATION.md](VERIFICATION.md) for the tested robot/device combinations and notebook results.
 
 ## Setup
 
@@ -34,13 +34,18 @@ Open the notebooks under `notebooks/newton/part3/` in order:
 | Notebook | What you build or verify |
 |---|---|
 | [01 — Newton](part3/01__newton_fundamentals.ipynb) | A small scene, state/control/contact ownership, solver choice and replicated worlds |
-| [02 — MuJoCo to Newton](part3/02__mujoco_to_newton.ipynb) | The same two-cube stack, with mapped joint targets and Newton state |
+| [02 — MuJoCo to Newton](part3/02__mujoco_to_newton.ipynb) | Pick and place both cubes in the box, with mapped joint targets and Newton state |
 | [03 — Clean the table](part3/03__clean_the_table.ipynb) | The bin, free cloth, rod, solver ownership and coupled loop for sequential gripper manipulation |
-| [04 — Final check](part3/04__final_check.ipynb) | Both robot profiles, CPU/CUDA selection, and measured grasp-to-release acceptance |
+| [04 — Final check](part3/04__final_check.ipynb) | Both CPU box tasks by default; CUDA and coupled checks opt-in |
+| [05 — Benchmark](part3/05__migration_benchmark.ipynb) | Preflight by default; opt into matched CPU/GPU box batches |
 
 Explanations live in the notebooks; exercises live in external Python files. Complete the `TODO Step` markers in your editor and compare with `part3/solutions/`. **`REFERENCE = True`** selects reference scripts directly. Set it to `False` to check your completed exercises. No cell copies a solution over your work, and backup cells preserve existing backups.
 
 An unfinished exercise must fail. Notebook 03 recognizes only the five documented `NotImplementedError` messages for Steps 0–4; missing dependencies, download problems and unrelated exceptions are not expected TODO outcomes. A reference run does not grade student files.
+
+## The box comparison
+
+See [BENCHMARK.md](BENCHMARK.md) for the full 40-second, 1–2048-world protocol, raw failures and matching CPU/GPU results. [Current notebook evidence](notebook-validation/2026-10-10/README.md) distinguishes fresh box/preflight executions from the retained October 4 sphere/coupling runs. [Viewer validation](VIEWER_VALIDATION.md) covers finite rigid-task viewers separately from measured throughput.
 
 ## The coupled gripper task
 
@@ -85,7 +90,7 @@ PXR_WORK_THREAD_LIMIT=1 python final_check.py --solutions --skip-gpu --robot bot
 PXR_WORK_THREAD_LIMIT=1 python solutions/clean_the_table_solution.py --robot so101 --device cpu --viewer gl --test
 ```
 
-Remove `solutions/` and the `_solution` suffix to run completed student scripts. Omit `--solutions` from the final checker to select those scripts. A checked run stops at measured completion or fails when its `--num-frames` budget expires. Without `--test`, GL remains interactive; closing a viewer does not prove task success.
+Remove `solutions/` and the `_solution` suffix to run completed student scripts. Omit `--solutions` from the final checker to select those scripts. A checked run stops at measured completion or fails when its `--num-frames` budget expires. The rigid-stack and box viewers stop at their frame budget; the box path checks physical completion. `--test` enables the stack assertion. Pausing does not advance physics, and cancellation never proves completion. The coupled-material viewer retains its separate behavior.
 
 Select CUDA explicitly when testing a GPU:
 
@@ -131,14 +136,14 @@ From `tutorials/newton`:
 PXR_WORK_THREAD_LIMIT=1 .venv/bin/python -m unittest discover -s test -v
 .venv/bin/python notebooks/newton/tools/build_clean_scaffolds.py --check
 
-# Execute all four notebooks.
+# Execute the teaching notebooks, including the coupled task.
 PXR_WORK_THREAD_LIMIT=1 NEWTON_NOTEBOOKS_EXECUTE=1 NEWTON_NOTEBOOKS_INCLUDE_FINAL=1 \
   .venv/bin/python -m unittest discover -s test -p test_notebooks.py -v
 ```
 
-Set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=0` to execute only notebooks 01/02. Executed copies are saved under `part3/.generated/notebooks/`; source notebooks and student files are preserved. Without the execution flags, the notebook suite runs static contracts and reports explicit execution skips. Passing static contracts does not establish a completed physics task.
+Set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=0` to execute notebooks 01/02/04 and the default preflight-only notebook 05, excluding the coupled notebook 03. Executed copies are saved under `part3/.generated/notebooks/`; source notebooks and student files are preserved. Without the execution flags, the notebook suite runs static contracts and reports explicit execution skips. Passing static contracts does not establish a completed physics task.
 
-Notebook 04 runs both robots sequentially; each CPU clean-task subprocess allows up to 30 minutes before timing out. On the validation workstation, a complete CPU pickup sequence took roughly 26–29 minutes per robot, and the four notebooks took about 83 minutes in total. Slower machines or first-time compilation may exceed the checker budget. The advanced cells capture subprocess output until completion, so a quiet cell can still be running; use the CUDA commands above to check the task on a supported GPU.
+Notebook 04 runs both CPU box tasks sequentially by default. Its separate stack/coupled block is disabled unless `RUN_LEGACY_AND_COUPLED=True`; each optional CPU clean-task subprocess allows up to 30 minutes before timing out. On the validation workstation, a complete CPU pickup sequence took roughly 26–29 minutes per robot, and the four notebooks took about 83 minutes in total. Slower machines or first-time compilation may exceed the checker budget. The advanced cells capture subprocess output until completion, so a quiet cell can still be running; use the CUDA commands above to check the task on a supported GPU.
 
 ## Assets, caches and licenses
 
@@ -146,4 +151,4 @@ Clean-table dynamics use the official SO-101 and reBot structured USD folders at
 
 Automatic caches must have the pinned Git HEAD and unchanged tracked robot files. An unverified cache is left untouched. Point `NEWTON_CACHE_PATH` at a fresh directory for official USDs, or `MUJOCO_MENAGERIE_CACHE` at a fresh parent directory for automatic MJCF downloads. Deliberate Menagerie models can still be selected with `--menagerie-path`, `MUJOCO_MENAGERIE_PATH` or `NEWTON_MENAGERIE_PATH`; these overrides are not assertions that the model matches the reference asset. They do not replace the dynamic robot's USD.
 
-SO-101 assets retain Apache-2.0; reBot retains MIT © 2026 Seeed Studio. Models are not redistributed here. See [third-party notices](THIRD_PARTY_NOTICES.md), the retained license copies, [Newton's stable documentation](https://newton-physics.github.io/newton/stable/), and the [version-fixed source](https://github.com/newton-physics/newton/tree/v1.6.0).
+SO-101 assets retain Apache-2.0; reBot retains MIT © 2026 Seeed Studio. Live robot models download into a cache; retained evidence archives may include historical model/source assets with their original licenses. See [third-party notices](THIRD_PARTY_NOTICES.md), the retained license copies, [Newton's stable documentation](https://newton-physics.github.io/newton/stable/), and the [version-fixed source](https://github.com/newton-physics/newton/tree/v1.6.0).

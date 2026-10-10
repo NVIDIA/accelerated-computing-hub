@@ -1,0 +1,38 @@
+{
+  "workflow-so101/results.json": {
+    "file_sha256": "cc0d585fcedd795763850e8ad4e11e7dccda2f946925706b7460a161ff3fcc5d",
+    "json_sha256": "cc0d585fcedd795763850e8ad4e11e7dccda2f946925706b7460a161ff3fcc5d",
+    "status": "passed",
+    "source_aggregate_sha256": "9e2e8eb5e79a4fc0374b0ad7750496dc2f77d08e10c8ea03ee929471c88efe92",
+    "case_count": 3,
+    "started_utc": "2026-10-08T16:49:32Z",
+    "finished_utc": "2026-10-08T16:50:16Z"
+  },
+  "workflow-rebot/results.json": {
+    "file_sha256": "ceb5cc8f39d27cc98c4f87be71a40246de40866ffca95dddd7bfb7318b1aefc8",
+    "json_sha256": "ceb5cc8f39d27cc98c4f87be71a40246de40866ffca95dddd7bfb7318b1aefc8",
+    "status": "passed",
+    "source_aggregate_sha256": "9e2e8eb5e79a4fc0374b0ad7750496dc2f77d08e10c8ea03ee929471c88efe92",
+    "case_count": 3,
+    "started_utc": "2026-10-08T16:51:02Z",
+    "finished_utc": "2026-10-08T16:51:51Z"
+  },
+  "replay-so101/results.json.gz": {
+    "file_sha256": "d402730b38ccefc441ec3b726c9b939abda6b711ee570a2b3784dc41b6d26c7d",
+    "json_sha256": "2542a479b7079f44256b608ebf20c15c8f87a1a32164862a81c89eb8c72c2a7f",
+    "status": "passed",
+    "source_aggregate_sha256": "9e2e8eb5e79a4fc0374b0ad7750496dc2f77d08e10c8ea03ee929471c88efe92",
+    "case_count": 11,
+    "started_utc": "2026-10-08T16:52:23Z",
+    "finished_utc": "2026-10-08T17:00:45Z"
+  },
+  "replay-rebot/results.json.gz": {
+    "file_sha256": "67c570f61fcbc0fd90f9b26e613cf233e80c6a65e42c4f4edea26d5cc877a3c2",
+    "json_sha256": "aa73aecd1e3c50eb35aee98671cd02f855a3c48371c7066f755b7e602f71a2f0",
+    "status": "passed",
+    "source_aggregate_sha256": "9e2e8eb5e79a4fc0374b0ad7750496dc2f77d08e10c8ea03ee929471c88efe92",
+    "case_count": 5,
+    "started_utc": "2026-10-08T17:02:13Z",
+    "finished_utc": "2026-10-08T17:03:21Z"
+  }
+}

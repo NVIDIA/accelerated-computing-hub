@@ -1,0 +1,45 @@
+Warp 1.15.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.4
+   Devices:
+     "cpu"      : "CPU"
+     "cuda:0"   : "NVIDIA RTX PRO 6000 Blackwell Workstation Edition" (95 GiB, sm_120, mempool enabled)
+     "cuda:1"   : "NVIDIA RTX PRO 6000 Blackwell Workstation Edition" (95 GiB, sm_120, mempool enabled)
+   CUDA peer access:
+     Supported fully (all-directional)
+   Kernel cache:
+     /home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache/1.15.0
+Module reset_data__locals__reset_xfrc_applied_250af49a 250af49 load on device 'cuda:1' took 0.34 ms  (cached)
+Module reset_data__locals__reset_qM_16cffc72 16cffc7 load on device 'cuda:1' took 0.22 ms  (cached)
+Module reset_data__locals__reset_mocap_50728498 5072849 load on device 'cuda:1' took 0.21 ms  (cached)
+Module reset_data__locals__reset_contact_b928b503 b928b50 load on device 'cuda:1' took 0.20 ms  (cached)
+Module reset_data__locals__reset_nworld_67644cc4 67644cc load on device 'cuda:1' took 0.25 ms  (cached)
+Module __main__ aa9828e load on device 'cuda:1' took 0.23 ms  (cached)
+Module mujoco_warp._src.smooth 075317a load on device 'cuda:1' took 2.32 ms  (cached)
+Module mujoco_warp._src.collision_driver adba295 load on device 'cuda:1' took 0.25 ms  (cached)
+Module _nxn_broadphase__locals__kernel_70bd807f 70bd807 load on device 'cuda:1' took 0.25 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_72468095 7246809 load on device 'cuda:1' took 0.56 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_264a25cb 264a25c load on device 'cuda:1' took 0.60 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_3842c73a 3842c73 load on device 'cuda:1' took 0.64 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_5f49f3fe 5f49f3f load on device 'cuda:1' took 0.27 ms  (cached)
+Module mujoco_warp._src.constraint 74774a2 load on device 'cuda:1' took 0.45 ms  (cached)
+Module _efc_contact_init__locals__kernel_ee7db883 ee7db88 load on device 'cuda:1' took 0.21 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_ae632932 a5933cd load on device 'cuda:1' took 0.25 ms  (cached)
+Module _efc_contact_update__locals__kernel_e54acee6 e54acee load on device 'cuda:1' took 0.21 ms  (cached)
+Module mujoco_warp._src.forward 38725d0 load on device 'cuda:1' took 0.37 ms  (cached)
+Module mujoco_warp._src.passive 0eb070f load on device 'cuda:1' took 0.28 ms  (cached)
+Module mujoco_warp._src.forward ce7cd41 load on device 'cuda:1' took 0.37 ms  (cached)
+Module mujoco_warp._src.support ca784c5 load on device 'cuda:1' took 0.19 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_caece2d8 ce1f406 load on device 'cuda:1' took 43.75 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_f3779eaf 4dae87b load on device 'cuda:1' took 47.65 ms  (cached)
+Module mujoco_warp._src.solver 59308bb load on device 'cuda:1' took 0.54 ms  (cached)
+Module solve_init_jaref__locals__kernel_9b42df3f 9b42df3 load on device 'cuda:1' took 0.25 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_eb785ea8 eb785ea load on device 'cuda:1' took 0.25 ms  (cached)
+Module update_constraint_efc__locals__kernel_841b0e9f 841b0e9 load on device 'cuda:1' took 0.22 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_65071eaa 65071ea load on device 'cuda:1' took 0.21 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_c54d3482 1399113 load on device 'cuda:1' took 0.43 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_f60fcf2d ef0b739 load on device 'cuda:1' took 48.41 ms  (cached)
+Module linesearch_iterative__locals__kernel_585cafef 66065f5 load on device 'cuda:1' took 0.41 ms  (cached)
+Module mujoco_warp._src.sensor 73a7567 load on device 'cuda:1' took 0.63 ms  (cached)
+Module _tile_euler_dense__locals__euler_dense_cf35d0f8 b521526 load on device 'cuda:1' took 47.89 ms  (cached)
+Module _tile_euler_dense__locals__euler_dense_5852fde0 42e5486 load on device 'cuda:1' took 48.48 ms  (cached)
+{"status": "complete", "median_simulation_seconds": 1.0567605959950015, "world_steps_per_second": 969968.0361708419}

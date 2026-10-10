@@ -1,0 +1,29 @@
+{
+  "created_utc": "2026-10-10T08:41:39.517561+00:00",
+  "article": "blog3",
+  "scope": "Fresh Hub relocation correctness checks; not performance measurements or new GUI validation.",
+  "context": "Isolated Docker build context containing this tutorial, shared brev scripts and .dockerignore. Runtime/test/notebook files bound by the archived context manifests.",
+  "archive_sha256": "9d69d3e14f90788b60c2002b8f1978cf405a72d2e2488b8d2a460530900327fb",
+  "archive_bytes": 484383,
+  "members": {
+    "v1/blog3-suite.log": "cff627f79f21603af2e5358a7885caabe80f024fd3fd1f2e8c7dd61cec90f2f8",
+    "v1/blog3-build.log": "b97327d7ffdfefc798f38f795d1591c6f33c9f82e157256ef95288e0a973d764",
+    "v1/context-manifest.json": "0431d3240ea4794548f388f4fef61a4ca39fd345a629476a968ca537ec09abd1",
+    "v1/runs.json": "954a21c7c4707b0096adeb3ce04d3e6eb29750691fc89941a10ed8c2007213fe",
+    "v2/blog3-kernels.log": "f6b206c1c2b97b0212d90f398ce9dd4d3199b3e213add71cc090f45022a7b613",
+    "v2/blog3-suite.log": "0210949aeb15ae431130705000487ba6ce8521e4dccdfb55bbdeccd8b31f6460",
+    "v2/blog3-gpu-rebot.npz": "dada41ac5ee52e00969772051c008f5b887492493428609a19b32ba5653e01e0",
+    "v2/blog3-gpu-rebot.json": "c3b2ca3151239abb2477562a288186f042feb26e38846f63a922f159c742567b",
+    "v2/blog3-gpu-so101.npz": "dc279ed5ac9b6f47e6eac783d50a937c48010aca6ca5af2d59096100add2ab48",
+    "v2/blog3-gpu-rebot.log": "1dcc99be98344b5144422366d49baba00fa194a018c46137b64a025144242284",
+    "v2/blog3-gpu-so101.log": "2aa7ee0e17131394dd72d2e39edb63556428d4d869e0ce54dfe07d28eb23e4f3",
+    "v2/blog3-build.log": "df9ea7fc600b31aa7dbbc5089c6dee6d2b1f3a7c5249cfedea31f1901048eeb7",
+    "v2/blog3-gpu-so101.json": "9a9946d58dc3ffd43ea3b15fe72eb124e3a437f3b47e92a3c69349de2b7fe80f",
+    "v2/context-manifest.json": "e930ef9cfe17724f55a3005c2033345f9d5a6a8cb4434a13f28793343fc847fb",
+    "v2/runs.json": "d90b5712447aa3c8554371007593e8f76ef87df7e1a6c938aebba0cf1475e498",
+    "remote_validate.py": "c1b085617817d330cc6f3d0592c3ffb16c013ad34627d0379f06dc8c7d792d73",
+    "remote_validate_v2.py": "98c2d854efb898733c13aabf5a74105b598d0e34c686912e54066fa65dd9c5a6"
+  },
+  "source_changes_between_contexts": "Only test_newton_migration.py was corrected among executable files; runtime/notebooks/lock/Docker unchanged. Documentation/derived mapping also refreshed.",
+  "later_publication_edits": "Notebook bootstrap revision pins, links and validation/provenance prose are reviewed separately; physics/evidence remain unchanged."
+}

@@ -1,0 +1,138 @@
+{
+  "article": 3,
+  "blocks": [
+    {
+      "kind": "heading",
+      "text": "When is migration worth it?"
+    },
+    {
+      "kind": "paragraph",
+      "text": "We compared Newton SolverMuJoCo on CPU and CUDA on the same task with SO-101 and reBot: pick up both cubes, place them in the receiving box, and withdraw the gripper. Each world completes 40 simulated seconds. We tested nine batch sizes, from one to 2048 independent worlds."
+    },
+    {
+      "kind": "paragraph",
+      "text": "The table shows median simulation seconds across five repetitions after one full warm-up, measured on shared AMD Ryzen Threadripper PRO 9985WX 64-Cores and one NVIDIA RTX PRO 6000 Blackwell Workstation Edition. The CPU uses up to 32 persistent workers, capped by world count; the GPU uses one device. Reset, commands, integration and grasp-verification observations are included. Inverse kinematics is precomputed before timing and replayed identically on both backends."
+    },
+    {
+      "columns": [
+        "Worlds",
+        "SO-101 CPU (s)",
+        "SO-101 GPU (s)",
+        "reBot CPU (s)",
+        "reBot GPU (s)"
+      ],
+      "kind": "table",
+      "metric": "simulation",
+      "rows": [
+        [
+          "1",
+          "6.4848",
+          "14.7928",
+          "6.3294",
+          "15.5382"
+        ],
+        [
+          "16",
+          "7.2303",
+          "16.7782",
+          "7.4193",
+          "17.1097"
+        ],
+        [
+          "32",
+          "7.6543",
+          "17.2842",
+          "7.4869",
+          "17.6607"
+        ],
+        [
+          "64",
+          "15.2200",
+          "17.8851",
+          "15.1986",
+          "18.6563"
+        ],
+        [
+          "128",
+          "30.4011",
+          "18.7815",
+          "29.9407",
+          "19.3498"
+        ],
+        [
+          "256",
+          "60.7351",
+          "19.9407",
+          "59.7683",
+          "20.6777"
+        ],
+        [
+          "512",
+          "122.6874",
+          "21.6250",
+          "119.8159",
+          "22.3135"
+        ],
+        [
+          "1024",
+          "242.4549",
+          "23.8462",
+          "238.9082",
+          "Excluded"
+        ],
+        [
+          "2048",
+          "482.4144",
+          "28.3054",
+          "475.6768",
+          "30.0213"
+        ]
+      ]
+    },
+    {
+      "kind": "paragraph",
+      "text": "For SO-101, the first tested batch faster on GPU was 128 worlds; the CPU took 17.04 times as long at 2048 worlds. For reBot, the first tested batch faster on GPU was 128 worlds; the CPU took 15.84 times as long at 2048 worlds. These observations apply to the tested sizes, rather than universal crossover thresholds."
+    },
+    {
+      "kind": "paragraph",
+      "text": "Including host output collection and task validation: For SO-101, the first tested batch faster on GPU was 128 worlds; the CPU took 14.00 times as long at 2048 worlds. For reBot, the first tested batch faster on GPU was 128 worlds; the CPU took 13.19 times as long at 2048 worlds. These medians sum all three costs within each repetition. Setup, compilation, warm-up and validator teardown remain separate."
+    },
+    {
+      "kind": "paragraph",
+      "text": "Excluded configurations: reBot GPU at 1024 worlds. 35 of 36 configurations passed every required episode. Every accepted world must physically grasp, lift, carry, release and settle both cubes inside the box. One failed episode excludes the entire configuration and its timing from comparisons; exact physical and numerical checks are in the guide."
+    },
+    {
+      "kind": "paragraph",
+      "links": [
+        {
+          "text": "benchmark notebook",
+          "url": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/part3/05_Notebook_Migration_Benchmark.ipynb"
+        },
+        {
+          "text": "companion benchmark guide",
+          "url": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/BENCHMARK.md"
+        },
+        {
+          "text": "full results",
+          "url": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/benchmark-results/2026-10-09-validated-box-gpu0/README.md"
+        }
+      ],
+      "text": "Use the benchmark notebook to reproduce the task. The companion benchmark guide explains the measurement method; full results retain ratios, ranges, failures and hardware configuration. These community measurements are not official product benchmarks or evidence of lower-end GPU, Colab or Brev performance."
+    },
+    {
+      "kind": "paragraph",
+      "links": [
+        {
+          "text": "ALOHA pot-and-lid replay",
+          "url": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/reference-benchmark/README.md"
+        }
+      ],
+      "text": "The companion also includes an ALOHA pot-and-lid replay comparing native MuJoCo on CPU with MuJoCo Warp on GPU. It is a separate workload and does not measure Newton's API or this box task."
+    }
+  ],
+  "report_sha256": {
+    "rebot": "5e5ccb2aeabcf9919ace2b8c148ad969a137b15fa5131d92e02d5499fad9ab60",
+    "so101": "9fd2ec27a6e388b148ec9e22de3654ea91ef34831e742c1a0155ec27dd967fba"
+  },
+  "study_revision": "final-box-sweep-v4-matched-tolerance-gpu0"
+}

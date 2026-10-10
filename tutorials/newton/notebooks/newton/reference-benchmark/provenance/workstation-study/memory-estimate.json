@@ -1,0 +1,19 @@
+{
+  "basis": "Exact frozen ALOHA FULLPHYSICS field count: time1+nq24+nv23+na0=48;1001 integrations;2048 worlds; nativefloat64 vs GPUfloat32.",
+  "gpu_history_bytes": 393609216,
+  "gpu_history_MiB": 375.375,
+  "gpu_resident_control_tape_bytes": 56056,
+  "gpu_reset_buffers_qpos_qvel_ctrl_bytes": 499712,
+  "gpu_host_download_history_bytes": 393609216,
+  "cpu_history_bytes": 787218432,
+  "cpu_history_MiB": 750.75,
+  "cpu_expanded_control_bytes": 229605376,
+  "cpu_initial_state_bytes": 786432,
+  "native_sensor_output_bytes": 0,
+  "existing_box_history_budget_MiB": 1024,
+  "history_below_existing_box_budget": true,
+  "known_selected_device_capacity_MiB": 97887,
+  "fraction_of_known_device_capacity": 0.0038347788776854947,
+  "qualification": "History only, not total device memory. Solver/contact/mesh/graph/workspace allocations are additional and version-dependent. Historical device capacity is not current free memory. Root must retain fresh allocation/hardware receipts before launch; OOM remains a failed configuration with original evidence.",
+  "limits_policy": "No new memory cutoff, shorter episode, fewer worlds, output downsampling or dependency changes were introduced.1024MiB is only a comparison to the existing box protocol trajectory budget, not an enforced new reference limit."
+}

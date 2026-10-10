@@ -1,0 +1,9 @@
+# Hub relocation checks — 10 October 2026
+
+Both updated Docker images built successfully on Linux with Python 3.12.15 and the unchanged Newton 1.6.0 / Warp 1.17.0 / MuJoCo 3.12.0 hash lock. The initial Newton regression invocation passed **273 tests**, explicitly skipped five notebook executions, and failed one stale test that extracted Step 8 from the superseded notebook Markdown. Its corrected test passed a targeted real-physics rerun: **274 regression tests passed across the two runs**. Only this test changed among executable files between contexts; it still checks both production/exercise guards and both real contact-truncation boundaries using the external Step 8 solution.
+
+Separate actual-kernel execution passed **three tests**: notebook 02 runs both CPU box robots, notebook 04 checks both CPU box tasks, and notebook 05 performs preflight with measurement disabled. The unchanged sphere and long coupled notebook were not rerun for this import; their source-equivalent evidence remains in the historical packages.
+
+Separate complete **SO-101 and reBot CUDA box runs both passed** on one RTX PRO 6000 Blackwell GPU. Each report records 2,000 frames and 40,000 integrations, finite complete observations, capacity checks and physical acceptance for both cubes. These are one-world correctness checks, not a new throughput study or replacement samples for excluded benchmark configurations.
+
+[The receipt](receipt.json) binds the [raw logs, invocation records, both CUDA reports and source manifests](evidence.tar.gz), including the first test failure. [Corrected run records](runs-v2.json) retain commands and exit status. The isolated build context contains this tutorial, shared Brev scripts and `.dockerignore`. No new desktop/GL lifecycle check, live Compose/Brev deployment or Colab run is claimed. Notebook bootstrap pins and links are later publication-only changes, checked separately.

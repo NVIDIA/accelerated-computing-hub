@@ -1,0 +1,197 @@
+{
+  "article": 3,
+  "files": {
+    "README.md": {
+      "bytes": 11270,
+      "sha256": "adee66419b6f65b40e9d455e15293b39324742801eed1f80f8411f297f01496b"
+    },
+    "article-section.json": {
+      "bytes": 5261,
+      "sha256": "3e86d1b8cfb4b61507aff35034697ebf1920dc63b9675cd8abd66e37d5485291"
+    },
+    "article-section.md": {
+      "bytes": 3393,
+      "sha256": "a1de16546e8d63c7afe3cdde30542154da777fc1a1fa14231813be134af85523"
+    },
+    "audit.json": {
+      "bytes": 267660,
+      "sha256": "fcf7dc12690f844dbfa3d5776d36405d9f42d87d2961fc58d4d088982e4d7252"
+    },
+    "executed-plan.json": {
+      "bytes": 8323,
+      "sha256": "b8c2eccb862815c77326ec05f36c107bccb37d65ba8550730b81e3f13deb8142"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.caption.txt": {
+      "bytes": 3176,
+      "sha256": "6c48a442c1578f344d03244478f9da4897fa34e175da8bb5903b442c175894df"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.pdf": {
+      "bytes": 33271,
+      "sha256": "cad4494128164c3298deecd310eadc6cb4d1f64e9c8937b6896f90815cccbb7a"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.png": {
+      "bytes": 403123,
+      "sha256": "4b35ea273fd47aaff2ed1ad4c0ae0358807c7689fbcf9fa7f95bff66f9f26d26"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.svg": {
+      "bytes": 53081,
+      "sha256": "6e0e21a742776efc4ddc59aec2c56fdee723bff0261b2774088907d6423250fb"
+    },
+    "figures/fig_box_cpu_gpu_scaling.caption.txt": {
+      "bytes": 3034,
+      "sha256": "6304f796b243bcb4b643d046ea3717d86f64d71666b550c99087731ebefd151b"
+    },
+    "figures/fig_box_cpu_gpu_scaling.pdf": {
+      "bytes": 33402,
+      "sha256": "0d10de6bd096145cfd008761d1ce5a93b41276e9cdc8e08064767919220898a3"
+    },
+    "figures/fig_box_cpu_gpu_scaling.png": {
+      "bytes": 404358,
+      "sha256": "f2ed0c0555a22badbe9f77fd9009c1043067f9e3873542eba93fffef7736293e"
+    },
+    "figures/fig_box_cpu_gpu_scaling.svg": {
+      "bytes": 52977,
+      "sha256": "6c01ff5aed33ff4df6395c6c2e79ae2395069b3bac4706d08e955d8c779d2372"
+    },
+    "figures/gen_fig_box_cpu_gpu_scaling.py": {
+      "bytes": 58453,
+      "sha256": "3a3d00070a892814093b28d180492e58eafaa55e6c5cf640d5c81b10fb332a92"
+    },
+    "figures/plotted-data.json": {
+      "bytes": 246911,
+      "sha256": "3c4601689312bea93cfd1d17aeb13aa46f143d7ba60059eaa4f1a0baad128efc"
+    },
+    "figures/study-contract.json": {
+      "bytes": 16550,
+      "sha256": "815281456135d0725f113388af744d48ab27f9de2881283984896d83c2d54c8b"
+    },
+    "methodology.md": {
+      "bytes": 2390,
+      "sha256": "9ccc17d85ddc981de006a1adbacd35149acc7ceb400fdc26925d02c3cd8664e8"
+    },
+    "presentation-contract.json": {
+      "bytes": 1746,
+      "sha256": "2ae9dcd4b2bd2d951d4d7c5da2a79125b69f435e202c183d1cabbfd8f86f2270"
+    },
+    "rebot/raw-run.tar.gz": {
+      "bytes": 14108370,
+      "sha256": "3f602e966253cbb293aa6b517f93fef9013c619c7077f27dc392edf196642562"
+    },
+    "rebot/results.json.gz": {
+      "bytes": 7161333,
+      "sha256": "275f3f9ea68766a0b6f6119e63ae5c8ba974748b39e449dfa7cf30b6fe566f2f"
+    },
+    "rebot/summary.csv": {
+      "bytes": 3723,
+      "sha256": "0fd78b8ada50624c42eb035ffac86aa933a0750bcc516b673815923d30efe072"
+    },
+    "rebot/summary.md": {
+      "bytes": 4982,
+      "sha256": "352d275bbfd48347f794e6d5081d2860cc8a89a0de15dafeb744ecd6f7263eb3"
+    },
+    "so101/raw-run.tar.gz": {
+      "bytes": 16940884,
+      "sha256": "bca36b348a807070dcb7bcb2381a6548bb6e7a162ae64a74aa3951687a03e973"
+    },
+    "so101/results.json.gz": {
+      "bytes": 8592426,
+      "sha256": "26758166ca153357b88b845886f055b2dc97e2fd4aafbd71752c3e8619f6eeec"
+    },
+    "so101/summary.csv": {
+      "bytes": 3852,
+      "sha256": "874a775d6c031eb64d5d7e102a3b13e9c6fd462bbb2d5e0375f599608ff591b1"
+    },
+    "so101/summary.md": {
+      "bytes": 5051,
+      "sha256": "88f383b8293e73ee70b46902f84e60bcfe29f1b71cbf846757a7547d8b26195e"
+    },
+    "source-manifest.json": {
+      "bytes": 16622,
+      "sha256": "1ec770be746368a49e2199298b72d431d79e41aee0736fb87ce6f95da6b7bc73"
+    },
+    "source.tar.gz": {
+      "bytes": 298555,
+      "sha256": "86b4f24c79f65c28717f742f7098c3b0a66b865c449d9802b47687cde7a7c236"
+    }
+  },
+  "presentation_revision": "linked-article-v3",
+  "report_uncompressed_sha256": {
+    "rebot": "5e5ccb2aeabcf9919ace2b8c148ad969a137b15fa5131d92e02d5499fad9ab60",
+    "so101": "9fd2ec27a6e388b148ec9e22de3654ea91ef34831e742c1a0155ec27dd967fba"
+  },
+  "repository_destination": "Article_3/benchmark-results/2026-10-09-validated-box-gpu0",
+  "source_aggregate_sha256": "4b19c4c489b47e62c9d2852530dba3c29fbeb7237c5053906def8e61c8d26ff9",
+  "source_archive_member_sha256": {
+    "sources/article2/Article_2/part2/benchmark_box.py": "8cfc410bce51296aefda3e960dbb4c30ace90c4658c6b1ce762e871a20ab9958",
+    "sources/article2/Article_2/part2/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "sources/article2/Article_2/part2/benchmark_workload.py": "d5a233723bb16d8175f2f412409e4f5cb0aaf00f8a500e1a47b2485893ea068e",
+    "sources/article2/Article_2/part2/box_task.py": "57396f73979f6d1731719b96ffbe3daf8abc77954c927a8bfe1a3ee018397196",
+    "sources/article2/Article_2/part2/migration_benchmark.py": "2cc65829bccf45e33ae40d7d4fb51e116cd80874cd905b7d0952053e43775ff8",
+    "sources/article2/Article_2/part2/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "sources/article2/Article_2/part2/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "sources/article2/Article_2/part2/scaling_study.py": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+    "sources/article2/Article_2/part2/so101_mjwarp.py": "01ba05b3cae6691311540fb758ffd7c244f4b6987ef7244749425416cc1efa5c",
+    "sources/article2/Article_2/part2/solutions/so101_mjwarp_solution.py": "9d1e19d682f0f5269caa8e87788ceca985c07ed2038c2ed9d3a6cbd0ed0b5eef",
+    "sources/article2/Article_2/part2/solutions/step_00_imports.py": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+    "sources/article2/Article_2/part2/solutions/step_01_put_model.py": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+    "sources/article2/Article_2/part2/solutions/step_02_make_data.py": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+    "sources/article2/Article_2/part2/solutions/step_03_seed_state.py": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+    "sources/article2/Article_2/part2/solutions/step_04_push_ctrl.py": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+    "sources/article2/Article_2/part2/solutions/step_05_mjw_step.py": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+    "sources/article2/Article_2/part2/solutions/step_06_pull_state.py": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+    "sources/article2/Article_2/part2/solutions/step_07_cuda_graph.py": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+    "sources/article2/Article_2/part2/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "sources/article2/Article_2/requirements.lock.txt": "4ab4a1d1c0514f157b6411526e9e70c3e1a538039798f1bd165bf16a2f68f53d",
+    "sources/article2/Article_2/requirements.txt": "f4857d7b0c3090a9cb1bd1c371e495b48c4a636f1e7538d14d501952d8157ddd",
+    "sources/article3/Article_3/part3/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "sources/article3/Article_3/part3/benchmark_newton_batch.py": "7af58b937e4302ee4abed0e62d3e73e9b53b345049c255631ab764a47fe57cb7",
+    "sources/article3/Article_3/part3/benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+    "sources/article3/Article_3/part3/benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+    "sources/article3/Article_3/part3/box_newton_demo.py": "a1177f357a07d4b59cda5338352dd77b044c68aae23272981e21dd07d01cc7c7",
+    "sources/article3/Article_3/part3/box_newton_exercise.py": "93debb0b7a178f14feb571a3a45a72ebb0e72ce0a9cc88fa948320d59e5853b3",
+    "sources/article3/Article_3/part3/box_task.py": "57396f73979f6d1731719b96ffbe3daf8abc77954c927a8bfe1a3ee018397196",
+    "sources/article3/Article_3/part3/clean_table_scene.py": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+    "sources/article3/Article_3/part3/clean_table_scene_original.py": "46000c107c584159c73a56ddc9a11eb165db351a2de3f643ca3f649341893cc9",
+    "sources/article3/Article_3/part3/clean_table_task.py": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+    "sources/article3/Article_3/part3/clean_the_table.py": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+    "sources/article3/Article_3/part3/clean_the_table_original.py": "5ff926f36e4794190ae40b6aff78527cc31caf2d472d025664d71237d544fe23",
+    "sources/article3/Article_3/part3/final_check.py": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+    "sources/article3/Article_3/part3/migration_benchmark.py": "6b004f4464afacb9000090cf85a293c14b7d6c5319b50cdbd6243e2bd71bdaec",
+    "sources/article3/Article_3/part3/newton_assets.py": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+    "sources/article3/Article_3/part3/newton_scene.py": "ffdef95715e3e03b3f99e939d1c531ec976ae111bdc9b982dc499a79183ca19e",
+    "sources/article3/Article_3/part3/newton_scene_original.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+    "sources/article3/Article_3/part3/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "sources/article3/Article_3/part3/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "sources/article3/Article_3/part3/so101_newton.py": "fb190e4d6ea97d36858265b21d6c200e7948eddedf0b65fc9d7af2e8766045cc",
+    "sources/article3/Article_3/part3/so101_newton_original.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+    "sources/article3/Article_3/part3/solutions/clean_step_00_add_bin.py": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+    "sources/article3/Article_3/part3/solutions/clean_step_01_add_garment.py": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+    "sources/article3/Article_3/part3/solutions/clean_step_02_add_cable.py": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+    "sources/article3/Article_3/part3/solutions/clean_step_03_build_coupled_solver.py": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+    "sources/article3/Article_3/part3/solutions/clean_step_04_simulate.py": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+    "sources/article3/Article_3/part3/solutions/clean_table_scene_solution.py": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+    "sources/article3/Article_3/part3/solutions/clean_the_table_solution.py": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+    "sources/article3/Article_3/part3/solutions/newton_scene_solution.py": "3bc5c4bdf52c3eeb3de41d5a84768ee0dd27ab79758f9ed450977c7081ed8c98",
+    "sources/article3/Article_3/part3/solutions/so101_newton_solution.py": "e3705e8a108fdff35237ab507c5ddf733851803bc18e690cdfc16254a4cf1a79",
+    "sources/article3/Article_3/part3/solutions/step_00_imports.py": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+    "sources/article3/Article_3/part3/solutions/step_01_builder.py": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+    "sources/article3/Article_3/part3/solutions/step_02_add_mjcf.py": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+    "sources/article3/Article_3/part3/solutions/step_03_joint_targets.py": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+    "sources/article3/Article_3/part3/solutions/step_04_props.py": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+    "sources/article3/Article_3/part3/solutions/step_05_finalize.py": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+    "sources/article3/Article_3/part3/solutions/step_06_state.py": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+    "sources/article3/Article_3/part3/solutions/step_07_solver.py": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+    "sources/article3/Article_3/part3/solutions/step_08_substep_loop.py": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+    "sources/article3/Article_3/part3/solutions/step_09_cuda_graph.py": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+    "sources/article3/Article_3/part3/utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+    "sources/article3/Article_3/requirements.lock.txt": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+    "sources/article3/Article_3/requirements.txt": "7455cb591974aa3f943c138348f87af75701fc5e68a47dafe5b2b5401a4bfbac"
+  },
+  "study_revision": "final-box-sweep-v4-matched-tolerance-gpu0",
+  "tool_sha256": {
+    "gen_fig_box_cpu_gpu_scaling.py": "3a3d00070a892814093b28d180492e58eafaa55e6c5cf640d5c81b10fb332a92",
+    "package_results.py": "54100a86f65acc7611e7c434c35ba7176eeeab1b534141aaa825c4456ed41ac4",
+    "presentation-contract.json": "2ae9dcd4b2bd2d951d4d7c5da2a79125b69f435e202c183d1cabbfd8f86f2270",
+    "study-contract.json": "815281456135d0725f113388af744d48ab27f9de2881283984896d83c2d54c8b"
+  }
+}

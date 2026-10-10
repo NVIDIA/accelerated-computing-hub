@@ -1,0 +1,27 @@
+{
+  "counts": [
+    1,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "backends": [
+    "cpu",
+    "gpu"
+  ],
+  "warmups": 1,
+  "repeats": 5,
+  "workers": 32,
+  "device": "cuda:0",
+  "steps": 0,
+  "graph_steps": 10,
+  "nconmax": 256,
+  "njmax": 1024,
+  "mode": "replay",
+  "notes": "Adjust device and CPU workers to the actual machine before running. Reference only; no claim that Colab/Brev or smaller GPUs have been validated."
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "Preparation checks only; no new physics measurements, no invented benchmark numbers, no external jobs. Figure rendering awaits accepted full-sweep pairs.",
+  "checks": [
+    {
+      "case": "syntax:fetch_reference_assets.py",
+      "passed": true
+    },
+    {
+      "case": "syntax:collect_reference_sweep.py",
+      "passed": true
+    },
+    {
+      "case": "syntax:make_figures.py",
+      "passed": true
+    },
+    {
+      "case": "syntax:run_reference.py",
+      "passed": true
+    },
+    {
+      "case": "syntax:reference_replay_probe.py",
+      "passed": true
+    },
+    {
+      "case": "all18-job-dry-run:blog2",
+      "passed": true
+    },
+    {
+      "case": "all18-job-dry-run:blog3",
+      "passed": true
+    },
+    {
+      "case": "actual-smoke-audit:blog2:cpu",
+      "passed": true
+    },
+    {
+      "case": "actual-smoke-audit:blog2:gpu",
+      "passed": true
+    },
+    {
+      "case": "actual-smoke-audit:blog3:cpu",
+      "passed": true
+    },
+    {
+      "case": "actual-smoke-audit:blog3:gpu",
+      "passed": true
+    },
+    {
+      "case": "figures reject non-comparable smoke-only data",
+      "passed": true
+    }
+  ],
+  "runner_sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+  "collector_sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381"
+}

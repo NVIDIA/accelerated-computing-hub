@@ -1,0 +1,28 @@
+{
+  "state": "independently_audited_ready_for_editorial_use",
+  "scope": "ALOHA native MuJoCo versus MuJoCo Warp reference only; no Newton API or box-task validation",
+  "audit_receipt_sha256": "a7e3dc73f803d05f01ba44c7ff0822a0fa889475e4f5c6068cbc342b399207b0",
+  "plots_visually_reviewed": true,
+  "source_results_root": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results",
+  "files": {
+    "package_audit.py": "23b61a5e31a203e6b4fbcbf7eed7eb40ee4f601b3bff41085cada5e8070e13c9",
+    "summary.json": "bf0afec39436a7a3a627b8438bd34ebaf73cf92cd29fdb41e31769b8f3694327",
+    "health-summary.json": "810a1556f8d5c4242001bd9713918ba3a67451ab5da6f8db68cdb60f04a3af05",
+    "hardware.json": "b1b8d15448f18c3b5a3907d27720a5b5ab6d611daccb92853e4e6c33008d3258",
+    "paired-results.csv": "ffdab84dccc944872a5d9f405e90db50ce5328498fb565071f13f174e635f282",
+    "episode-timings.csv": "3915bee57626ad6fa6a0fdbcfaa293c77e00cc54e9bd690f77f66ec50cf894d8",
+    "generate_reference_figures.py": "b6ec61fa5cfdf6efc7f8c902c0b8ce2a7b999af6d52f1a2b72ab7a7c7c0acdab",
+    "RESULTS.md": "dc32a813ea0bcf4767613c29b3ad3e6af1adb548142b76e0a9d6eb7f9fe52259",
+    "audit-receipt.json": "a7e3dc73f803d05f01ba44c7ff0822a0fa889475e4f5c6068cbc342b399207b0",
+    "figures-blog3/blog3-reference.pdf": "8b59e05208470fd2d9a524f71c694d693b218ce5330b48d7ea1ad689272a053d",
+    "figures-blog3/blog3-reference.png": "309e9bba43d0eb6a86a5a0f53100de36460684067e81c927b6c85adf758a6231",
+    "figures-blog3/figure-provenance.json": "7741b1590dfb6c63577f026be5e7552bfdb1a0275578a50b8d89a9d09f0b7dbc",
+    "figures-blog3/caption.txt": "21fd800105764df717d2d392c63acf5d95354bed9a656fe6f75d22b8f62ff32b",
+    "figures-blog3/blog3-reference.svg": "b7c2f29a9b6ab74bd87830dc727008a2c5aee404bddfb4ce1437bb71bfb7b024",
+    "figures-blog2/blog2-reference.svg": "32f582a6cfde083236f808f4769ea3cdba443250eeb609050f011c5bc745441b",
+    "figures-blog2/blog2-reference.pdf": "59600e0973a251b26e8e393c0e838ff705e9e20ecf6e4aaa68fda92f77d4d0bc",
+    "figures-blog2/blog2-reference.png": "0c1134e97fad80830900b28e6e43fe8b2774043d4766b04ad8d64baa31452f96",
+    "figures-blog2/figure-provenance.json": "1e24d5866248f75b3997d10f20f5f68314c2be327a9b2d13f86f577f6a9c58e6",
+    "figures-blog2/caption.txt": "21fd800105764df717d2d392c63acf5d95354bed9a656fe6f75d22b8f62ff32b"
+  }
+}

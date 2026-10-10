@@ -1,0 +1,32 @@
+{
+  "inventory_source": "/private/tmp/blogs-box-sweep-v3-20261009/article3/smoke-so101-v3/preflight.json",
+  "inventory_sha256": "a4af42198e3baea1818046a71634afdcd759bcec58c8ec1e95f74e386f5522ef",
+  "inventory_utc": "2026-10-08T23:35:48Z",
+  "scope": "Retained workstation identity inventory, not a utilization trace for this reference run.",
+  "cpu_model": "AMD Ryzen Threadripper PRO 9985WX 64-Cores",
+  "physical_cpu_cores": 64,
+  "logical_cpu_count": 128,
+  "ram_bytes": 264948404224,
+  "os": "Linux",
+  "os_release": "7.0.0-38-generic",
+  "architecture": "x86_64",
+  "selected_gpu": "cuda:1",
+  "gpu_name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+  "gpu_inventory": [
+    {
+      "index": "0",
+      "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+      "driver": "615.71.09",
+      "memory_total_mib": "97887"
+    },
+    {
+      "index": "1",
+      "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition",
+      "driver": "615.71.09",
+      "memory_total_mib": "97887"
+    }
+  ],
+  "worker_policy": "min(worlds,32,available affinity):1,16,then32 native C++ rollout threads",
+  "shared_workstation": true,
+  "concurrent_utilization_trace_available": false
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "blog3-build",
+    "command": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "-t",
+      "blogs-hub-refresh-blog3:20261010",
+      "-f",
+      "/home/johnny/Projects/blogs-hub-refresh-20261010/blog3-context/tutorials/newton/brev/dockerfile",
+      "/home/johnny/Projects/blogs-hub-refresh-20261010/blog3-context"
+    ],
+    "started_utc": "2026-10-10T07:53:04.414613+00:00",
+    "finished_utc": "2026-10-10T07:53:07.933633+00:00",
+    "exit_code": 0,
+    "log_sha256": "b97327d7ffdfefc798f38f795d1591c6f33c9f82e157256ef95288e0a973d764"
+  },
+  {
+    "name": "blog3-suite",
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--name",
+      "blogs-hub-refresh-blog3",
+      "--gpus",
+      "device=GPU-87c0fe81-bcfb-b636-9eec-e56fd88c33c3",
+      "--shm-size=4g",
+      "-e",
+      "PXR_WORK_THREAD_LIMIT=1",
+      "-e",
+      "NEWTON_NOTEBOOKS_EXECUTE=0",
+      "-e",
+      "ARTICLE2_NOTEBOOKS_EXECUTE=1",
+      "--entrypoint",
+      "bash",
+      "blogs-hub-refresh-blog3:20261010",
+      "/accelerated-computing-hub/tutorials/newton/brev/test.bash"
+    ],
+    "started_utc": "2026-10-10T07:53:07.933983+00:00",
+    "finished_utc": "2026-10-10T07:59:12.913860+00:00",
+    "exit_code": 1,
+    "log_sha256": "cff627f79f21603af2e5358a7885caabe80f024fd3fd1f2e8c7dd61cec90f2f8"
+  }
+]
