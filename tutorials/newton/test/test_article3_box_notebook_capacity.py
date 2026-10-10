@@ -30,7 +30,7 @@ class NewtonBoxNotebookCapacityTests(unittest.TestCase):
                          and isinstance(node.targets[0], ast.Name)
                          and node.targets[0].id in {'REPO_URL', 'REF'}}
             self.assertEqual(constants['REPO_URL'], 'https://github.com/johnnynunez/accelerated-computing-hub.git')
-            self.assertTrue(constants['REF'] == 'feature/blog3-validated-box-benchmark' or __import__('re').fullmatch(r'[0-9a-f]{40}', constants['REF']))
+            self.assertRegex(constants['REF'], r'^[0-9a-f]{40}$')
             control = next(s for s in sources if 'RUN_BENCHMARK = False' in s)
             for value in (primary, legacy):
                 changed = control.replace(f'{selector} = "{primary}"', f'{selector} = "{value}"')

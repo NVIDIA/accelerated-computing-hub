@@ -910,7 +910,7 @@
       "source": "Article_3/part3/05_Notebook_Migration_Benchmark.ipynb",
       "destination": "notebooks/newton/part3/05__migration_benchmark.ipynb",
       "source_sha256": "aae0564fe0ecd53ef7eea90b7cac6255a4c1e576fbcd75e6a9f2150bb64c3810",
-      "destination_sha256": "be0ed341e3c5b0003f394634db3f07ee124b1e7ac0504d276921c4a3ddd78503",
+      "destination_sha256": "d5aa7aefc78bf7f5623e54071e6028c38a84c329e9f656c6d752b74398dacd41",
       "changed": true,
       "adaptation": "Hub notebook filename, paths, public bootstrap and presentation/metadata; unchanged physics commands"
     },
@@ -4085,7 +4085,7 @@
       "source": "tests/test_article3_box_notebook_capacity.py",
       "destination": "test/test_article3_box_notebook_capacity.py",
       "source_sha256": "5e3c7ef1c48d80bb6361dc03163a9b9129681e1824033730c7d5ca0ec723e94c",
-      "destination_sha256": "8f527d2fcf870e4391fcf13396acb42c6c4e894e7a07d799f13e10be6ed08c2f"
+      "destination_sha256": "96bd0e20da7983acb1e51317eae574b178f6f5407adfd68425f0f18057883f8f"
     },
     {
       "source": "tests/test_article3_viewer_loop.py",
@@ -4198,5 +4198,6 @@
     "MJWarp scaffold assertion follows report_completion before headless/interactive dispatch.",
     "Box acceptance/capacity fixtures use the Newton-local helper; the Article 2-only physical class is omitted, with Newton physical tests provided separately.",
     "The legacy Newton contact-capacity regression tests the complete reference and external Step 8 solution at BOTH real truncation boundaries; no dependency on the superseded stack Markdown in notebook 02."
-  ]
+  ],
+  "public_runtime_commit": "cc22d752570bd5e9d7e2fecd5e01695b7ceaeeca"
 }
