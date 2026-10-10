@@ -1,4 +1,21 @@
-# Verification scope
+# Current box-task import and validation scope
+
+This revision imports the current two-cube box tutorials, benchmark runners and evidence from source commit `f9a4240dc56492a494f4903fb8ff0b62a7be8629`. [The current relocation map](current-relocation-manifest.json) records each source/destination hash and permitted path or notebook-presentation changes. `relocation-manifest.json` and `original-validation.json` below remain unchanged historical records of the earlier Hub import.
+
+- [Workstation box study](benchmark-results/2026-10-09-validated-box-gpu0/README.md): 35 accepted configurations and one excluded reBot GPU 1024-world configuration. The original failure, source archive and all raw results remain unchanged.
+- [Notebook evidence](notebook-validation/2026-10-10/README.md): current box/preflight kernel executions plus clearly dated October 4 sphere/coupling source-equivalent recordings. These are source-package results, not a new execution of this Hub relocation.
+- [Viewer evidence](VIEWER_VALIDATION.md): 20 box lifecycle checks and four automatic stack checks on Linux/NVIDIA; no macOS GUI validation claim.
+- [ALOHA reference](reference-benchmark/README.md): a separate native-MuJoCo/MJWarp workload, not Newton API throughput.
+
+The Hub update keeps the Python 3.12 hash lock unchanged. Notebooks 02 and 04 now default to the rigid two-cube box task; 05 defaults to preflight without measurements. Notebook 03 remains the independent coupled-material exercise. Source archives, recorded notebooks, original metadata and result manifests are immutable; live notebook filenames/setup paths and the final-check baseline paths follow the Hub layout. Retained logs may contain their original machine paths as provenance.
+
+Local relocation checks passed **144 tests** (127 contracts/CLI/viewer/report tests with 205 subtests, plus 17 invalid-configuration/memory guards). Five real notebook tests were skipped and the POSIX process-cleanup test was excluded from the final local selection because this macOS sandbox blocks `ps`. All five Hub notebook format checks, local documentation links and shell syntax passed. This does not establish relocated physics performance.
+
+The [fresh Hub validation receipt](../../hub-validation/2026-10-10/README.md) records the updated Docker build, 273 passing regression tests plus the corrected stale-test rerun, three actual notebook executions (02, 04 and preflight-only 05), and complete SO-101/reBot CUDA box checks with 40,000 integrations each. The first failure and all rerun logs are retained. Earlier container counts below apply only to the historical stack-oriented release.
+
+---
+
+# Historical verification scope
 
 The full robot task was validated before this tutorial was relocated into the Hub. The relocation preserves the physics and task gate, and separately checks the new paths and notebook packaging. These are correctness checks, not throughput measurements.
 

@@ -1,0 +1,4969 @@
+{
+  "schema_version": 3,
+  "protocol_version": 2,
+  "execution_revision": "parallel-host-validation-v1",
+  "article": 3,
+  "task": "two_cube_pick_place_into_box",
+  "environment_counts": [
+    1,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "statistic": "median",
+  "range": "observed minimum and maximum of five measured repetitions; not a confidence interval",
+  "warmups_excluded": 1,
+  "simulated_seconds_per_environment": 40,
+  "control_frames": 2000,
+  "physics_steps": 40000,
+  "observation_fields": 61,
+  "physics_timestep_seconds": 0.001,
+  "substeps_per_control_frame": 20,
+  "observation_dtype": "float32",
+  "reports": {
+    "so101": {
+      "file": "so101/results.json.gz",
+      "sha256": "1ebc2a8bdcefad89060a72bb38dc0f0b760762df01f3999518409f5df280046d",
+      "uncompressed_sha256": "cfbc9f9bb91da2fd31d9e20cab938942213ebe2b108b15b780385b3935e5225c",
+      "started_utc": "2026-10-09T00:30:47Z",
+      "finished_utc": "2026-10-09T02:46:58Z",
+      "cpu_model": "AMD Ryzen Threadripper PRO 9985WX 64-Cores",
+      "gpu": {
+        "available": true,
+        "alias": "cuda:1",
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+      },
+      "packages": {
+        "mujoco": "3.12.0",
+        "mujoco-warp": "3.12.0",
+        "warp-lang": "1.17.0",
+        "newton": "1.6.0",
+        "numpy": "2.5.3"
+      },
+      "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8",
+      "measurement_label": "community_task_measurement_not_official_product_benchmark"
+    },
+    "rebot": {
+      "file": "rebot/results.json.gz",
+      "sha256": "432cdccac1c68592c0506b042d036f0c57579ed582fb3b4fdb66e7411c6084ce",
+      "uncompressed_sha256": "2617761c062fb842921b2fd6d0f1b36743a966a804b8f5d1af34fd76ecae1486",
+      "started_utc": "2026-10-09T03:22:27Z",
+      "finished_utc": "2026-10-09T05:39:46Z",
+      "cpu_model": "AMD Ryzen Threadripper PRO 9985WX 64-Cores",
+      "gpu": {
+        "available": true,
+        "alias": "cuda:1",
+        "name": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+      },
+      "packages": {
+        "mujoco": "3.12.0",
+        "mujoco-warp": "3.12.0",
+        "warp-lang": "1.17.0",
+        "newton": "1.6.0",
+        "numpy": "2.5.3"
+      },
+      "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8",
+      "measurement_label": "community_task_measurement_not_official_product_benchmark"
+    }
+  },
+  "points": [
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 1,
+      "case_id": "newton-batch-newton_cpu-w1-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 1,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "1aa55d0e6ebf92b8e5adcc53d771fe4286666fb2578243584deecdb2672ec07a",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "serial_parent",
+          "workers": 1,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 0,
+          "child_history_readonly": null,
+          "child_environment": null
+        },
+        "setup_seconds": 3.743700108316261e-05,
+        "teardown_seconds": 2.3430002329405397e-06,
+        "case_seconds": 49.682949527001256
+      },
+      "simulation": {
+        "samples_seconds": [
+          7.6588403710011335,
+          7.721265330001188,
+          7.696238413998799,
+          7.664625805000469,
+          7.648411058999045
+        ],
+        "median_seconds": 7.664625805000469,
+        "min_seconds": 7.648411058999045,
+        "max_seconds": 7.721265330001188
+      },
+      "checked": {
+        "samples_seconds": [
+          7.744180642999709,
+          7.805336862000331,
+          7.781016201000966,
+          7.749678529999073,
+          7.733708426998419
+        ],
+        "median_seconds": 7.749678529999073,
+        "min_seconds": 7.733708426998419,
+        "max_seconds": 7.805336862000331
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          7.6588403710011335,
+          7.721265330001188,
+          7.696238413998799,
+          7.664625805000469,
+          7.648411058999045
+        ],
+        "output_transfer_seconds": [
+          7.70070000726264e-05,
+          4.512899977271445e-05,
+          4.3266001739539206e-05,
+          4.864399852522183e-05,
+          8.913599958759733e-05
+        ],
+        "validation_seconds": [
+          0.08526326499850256,
+          0.08402640299937048,
+          0.08473452100042778,
+          0.08500408100007917,
+          0.08520823199978622
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 1,
+      "case_id": "newton-batch-newton_cuda-w1-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "1aa55d0e6ebf92b8e5adcc53d771fe4286666fb2578243584deecdb2672ec07a",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "serial_parent",
+          "workers": 1,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 0,
+          "child_history_readonly": null,
+          "child_environment": null
+        },
+        "setup_seconds": 2.6790999982040375e-05,
+        "teardown_seconds": 2.5939989427570254e-06,
+        "case_seconds": 87.81600117900234
+      },
+      "simulation": {
+        "samples_seconds": [
+          14.237689581997984,
+          14.087641621998046,
+          13.974252790001628,
+          14.098746619001759,
+          13.907776566000393
+        ],
+        "median_seconds": 14.087641621998046,
+        "min_seconds": 13.907776566000393,
+        "max_seconds": 14.237689581997984
+      },
+      "checked": {
+        "samples_seconds": [
+          14.322016705995338,
+          14.172226958995452,
+          14.058650071005104,
+          14.182951769002102,
+          13.992083740002272
+        ],
+        "median_seconds": 14.172226958995452,
+        "min_seconds": 13.992083740002272,
+        "max_seconds": 14.322016705995338
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          14.237689581997984,
+          14.087641621998046,
+          13.974252790001628,
+          14.098746619001759,
+          13.907776566000393
+        ],
+        "output_transfer_seconds": [
+          0.0004046849971928168,
+          0.00038704799953848124,
+          0.0003816500029643066,
+          0.00030854000215185806,
+          0.0002998160016431939
+        ],
+        "validation_seconds": [
+          0.08392243900016183,
+          0.08419828899786808,
+          0.08401563100051135,
+          0.0838966099981917,
+          0.0840073580002354
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 16,
+      "case_id": "newton-batch-newton_cpu-w16-t16",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 16,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "d273bdb2a6e8aa6c5a6dc04e2e897bd474c4ce79a01e556423a68a47392fd4a1",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 96,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 16,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 7808000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 3.3461239309981465,
+        "teardown_seconds": 0.01381461300115916,
+        "case_seconds": 86.93603395299942
+      },
+      "simulation": {
+        "samples_seconds": [
+          8.916935450000892,
+          8.8599927940013,
+          8.90168876700045,
+          8.889261324999097,
+          8.839741424999374
+        ],
+        "median_seconds": 8.889261324999097,
+        "min_seconds": 8.839741424999374,
+        "max_seconds": 8.916935450000892
+      },
+      "checked": {
+        "samples_seconds": [
+          9.022119078999822,
+          8.960036723001394,
+          9.005218780999712,
+          8.999614623000525,
+          8.940401801999542
+        ],
+        "median_seconds": 8.999614623000525,
+        "min_seconds": 8.940401801999542,
+        "max_seconds": 9.022119078999822
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          8.916935450000892,
+          8.8599927940013,
+          8.90168876700045,
+          8.889261324999097,
+          8.839741424999374
+        ],
+        "output_transfer_seconds": [
+          0.0006975110009079799,
+          0.0003613799999584444,
+          0.0003333669992571231,
+          0.00035975799983134493,
+          0.00032751899925642647
+        ],
+        "validation_seconds": [
+          0.10448611799802165,
+          0.09968254900013562,
+          0.1031966470000043,
+          0.10999354000159656,
+          0.10033285800091107
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 16,
+      "case_id": "newton-batch-newton_cuda-w16-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "d273bdb2a6e8aa6c5a6dc04e2e897bd474c4ce79a01e556423a68a47392fd4a1",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 96,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 16,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 7808000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 3.386191842997505,
+        "teardown_seconds": 0.018066233998979442,
+        "case_seconds": 103.33747528700042
+      },
+      "simulation": {
+        "samples_seconds": [
+          16.055942618997506,
+          16.042297212999983,
+          16.023554140996566,
+          16.09423258300012,
+          16.01474300100017
+        ],
+        "median_seconds": 16.042297212999983,
+        "min_seconds": 16.01474300100017,
+        "max_seconds": 16.09423258300012
+      },
+      "checked": {
+        "samples_seconds": [
+          16.15787936099514,
+          16.15267318899714,
+          16.12985450499764,
+          16.194035533000715,
+          16.12956382199627
+        ],
+        "median_seconds": 16.15267318899714,
+        "min_seconds": 16.12956382199627,
+        "max_seconds": 16.194035533000715
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          16.055942618997506,
+          16.042297212999983,
+          16.023554140996566,
+          16.09423258300012,
+          16.01474300100017
+        ],
+        "output_transfer_seconds": [
+          0.00220006299787201,
+          0.0021084139989397954,
+          0.0023301010005525313,
+          0.0005492140007845592,
+          0.0005508569993253332
+        ],
+        "validation_seconds": [
+          0.09973667899976135,
+          0.1082675619982183,
+          0.10397026300051948,
+          0.09925373599980958,
+          0.11426996399677591
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 32,
+      "case_id": "newton-batch-newton_cpu-w32-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "160020914fdd818f9c83d51102a20c250acd510c7d61e0539c353c75dad1e413",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 192,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 15616000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.719668149999052,
+        "teardown_seconds": 0.02528157699998701,
+        "case_seconds": 118.53295251500094
+      },
+      "simulation": {
+        "samples_seconds": [
+          9.029790792999847,
+          8.992406411998672,
+          9.025600988003134,
+          8.971233608001057,
+          8.949393127000803
+        ],
+        "median_seconds": 8.992406411998672,
+        "min_seconds": 8.949393127000803,
+        "max_seconds": 9.029790792999847
+      },
+      "checked": {
+        "samples_seconds": [
+          9.175548134000564,
+          9.130315192000126,
+          9.143887853002525,
+          9.075826888998563,
+          9.058522438001091
+        ],
+        "median_seconds": 9.130315192000126,
+        "min_seconds": 9.058522438001091,
+        "max_seconds": 9.175548134000564
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          9.029790792999847,
+          8.992406411998672,
+          9.025600988003134,
+          8.971233608001057,
+          8.949393127000803
+        ],
+        "output_transfer_seconds": [
+          0.0014317079985630699,
+          0.0006439200005843304,
+          0.0006485970006906427,
+          0.0006383920008374844,
+          0.0006286259995249566
+        ],
+        "validation_seconds": [
+          0.14432563300215406,
+          0.1372648600008688,
+          0.11763826799870003,
+          0.10395488899666816,
+          0.10850068500076304
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 32,
+      "case_id": "newton-batch-newton_cuda-w32-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "160020914fdd818f9c83d51102a20c250acd510c7d61e0539c353c75dad1e413",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 192,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 15616000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.733347738001612,
+        "teardown_seconds": 0.03722761099925265,
+        "case_seconds": 110.13928102299906
+      },
+      "simulation": {
+        "samples_seconds": [
+          16.525546725999448,
+          16.523688000997936,
+          16.479749172001902,
+          16.613340575997427,
+          16.613634964000084
+        ],
+        "median_seconds": 16.525546725999448,
+        "min_seconds": 16.479749172001902,
+        "max_seconds": 16.613634964000084
+      },
+      "checked": {
+        "samples_seconds": [
+          16.667245631000696,
+          16.67006202999619,
+          16.618391111001984,
+          16.75226868000027,
+          16.74808410299738
+        ],
+        "median_seconds": 16.67006202999619,
+        "min_seconds": 16.618391111001984,
+        "max_seconds": 16.75226868000027
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          16.525546725999448,
+          16.523688000997936,
+          16.479749172001902,
+          16.613340575997427,
+          16.613634964000084
+        ],
+        "output_transfer_seconds": [
+          0.004093771000043489,
+          0.004469953000807436,
+          0.004630026000086218,
+          0.004147182000451721,
+          0.0009912069981510285
+        ],
+        "validation_seconds": [
+          0.13760513400120544,
+          0.14190407599744503,
+          0.13401191299999482,
+          0.1347809220023919,
+          0.13345793199914624
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 64,
+      "case_id": "newton-batch-newton_cpu-w64-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "a1ed92d0a62fb32fc29b92b4e8158618d771246f4efaba1f263c570fc3db7817",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 384,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 31232000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.669070208001358,
+        "teardown_seconds": 0.02715023099881364,
+        "case_seconds": 174.80040779699993
+      },
+      "simulation": {
+        "samples_seconds": [
+          18.128547656000592,
+          18.040323591998458,
+          17.998069166002097,
+          18.018573165001726,
+          18.11902937800187
+        ],
+        "median_seconds": 18.040323591998458,
+        "min_seconds": 17.998069166002097,
+        "max_seconds": 18.128547656000592
+      },
+      "checked": {
+        "samples_seconds": [
+          18.400056464000954,
+          18.263373084002524,
+          18.216033042001072,
+          18.230405253001663,
+          18.331583324004896
+        ],
+        "median_seconds": 18.263373084002524,
+        "min_seconds": 18.216033042001072,
+        "max_seconds": 18.400056464000954
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          18.128547656000592,
+          18.040323591998458,
+          17.998069166002097,
+          18.018573165001726,
+          18.11902937800187
+        ],
+        "output_transfer_seconds": [
+          0.0030928550004318822,
+          0.002572003002569545,
+          0.0026080779971380252,
+          0.0012035010004183277,
+          0.0012364210015221033
+        ],
+        "validation_seconds": [
+          0.2684159529999306,
+          0.220477489001496,
+          0.21535579800183768,
+          0.21062858699951903,
+          0.2113175250015047
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 64,
+      "case_id": "newton-batch-newton_cuda-w64-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "a1ed92d0a62fb32fc29b92b4e8158618d771246f4efaba1f263c570fc3db7817",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 384,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 31232000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.758309098000609,
+        "teardown_seconds": 0.03590977500061854,
+        "case_seconds": 115.48668010999972
+      },
+      "simulation": {
+        "samples_seconds": [
+          17.261479761000373,
+          17.28597205800179,
+          17.40350073100126,
+          17.28684306300056,
+          17.23868045799827
+        ],
+        "median_seconds": 17.28597205800179,
+        "min_seconds": 17.23868045799827,
+        "max_seconds": 17.40350073100126
+      },
+      "checked": {
+        "samples_seconds": [
+          17.553738753002108,
+          17.558026004000567,
+          17.65012567499798,
+          17.551149132996215,
+          17.5043261360006
+        ],
+        "median_seconds": 17.553738753002108,
+        "min_seconds": 17.5043261360006,
+        "max_seconds": 17.65012567499798
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          17.261479761000373,
+          17.28597205800179,
+          17.40350073100126,
+          17.28684306300056,
+          17.23868045799827
+        ],
+        "output_transfer_seconds": [
+          0.008176207000360591,
+          0.007719552999333246,
+          0.007867186999646947,
+          0.007419996996759437,
+          0.007862921000196366
+        ],
+        "validation_seconds": [
+          0.28408278500137385,
+          0.2643343929994444,
+          0.23875775699707447,
+          0.25688607299889554,
+          0.2577827570021327
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 128,
+      "case_id": "newton-batch-newton_cpu-w128-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "7dea38555703606f88a5bb586578024c1be46af45f579a04fa47465ee611d56f",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 768,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 62464000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.709946588998719,
+        "teardown_seconds": 0.02840444699904765,
+        "case_seconds": 283.68661848899865
+      },
+      "simulation": {
+        "samples_seconds": [
+          35.804240596000454,
+          36.18956969499777,
+          35.690413372001785,
+          35.89962895500139,
+          36.219971063997946
+        ],
+        "median_seconds": 35.89962895500139,
+        "min_seconds": 35.690413372001785,
+        "max_seconds": 36.219971063997946
+      },
+      "checked": {
+        "samples_seconds": [
+          36.22370453199983,
+          36.598070853000536,
+          36.10694725999929,
+          36.319027102999826,
+          36.62937248199887
+        ],
+        "median_seconds": 36.319027102999826,
+        "min_seconds": 36.10694725999929,
+        "max_seconds": 36.62937248199887
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          35.804240596000454,
+          36.18956969499777,
+          35.690413372001785,
+          35.89962895500139,
+          36.219971063997946
+        ],
+        "output_transfer_seconds": [
+          0.004759720999572892,
+          0.004910740000923397,
+          0.004884039997705258,
+          0.0049220090004382655,
+          0.004875218000961468
+        ],
+        "validation_seconds": [
+          0.4147042149998015,
+          0.4035904180018406,
+          0.4116498479997972,
+          0.4144761389979976,
+          0.40452619999996386
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 128,
+      "case_id": "newton-batch-newton_cuda-w128-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 2,
+      "comparison_signature": "7dea38555703606f88a5bb586578024c1be46af45f579a04fa47465ee611d56f",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 256,
+      "case_id": "newton-batch-newton_cpu-w256-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "be337e5c047ffd1f33a451bd1aa55d4689893ab52a23d819585b68f9b2e9c415",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 1536,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 124928000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.713416810998751,
+        "teardown_seconds": 0.03066332600064925,
+        "case_seconds": 501.40263337500073
+      },
+      "simulation": {
+        "samples_seconds": [
+          71.82952612600275,
+          72.34450552499766,
+          71.74153377399853,
+          71.7360017179999,
+          71.83255178400213
+        ],
+        "median_seconds": 71.82952612600275,
+        "min_seconds": 71.7360017179999,
+        "max_seconds": 72.34450552499766
+      },
+      "checked": {
+        "samples_seconds": [
+          72.64749633700558,
+          73.15758068799914,
+          72.54975642300269,
+          72.57267933699768,
+          72.64575477200196
+        ],
+        "median_seconds": 72.64575477200196,
+        "min_seconds": 72.54975642300269,
+        "max_seconds": 73.15758068799914
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          71.82952612600275,
+          72.34450552499766,
+          71.74153377399853,
+          71.7360017179999,
+          71.83255178400213
+        ],
+        "output_transfer_seconds": [
+          0.008962018000602257,
+          0.009496120001131203,
+          0.00890218800122966,
+          0.009654630997829372,
+          0.00917536300039501
+        ],
+        "validation_seconds": [
+          0.8090081930022279,
+          0.8035790430003544,
+          0.7993204610029352,
+          0.8270229879999533,
+          0.8040276249994349
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 256,
+      "case_id": "newton-batch-newton_cuda-w256-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "be337e5c047ffd1f33a451bd1aa55d4689893ab52a23d819585b68f9b2e9c415",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 2
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 512,
+      "case_id": "newton-batch-newton_cpu-w512-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "85e2df94cc91a95d60b03cecf62219534e1b6a8384788f5364ea873dee46e43e",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 3072,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 249856000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.6834322059985425,
+        "teardown_seconds": 0.0374810110006365,
+        "case_seconds": 933.5291022550009
+      },
+      "simulation": {
+        "samples_seconds": [
+          143.5982766069974,
+          142.6833928720007,
+          144.76333186000193,
+          142.68249259200093,
+          143.00346560600155
+        ],
+        "median_seconds": 143.00346560600155,
+        "min_seconds": 142.68249259200093,
+        "max_seconds": 144.76333186000193
+      },
+      "checked": {
+        "samples_seconds": [
+          145.21372403399437,
+          144.31150016300307,
+          146.3958269970026,
+          144.32158644800074,
+          144.63136251800097
+        ],
+        "median_seconds": 144.63136251800097,
+        "min_seconds": 144.31150016300307,
+        "max_seconds": 146.3958269970026
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          143.5982766069974,
+          142.6833928720007,
+          144.76333186000193,
+          142.68249259200093,
+          143.00346560600155
+        ],
+        "output_transfer_seconds": [
+          0.01765143599914154,
+          0.017535140003019478,
+          0.017570074000104796,
+          0.01788230500096688,
+          0.01770687799944426
+        ],
+        "validation_seconds": [
+          1.597795990997838,
+          1.61057215099936,
+          1.6149250630005554,
+          1.6212115509988507,
+          1.6101900339999702
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 512,
+      "case_id": "newton-batch-newton_cuda-w512-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "85e2df94cc91a95d60b03cecf62219534e1b6a8384788f5364ea873dee46e43e",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 2
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 1024,
+      "case_id": "newton-batch-newton_cpu-w1024-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "446b326461c68ba47000e7a53188af3d2358a79fd77562afd34b7be1efcbe279",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6144,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 499712000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.668637284001306,
+        "teardown_seconds": 0.04803557099876343,
+        "case_seconds": 1804.2920898039993
+      },
+      "simulation": {
+        "samples_seconds": [
+          285.58427201700033,
+          286.51673077599844,
+          286.5794458420023,
+          287.7106733239998,
+          287.7911246069998
+        ],
+        "median_seconds": 286.5794458420023,
+        "min_seconds": 285.58427201700033,
+        "max_seconds": 287.7911246069998
+      },
+      "checked": {
+        "samples_seconds": [
+          288.82846012200025,
+          289.73082810399865,
+          289.8411610610019,
+          290.9386645489976,
+          291.02916034100053
+        ],
+        "median_seconds": 289.8411610610019,
+        "min_seconds": 288.82846012200025,
+        "max_seconds": 291.02916034100053
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          285.58427201700033,
+          286.51673077599844,
+          286.5794458420023,
+          287.7106733239998,
+          287.7911246069998
+        ],
+        "output_transfer_seconds": [
+          0.03417256600005203,
+          0.034613765998074086,
+          0.034181709997938015,
+          0.03482565599915688,
+          0.03411382299964316
+        ],
+        "validation_seconds": [
+          3.210015538999869,
+          3.179483562002133,
+          3.2275335090016597,
+          3.1931655689986655,
+          3.203921911001089
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 1024,
+      "case_id": "newton-batch-newton_cuda-w1024-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "446b326461c68ba47000e7a53188af3d2358a79fd77562afd34b7be1efcbe279",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "so101",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 2048,
+      "case_id": "newton-batch-newton_cpu-w2048-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "86e601523c4d0bb071e0f201501201629871ff5cab887eb1c6336ad1aa3eb7bd",
+      "model_sha256": "db2f02cfa3f4476c397d30a7d309d91e57b667ee9001f54833cb828aa5844af8",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 12288,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 999424000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.6892435169993405,
+        "teardown_seconds": 0.0699385239968251,
+        "case_seconds": 3510.583778000002
+      },
+      "simulation": {
+        "samples_seconds": [
+          568.6422739450009,
+          568.6364068269995,
+          567.7764563279998,
+          568.7772693340012,
+          569.7235537739998
+        ],
+        "median_seconds": 568.6422739450009,
+        "min_seconds": 567.7764563279998,
+        "max_seconds": 569.7235537739998
+      },
+      "checked": {
+        "samples_seconds": [
+          575.0651934430007,
+          575.0534306709978,
+          574.363807558002,
+          575.2078364860026,
+          576.179025383999
+        ],
+        "median_seconds": 575.0651934430007,
+        "min_seconds": 574.363807558002,
+        "max_seconds": 576.179025383999
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          568.6422739450009,
+          568.6364068269995,
+          567.7764563279998,
+          568.7772693340012,
+          569.7235537739998
+        ],
+        "output_transfer_seconds": [
+          0.06838598200010892,
+          0.0687128159988788,
+          0.06796814300105325,
+          0.06847983400075464,
+          0.06865800499872421
+        ],
+        "validation_seconds": [
+          6.354533515999719,
+          6.3483110279994435,
+          6.519383087001188,
+          6.362087318000704,
+          6.386813605000498
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "so101",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 2048,
+      "case_id": "newton-batch-newton_cuda-w2048-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "86e601523c4d0bb071e0f201501201629871ff5cab887eb1c6336ad1aa3eb7bd",
+      "model_sha256": "0d07612eec4752dab83286b4a679410eb01ea69a5745dc6be26003a908b3b508",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 1,
+      "case_id": "newton-batch-newton_cpu-w1-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 1,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "6ff9157d3d9a73f14d01143854b37a5a201020cce454ecbc571a852067763340",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "serial_parent",
+          "workers": 1,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 0,
+          "child_history_readonly": null,
+          "child_environment": null
+        },
+        "setup_seconds": 3.7327001336961985e-05,
+        "teardown_seconds": 2.073000359814614e-06,
+        "case_seconds": 50.238799515998835
+      },
+      "simulation": {
+        "samples_seconds": [
+          7.995999539001787,
+          7.566229894000571,
+          7.553807542000868,
+          7.606357262000529,
+          7.981075781000982
+        ],
+        "median_seconds": 7.606357262000529,
+        "min_seconds": 7.553807542000868,
+        "max_seconds": 7.995999539001787
+      },
+      "checked": {
+        "samples_seconds": [
+          8.081136676002643,
+          7.651041564997286,
+          7.638587845001894,
+          7.691102410997701,
+          8.066166167001938
+        ],
+        "median_seconds": 7.691102410997701,
+        "min_seconds": 7.638587845001894,
+        "max_seconds": 8.081136676002643
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          7.995999539001787,
+          7.566229894000571,
+          7.553807542000868,
+          7.606357262000529,
+          7.981075781000982
+        ],
+        "output_transfer_seconds": [
+          7.851000191294588e-05,
+          8.11039972177241e-05,
+          5.7007000577868894e-05,
+          3.693599865073338e-05,
+          7.151899990276434e-05
+        ],
+        "validation_seconds": [
+          0.08505862699894351,
+          0.08473056699949666,
+          0.08472329600044759,
+          0.08470821299852105,
+          0.08501886700105388
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 1,
+      "case_id": "newton-batch-newton_cuda-w1-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "6ff9157d3d9a73f14d01143854b37a5a201020cce454ecbc571a852067763340",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "serial_parent",
+          "workers": 1,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 0,
+          "child_history_readonly": null,
+          "child_environment": null
+        },
+        "setup_seconds": 2.70609998551663e-05,
+        "teardown_seconds": 2.264001523144543e-06,
+        "case_seconds": 96.41770464300134
+      },
+      "simulation": {
+        "samples_seconds": [
+          15.346852099999523,
+          15.618272641000658,
+          15.432475435001834,
+          15.65570423600002,
+          15.456675527999323
+        ],
+        "median_seconds": 15.456675527999323,
+        "min_seconds": 15.346852099999523,
+        "max_seconds": 15.65570423600002
+      },
+      "checked": {
+        "samples_seconds": [
+          15.431035666002572,
+          15.702393070998369,
+          15.51641414900223,
+          15.739780880998296,
+          15.540940877999674
+        ],
+        "median_seconds": 15.540940877999674,
+        "min_seconds": 15.431035666002572,
+        "max_seconds": 15.739780880998296
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          15.346852099999523,
+          15.618272641000658,
+          15.432475435001834,
+          15.65570423600002,
+          15.456675527999323
+        ],
+        "output_transfer_seconds": [
+          0.00043345900121494196,
+          0.0004834749997826293,
+          0.0002953990006062668,
+          0.000303671997244237,
+          0.0003898820032190997
+        ],
+        "validation_seconds": [
+          0.08375010700183338,
+          0.08363695499792811,
+          0.08364331499979016,
+          0.08377297300103237,
+          0.08387546799713164
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 16,
+      "case_id": "newton-batch-newton_cpu-w16-t16",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 16,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "054c2da052091d64ca5b0627c10f5d2f984d14a5886a04d9a547691ff483adb4",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 96,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 16,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 7808000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 3.380053360997408,
+        "teardown_seconds": 0.01283123500252259,
+        "case_seconds": 87.63611974299783
+      },
+      "simulation": {
+        "samples_seconds": [
+          8.817274558998179,
+          8.828717390999373,
+          8.895157973001915,
+          8.874854107001738,
+          8.866088016999129
+        ],
+        "median_seconds": 8.866088016999129,
+        "min_seconds": 8.817274558998179,
+        "max_seconds": 8.895157973001915
+      },
+      "checked": {
+        "samples_seconds": [
+          8.925530751999759,
+          8.931772168998577,
+          9.004816398999537,
+          8.975120111004799,
+          8.967015697999159
+        ],
+        "median_seconds": 8.967015697999159,
+        "min_seconds": 8.925530751999759,
+        "max_seconds": 9.004816398999537
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          8.817274558998179,
+          8.828717390999373,
+          8.895157973001915,
+          8.874854107001738,
+          8.866088016999129
+        ],
+        "output_transfer_seconds": [
+          0.0008076890007941984,
+          0.000340958999004215,
+          0.00034924099963973276,
+          0.0003777550009544939,
+          0.00033350800003972836
+        ],
+        "validation_seconds": [
+          0.10744850400078576,
+          0.1027138190002006,
+          0.10930918499798281,
+          0.09988824900210602,
+          0.1005941729999904
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 16,
+      "case_id": "newton-batch-newton_cuda-w16-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "054c2da052091d64ca5b0627c10f5d2f984d14a5886a04d9a547691ff483adb4",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              16
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 96,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 16,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 7808000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 3.3826355260025593,
+        "teardown_seconds": 0.017179802001919597,
+        "case_seconds": 111.79181847699874
+      },
+      "simulation": {
+        "samples_seconds": [
+          17.427839207000943,
+          17.42312490400218,
+          17.53245209799934,
+          17.3981206569988,
+          17.53671888000099
+        ],
+        "median_seconds": 17.427839207000943,
+        "min_seconds": 17.3981206569988,
+        "max_seconds": 17.53671888000099
+      },
+      "checked": {
+        "samples_seconds": [
+          17.537162184002227,
+          17.525018947002536,
+          17.638818627998262,
+          17.49759559999802,
+          17.637117948001105
+        ],
+        "median_seconds": 17.537162184002227,
+        "min_seconds": 17.49759559999802,
+        "max_seconds": 17.638818627998262
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          17.427839207000943,
+          17.42312490400218,
+          17.53245209799934,
+          17.3981206569988,
+          17.53671888000099
+        ],
+        "output_transfer_seconds": [
+          0.0020685569979832508,
+          0.0019537619991751853,
+          0.002024740999331698,
+          0.0005400810005085077,
+          0.0005452190016512759
+        ],
+        "validation_seconds": [
+          0.10725442000330077,
+          0.09994028100118157,
+          0.10434178899959079,
+          0.09893486199871404,
+          0.09985384899846395
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 32,
+      "case_id": "newton-batch-newton_cpu-w32-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "a931e82e1a13c1aa244ba5d0f8cf64d4a63f72b556bbd63e6655a16f9f126ecb",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 192,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 15616000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.6400272389983,
+        "teardown_seconds": 0.027526349000254413,
+        "case_seconds": 120.5987973730007
+      },
+      "simulation": {
+        "samples_seconds": [
+          8.934909833998972,
+          9.066461988997617,
+          8.992984774999059,
+          8.958386857000733,
+          8.951054412998928
+        ],
+        "median_seconds": 8.958386857000733,
+        "min_seconds": 8.934909833998972,
+        "max_seconds": 9.066461988997617
+      },
+      "checked": {
+        "samples_seconds": [
+          9.071955218998482,
+          9.20098180399873,
+          9.098135191001347,
+          9.094218395999633,
+          9.078396749999229
+        ],
+        "median_seconds": 9.094218395999633,
+        "min_seconds": 9.071955218998482,
+        "max_seconds": 9.20098180399873
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          8.934909833998972,
+          9.066461988997617,
+          8.992984774999059,
+          8.958386857000733,
+          8.951054412998928
+        ],
+        "output_transfer_seconds": [
+          0.0011066819970437791,
+          0.0006327510018309113,
+          0.0012148670030001085,
+          0.0006569580000359565,
+          0.0006736840005032718
+        ],
+        "validation_seconds": [
+          0.13593870300246635,
+          0.13388706399928196,
+          0.10393554899928859,
+          0.13517458099886426,
+          0.1266686529997969
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 32,
+      "case_id": "newton-batch-newton_cuda-w32-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "a931e82e1a13c1aa244ba5d0f8cf64d4a63f72b556bbd63e6655a16f9f126ecb",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              32
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 192,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 15616000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.714239621000161,
+        "teardown_seconds": 0.03661549500247929,
+        "case_seconds": 120.84617492500183
+      },
+      "simulation": {
+        "samples_seconds": [
+          18.36224880300142,
+          18.260082795000926,
+          18.500064245999965,
+          18.330692216997704,
+          18.47954796799968
+        ],
+        "median_seconds": 18.36224880300142,
+        "min_seconds": 18.260082795000926,
+        "max_seconds": 18.500064245999965
+      },
+      "checked": {
+        "samples_seconds": [
+          18.46960846300135,
+          18.37393852900277,
+          18.605276519003382,
+          18.43501310299689,
+          18.621851710002375
+        ],
+        "median_seconds": 18.46960846300135,
+        "min_seconds": 18.37393852900277,
+        "max_seconds": 18.621851710002375
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          18.36224880300142,
+          18.260082795000926,
+          18.500064245999965,
+          18.330692216997704,
+          18.47954796799968
+        ],
+        "output_transfer_seconds": [
+          0.0035042620002059266,
+          0.004107359000045108,
+          0.003972966002038447,
+          0.0007586739993712399,
+          0.0007703720002609771
+        ],
+        "validation_seconds": [
+          0.10385539799972321,
+          0.10974837500180001,
+          0.10123930700137862,
+          0.10356221199981519,
+          0.14153337000243482
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 64,
+      "case_id": "newton-batch-newton_cpu-w64-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "77621ef15cbfecf766c2128308137f98fece572cf3011a3b04fc7b52e2ceb631",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 384,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 31232000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.736348540001927,
+        "teardown_seconds": 0.02772738700150512,
+        "case_seconds": 174.83498814099949
+      },
+      "simulation": {
+        "samples_seconds": [
+          18.094894124998973,
+          17.75632613700145,
+          17.8876389199977,
+          17.770666043001256,
+          17.959283601001516
+        ],
+        "median_seconds": 17.8876389199977,
+        "min_seconds": 17.75632613700145,
+        "max_seconds": 18.094894124998973
+      },
+      "checked": {
+        "samples_seconds": [
+          18.336829059000593,
+          17.96102174200132,
+          18.117753113994695,
+          18.003089756002737,
+          18.169232387001102
+        ],
+        "median_seconds": 18.117753113994695,
+        "min_seconds": 17.96102174200132,
+        "max_seconds": 18.336829059000593
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          18.094894124998973,
+          17.75632613700145,
+          17.8876389199977,
+          17.770666043001256,
+          17.959283601001516
+        ],
+        "output_transfer_seconds": [
+          0.0027424770014476962,
+          0.0025775159992917906,
+          0.002562362999015022,
+          0.0012250820000190288,
+          0.0012091669996152632
+        ],
+        "validation_seconds": [
+          0.239192457000172,
+          0.20211808900057804,
+          0.2275518309979816,
+          0.23119863100146176,
+          0.20873961899997084
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 64,
+      "case_id": "newton-batch-newton_cuda-w64-t1",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "77621ef15cbfecf766c2128308137f98fece572cf3011a3b04fc7b52e2ceb631",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": {
+          "timestep": {
+            "shape": [
+              1
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.0010000000474974513
+          },
+          "tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "ls_tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.009999999776482582
+          },
+          "ccd_tolerance": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 9.999999974752427e-07
+          },
+          "impratio_invsqrt": {
+            "shape": [
+              64
+            ],
+            "dtype": "float32",
+            "uniform_value": 0.10000000149011612
+          },
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "mujoco_warp",
+        "active_clock_precision": "float32"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 384,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float32",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 39.98965072631836,
+        "minimum_final_raw_time_s": 39.98965072631836,
+        "maximum_final_raw_time_s": 39.98965072631836,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 31232000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.758887894997315,
+        "teardown_seconds": 0.03567080499851727,
+        "case_seconds": 128.1879844640025
+      },
+      "simulation": {
+        "samples_seconds": [
+          19.801375462997385,
+          19.458402303000184,
+          19.31938155700118,
+          19.333867355999246,
+          19.193316625998705
+        ],
+        "median_seconds": 19.333867355999246,
+        "min_seconds": 19.193316625998705,
+        "max_seconds": 19.801375462997385
+      },
+      "checked": {
+        "samples_seconds": [
+          20.072267591996933,
+          19.70292386699657,
+          19.592580109005212,
+          19.572392558999127,
+          19.41431580099743
+        ],
+        "median_seconds": 19.592580109005212,
+        "min_seconds": 19.41431580099743,
+        "max_seconds": 20.072267591996933
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          19.801375462997385,
+          19.458402303000184,
+          19.31938155700118,
+          19.333867355999246,
+          19.193316625998705
+        ],
+        "output_transfer_seconds": [
+          0.007779048999509541,
+          0.0071665679970465135,
+          0.007772959001158597,
+          0.007934594999824185,
+          0.008138724999298574
+        ],
+        "validation_seconds": [
+          0.2631130800000392,
+          0.23735499599933974,
+          0.26542559300287394,
+          0.23059060800005682,
+          0.21286044999942533
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 128,
+      "case_id": "newton-batch-newton_cpu-w128-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "b6931176b8115e02f83180ccf845c43db4aa068b8926242add3281c0e93d7d69",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 768,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 62464000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.680716758000926,
+        "teardown_seconds": 0.028038658001605654,
+        "case_seconds": 281.3221682410003
+      },
+      "simulation": {
+        "samples_seconds": [
+          35.58103076000043,
+          35.56267832799858,
+          35.53358312399723,
+          35.674542709999514,
+          35.62608663799983
+        ],
+        "median_seconds": 35.58103076000043,
+        "min_seconds": 35.53358312399723,
+        "max_seconds": 35.674542709999514
+      },
+      "checked": {
+        "samples_seconds": [
+          35.99688445000356,
+          36.01975185299307,
+          35.96707703399443,
+          36.1038192369997,
+          36.04178006000075
+        ],
+        "median_seconds": 36.01975185299307,
+        "min_seconds": 35.96707703399443,
+        "max_seconds": 36.1038192369997
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          35.58103076000043,
+          35.56267832799858,
+          35.53358312399723,
+          35.674542709999514,
+          35.62608663799983
+        ],
+        "output_transfer_seconds": [
+          0.0048367090021201875,
+          0.004708523996669101,
+          0.004811639999388717,
+          0.004707744999905117,
+          0.0046898779983166605
+        ],
+        "validation_seconds": [
+          0.411016981001012,
+          0.4523650009978155,
+          0.42868226999780745,
+          0.4245687820002786,
+          0.41100354400259675
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 128,
+      "case_id": "newton-batch-newton_cuda-w128-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 2,
+      "comparison_signature": "b6931176b8115e02f83180ccf845c43db4aa068b8926242add3281c0e93d7d69",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 256,
+      "case_id": "newton-batch-newton_cpu-w256-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "a1de3e62f3ed44ef8c66ad49cbf17f467008531944132d7eaf767f6524b6d8e7",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 1536,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 124928000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.675284004999412,
+        "teardown_seconds": 0.0307611470016127,
+        "case_seconds": 496.99201442499907
+      },
+      "simulation": {
+        "samples_seconds": [
+          70.62174402100209,
+          70.63044326800082,
+          71.29825291100133,
+          71.20021262099908,
+          70.98526204800146
+        ],
+        "median_seconds": 70.98526204800146,
+        "min_seconds": 70.62174402100209,
+        "max_seconds": 71.29825291100133
+      },
+      "checked": {
+        "samples_seconds": [
+          71.44557464800528,
+          71.46913736200077,
+          72.16582502600068,
+          72.00463641799797,
+          71.7937540960047
+        ],
+        "median_seconds": 71.7937540960047,
+        "min_seconds": 71.44557464800528,
+        "max_seconds": 72.16582502600068
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          70.62174402100209,
+          70.63044326800082,
+          71.29825291100133,
+          71.20021262099908,
+          70.98526204800146
+        ],
+        "output_transfer_seconds": [
+          0.008868845001416048,
+          0.009162171998468693,
+          0.008812078998744255,
+          0.009423638999578543,
+          0.009040246000949992
+        ],
+        "validation_seconds": [
+          0.8149617820017738,
+          0.829531922001479,
+          0.8587600360006036,
+          0.7950001579993113,
+          0.7994518020022952
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 256,
+      "case_id": "newton-batch-newton_cuda-w256-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "a1de3e62f3ed44ef8c66ad49cbf17f467008531944132d7eaf767f6524b6d8e7",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 512,
+      "case_id": "newton-batch-newton_cpu-w512-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "53b65b6bbbc65d32ed56ca91205319ed0bb482ac78118d7199a5c780e477f182",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 3072,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 249856000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.670257196998136,
+        "teardown_seconds": 0.03804758799742558,
+        "case_seconds": 924.7578710139969
+      },
+      "simulation": {
+        "samples_seconds": [
+          141.70781890200305,
+          141.6576007620024,
+          141.46779432199764,
+          141.6811318029977,
+          141.41889766900204
+        ],
+        "median_seconds": 141.6576007620024,
+        "min_seconds": 141.41889766900204,
+        "max_seconds": 141.70781890200305
+      },
+      "checked": {
+        "samples_seconds": [
+          143.4317020439994,
+          143.3214338500038,
+          143.0936540609946,
+          143.30405204099588,
+          143.04876249800145
+        ],
+        "median_seconds": 143.30405204099588,
+        "min_seconds": 143.04876249800145,
+        "max_seconds": 143.4317020439994
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          141.70781890200305,
+          141.6576007620024,
+          141.46779432199764,
+          141.6811318029977,
+          141.41889766900204
+        ],
+        "output_transfer_seconds": [
+          0.017660722998698475,
+          0.017577006001374684,
+          0.017688735999399796,
+          0.01753988299969933,
+          0.017519231001642765
+        ],
+        "validation_seconds": [
+          1.7062224189976405,
+          1.6462560820000363,
+          1.6081710029975511,
+          1.6053803549984877,
+          1.6123455979977734
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 512,
+      "case_id": "newton-batch-newton_cuda-w512-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "53b65b6bbbc65d32ed56ca91205319ed0bb482ac78118d7199a5c780e477f182",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 1024,
+      "case_id": "newton-batch-newton_cpu-w1024-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "db871e33636621a585ded3e1ab855fbf3b1f7e0d7ace790db914d20f51cb2513",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 6144,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 499712000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.680944457999431,
+        "teardown_seconds": 0.050627658998564584,
+        "case_seconds": 1782.6480186629997
+      },
+      "simulation": {
+        "samples_seconds": [
+          283.68493685999783,
+          282.06012910999925,
+          282.7001734309997,
+          283.8140354220013,
+          282.9763578179991
+        ],
+        "median_seconds": 282.9763578179991,
+        "min_seconds": 282.06012910999925,
+        "max_seconds": 283.8140354220013
+      },
+      "checked": {
+        "samples_seconds": [
+          286.9294784119993,
+          285.26628109599915,
+          285.9100399279996,
+          287.0142446509999,
+          286.1808482419983
+        ],
+        "median_seconds": 286.1808482419983,
+        "min_seconds": 285.26628109599915,
+        "max_seconds": 287.0142446509999
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          283.68493685999783,
+          282.06012910999925,
+          282.7001734309997,
+          283.8140354220013,
+          282.9763578179991
+        ],
+        "output_transfer_seconds": [
+          0.034317893001571065,
+          0.03484699800173985,
+          0.03425788100139471,
+          0.03459370799828321,
+          0.03423755699986941
+        ],
+        "validation_seconds": [
+          3.210223658999894,
+          3.1713049879981554,
+          3.175608615998499,
+          3.1656155210002908,
+          3.1702528669993626
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 1024,
+      "case_id": "newton-batch-newton_cuda-w1024-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 2,
+      "comparison_signature": "db871e33636621a585ded3e1ab855fbf3b1f7e0d7ace790db914d20f51cb2513",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    },
+    {
+      "robot": "rebot",
+      "series": "cpu",
+      "backend": "newton_cpu",
+      "worlds": 2048,
+      "case_id": "newton-batch-newton_cpu-w2048-t32",
+      "status": "passed",
+      "accepted": true,
+      "cpu_workers": 32,
+      "warmup_count": 1,
+      "measured_count": 5,
+      "comparison_signature": "3ed7429118173930782ad93f29957d96632e80dca122cdcacff2caf4984481d2",
+      "model_sha256": "ead270ec8162eb285afa114b23141cba1a8652cab5e036c3336b880a0ced8b9f",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": {
+        "native_requested": {
+          "timestep": 0.001,
+          "tolerance": 9.99999993922529e-09,
+          "ls_tolerance": 0.009999999776482582,
+          "ccd_tolerance": 9.999999974752427e-07,
+          "impratio": 100.0,
+          "iterations": 100,
+          "ls_iterations": 50,
+          "ccd_iterations": 35,
+          "solver": 2,
+          "integrator": 3,
+          "cone": 1,
+          "disableflags": 524288,
+          "enableflags": 0
+        },
+        "uploaded_gpu_effective": null,
+        "collision_policy": "backend defaults; no collider flag override",
+        "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+        "active_backend": "native_mujoco",
+        "active_clock_precision": "float64"
+      },
+      "clock_evidence": {
+        "world_episodes_checked": 12288,
+        "actual_steps_per_world": 40000,
+        "backend_clock_precision": "float64",
+        "recorded_clock_precision": "float32",
+        "allowed_observation_ulps": 1,
+        "maximum_observation_ulp_error": 0.0,
+        "expected_final_raw_time_s": 40.0,
+        "minimum_final_raw_time_s": 40.0,
+        "maximum_final_raw_time_s": 40.0,
+        "nominal_integrated_duration_s": 40.0
+      },
+      "host_validation": {
+        "policy": {
+          "version": 1,
+          "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+          "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+          "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+          "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+          "requested_workers": 32
+        },
+        "actual": {
+          "policy_version": 1,
+          "mode": "persistent_spawn_pool",
+          "workers": 32,
+          "requested_workers": 32,
+          "affinity_limit": 128,
+          "shared_history_bytes": 999424000,
+          "child_history_readonly": true,
+          "child_environment": {
+            "CUDA_VISIBLE_DEVICES": "",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "PXR_WORK_THREAD_LIMIT": "1"
+          }
+        },
+        "setup_seconds": 6.697487950001232,
+        "teardown_seconds": 0.06988588500098558,
+        "case_seconds": 3477.602275314999
+      },
+      "simulation": {
+        "samples_seconds": [
+          561.8342703929993,
+          562.0809776630012,
+          562.435564579002,
+          561.8451214959969,
+          562.3561525069999
+        ],
+        "median_seconds": 562.0809776630012,
+        "min_seconds": 561.8342703929993,
+        "max_seconds": 562.435564579002
+      },
+      "checked": {
+        "samples_seconds": [
+          568.2695541940011,
+          568.499619831,
+          568.9906841440024,
+          568.3159359839956,
+          568.7798777500029
+        ],
+        "median_seconds": 568.499619831,
+        "min_seconds": 568.2695541940011,
+        "max_seconds": 568.9906841440024
+      },
+      "components_seconds": {
+        "simulation_seconds": [
+          561.8342703929993,
+          562.0809776630012,
+          562.435564579002,
+          561.8451214959969,
+          562.3561525069999
+        ],
+        "output_transfer_seconds": [
+          0.0681329850012844,
+          0.06854309199843556,
+          0.0680663259990979,
+          0.06888714500018978,
+          0.06814389400096843
+        ],
+        "validation_seconds": [
+          6.367150816000503,
+          6.350099076000333,
+          6.487053239001398,
+          6.401927342998533,
+          6.355581349002023
+        ]
+      },
+      "excluded_reason": null,
+      "failed_world_samples": 0
+    },
+    {
+      "robot": "rebot",
+      "series": "gpu",
+      "backend": "newton_cuda",
+      "worlds": 2048,
+      "case_id": "newton-batch-newton_cuda-w2048-t1",
+      "status": "failed",
+      "accepted": false,
+      "cpu_workers": null,
+      "warmup_count": 1,
+      "measured_count": 0,
+      "comparison_signature": "3ed7429118173930782ad93f29957d96632e80dca122cdcacff2caf4984481d2",
+      "model_sha256": "c74f9e928e7ab8c1982f6db7c94fa5be55f682d5a9182d7ab6be72d0c41fe913",
+      "acceptance": {
+        "protocol_version": 2,
+        "clock_validation": "every raw float32 observation matches sequential backend-precision integration within one observation ULP; independent per-world integration count",
+        "clock_observation_ulp_allowance": 1,
+        "task": "two_cube_pick_place_into_box",
+        "frames": 2000,
+        "physics_steps": 40000,
+        "simulated_seconds": 40.0,
+        "control_hz": 50,
+        "bilateral_close_frames": 10,
+        "minimum_jaw_normal_force_N": 1e-05,
+        "whole_cube_lift_m": 0.01,
+        "consecutive_loaded_lift_frames": 25,
+        "loaded_carry_frames": 10,
+        "horizontal_carry_m": 0.05,
+        "whole_cube_box_tolerance_m": 0.003,
+        "release_open_fraction": 0.8,
+        "detached_settled_frames": 50,
+        "maximum_settled_corner_speed_m_s": 0.04,
+        "final_jaw_clearance_m": 0.02,
+        "ordered_cube_cycles": [
+          "red_cube",
+          "blue_cube"
+        ],
+        "observation_fields": 61,
+        "observation_dtype": "float32",
+        "jaw_clearance_observation": "final control frame only; earlier entries are zero",
+        "contact_observation": "actual solved backend contact forces after a backend forward pass"
+      },
+      "backend_settings": null,
+      "clock_evidence": null,
+      "host_validation": null,
+      "simulation": null,
+      "checked": null,
+      "components_seconds": null,
+      "excluded_reason": "Full Newton batch failed task, time progression, finite-state or capacity checks",
+      "failed_world_samples": 1
+    }
+  ],
+  "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8",
+  "recording_scope": "61 float32 physical observations per world at 50 Hz: time, actual opening, final-frame jaw clearance, and each cube's eight corners, maximum corner speed, two jaw-contact counts and two solved jaw normal forces. Both devices use this format.",
+  "timer_scope": {
+    "simulation": "Episode reset, commands, 40000 physics steps, per-frame backend forward and actual geometry/contact recording, including CPU dispatch/completion or CUDA synchronization. Final host collection/download and validation are separate.",
+    "checked": "Per-repetition simulation_seconds + output_transfer_seconds + validation_seconds. Sum components within each repetition, then compute min/median/max. This includes the time to checked host observations, including validation history copy, dispatch and result collection, but excludes model/tape preparation, setup, compilation, warm-up and validator teardown."
+  },
+  "comparison_scope": "Within this article's pinned stack. Both articles use the box task and observation format, but their physics stacks differ; no cross-article speedup is measured.",
+  "clock_scope": "Protocol v2: independently counted 40000 integration steps per world. Every recorded float32 frame timestamp is checked against sequential additions in the actual backend precision (CPU float64, GPU float32), within one observation ULP. Raw clock values are preserved; nominal task event time is used only after raw-clock and integration-count checks pass.",
+  "backend_option_scope": "Actual native and uploaded GPU options are retained per accepted case. Pinned MuJoCo Warp clamps requested tolerance to at least 1e-6 and represents numerical options in float32. Solver/integrator/cone choices and collision flags must match the native request; no collider flag override is permitted.",
+  "host_validation_scope": "Execution revision v3 applies the unchanged serial physical/clock/count oracle independently per world. CPU and GPU cases share the requested host-validation worker budget, capped by worlds and CPU affinity. One worker runs in the parent; larger batches use a persistent spawn pool and read-only shared histories. validation_seconds includes the shared-history copy, dispatch, all oracle work and result collection; validator setup/teardown are separately recorded case costs and excluded from both plotted metrics.",
+  "renderer": {
+    "matplotlib": "3.10.7",
+    "png_dpi": 300,
+    "figure_inches": [
+      12.8,
+      7.2
+    ],
+    "x_scale": "log2",
+    "y_scale": "log10",
+    "colors": {
+      "cpu": "#0072B2",
+      "gpu": "#D55E00"
+    },
+    "script_sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e"
+  }
+}

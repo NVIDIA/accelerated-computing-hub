@@ -60,26 +60,44 @@ MIGRATION = "02__mujoco_to_newton.ipynb"
 
 
 class MigrationNotebookTests(unittest.TestCase):
-    def test_migration_preserves_external_exercises_and_covers_both_robots(self):
-        path = PART3 / MIGRATION
-        self.assertTrue(path.exists(), "Missing dedicated migration notebook")
+    def test_migration_runs_both_box_robots_and_preserves_the_exercise(self):
         notebook = load_notebook(MIGRATION)
         markdown, code = source_text(notebook, "markdown"), source_text(notebook, "code")
-        for heading in ("Outline", "What you will learn", "Setup", "files", "Troubleshooting", "Recap", "Next"):
-            self.assertIn(heading, markdown)
-        for step in range(10):
-            self.assertIn(f"Step {step}.", markdown)
-        for term in ("so101", "rebot", "REFERENCE = True", "sys.executable", "check=True", "NotImplementedError"):
+        for term in ("so101", "rebot", "REFERENCE = True", "sys.executable", "check=True",
+                     "box_newton_exercise.py", "--task", "box", "40000", "RUN_GPU = False"):
             self.assertIn(term, code)
-        self.assertIn("joint_target_q_start", markdown + code)
-        self.assertIn("0.08", markdown + code)
-        self.assertNotIn("joint_target_pos", markdown + code)
+        self.assertIn("joint_target_q_start", markdown)
+        self.assertIn("SolverVBD", markdown)
+        self.assertIn("03__clean_the_table.ipynb", markdown)
+        self.assertIn("05__migration_benchmark.ipynb", markdown)
+        self.assertNotIn("shutil.copy", code)
         self.assertNotIn("except Exception", code)
-        self.assertNotIn("returncode != 0", code)
-        self.assertNotIn("!python", code)
-        self.assertIn("not backup.exists()", code)
-        self.assertIn("solutions/so101_newton_solution.py", code)
-        self.assertIn("04__final_check.ipynb", markdown)
+
+    def test_box_reports_cannot_hide_failure_or_incomplete_integration(self):
+        cell = next("".join(c["source"]) for c in load_notebook(MIGRATION)["cells"]
+                    if c["cell_type"] == "code" and "def run_box(" in "".join(c["source"]))
+        for fault in (None, "status", "capacity", "validation", "count"):
+            with self.subTest(fault=fault), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                result = {"status": "passed", "capacity_passed": True,
+                          "validation": {"passed": True}, "recorded_physics_steps": 40000}
+                if fault == "status": result["status"] = "failed"
+                if fault == "capacity": result["capacity_passed"] = False
+                if fault == "validation": result["validation"]["passed"] = False
+                if fault == "count": result["recorded_physics_steps"] = 39999
+                def run(command, **kwargs):
+                    self.assertEqual(command[command.index("--task") + 1], "box")
+                    self.assertEqual(command[command.index("--num-frames") + 1], "2000")
+                    self.assertEqual(command[command.index("--sim-substeps") + 1], "20")
+                    self.assertTrue(kwargs["check"])
+                    Path(command[command.index("--report") + 1]).write_text(json.dumps(result))
+                scope = dict(OUTPUT=root, PART3=PART3, SCRIPT=PART3/"box_newton_demo.py",
+                             ROBOTS=("so101", "rebot"), subprocess=subprocess, sys=sys, json=json)
+                with mock.patch.object(subprocess, "run", side_effect=run), contextlib.redirect_stdout(io.StringIO()):
+                    if fault is None: exec(compile(cell, "box-report", "exec"), scope)
+                    else:
+                        with self.assertRaises(AssertionError): exec(compile(cell, "box-report", "exec"), scope)
+
 
 
 FINAL = "04__final_check.ipynb"
@@ -194,7 +212,7 @@ class AdvancedNotebookTests(unittest.TestCase):
 
 
 class FinalNotebookTests(unittest.TestCase):
-    def test_final_notebook_asserts_both_robots_including_the_advanced_task(self):
+    def test_final_notebook_defaults_to_both_box_robots_with_optional_coupling(self):
         self.assertTrue((PART3 / FINAL).exists(), "Missing final notebook 04")
         self.assertFalse((PART3 / "02_Notebook_Final_Check.ipynb").exists(), "Obsolete notebook was not removed")
         notebook = load_notebook(FINAL)
@@ -202,6 +220,8 @@ class FinalNotebookTests(unittest.TestCase):
         for heading in ("Outline", "What you will learn", "Setup", "files", "Troubleshooting", "Recap", "Next"):
             self.assertIn(heading, markdown)
         self.assertIn("REFERENCE = True", code)
+        self.assertIn("RUN_LEGACY_AND_COUPLED = False", code)
+        self.assertIn("recorded_physics_steps\"] == 40000", code)
         module = ast.parse(code)
         calls = [node.test for node in ast.walk(module) if isinstance(node, ast.Assert)
                  and isinstance(node.test, ast.Call) and isinstance(node.test.func, ast.Name)
@@ -233,47 +253,9 @@ class FinalNotebookTests(unittest.TestCase):
 
 
 class NotebookSafetyTests(unittest.TestCase):
-    def test_backup_cell_never_overwrites_existing_backups_or_student_work(self):
-        notebook = load_notebook(MIGRATION)
-        cell = next("".join(c["source"]) for c in notebook["cells"]
-                    if c["cell_type"] == "code" and "not backup.exists()" in "".join(c["source"]))
-        with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
-            root = Path(directory)
-            for name in ("newton_scene.py", "so101_newton.py"):
-                (root / name).write_text("original student work")
-            scope = {"PART3": root, "shutil": shutil}
-            exec(compile(cell, "migration-backup-cell", "exec"), scope)
-            for name in ("newton_scene.py", "so101_newton.py"):
-                (root / name).write_text("new student work")
-            exec(compile(cell, "migration-backup-cell", "exec"), scope)
-            for name in ("newton_scene.py", "so101_newton.py"):
-                student = root / name
-                self.assertEqual(student.read_text(), "new student work")
-                self.assertEqual(student.with_name(student.stem + "_original.py").read_text(), "original student work")
 
-    def test_baseline_cell_accepts_only_the_explicit_incomplete_error(self):
-        notebook = load_notebook(MIGRATION)
-        cell = next("".join(c["source"]) for c in notebook["cells"]
-                    if c["cell_type"] == "code" and "sentinel =" in "".join(c["source"]))
-        sentinel = 'raise NotImplementedError("Complete TODO Steps 1-5 in build_newton_model()")'
-        expected = "NotImplementedError: Complete TODO Steps 1-5 in build_newton_model()"
-        with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
-            root = Path(directory)
-            (root / "newton_scene.py").write_text(sentinel)
-            scope = {"PART3": root, "subprocess": subprocess, "sys": sys}
-            for error in (expected, "ModuleNotFoundError: No module named 'newton'", "SyntaxError: broken"):
-                failure = subprocess.CalledProcessError(1, [sys.executable], output="", stderr=error)
-                with mock.patch.object(subprocess, "run", side_effect=failure) as run:
-                    if error == expected:
-                        exec(compile(cell, "migration-baseline-cell", "exec"), scope)
-                    else:
-                        with self.assertRaises(subprocess.CalledProcessError):
-                            exec(compile(cell, "migration-baseline-cell", "exec"), scope)
-                    self.assertIs(run.call_args.kwargs["check"], True)
-                    self.assertEqual(run.call_args.args[0][0], sys.executable)
-            with mock.patch.object(subprocess, "run", return_value=subprocess.CompletedProcess([], 0)):
-                with self.assertRaises(AssertionError):
-                    exec(compile(cell, "migration-baseline-cell", "exec"), scope)
+
+
 
     def test_nbformat_schema(self):
         try:
@@ -304,8 +286,8 @@ class NotebookExecutionTests(unittest.TestCase):
         # a notebook's interpreter by falling back to a system kernelspec.
         km = KernelManager(kernel_name="python3", ip="127.0.0.1")
         km.kernel_spec.argv = [sys.executable, "-m", "ipykernel_launcher", "-f", "{connection_file}"]
-        # Notebook 04 runs two separately bounded 1800 s gripper tasks in one
-        # cell, plus rigid checks and compilation. Its cell must cover both.
+        # Notebook 04 runs two separately bounded 1800 s box tasks in one
+        # cell. The coupled exercise remains opt-in within the notebook.
         cell_timeout = 4200 if name == FINAL else 1900
         client = NotebookClient(notebook, km=km, timeout=cell_timeout, allow_errors=False,
                                 resources={"metadata": {"path": str(PART3)}})
@@ -340,9 +322,7 @@ class NotebookExecutionTests(unittest.TestCase):
     def test_clean_table_runs_headless(self):
         self.execute_notebook(ADVANCED)
 
-    @unittest.skipUnless(os.environ.get("NEWTON_NOTEBOOKS_INCLUDE_FINAL") == "1",
-                         "Final coupled-task notebook is opt-in: NEWTON_NOTEBOOKS_INCLUDE_FINAL=1")
-    def test_final_includes_both_full_clean_table_tasks(self):
+    def test_final_box_tasks_run_headless(self):
         self.execute_notebook(FINAL)
 
 

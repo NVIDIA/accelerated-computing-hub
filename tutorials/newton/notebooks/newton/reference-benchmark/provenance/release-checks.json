@@ -1,0 +1,11 @@
+{
+  "verified_reports": 36,
+  "verified_endpoint_files": 216,
+  "verified_launch_logs": 36,
+  "accepted_same_count_pairs": 18,
+  "pairs_exactly_equal_to_original_audit": true,
+  "approved_recipe_files_exact": 15,
+  "fetched_assets_or_meshes_included": false,
+  "copied_collector_sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381",
+  "portability_check_sha256": "9961a0da096914b9c089db47b5fb91519d5991674820d540856a6b71d336354e"
+}

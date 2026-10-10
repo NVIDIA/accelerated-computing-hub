@@ -27,19 +27,34 @@ import pick_place_common as task  # noqa: E402
 from robots import RobotSpec, get_robot  # noqa: E402
 
 
-def build_ik_model(spec: RobotSpec | None = None) -> tuple[mujoco.MjModel, mujoco.MjData, Path]:
+def build_ik_model(spec: RobotSpec | None = None, *, task_name: str = "stack") -> tuple[mujoco.MjModel, mujoco.MjData, Path]:
     """Compile a stock MuJoCo model used *only* for inverse kinematics."""
     spec = spec or task.active_robot()
-    scene = task.resolve_pick_place_scene(spec=spec)
+    if task_name == "box":
+        from box_task import BoxTask
+        scene = BoxTask(spec).resolve_scene()
+    elif task_name == "stack":
+        scene = task.resolve_pick_place_scene(spec=spec)
+    else:
+        raise ValueError(f"Unknown task {task_name!r}")
     ik_model = mujoco.MjModel.from_xml_path(str(scene))
     ik_data = mujoco.MjData(ik_model)
     return ik_model, ik_data, scene
 
 
-def build_newton_model(spec: RobotSpec | None = None) -> newton.Model:
-    """Assemble the pick-and-place scene with ``newton.ModelBuilder``."""
+def build_newton_builder(spec: RobotSpec | None = None, *, task_name: str = "stack",
+                         initial_ctrl: np.ndarray | None = None) -> newton.ModelBuilder:
+    """Assemble one complete scene, ready to finalize or replicate into worlds."""
     spec = spec or get_robot()
-    scene = task.resolve_pick_place_scene(spec=spec)
+    if task_name == "box":
+        from box_task import BoxTask
+        box_task = BoxTask(spec)
+        scene = box_task.resolve_scene()
+        spec = box_task.spec
+    elif task_name == "stack":
+        scene = task.resolve_pick_place_scene(spec=spec)
+    else:
+        raise ValueError(f"Unknown task {task_name!r}")
     robot_xml = scene.parent / spec.robot_xml
 
     # Step 1: explicit Newton 1.5 coordinate layout + solver attributes.
@@ -52,25 +67,35 @@ def build_newton_model(spec: RobotSpec | None = None) -> newton.Model:
 
     # Step 2: import the robot from the same MJCF used in Article 2.
     builder.add_mjcf(
-        str(robot_xml),
+        str(scene if task_name == "box" else robot_xml),
         ignore_names=["floor"],
-        collapse_fixed_joints=True,
+        # Keep authored static robot bodies in the box benchmark so MuJoCo's
+        # parent/body contact exclusions survive conversion into a template.
+        collapse_fixed_joints=task_name != "box",
     )
 
     # Step 3: seed only named robot joints, in the MJCF actuator order.
     # Builder targets use coordinates; gains and effort limits use DOFs.
     robot_mj = mujoco.MjModel.from_xml_path(str(robot_xml))
     joints = robot_joint_indices(builder, robot_mj)
+    seed = np.asarray(spec.home_ctrl if initial_ctrl is None else initial_ctrl, dtype=float)
+    if seed.shape != (robot_mj.nu,) or not np.isfinite(seed).all():
+        raise ValueError("Initial robot coordinates must match all finite actuator targets")
     gripper = set(spec.gripper_ctrl_indices)
     for actuator, joint in enumerate(joints):
         q = builder.joint_q_start[joint]
         dof = builder.joint_qd_start[joint]
-        builder.joint_q[q] = float(spec.home_ctrl[actuator])
-        builder.joint_target_q[q] = float(spec.home_ctrl[actuator])
+        builder.joint_q[q] = float(seed[actuator])
+        builder.joint_target_q[q] = float(seed[actuator])
         builder.joint_target_ke[dof] = spec.arm_target_ke
         builder.joint_target_kd[dof] = spec.arm_target_kd
         builder.joint_target_mode[dof] = int(JointTargetMode.POSITION)
         if actuator in gripper:
+            if task_name == "box" and spec.key == "rebot":
+                # Match the authored linear-finger drives, as in the coupled
+                # box example; rotary-arm gains make this grasp too soft.
+                builder.joint_target_ke[dof] = float(robot_mj.actuator_gainprm[actuator, 0])
+                builder.joint_target_kd[dof] = float(-robot_mj.actuator_biasprm[actuator, 2])
             continue
         builder.joint_effort_limit[dof] = spec.arm_effort_limit
         # Newton 1.5 also preserves the MJCF actuator's own force range.
@@ -81,6 +106,13 @@ def build_newton_model(spec: RobotSpec | None = None) -> newton.Model:
             builder.custom_attributes["mujoco:actuator_forcerange"].values[actuator] = wp.vec2(
                 -spec.arm_force_limit, spec.arm_force_limit,
             )
+
+    if task_name == "box":
+        # The benchmark migrates the complete canonical MJCF scene, including
+        # table, free payloads, box geometry and their authored contact masks.
+        # The tutorial's programmatic stacking scene continues below.
+        builder.add_ground_plane()
+        return builder
 
     # Step 4: table (static) and the two cubes (free bodies), same poses as the MJCF.
     table_cfg = newton.ModelBuilder.ShapeConfig(ke=1.0e5, kd=1.0e2, mu=1.0, density=0.0, gap=0.0)
@@ -117,9 +149,14 @@ def build_newton_model(spec: RobotSpec | None = None) -> newton.Model:
             label=label,
         )
 
-    # Step 5: ground plane, then pack everything into device arrays.
+    # Step 5: ground plane completes the single-world scene.
     builder.add_ground_plane()
-    return builder.finalize()
+    return builder
+
+
+def build_newton_model(spec: RobotSpec | None = None) -> newton.Model:
+    """Assemble the pick-and-place scene and pack it into device arrays."""
+    return build_newton_builder(spec).finalize()
 
 
 def body_index(model: newton.Model, suffix: str) -> int:

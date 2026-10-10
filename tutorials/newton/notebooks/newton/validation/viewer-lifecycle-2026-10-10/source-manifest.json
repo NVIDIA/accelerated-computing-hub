@@ -1,0 +1,1740 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-10T02:05:58.348133+00:00",
+  "scope": "Article 3 instrumented Linux viewer lifecycle evidence; timing ineligible",
+  "publication_performed": false,
+  "canonical_or_original_changed": false,
+  "box_lifecycle_passes": 20,
+  "stack_automatic_passes": 4,
+  "actual_audit_sha256": "2d972a38390af7871ac6b6881910b08e81320d91ee744f76e2ebf3f49c179fae",
+  "package_manifests": {
+    "viewer-feedback-fix-blog3-v1": "822dc3408380b4979b3a9498331380ac8e8184a428aedbcbfed5d56f61e98fd4",
+    "viewer-nvidia-desktop-validation-v2": "14dbf9a734bacf8dc9a2c2366b80d4079b00b149f8fdf53a3d8093c3c605f194",
+    "viewer-nvidia-matrix-v1": "1b0754d43b1126905eb090f86708ace841d287e8daf89d56f0314cdfbab481c1"
+  },
+  "measured_source_commit": "ee9119a0d45bf887168fa30ba73c174d3f5538c0",
+  "files": [
+    {
+      "path": "COPY-MAP.json",
+      "source_path": null,
+      "sha256": "23d7da941189e40f030543cb2b4e8601e402bf820beb637e26ab23bbb52e3f78",
+      "bytes": 2534,
+      "kind": "new packaging explanation/inventory; raw results unchanged"
+    },
+    {
+      "path": "EXCLUDED-FILES.json",
+      "source_path": null,
+      "sha256": "40948e0efafeedffde3a24801af425a9c2338cb6cae6873c9c980b2d15eae3d4",
+      "bytes": 345685,
+      "kind": "new packaging explanation/inventory; raw results unchanged"
+    },
+    {
+      "path": "LICENSE",
+      "source_path": "/Users/johnunez/Projects/johnnynunez/blogs/LICENSE",
+      "sha256": "c189d126714dff528b5ec67769509e5a3e924f38d06def8dc2f8dd787c8a2352",
+      "bytes": 1075,
+      "kind": "original repository license"
+    },
+    {
+      "path": "README.md",
+      "source_path": null,
+      "sha256": "7561f3cb137ff793bee40fa903442031ddfb1ef2853e9847ce950ecbbe5205d5",
+      "bytes": 4143,
+      "kind": "new packaging explanation/inventory; raw results unchanged"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/box-report.json",
+      "sha256": "963a31c52ee5bfac59c6e71d8276838999cfc9d9537e9973867578082cb9551c",
+      "bytes": 9665,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/box-report.npz",
+      "sha256": "f33c176ce7d7f70061f2415741ae31687476118cdd02fed2a6ab5b2f3b4e8d53",
+      "bytes": 216098,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/candidate.log",
+      "sha256": "1ae9a32869175df3357d3e8a0073f5bc908d442dea0099671f8eefa957c716db",
+      "bytes": 7414,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/events.jsonl",
+      "sha256": "f0cbe97fe4b5df679dc3476ebcf466f8ed71cda54b883ad71dab607b5e1b9c01",
+      "bytes": 1014514,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/result.json",
+      "sha256": "17217e4bde925e87bfc9d12f895d17496e42cc3f63024a4306b275f7e01816b8",
+      "bytes": 3226,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/automatic/x11-rpc.jsonl",
+      "sha256": "1d4924fe576b6427fdd73e80a0591cc99efd21a61a2859b55059251c4f067f4f",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/escape/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/escape/candidate.log",
+      "sha256": "c1744aca1de1fa45209a3c53e395b84c946a7fa00eee718a613173e0a098feff",
+      "bytes": 7088,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/escape/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/escape/events.jsonl",
+      "sha256": "69ede3356cf22a39b9dab598f36ff121f654b4394631de3197c502dc5bd4408e",
+      "bytes": 7589,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/escape/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/escape/result.json",
+      "sha256": "4de0c9d4c51a83b2a34e669a12e6ae6908d0fb081991be9bcbe24455ec89864f",
+      "bytes": 3126,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/escape/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/escape/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/escape/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/escape/x11-rpc.jsonl",
+      "sha256": "3ddf4e082a94998100ed01ae3f1bfa19ee94bde7bb6c4b0067ebffade03642e3",
+      "bytes": 401,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/box-report.json",
+      "sha256": "cce3d337815b201debfde5297257ed706a122e102e2b246bec5033d3d5565a96",
+      "bytes": 9672,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/box-report.npz",
+      "sha256": "afb644c1ad731cd84eb6ed7f69bdb7e60647e688dd921b48f3b01ec18397dbcf",
+      "bytes": 217097,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/candidate.log",
+      "sha256": "9d57df9a9989861d52ec0aa40bf87df6bc7d3d5b9ad1ef45d73127e51b0e1c2f",
+      "bytes": 7199,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/events.jsonl",
+      "sha256": "a1b1788aa0efdf409d7a79a4010caaeb88c5cb1af32e4f2609752b6f2279c112",
+      "bytes": 1042131,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/result.json",
+      "sha256": "b7035246a968ac3b8dcda31ce52cecec3063839e560cb856e6755c46790f7b67",
+      "bytes": 3413,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/pause/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/pause/x11-rpc.jsonl",
+      "sha256": "3908961ee859961f70c632543fc896310660dac856582c057f39f00fa82e5823",
+      "bytes": 667,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/sigint/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/sigint/candidate.log",
+      "sha256": "7b041d4eefd77c730406497f8a4bdd96f8421aa33ddf17085bb3eee641270b27",
+      "bytes": 7088,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/sigint/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/sigint/events.jsonl",
+      "sha256": "4cc4c90f54c7db1f0d1af1d298e715fb7ab37d5f3ec3bb30f89cb6b8afd9469b",
+      "bytes": 7010,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/sigint/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/sigint/result.json",
+      "sha256": "d721eaed101813110db77f890ea7524b0701682a9687f342c229a74850a939a0",
+      "bytes": 3127,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/sigint/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/sigint/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/sigint/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/sigint/x11-rpc.jsonl",
+      "sha256": "86bc01c52ff7b93ff46e854eedb3b8ee74535613dbb7b66825cf6bc938a216ca",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/summary.json",
+      "sha256": "6985123e4eaade6937e233ba1c2e5bd09008c89b8061a5d950cc164cfe2a51d3",
+      "bytes": 23403,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/window-close/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/window-close/candidate.log",
+      "sha256": "464e57f0cb9e070f90597f4f0e48d4d380269938eaaa2697e9bd90e9028f6040",
+      "bytes": 7088,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/window-close/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/window-close/events.jsonl",
+      "sha256": "a9c3003fc9a0305689eaa5fab588fc52b4812b463c1619e7129c37b4749f4fba",
+      "bytes": 7507,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/window-close/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/window-close/result.json",
+      "sha256": "4f94f01b99f20b9aa8d9f3bd0c92bb37c14f6462e2b600a7e67500ae66b5ce1d",
+      "bytes": 3144,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/window-close/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/window-close/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/blog3-rebot-box-cuda/window-close/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/results/blog3-rebot-box-cuda/window-close/x11-rpc.jsonl",
+      "sha256": "5e212d039b17d767200c3add7ffaeb5692dfbc73aedc92f5cfc30fbc0e8ef6f2",
+      "bytes": 392,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/box-report.json",
+      "sha256": "13aa6111c0597ecb9559f1248bf2bf4cc8fff88f7184c1090f5d863cb4fbfc57",
+      "bytes": 8421,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/box-report.npz",
+      "sha256": "6f09f415482fa273b35577921664b7573d58cd111ac4afebc05b29fe3f4ad8ae",
+      "bytes": 150464,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/candidate.log",
+      "sha256": "79c1424396eef66e896a28f50ef78d51b57772e4e794ebdb6ec9d8a5292625cf",
+      "bytes": 1687,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/events.jsonl",
+      "sha256": "99eab2c3fc6d742ece9d20ae0ff37f38c4bf7c8a918dadd15c31cba9e4b26d2f",
+      "bytes": 1002376,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/result.json",
+      "sha256": "10b6b43e72fc95988caf44f2a9fca673e5466bbf5de3fe0be99462d0ba7d22f7",
+      "bytes": 3237,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/automatic/x11-rpc.jsonl",
+      "sha256": "cbdb0e776b3f9431d59007323bf08665b7c279db463fac109b9a00f8c441afc6",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/candidate.log",
+      "sha256": "d6cb44a17c7db6265a83062c6259f19e4d32263254da05aa54a798844b2fece9",
+      "bytes": 1515,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/events.jsonl",
+      "sha256": "caced31040f4aec01e7eaf60903379ffdee0efdb0fe897092781b93e235b9fe6",
+      "bytes": 7435,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/result.json",
+      "sha256": "132633a8410afb1c67629bac54bc9a945cd174ff7d6ddbfb47e3a69d23955876",
+      "bytes": 3138,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/escape/x11-rpc.jsonl",
+      "sha256": "b3d4cafedcefaf81752ce7314deb6f394530dece5f768aeaa4cf1e33a5560578",
+      "bytes": 401,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/box-report.json",
+      "sha256": "13aa6111c0597ecb9559f1248bf2bf4cc8fff88f7184c1090f5d863cb4fbfc57",
+      "bytes": 8421,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/box-report.npz",
+      "sha256": "6f09f415482fa273b35577921664b7573d58cd111ac4afebc05b29fe3f4ad8ae",
+      "bytes": 150464,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/candidate.log",
+      "sha256": "b87826cca8c7579f28867038599b5aed5e823e6473401a2abc5757c4fce481e3",
+      "bytes": 1642,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/events.jsonl",
+      "sha256": "c87953958b53759bbc00b4f616b6d8724c91e7d25f135023dd229000c15cc513",
+      "bytes": 1028483,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/result.json",
+      "sha256": "6b71c09df59b75c98b83a44b0eeee1d0b633053f6a1e858dac7b7df84127882c",
+      "bytes": 3424,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/pause/x11-rpc.jsonl",
+      "sha256": "8d8de846c7020296456903d7d1dcf310317ac36bc16402ac7aa66a1f3eb86e63",
+      "bytes": 667,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/candidate.log",
+      "sha256": "faf05fe7e0eb2f827641722e597086fa956367980de121e72f95409909f92c40",
+      "bytes": 1515,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/events.jsonl",
+      "sha256": "adc4eafd0f355650e900932d510872e76a65e2c7d4a8dffba8ff162c60052cac",
+      "bytes": 7356,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/result.json",
+      "sha256": "ab6b4535a5b51c0330189917216c7d938aaf25fdd466b11c96f04e6ce5405476",
+      "bytes": 3138,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/sigint/x11-rpc.jsonl",
+      "sha256": "a1bb4b8e1e3966ca4dcf2e60330506826c278b3e8857a1e7a040b6b8d79a6ac8",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/summary.json",
+      "sha256": "92f486fc9d2cdd4f197f2e9fa0e48d4aa8ec74d9c47b102684600526979a0784",
+      "bytes": 23460,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/candidate.log",
+      "sha256": "460b4d23c31793f17a215f24e1026becdba29667689b2e30cdf5b04dceae8e43",
+      "bytes": 1515,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/events.jsonl",
+      "sha256": "400d0c26fc3690dbc0ab48b95e667b768ca519a23b8ea46a01ddef6118fc8aa2",
+      "bytes": 7357,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/result.json",
+      "sha256": "0ea4ca1635dad48a808c8429d06c2bdcecf5bc85e0bbc2774b88205a0aa1ed32",
+      "bytes": 3156,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-rebot-box-cpu-20261010T0107Z/window-close/x11-rpc.jsonl",
+      "sha256": "e5db916c4e8445092423e7fbc155307fca9fa31bca4c382fdfb171beba558195",
+      "bytes": 392,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/box-report.json",
+      "sha256": "098fe872e3c88218143c507728d233ec3c073fac0076215e1fe446a7d10bafb8",
+      "bytes": 8411,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/box-report.npz",
+      "sha256": "e1258c774bed818d546c5dd64da50999db1a2ce1c1a2fddf172b752b69b2bc34",
+      "bytes": 160037,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/candidate.log",
+      "sha256": "9a7a7c2b49616043c3f530b2f0b153808119cc4d5a1c5e2b7d889a85f8fb0be1",
+      "bytes": 1697,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/events.jsonl",
+      "sha256": "6a49d547d5a766b82e54c15ff84c77b87d01bdbe8db1b3856d4f503e05718a73",
+      "bytes": 1002395,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/result.json",
+      "sha256": "6074cc29ad62e34a33ac347bf2abcf0b559dda70b14f3175bbcb94c653d49d42",
+      "bytes": 3237,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/automatic/x11-rpc.jsonl",
+      "sha256": "aff0a77626c124c2168067dd75b573ea34d4d1eecc02b092c792e8a7e5373b6b",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/candidate.log",
+      "sha256": "c124e8efc64bbb81ee380c52498110fa41fe6ca46b30c568ab59554e5abb6b4f",
+      "bytes": 1525,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/events.jsonl",
+      "sha256": "d1400d43a74ca9d706909a14c2d51cb761ed1f3e9a0173bcea8e62f6cae40458",
+      "bytes": 7437,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/result.json",
+      "sha256": "3b24caaf7f5f4a442831119e5097b61cc74a171c0d6ac5178340ed28be1c7513",
+      "bytes": 3138,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/escape/x11-rpc.jsonl",
+      "sha256": "1e2434b727d1b9f4f1de3389f98589ce6d219bb7549c5313da91600e8ce6fb2c",
+      "bytes": 401,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/box-report.json",
+      "sha256": "098fe872e3c88218143c507728d233ec3c073fac0076215e1fe446a7d10bafb8",
+      "bytes": 8411,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/box-report.npz",
+      "sha256": "e1258c774bed818d546c5dd64da50999db1a2ce1c1a2fddf172b752b69b2bc34",
+      "bytes": 160037,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/candidate.log",
+      "sha256": "e7a7b273c21925401cc50f8456251cc204e8bbd955b7287ecdd9d027252930f4",
+      "bytes": 1652,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/events.jsonl",
+      "sha256": "7e23bf91a4fd395703c670325693ab886535c86632f20718706906d2457cd4af",
+      "bytes": 1029021,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/result.json",
+      "sha256": "d60c79ff376fc895970b1332e0dcce7a9a3f2fc096b3174cd1160a842ed628c0",
+      "bytes": 3424,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/pause/x11-rpc.jsonl",
+      "sha256": "ac7300b2fa02b5a3e1260f635330f963c1bb11f5013c1aa7161c3ac9585330e4",
+      "bytes": 667,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/candidate.log",
+      "sha256": "8b85a614a51d39243522b08b9978f987eac99ff439df2e457b06fc19126b8e72",
+      "bytes": 1525,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/events.jsonl",
+      "sha256": "a6aa473ebad3c2c39b6d167a44540d88ad5a646ae16ca808ceb480bd52e66259",
+      "bytes": 7104,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/result.json",
+      "sha256": "2e9b68898b9276fd4a44b5b637a65605f25a441e466cc5e071f781da32434f05",
+      "bytes": 3138,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/sigint/x11-rpc.jsonl",
+      "sha256": "7ad9bac4f2908a8590189d208d5817f2bc4f140ecb16baa8db33cf9b5216e2c9",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/summary.json",
+      "sha256": "9ec6055217272baeca4f452cbb0a0b146e11e5ac5be33b2b9af415689220f87c",
+      "bytes": 23460,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/candidate.log",
+      "sha256": "eee1bce83f9ddc433326edd1d9e04b2b195adeb00f49c919f4bc97a03b11091d",
+      "bytes": 1525,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/events.jsonl",
+      "sha256": "2f9365743857bec52c6ef35259218b6065cbaee8c9bfd316a18ad7424a42fe67",
+      "bytes": 7351,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/result.json",
+      "sha256": "5b53e5019ccaed16852f1b1a7ec629c4911f89ab0f34d3df1ff6150edc8129ae",
+      "bytes": 3156,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cpu-20261010T0104Z/window-close/x11-rpc.jsonl",
+      "sha256": "f5b08b1fa705ee8a54e74c41464633684c98ebd9083ba768f978a2db41d03471",
+      "bytes": 392,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/box-report.json",
+      "sha256": "cc78f91b2a5c79670e9505063b43bb52af760ccbf52fc452aea38c3851daec03",
+      "bytes": 9691,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/box-report.npz",
+      "sha256": "789d7f6850f70b47014d0828c0b8b9e19d28d3a00b9d569b3e021d5703d54d95",
+      "bytes": 199777,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/candidate.log",
+      "sha256": "1fedc20a75c4e42784701fccb8e433d2636e2a8f7daedb5e33f85dacd5f4f1a4",
+      "bytes": 6685,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/events.jsonl",
+      "sha256": "0111583ae89adcfd684590300ec663f0bc19b5c66efb75a2bffe666ed1fc6560",
+      "bytes": 1014468,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/result.json",
+      "sha256": "4bbf5d338be0e05f8c9b2f6d651ff0ea46ddcdf64d16fdee54cb7e766e118379",
+      "bytes": 3286,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/automatic/x11-rpc.jsonl",
+      "sha256": "e26c8cffd5d2f087ec3a7e94116dda2c1b20384cbdd95fa0caaa533a7b592706",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/candidate.log",
+      "sha256": "5de3e99b5edfc736b175a21d82f081f6df9f097027352b1d2d270828b32f38cb",
+      "bytes": 6348,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/events.jsonl",
+      "sha256": "823bd5f7088816e471dcce7e92d7b3544311539a21ffa5e4d79ca5ae2fd4ac4d",
+      "bytes": 7586,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/result.json",
+      "sha256": "7c8e478534968fd6270e6bb4e4b87e3a7a979a3e66bd3467b5c7b55b515e85b5",
+      "bytes": 3186,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/escape/x11-rpc.jsonl",
+      "sha256": "67921d3b37fe35773344769d11540f9f4b695d2a1d721b71e41baa6f389a65a8",
+      "bytes": 401,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/box-report.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/box-report.json",
+      "sha256": "638267d912c033e99f3e5bb9a363dc8c763605e93c3429829efec757baa69f01",
+      "bytes": 9692,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/box-report.npz",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/box-report.npz",
+      "sha256": "d12b349e5a75fddbf4d151780779637391e65fb386f8fce2ac733ebbb3c6bee8",
+      "bytes": 230383,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/candidate.log",
+      "sha256": "793fa695e583092ddf3ef7d43c3b3d4fd3f4d7ae31a7ee7cfa120eed8ed0a461",
+      "bytes": 6479,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/events.jsonl",
+      "sha256": "a02c82136b70daa59e83d350d42540489737e55978b3891df668a19849fa269b",
+      "bytes": 1041704,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/result.json",
+      "sha256": "3be7ea5ad011185e99b84a7339a9e9f9c0844505383191b8db7805a87fd35126",
+      "bytes": 3473,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/pause/x11-rpc.jsonl",
+      "sha256": "03e5fa20114078a7dfc203792384927df2e6917ce9b684ec5662543f3708c801",
+      "bytes": 667,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/candidate.log",
+      "sha256": "aa782b2cd11becbe98491e22f52dae5dad40061afc2fb78eb4f24b031af3fe42",
+      "bytes": 6348,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/events.jsonl",
+      "sha256": "72d3db0c4717de62d675688d08c02ab3612de8ad2b96824216fd4bdcab78a31c",
+      "bytes": 7504,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/result.json",
+      "sha256": "1badecc08dd1b0f9f117c5e8f4e465e6b98360cb0f1114a5ab9630b26ba14d6a",
+      "bytes": 3186,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/sigint/x11-rpc.jsonl",
+      "sha256": "b407cba4e81ed7d1e7529727903c3973de482e5b6dac7a17739e6ce5cf595bde",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/summary.json",
+      "sha256": "c4f6af5703722aa2ed5450c4cf4ce729cd0b53e8c083b816d9b01b828100adc6",
+      "bytes": 23702,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/candidate.log",
+      "sha256": "ca3efe2afdaf83f6d7c30836c6815e5dde8f5f4b135a46e9d2e8724f9ecdfc87",
+      "bytes": 6348,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/events.jsonl",
+      "sha256": "ce88bde8f521cf09e53e99757f7c1db74ac73e80abc8001b4a00b0e1bcc79a06",
+      "bytes": 7510,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/result.json",
+      "sha256": "c6c1be056497891ca502444e30ca0fd4168a54b72d858ea04a6b8e14f805ed34",
+      "bytes": 3204,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/box/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/nvidia-v2-blog3-so101-box-cuda-20261010T0105Z/window-close/x11-rpc.jsonl",
+      "sha256": "827fd6725b78daf17a1a916530f7e46d8b29defd86f30cd68e01c4eef35cfff6",
+      "bytes": 392,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack-sequence/rebot-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu.launch.log",
+      "sha256": "52f4251cab3fd3457d7c6975edca46d4964b9f6a1e29f6340b7ee28021327ae5",
+      "bytes": 151,
+      "kind": "original stack serial sequence status/log"
+    },
+    {
+      "path": "evidence/stack-sequence/rebot-cuda.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda.launch.log",
+      "sha256": "139b352151cb7103f341133dffab4e81611811e6e83adef2fb77455e15093022",
+      "bytes": 152,
+      "kind": "original stack serial sequence status/log"
+    },
+    {
+      "path": "evidence/stack-sequence/sequence-status.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/sequence-status.json",
+      "sha256": "2735ac66c86538a6780f4d15a9356477c0c3a2083039fad7e0c295bbe01d5b3e",
+      "bytes": 5637,
+      "kind": "original stack serial sequence status/log"
+    },
+    {
+      "path": "evidence/stack-sequence/so101-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu.launch.log",
+      "sha256": "e4bb133447f54b37a947f20581c9f5a4a7e9fd86564383fbed73df5edfaabf20",
+      "bytes": 151,
+      "kind": "original stack serial sequence status/log"
+    },
+    {
+      "path": "evidence/stack-sequence/so101-cuda.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda.launch.log",
+      "sha256": "03a681c2f32c46b81102600ae7e4fab42e7c3c729122b4e388607009a4e80acc",
+      "bytes": 152,
+      "kind": "original stack serial sequence status/log"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/automatic/candidate.log",
+      "sha256": "7650b1263780e160af933948df37613fb1632356aeab0a54fd857a43634b319c",
+      "bytes": 1630,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/automatic/events.jsonl",
+      "sha256": "38ba6ea8f3304b6f200cf459e375ba45e6e11ac31fd8cca50a9970c2f89f5e64",
+      "bytes": 300524,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/automatic/result.json",
+      "sha256": "8ae3252382961f5202ce94f7d76aab407a976d46525dbcb39f827901aad399c9",
+      "bytes": 2940,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/automatic/x11-rpc.jsonl",
+      "sha256": "1065ca64d5d11da0f63c73a9de4e87be358af51fdacce3ad03b7fa8b15fadf88",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cpu/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cpu/summary.json",
+      "sha256": "a568e9a0b75bcf84f2242683d4eae51da14749d777d6b1b7c54ad057b9fd95b5",
+      "bytes": 8731,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/automatic/candidate.log",
+      "sha256": "4d5dbe523bb94c9713f312e10cd2103fbe688a9949fd1b7ebff636a345b93cea",
+      "bytes": 7098,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/automatic/events.jsonl",
+      "sha256": "a9c33791780be6afb69e154b61a4a6ff284f44d3fca7776cb32b28aa13fe3c52",
+      "bytes": 304180,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/automatic/result.json",
+      "sha256": "71a723cce2da4365fec5972b7b1ae88833517ef7f8bafa780bb1983141fee816",
+      "bytes": 2988,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/automatic/x11-rpc.jsonl",
+      "sha256": "9dabf623ae3b7afdb66b7656344af09d5fe077e78e3f359308ad715d8a6183bf",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/rebot-cuda/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/rebot-cuda/summary.json",
+      "sha256": "1a132f0c104543bca6604802bad276187d02fd53766b36ec850951ca5314cb25",
+      "bytes": 8779,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/automatic/candidate.log",
+      "sha256": "a5eded938948e4458803ca719c8b2a4fbaf9ea4fa3812fa49e0c719ba95023b8",
+      "bytes": 1641,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/automatic/events.jsonl",
+      "sha256": "b305633090cfa2a58056f19d18264bfb64d3971ef9f77b605d0369e8edca5fb7",
+      "bytes": 300541,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/automatic/result.json",
+      "sha256": "bc2883a13cb8d91dded134950eb105cd4e9f602e4cd39afcdaaa5f64ffa9c7b5",
+      "bytes": 2940,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/automatic/x11-rpc.jsonl",
+      "sha256": "2e6aef3d076920035e4d52c6b020779adfc889975fabf1fab4bd19a739e4c018",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cpu/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cpu/summary.json",
+      "sha256": "2d070376a59fe5178eb2c1c3693295c8a9e47cfd0a400896ee25673a10e713b8",
+      "bytes": 8731,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/automatic/candidate.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/automatic/candidate.log",
+      "sha256": "e1ef84fa30881d54cd3ad06d1cecf6250f0394cde7a61f83732d356f58ab7478",
+      "bytes": 6378,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/automatic/events.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/automatic/events.jsonl",
+      "sha256": "a3b259811f8dd09b3c4353abcf38055638e9ec5f6629278fefeaa2a918b6e34b",
+      "bytes": 304199,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/automatic/result.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/automatic/result.json",
+      "sha256": "d268620494881fe412ab02f2be711783d4ca7fcb9de969b67664aa3de33d2019",
+      "bytes": 2988,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/automatic/x11-helper.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/automatic/x11-helper.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/automatic/x11-rpc.jsonl",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/automatic/x11-rpc.jsonl",
+      "sha256": "37acabd071d8432af02db7c1445214aa7d12bbad3130b9256cfa6a6c1d37e6b6",
+      "bytes": 267,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "evidence/stack/so101-cuda/summary.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/post-study-viewer-evidence/newton-stack-automatic-20261010/so101-cuda/summary.json",
+      "sha256": "da8556db8b073a400c883ba09aa57254d69ee7faed3c65143ecf06102573767c",
+      "bytes": 8779,
+      "kind": "original Article 3 raw lifecycle evidence"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_box_protocol.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_box_protocol.py",
+      "sha256": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+      "bytes": 28460,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_newton_batch.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_newton_batch.py",
+      "sha256": "7af58b937e4302ee4abed0e62d3e73e9b53b345049c255631ab764a47fe57cb7",
+      "bytes": 30826,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_workflows.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_workflows.py",
+      "sha256": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+      "bytes": 22457,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_workload.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/benchmark_workload.py",
+      "sha256": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+      "bytes": 27737,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/box_newton_demo.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/box_newton_demo.py",
+      "sha256": "399183c86bb4826a58a18b4162735d8f80f649fe1be13e153f5c4470053ce5d1",
+      "bytes": 12619,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/box_newton_exercise.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/box_newton_exercise.py",
+      "sha256": "93debb0b7a178f14feb571a3a45a72ebb0e72ce0a9cc88fa948320d59e5853b3",
+      "bytes": 1053,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/box_task.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/box_task.py",
+      "sha256": "57396f73979f6d1731719b96ffbe3daf8abc77954c927a8bfe1a3ee018397196",
+      "bytes": 20976,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_scene.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_scene.py",
+      "sha256": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+      "bytes": 10472,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_scene_original.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_scene_original.py",
+      "sha256": "46000c107c584159c73a56ddc9a11eb165db351a2de3f643ca3f649341893cc9",
+      "bytes": 10683,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_task.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_table_task.py",
+      "sha256": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+      "bytes": 26569,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_the_table.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_the_table.py",
+      "sha256": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+      "bytes": 26970,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_the_table_original.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/clean_the_table_original.py",
+      "sha256": "5ff926f36e4794190ae40b6aff78527cc31caf2d472d025664d71237d544fe23",
+      "bytes": 13064,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/final_check.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/final_check.py",
+      "sha256": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+      "bytes": 25611,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/migration_benchmark.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/migration_benchmark.py",
+      "sha256": "6b004f4464afacb9000090cf85a293c14b7d6c5319b50cdbd6243e2bd71bdaec",
+      "bytes": 40883,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_assets.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_assets.py",
+      "sha256": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+      "bytes": 3289,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_scene.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_scene.py",
+      "sha256": "ffdef95715e3e03b3f99e939d1c531ec976ae111bdc9b982dc499a79183ca19e",
+      "bytes": 7843,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_scene_original.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/newton_scene_original.py",
+      "sha256": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+      "bytes": 7753,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/pick_place_common.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/pick_place_common.py",
+      "sha256": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+      "bytes": 16901,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/robots.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/robots.py",
+      "sha256": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+      "bytes": 6614,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/so101_newton.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/so101_newton.py",
+      "sha256": "2746ba94bfb208e0b9e9db01658489ec1e9a6e29109c70e59c6fbd690434d2f6",
+      "bytes": 12572,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/so101_newton_original.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/so101_newton_original.py",
+      "sha256": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+      "bytes": 12265,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_00_add_bin.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_00_add_bin.py",
+      "sha256": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+      "bytes": 1408,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_01_add_garment.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_01_add_garment.py",
+      "sha256": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+      "bytes": 1508,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_02_add_cable.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_02_add_cable.py",
+      "sha256": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+      "bytes": 1165,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_03_build_coupled_solver.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_03_build_coupled_solver.py",
+      "sha256": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+      "bytes": 1613,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_04_simulate.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_step_04_simulate.py",
+      "sha256": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+      "bytes": 513,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_table_scene_solution.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_table_scene_solution.py",
+      "sha256": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+      "bytes": 14500,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_the_table_solution.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/clean_the_table_solution.py",
+      "sha256": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+      "bytes": 27236,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/newton_scene_solution.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/newton_scene_solution.py",
+      "sha256": "3bc5c4bdf52c3eeb3de41d5a84768ee0dd27ab79758f9ed450977c7081ed8c98",
+      "bytes": 8572,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/so101_newton_solution.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/so101_newton_solution.py",
+      "sha256": "390c4e435b3a878818ecb7082c94921f811a8ae90e9cf94d2c76f1e01ee23f5f",
+      "bytes": 9980,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_00_imports.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_00_imports.py",
+      "sha256": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+      "bytes": 415,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_01_builder.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_01_builder.py",
+      "sha256": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+      "bytes": 867,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_02_add_mjcf.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_02_add_mjcf.py",
+      "sha256": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+      "bytes": 864,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_03_joint_targets.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_03_joint_targets.py",
+      "sha256": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+      "bytes": 1911,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_04_props.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_04_props.py",
+      "sha256": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+      "bytes": 1768,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_05_finalize.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_05_finalize.py",
+      "sha256": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+      "bytes": 650,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_06_state.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_06_state.py",
+      "sha256": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+      "bytes": 998,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_07_solver.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_07_solver.py",
+      "sha256": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+      "bytes": 1570,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_08_substep_loop.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_08_substep_loop.py",
+      "sha256": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+      "bytes": 1373,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_09_cuda_graph.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/solutions/step_09_cuda_graph.py",
+      "sha256": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+      "bytes": 832,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/utils.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/utils.py",
+      "sha256": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+      "bytes": 12524,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/part3/viewer_loop.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/part3/viewer_loop.py",
+      "sha256": "fcbd25ba42169edcd627aa1c469a428947bfad94499c6f692edad7c50fa6ef61",
+      "bytes": 3985,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/Article_3/requirements.lock.txt",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/Article_3/requirements.lock.txt",
+      "sha256": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+      "bytes": 184048,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/README.md",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/README.md",
+      "sha256": "050cdfac0012a4845cd11765c87815f02f0c8ce63ba8e31311c4e2e48778d07d",
+      "bytes": 3412,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/baseline-manifest.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/baseline-manifest.json",
+      "sha256": "362582d5415d1d903e63ab6fbb222ae631f1421a38f05de5a3a951140bb13f70",
+      "bytes": 5165,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/candidate-manifest.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/candidate-manifest.json",
+      "sha256": "822dc3408380b4979b3a9498331380ac8e8184a428aedbcbfed5d56f61e98fd4",
+      "bytes": 5584,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/review-receipt.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/review-receipt.json",
+      "sha256": "a0c02955b33a2f5f0fc1b5c0369b8ed6e1e623876ca9a9435bb7a9bf4d1628a2",
+      "bytes": 1865,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/tests/test_physics_identity.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/tests/test_physics_identity.py",
+      "sha256": "64f2610a05d97e7d1805e17e05a45b2a2d614cc8bb624a31fc5829c20035e089",
+      "bytes": 3263,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-feedback-fix-blog3-v1/tests/test_viewer_loop.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-feedback-fix-blog3-v1/tests/test_viewer_loop.py",
+      "sha256": "8fe436d541ba14ca3a6546c541d697f834b90abfd598d2473633c77a6d4e6356",
+      "bytes": 6962,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/README.md",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/README.md",
+      "sha256": "f674dc6163ecb344261f0972ef1252d7c76b27767e9cf6c3cbba79f91a7c3f55",
+      "bytes": 10950,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog2/candidate-sha256.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog2/candidate-sha256.json",
+      "sha256": "303e27bbd10be16944cdfb8c588271e51bae498fd94690f0c2a93fa702ced102",
+      "bytes": 3733,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog2/instrument_entrypoint.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog2/instrument_entrypoint.py",
+      "sha256": "40bc82b467a6dfe58fe60b491a0eed75fa082862a69ef249db4387321ed38604",
+      "bytes": 5422,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog2/run_gui_checks.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog2/run_gui_checks.py",
+      "sha256": "95e208a158dc9e6d2175aaa24c9ddfe68c6c1cddd9641e03bf8847f9947c5bd7",
+      "bytes": 24554,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog3/candidate-sha256.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog3/candidate-sha256.json",
+      "sha256": "8a2cb785fc1e880bc0aa7bd6f2f66dfddddce8a311f3aae2af46ab5f2bb1a597",
+      "bytes": 4951,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog3/instrument_entrypoint.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog3/instrument_entrypoint.py",
+      "sha256": "5f7c858c7b7d57ee16ebbcd0d8098d3d0b4ca77a3b867026417d4d481a11bcd3",
+      "bytes": 5612,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog3/run_gui_checks.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog3/run_gui_checks.py",
+      "sha256": "db9ef615ef0af3ae76ed0135ca83e22dfbc0864086cec25a75b140dee3813282",
+      "bytes": 28716,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog3/runtime-sha256.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog3/runtime-sha256.json",
+      "sha256": "37999cdb84d134378b6c3fd655d6a5f71fb4880475a7953d16752296a84d18d8",
+      "bytes": 458,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/blog3/runtime_identity.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/blog3/runtime_identity.py",
+      "sha256": "a94a90abb03cbf0d4b93ef3a3308601b1927be0df0367ebf32dcb8b49a0ff1b7",
+      "bytes": 1473,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/desktop_contract.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/desktop_contract.py",
+      "sha256": "f4d9457f1803963879e8f423655e3a72ee027c06022ab7f7fb8094f51ef8c6fd",
+      "bytes": 5868,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/desktop_x11.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/desktop_x11.py",
+      "sha256": "473e75173e682cf5684c2dc92b7e30d8042cd576d3d2396adb09fad2cd85aabe",
+      "bytes": 9746,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/inheritance.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/inheritance.json",
+      "sha256": "bd74b2d23b77969b723c7b167343f12f67766f9024d17f3a07825024036655c6",
+      "bytes": 811,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/offline-tests.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/offline-tests.log",
+      "sha256": "0bc64479b8e077e2a5338c83205a3ad796e73201ed46a69c8925aca66c6d679b",
+      "bytes": 2463,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/ownership.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/ownership.py",
+      "sha256": "7f75cb54b26ac4ab9ebe922c51c2a46dd38f7d7a78fb2739d8f4836582671e2a",
+      "bytes": 2451,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/preparation-manifest.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/preparation-manifest.json",
+      "sha256": "14dbf9a734bacf8dc9a2c2366b80d4079b00b149f8fdf53a3d8093c3c605f194",
+      "bytes": 2459,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/prepare_copies.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/prepare_copies.py",
+      "sha256": "151555a2a88f6ddcce739f8cdac0736bba11cf311eef936638787a0c3e9987f9",
+      "bytes": 11318,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/test_offline.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/test_offline.py",
+      "sha256": "cc1ab53c94232bd69681426646f9e6947588707233b117367151efe540988f78",
+      "bytes": 13792,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/test_ownership_offline.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/test_ownership_offline.py",
+      "sha256": "e491f9ff71f509668f1c316b08c528abd6067f3bb0b0b65d79953271f24e0579",
+      "bytes": 8796,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-desktop-validation-v2/x11_worker.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-validation-v2/x11_worker.py",
+      "sha256": "c71cf30c3ef7cbf8a2968442af8237d98043ce34a9e8a7a2da7471b8ab732330",
+      "bytes": 1737,
+      "kind": "exact candidate/harness source and original provenance"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/README.md",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/README.md",
+      "sha256": "422c22f3cdd211c153853de1afdefcfd73cbb2962209df2d22eff2e328513499",
+      "bytes": 3430,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-rebot-box-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-rebot-box-cpu.launch.log",
+      "sha256": "ce1df3abd4160104e452a087b846e631a05e2d5d5201862a40f4cca94602877f",
+      "bytes": 134,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-rebot-box-mjwarp.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-rebot-box-mjwarp.launch.log",
+      "sha256": "6308c5ad4e27f7f030e123ab7d30443353ce672eec3d2364a52d1702e6a05d6d",
+      "bytes": 137,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-rebot-stack-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-rebot-stack-cpu.launch.log",
+      "sha256": "96f182f81f3e4acc49019c48fbd4007e50ccccbb41c59d912470d64acf36a086",
+      "bytes": 136,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-rebot-stack-mjwarp.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-rebot-stack-mjwarp.launch.log",
+      "sha256": "7bff7970d2433273f561794e3d7c8af687402a36ea24adf2e2b5bbb07b7694e4",
+      "bytes": 139,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-so101-box-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-so101-box-cpu.launch.log",
+      "sha256": "2d079c5bd07863088d907d0bcc7d0112bcf0fa6e4ab1cf434a8a1c659656a403",
+      "bytes": 134,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-so101-box-mjwarp.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-so101-box-mjwarp.launch.log",
+      "sha256": "d05b1859977701ace1f71f0d2867d9a607c0e16422f18f24d112c2818e26b51a",
+      "bytes": 137,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-so101-stack-cpu.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-so101-stack-cpu.launch.log",
+      "sha256": "40783ae861adc943687713045c6254f49c1f9b20d9d908d117a229586655b0f6",
+      "bytes": 136,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog2-so101-stack-mjwarp.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog2-so101-stack-mjwarp.launch.log",
+      "sha256": "3086d218456e52c4b821f322813c2736822f0d037b9c38c73314962274593865",
+      "bytes": 139,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/blog3-rebot-box-cuda.launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/blog3-rebot-box-cuda.launch.log",
+      "sha256": "24c7fcf3e7e6f30027b1ebed600578a41c414d49bcaa8b59810d5ddded30a33b",
+      "bytes": 135,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/inheritance.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/inheritance.json",
+      "sha256": "ae330be1af78d1f191ece178a33ff84f772d927438b5ec4d8f2ac533372622ac",
+      "bytes": 407,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/ownership.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/ownership.py",
+      "sha256": "7f75cb54b26ac4ab9ebe922c51c2a46dd38f7d7a78fb2739d8f4836582671e2a",
+      "bytes": 2451,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/plan.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/plan.json",
+      "sha256": "45889482b168499d6c396081d28a059098742901ce317050d452a344224c4b72",
+      "bytes": 20521,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/plan.status.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/plan.status.json",
+      "sha256": "388779018c6b541acb86a818328cd7e77f83599118dc5f20816baad46ba48d21",
+      "bytes": 22800,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/preparation-manifest.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/preparation-manifest.json",
+      "sha256": "1b0754d43b1126905eb090f86708ace841d287e8daf89d56f0314cdfbab481c1",
+      "bytes": 1106,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/root-launch.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/root-launch.json",
+      "sha256": "f935d9b2f891dd8a33ec6ecc56d56849fa81fb8acae2a32565840d1a2bb55442",
+      "bytes": 783,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/root-launch.log",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/root-launch.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/supervisor.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/supervisor.py",
+      "sha256": "9c62c0de469e9d3a33bd3ea9865ff8c575e354661db5de1654ea05408cd38b49",
+      "bytes": 13209,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "method/viewer-nvidia-matrix-v1/test_offline.py",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1/test_offline.py",
+      "sha256": "859afb6b8ff7fd35c68296fe72a8bfc688d8ca3244ca49d474239753b7b5c1ad",
+      "bytes": 7546,
+      "kind": "shared matrix method/status context"
+    },
+    {
+      "path": "provenance/blog3-viewer-all24-contact-actual-audit.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/blog3-viewer-all24-contact-actual-audit.json",
+      "sha256": "2d972a38390af7871ac6b6881910b08e81320d91ee744f76e2ebf3f49c179fae",
+      "bytes": 28355,
+      "kind": "original review/source-commit receipt"
+    },
+    {
+      "path": "provenance/canonical-measured-source-commits.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/canonical-measured-source-commits.json",
+      "sha256": "3927477f25bc8d24434bfc3a53b656b175acfca2f68858537491538445a1eaf6",
+      "bytes": 1095,
+      "kind": "original review/source-commit receipt"
+    },
+    {
+      "path": "provenance/viewer-matrix-final9-contact-audit.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-matrix-final9-contact-audit.json",
+      "sha256": "aa2c72765e48d4608e424bc219b925b29e92345f1c80167bb70625e85320e1f4",
+      "bytes": 7494,
+      "kind": "original review/source-commit receipt"
+    },
+    {
+      "path": "provenance/viewer-matrix-partial8-contact-audit.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-matrix-partial8-contact-audit.json",
+      "sha256": "b93cd9eafebe077c09b4307f84c5c16bf469ecf480355c8bc7b80e987d86c48e",
+      "bytes": 10049,
+      "kind": "original review/source-commit receipt"
+    },
+    {
+      "path": "provenance/viewer-nvidia-desktop-v2-independent-review.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-desktop-v2-independent-review.json",
+      "sha256": "ab2a41382369e0bceebff84f1e10bfee4c0339be0fc5fca5f9705e0456d50ba6",
+      "bytes": 1656,
+      "kind": "original review/source-commit receipt"
+    },
+    {
+      "path": "provenance/viewer-nvidia-matrix-v1-contact-independent-review.json",
+      "source_path": "/private/tmp/blogs-gpu-repair-20261009/viewer-nvidia-matrix-v1-contact-independent-review.json",
+      "sha256": "09940bb505b6e0f2d22aa815701dae958dbf9d64c01dbfc78ae1864014a3feea",
+      "bytes": 2636,
+      "kind": "original review/source-commit receipt"
+    }
+  ]
+}
