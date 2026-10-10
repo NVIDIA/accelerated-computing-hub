@@ -1,56 +1,52 @@
 # Sim2Real Blogs
 
-Companion tutorials for the simulation-to-real robotics blog series. Each article
-has its own lessons, exercises, and completed solutions.
-
-## Articles
-
-| Article | Lessons |
-| --- | --- |
-| 2. How to Use NVIDIA Warp and MJWarp to Accelerate Robotics Simulation and Learning Workflows | [SO-101 simulation: from MuJoCo to MuJoCo Warp](notebooks/mujoco/README.md) |
-
-The current lessons cover simulation and physics throughput; they do not deploy
-a policy to a physical robot.
-
-## Notebooks
+Companion tutorials for the simulation-to-real robotics blog series. Article 2
+runs the same receiving-box task on native MuJoCo CPU and MuJoCo Warp GPU:
+each arm grasps both cubes, carries and releases them into the box, then withdraws.
+The lessons check both SO-101 and Seeed reBot DevArm. They do not deploy a policy
+to a physical robot.
 
 | Notebook | Description | Colab |
-| --- | --- | --- |
-| [01. MuJoCo Fundamentals](notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb) | Load the SO-101 model, inspect state, and control a CPU simulation. | [Open in Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb) |
-| [02. Pick and Place](notebooks/mujoco/part1/02__pick_and_place.ipynb) | Complete the physics loop, validate a stack, and optionally place both cubes in a box. | [Open in Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part1/02__pick_and_place.ipynb) |
-| [03. MuJoCo Warp](notebooks/mujoco/part2/03__mujoco_warp.ipynb) | Seed GPU state, validate one world, capture CUDA work, and benchmark a batch. | [Open in Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part2/03__mujoco_warp.ipynb) |
+|---|---|---|
+| [MuJoCo fundamentals](notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb) | Inspect a model, state and CPU stepping. | [Open](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/feature/blog2-validated-box-benchmark/tutorials/sim2real-blogs/notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb) |
+| [Pick and place](notebooks/mujoco/part1/02__pick_and_place.ipynb) | Both robots place both cubes in the box. | [Open](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/feature/blog2-validated-box-benchmark/tutorials/sim2real-blogs/notebooks/mujoco/part1/02__pick_and_place.ipynb) |
+| [MuJoCo Warp](notebooks/mujoco/part2/03__mujoco_warp.ipynb) | The same task on one selected GPU. | [Open](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/feature/blog2-validated-box-benchmark/tutorials/sim2real-blogs/notebooks/mujoco/part2/03__mujoco_warp.ipynb) |
+| [CPU/GPU benchmark](notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) | Preflight first; optionally measure 1 through 2048 environments. | [Open](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/feature/blog2-validated-box-benchmark/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) |
 
-Follow the [local Python 3.12 setup and validation instructions](notebooks/mujoco/README.md)
-to run the lessons. Colab links target upstream `main` and become available after merge.
+See the [lesson guide](notebooks/mujoco/README.md), [benchmark method and results](notebooks/mujoco/BENCHMARK.md),
+and [validation scope](VALIDATION.md). Reference implementations run by default;
+student exercises remain editable and optional stacking stays separate.
 
-The optional receiving-box task runs with either the SO-101 or Seeed reBot
-DevArm, on CPU MuJoCo or single-world MuJoCo Warp. Its checks require each cube
-to be grasped, lifted, carried and released inside the box, then settled after
-the gripper withdraws. The original stacking task remains the default.
+## Local and hosted setup
 
-## Brev and Docker
+Use Python 3.12 with the module's unchanged hash lock. This update deliberately
+uses the measured MuJoCo 3.8.0 / MuJoCo Warp 3.8.0.3 / Warp 1.15.0 line, replacing
+the previous Hub tutorial's 3.12 / 1.17 dependencies. Newton uses a separate environment.
 
-This tutorial has its own [Dockerfile](brev/dockerfile),
-[dependencies](brev/requirements.txt), [Docker Compose configuration](brev/docker-compose.yml),
-and [test entrypoint](brev/test.bash). Use an NVIDIA CUDA GPU such as an L40S, L4,
-or T4 and a provider with Flexible Ports for Brev.
-
-From the repository root, build and run the dedicated environment:
+The existing Brev Docker Compose services and shared Hub entrypoint are retained.
+The image installs the same physics lock before adding notebook/UI tools under
+constraints. Build and test it through the Hub scripts:
 
 ```bash
-./brev/dev-build.bash sim2real-blogs
-./brev/dev-start.bash sim2real-blogs
-./brev/dev-test.bash sim2real-blogs
+brev/dev-build.bash sim2real-blogs
+brev/dev-test.bash sim2real-blogs
 ```
 
-The Compose configuration uses `ghcr.io/nvidia/sim2real-blogs-tutorial:latest`;
-build locally until that image is published by the repository's CI.
+A container build, Brev deployment or Colab run is separate validation; imported
+workstation measurements do not establish those results. The Colab links select
+the public contribution source before merge. Setup prints its resolved Git SHA,
+refuses to overwrite a checkout at another revision, and skips LFS downloads for
+teaching code. Teaching cells need a Python 3.12 kernel; the benchmark notebook
+uses an isolated Python 3.12 environment for hosted subprocesses.
 
-See the [validation record](VALIDATION.md) for the CPU/dual-GPU matrix,
-container checks and remaining environment coverage.
+## Evidence and attribution
 
-## Attribution
+[Migration provenance](notebooks/mujoco/MIGRATION_MANIFEST.json) records relocation
+and source identities. The original result, notebook, viewer and reference packages
+are retained byte-for-byte, including failed cases and their historical paths.
+Pull the required LFS objects when inspecting archived evidence; notebook physics
+does not require downloading those archives.
 
-The imported lessons retain their [MIT license](notebooks/mujoco/LICENSE).
-See the [third-party notices](notebooks/mujoco/THIRD_PARTY_NOTICES.md) for
-source attribution and robot asset licenses.
+The imported materials retain their [MIT license](notebooks/mujoco/LICENSE) and
+[third-party notices](notebooks/mujoco/THIRD_PARTY_NOTICES.md), including model
+assets preserved inside diagnostic archives.

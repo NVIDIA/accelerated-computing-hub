@@ -216,9 +216,11 @@ class BoxTask:
         self.spec = replace(spec, table_center_xyz=(x, 0., spec.table_top_z - .012),
                             table_half_xyz=(.18, .28, .012), red_xy=(x - .035, -.15),
                             blue_xy=(x + .045, -.15), camera_lookat=(x, 0., spec.table_top_z + .11))
-        self.box = ReceivingBox(np.array([x - .115, .055, spec.table_top_z + .006]),
-                                np.array([x + .115, .245, spec.table_top_z + .091]))
-        self.slots = {"red_cube": np.array([x - .065, .11]), "blue_cube": np.array([x + .005, .11])}
+        self.box = ReceivingBox(np.array([x - .165, .015, spec.table_top_z + .006]),
+                                np.array([x + .165, .265, spec.table_top_z + .061]))
+        # Fill the farther slot first, leaving room for the gripper to place
+        # the second cube without sweeping through the first one.
+        self.slots = {"red_cube": np.array([x + .055, .15]), "blue_cube": np.array([x - .030, .15])}
         self.evidence = {}
         self.frames = 0
         self.phase = "initial"
@@ -249,7 +251,8 @@ class BoxTask:
             ET.SubElement(world, "geom", name="receiving_box_" + name, type="box",
                           pos=" ".join(map(str, pos)), size=" ".join(map(str, size)),
                           rgba="0.16 0.35 0.48 1", friction="0.8 0.005 0.0005", condim="3",
-                          solref="0.01 1", contype="1", conaffinity="1")
+                          solref=("-4444.444444 -266.666667" if name == "floor" else "0.01 1"),
+                          contype="1", conaffinity="1")
         path = scene.with_name("scene_pick_place_box.xml")
         path.write_text(ET.tostring(root, encoding="unicode") + "\n")
         task.set_active_robot(self.spec)
@@ -263,14 +266,19 @@ class BoxTask:
             above = grasp.copy(); above[2] = spec.table_top_z + .19
             destination = np.array([*self.slots[name], above[2]])
             retreat = destination + [0., 0., .025]
+            # Carry above the rim, then descend while holding. The requested
+            # cube bottom is 32 mm above the box floor; live geometry and
+            # contact evidence must still establish the actual task outcome.
+            placement = destination.copy()
+            placement[2] = spec.table_top_z + .060 + (.006 if spec.key == "rebot" else 0.)
             for phase, point, grip, duration in (
                 ("approach", above, spec.gripper_open, 1.6),
                 ("descend", grasp, spec.gripper_open, 1.6),
                 ("close", grasp, spec.gripper_closed, 2.2),
                 ("lift", above, spec.gripper_closed, 2.0),
                 ("carry", destination, spec.gripper_closed, 3.0),
-                ("hold", destination, spec.gripper_closed, .8),
-                ("open", destination, spec.gripper_open, 1.6),
+                ("hold", placement, spec.gripper_closed, 2.4),
+                ("open", placement, spec.gripper_open, 1.6),
                 ("retreat", retreat, spec.gripper_open, 1.4),
                 ("settle", retreat, spec.gripper_open, 1.4),
             ):

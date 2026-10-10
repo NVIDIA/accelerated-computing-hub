@@ -11,7 +11,7 @@
 #     operations, not the data pointers you rebind later.
 #   * Replaying reuses the same buffers, so write new controls into the SAME
 #     arrays rather than reassigning d.ctrl to a fresh array.
-#   * Graph capture is CUDA-only; this tutorial checks for CUDA at startup.
+#   * Graph capture is CUDA-only, hence the device check and CPU fallback.
 
 graph = None
 if device.is_cuda:

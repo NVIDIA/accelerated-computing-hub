@@ -1,0 +1,21 @@
+{
+  "preparation_only": true,
+  "runner_revision": "frozen-v3",
+  "runner_sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+  "physics_source_changed": false,
+  "measured_results_included": false,
+  "figures_generated": false,
+  "upstream_commits": {
+    "mujoco_warp": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+    "mujoco_menagerie": "affef0836947b64cc06c4ab1cbf0152835693374"
+  },
+  "asset_manifest_sha256": "87790d12695c9639d09f74a4562e2fa66271abb522e2bdbd48acc1cc52759831",
+  "runtime_assets_vendored": false,
+  "reference_scope": "Native MuJoCo versus MuJoCo Warp; separate from Newton API and two-cube receiving-box task.",
+  "evidence_limitations": [
+    "Full intermediate state histories are validated in memory but not persisted.",
+    "Coarse final-height health does not establish grasp/contact/hold success.",
+    "Specific PartNet pot/lid asset license remains unestablished.",
+    "Colab/Brev/lower-end GPU recipes have not been hardware validated."
+  ]
+}

@@ -11,6 +11,7 @@
 #
 #      Article 2 / Part 1   so101_pick_place.py  ->  mujoco.mj_step      (CPU)
 #      Article 2 / Part 2   so101_mjwarp.py      ->  mujoco_warp.step    (GPU)
+#      Article 3 / Part 3   so101_newton.py      ->  SolverMuJoCo.step() (Newton)
 #
 #  The same code drives two robots, selected with --robot:
 #
@@ -151,16 +152,15 @@ def resolve_pick_place_scene(
     """Generate and return the local pick-place scene XML for *spec*."""
     spec = spec or get_robot(robot)
     set_active_robot(spec)
-    robot_dir = resolve_menagerie_robot_path(spec, menagerie_root, explicit=explicit).resolve()
+    robot_dir = resolve_menagerie_robot_path(spec, menagerie_root, explicit=explicit)
     generated_dir = Path(__file__).parent / ".generated" / spec.folder
     generated_dir.mkdir(parents=True, exist_ok=True)
 
     shutil.copyfile(robot_dir / spec.robot_xml, generated_dir / spec.robot_xml)
     assets_link = generated_dir / "assets"
-    if assets_link.is_symlink() and (
-        not assets_link.exists() or assets_link.resolve() != (robot_dir / "assets").resolve()
-    ):
-        # Refresh both broken links and links to a previously selected checkout.
+    if assets_link.is_symlink() and not assets_link.exists():
+        # Stale symlink whose target no longer exists on this machine
+        # (e.g. a moved cache); remove it so it can be recreated locally.
         assets_link.unlink()
     if not assets_link.exists():
         try:
@@ -183,6 +183,11 @@ def load_pick_place_model(xml_path: Path, spec: RobotSpec | None = None) -> mujo
     """
     spec = spec or active_robot()
     model = mujoco.MjModel.from_xml_path(str(xml_path))
+    # The legacy SO-101 stack needs a larger line-search budget. Set it on
+    # the native model so CPU execution and GPU upload share the same option.
+    # Box scenes retain their separately configured solver settings.
+    if spec.key == "so101" and Path(xml_path).name == "scene_pick_place.xml":
+        model.opt.ls_iterations = max(50, model.opt.ls_iterations)
     if spec.arm_force_limit is None:
         return model
     gripper = set(spec.gripper_actuator_names)
@@ -427,59 +432,3 @@ def apply_viewer_camera(viewer, spec: RobotSpec | None = None) -> None:
     viewer.cam.elevation = -25
     viewer.cam.distance = spec.camera_distance
     viewer.cam.lookat[:] = spec.camera_lookat
-
-
-def validate_cpu_state(data: mujoco.MjData) -> None:
-    """Reject non-finite state and MuJoCo warnings, including automatic resets."""
-    if not all(np.isfinite(values).all() for values in (data.qpos, data.qvel, data.qacc)):
-        raise RuntimeError("Simulation contains non-finite positions, velocities, or accelerations.")
-    warnings = [
-        mujoco.mjtWarning(i).name
-        for i, warning in enumerate(data.warning)
-        if warning.number
-    ]
-    if warnings:
-        raise RuntimeError(f"MuJoCo reported warnings during this run: {', '.join(warnings)}")
-
-
-def validate_stack(
-    model: mujoco.MjModel,
-    data: mujoco.MjData,
-    spec: RobotSpec,
-    *,
-    controller_done: bool,
-) -> dict[str, float]:
-    """Check the final, settled red-on-blue arrangement in the fixed tutorial scene.
-
-    This acceptance check is deliberately scoped to the final arrangement; it
-    does not establish contact-force parity or a success rate over varied tasks.
-    """
-    validate_cpu_state(data)
-    mujoco.mj_forward(model, data)
-    validate_cpu_state(data)
-    red = data.xpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "red_cube")]
-    blue = data.xpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")]
-    metrics = {
-        "xy_error_m": float(np.linalg.norm(red[:2] - blue[:2])),
-        "height_error_m": float(abs(red[2] - blue[2] - 2.0 * spec.cube_half)),
-        "blue_height_error_m": float(abs(blue[2] - spec.cube_center_z)),
-    }
-    speeds, angular_speeds = [], []
-    for name in ("red_cube_joint", "blue_cube_joint"):
-        joint_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
-        address = model.jnt_dofadr[joint_id]
-        speeds.append(float(np.linalg.norm(data.qvel[address:address + 3])))
-        angular_speeds.append(float(np.linalg.norm(data.qvel[address + 3:address + 6])))
-    metrics["max_cube_speed_m_s"] = max(speeds)
-    metrics["max_cube_angular_speed_rad_s"] = max(angular_speeds)
-    passed = (
-        controller_done
-        and metrics["xy_error_m"] < 0.015
-        and metrics["height_error_m"] < 0.010
-        and metrics["blue_height_error_m"] < 0.010
-        and metrics["max_cube_speed_m_s"] < 0.05
-        and metrics["max_cube_angular_speed_rad_s"] < 0.5
-    )
-    if not passed:
-        raise RuntimeError(f"Stack validation failed (controller_done={controller_done}): {metrics}")
-    return metrics

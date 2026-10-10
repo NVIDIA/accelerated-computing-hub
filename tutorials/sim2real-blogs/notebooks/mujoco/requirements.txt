@@ -1,9 +1,10 @@
-# Reproducible environment for the MuJoCo / MuJoCo Warp lessons (Python 3.12).
-# Newton is not needed for these lessons.
-mujoco==3.12.0
-mujoco-warp==3.12.0
-warp-lang==1.17.0
-numpy==2.5.3
-matplotlib==3.11.2
+# Article 2: the MuJoCo 3.8 / Warp 1.15 line verified on CPU and CUDA.
+# Use requirements.lock.txt with --require-hashes to reproduce all dependencies.
+mujoco==3.8.0
+mujoco-warp==3.8.0.3
+warp-lang==1.15.0
+numpy
+matplotlib
+nbformat
+nbclient
 ipykernel
-jupyterlab

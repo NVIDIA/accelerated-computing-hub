@@ -1,0 +1,26 @@
+{
+  "presentation_revision": "linked-article-v3",
+  "study_revision": "final-box-sweep-v4-matched-tolerance-gpu0",
+  "articles": {
+    "2": {
+      "branch": "feature/blog2-validated-gpu-box",
+      "repository_destination": "Article_2/benchmark-results/2026-10-09-validated-box-gpu0",
+      "links": {
+        "benchmark notebook": "https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/part2/02_Notebook_CPU_GPU_Benchmark.ipynb",
+        "companion benchmark guide": "https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/BENCHMARK.md",
+        "full results": "https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/benchmark-results/2026-10-09-validated-box-gpu0/README.md",
+        "ALOHA pot-and-lid replay": "https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/reference-benchmark/README.md"
+      }
+    },
+    "3": {
+      "branch": "feature/blog3-validated-gpu-box",
+      "repository_destination": "Article_3/benchmark-results/2026-10-09-validated-box-gpu0",
+      "links": {
+        "benchmark notebook": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/part3/05_Notebook_Migration_Benchmark.ipynb",
+        "companion benchmark guide": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/BENCHMARK.md",
+        "full results": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/benchmark-results/2026-10-09-validated-box-gpu0/README.md",
+        "ALOHA pot-and-lid replay": "https://github.com/johnnynunez/blogs/blob/feature/blog3-validated-gpu-box/Article_3/reference-benchmark/README.md"
+      }
+    }
+  }
+}

@@ -46,12 +46,17 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements.txt first for better Docker layer caching.
+# Use the measured Blog 2 dependency line, unchanged from the source archive.
+# The previous Hub image used MuJoCo 3.12 / Warp 1.17; those are not these results.
+COPY tutorials/${ACH_TUTORIAL}/notebooks/mujoco/requirements.lock.txt /opt/physics.lock.txt
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# Install Python packages.
-RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
- && rm -f /opt/requirements.txt
+# UI tools may add packages but cannot upgrade the locked physics dependencies.
+RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes -r /opt/physics.lock.txt \
+ && pip freeze > /opt/locked-constraints.txt \
+ && pip install --no-cache-dir --root-user-action=ignore -c /opt/locked-constraints.txt -r /opt/requirements.txt \
+ && pip check \
+ && rm -f /opt/requirements.txt /opt/physics.lock.txt /opt/locked-constraints.txt
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \

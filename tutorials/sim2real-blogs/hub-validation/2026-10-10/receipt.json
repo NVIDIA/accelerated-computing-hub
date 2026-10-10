@@ -1,0 +1,22 @@
+{
+  "created_utc": "2026-10-10T08:36:52.355145+00:00",
+  "article": "blog2",
+  "scope": "Fresh Hub relocation correctness checks; not performance measurements or new GUI validation.",
+  "context": "Isolated Docker build context containing this tutorial, shared brev scripts and .dockerignore. Runtime/test/notebook files bound by the archived context manifests.",
+  "archive_sha256": "eec10228c5958840ba8ddce93fede8f57e3ffcc482ff737851e380b23e141105",
+  "archive_bytes": 60016,
+  "members": {
+    "v1/blog2-suite.log": "403af5814c37160ba479212fb2e45baf56b053fe8372e7504af548fee0bd1a0a",
+    "v1/blog2-build.log": "c041ced590cef27d918cbff1af6b8e3154ceaace9f5b7f5bd73455e488db19f2",
+    "v1/context-manifest.json": "e454873fad43a35ee5be2266a9711665b95d694089bc19b04b0c86da31cc22d8",
+    "v1/runs.json": "a1c3a313f62896e44c52b2cd9549bda8d186e6a397ae72948580858359c35a47",
+    "v2/blog2-suite.log": "e2137abfaaaa7c029148f7bb043e31226485a6d0ab062f044f7939ea22c40aa1",
+    "v2/blog2-build.log": "14c986bc937e3c9f43897a97c9aaac178a385cc6fea1d7f9411065f3d3135c4b",
+    "v2/context-manifest.json": "07c9376ec7bb8e8cafe98d934191725d5d1712e5dd7a2fe5b3f62b9eb0874dd7",
+    "v2/runs.json": "777efd9cabf6d389e0e3cf59732b7f794ec0ddb434318e5a4afb654b90208f3a",
+    "remote_validate.py": "c1b085617817d330cc6f3d0592c3ffb16c013ad34627d0379f06dc8c7d792d73",
+    "remote_validate_v2.py": "98c2d854efb898733c13aabf5a74105b598d0e34c686912e54066fa65dd9c5a6"
+  },
+  "source_changes_between_contexts": "Only test_asset_cache.py was corrected; runtime/notebooks/lock/Docker unchanged.",
+  "later_publication_edits": "Notebook bootstrap revision pins, links and validation/provenance prose are reviewed separately; physics/evidence remain unchanged."
+}

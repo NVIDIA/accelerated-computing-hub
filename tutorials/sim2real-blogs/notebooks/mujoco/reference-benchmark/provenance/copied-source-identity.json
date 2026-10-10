@@ -1,0 +1,80 @@
+{
+  "scope": "Exact approved public recipe copied without code changes; README renamed RUNNING.md. Historical paths retained as provenance only.",
+  "files": [
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/fetch_reference_assets.py",
+      "release_path": "fetch_reference_assets.py",
+      "sha256": "d3166430ab691a409cd095a8ed7596978b02d0ea8ca1e0e1409115107f9eefe9"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/resource-config.json",
+      "release_path": "resource-config.json",
+      "sha256": "9814b52bc18f79572352b78bf9436fa9c5c5afcc34c90cdac90c040484859d29"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/PROVENANCE.json",
+      "release_path": "PROVENANCE.json",
+      "sha256": "99d309cebda1a23743f595f8886868c9e2f169d698cd048705f27340f9b8bd08"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/collect_reference_sweep.py",
+      "release_path": "collect_reference_sweep.py",
+      "sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/ASSET_ORIGINS.md",
+      "release_path": "ASSET_ORIGINS.md",
+      "sha256": "4bf686c4310b256290ba88332c9fb14ba4dc9c5881db0412e5e24512370759a1"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/requirements-blog3.txt",
+      "release_path": "requirements-blog3.txt",
+      "sha256": "7972d7d098837379ef34c4847d26ab1cb5c6e0556853d00f56c9216e1ad32267"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/make_figures.py",
+      "release_path": "make_figures.py",
+      "sha256": "d3c7153c48a567700b959a29b8f1cb5676ed1b0be0b5ff252f0156426311e4f8"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/requirements-blog2.txt",
+      "release_path": "requirements-blog2.txt",
+      "sha256": "c2eacbd5bccab428b2b577294730e047787c0687e2da592f268f455790796f6f"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/README.md",
+      "release_path": "RUNNING.md",
+      "sha256": "624f998342cb508ad8d67aacb27194e31f90cbc97cfa24290b8c592ff3c3d1ce"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/run_reference.py",
+      "release_path": "run_reference.py",
+      "sha256": "88a8dea5182428035401ff2a97f91230302e28a2eee9d73aa6cc532578c37657"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/PREPARATION_CHECKS.json",
+      "release_path": "provenance/preparation/PREPARATION_CHECKS.json",
+      "sha256": "386b8b7be5ba8be40dac9578c2e9a9b3d14befc4834fe18677a2eef75051a858"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/requirements-figures.txt",
+      "release_path": "requirements-figures.txt",
+      "sha256": "be923c642695914a2c78b1fe8cd465496994e45d41c89ae86b5962883f01eb27"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/PREPARATION_MANIFEST.json",
+      "release_path": "provenance/preparation/PREPARATION_MANIFEST.json",
+      "sha256": "4025bd2e5f33f89c1882f339fb8131b6901a13b83f25f7d49a9e9c3c4fa105a3"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/reference_replay_probe.py",
+      "release_path": "reference_replay_probe.py",
+      "sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0"
+    },
+    {
+      "original_path": "/private/tmp/blogs-gpu-repair-20261009/reference-publication-prep/assets-manifest.json",
+      "release_path": "assets-manifest.json",
+      "sha256": "87790d12695c9639d09f74a4562e2fa66271abb522e2bdbd48acc1cc52759831"
+    }
+  ]
+}
