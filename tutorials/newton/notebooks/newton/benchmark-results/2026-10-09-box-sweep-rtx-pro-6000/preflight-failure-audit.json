@@ -1,0 +1,282 @@
+{
+  "report": "/private/tmp/blogs-box-sweep-v3-20261009/article3/diagnostic-so101-v3/results.json",
+  "report_sha256": "7d181ded75ee8f4982c9f193f9d96e74d3397764dd18529092f52b4a58018994",
+  "case": "newton-batch-newton_cuda-w128-t1",
+  "publication_eligible": false,
+  "accepted_timings": null,
+  "ratio": null,
+  "backend_settings": {
+    "native_requested": {
+      "timestep": 0.001,
+      "tolerance": 9.99999993922529e-09,
+      "ls_tolerance": 0.009999999776482582,
+      "ccd_tolerance": 9.999999974752427e-07,
+      "impratio": 100.0,
+      "iterations": 100,
+      "ls_iterations": 50,
+      "ccd_iterations": 35,
+      "solver": 2,
+      "integrator": 3,
+      "cone": 1,
+      "disableflags": 524288,
+      "enableflags": 0
+    },
+    "uploaded_gpu_effective": {
+      "timestep": {
+        "shape": [
+          1
+        ],
+        "dtype": "float32",
+        "uniform_value": 0.0010000000474974513
+      },
+      "tolerance": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "uniform_value": 9.999999974752427e-07
+      },
+      "ls_tolerance": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "uniform_value": 0.009999999776482582
+      },
+      "ccd_tolerance": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "uniform_value": 9.999999974752427e-07
+      },
+      "impratio_invsqrt": {
+        "shape": [
+          128
+        ],
+        "dtype": "float32",
+        "uniform_value": 0.10000000149011612
+      },
+      "iterations": 100,
+      "ls_iterations": 50,
+      "ccd_iterations": 35,
+      "solver": 2,
+      "integrator": 3,
+      "cone": 1,
+      "disableflags": 524288,
+      "enableflags": 0
+    },
+    "collision_policy": "backend defaults; no collider flag override",
+    "note": "MuJoCo Warp may clamp requested tolerances for float32; actual uploaded values are recorded separately",
+    "active_backend": "mujoco_warp",
+    "active_clock_precision": "float32"
+  },
+  "host_validation": {
+    "policy": {
+      "version": 1,
+      "oracle": "validate_observations; unchanged per-world CubeEvidence and raw-clock/count checks",
+      "parallelism": "persistent spawned CPU processes, capped by worlds/requested workers/affinity; one worker runs in the parent",
+      "history_transport": "one float32 parent copy to shared memory per validation; child views are read-only",
+      "timer": "validation includes history copy, dispatch, all oracle work and result collection; process setup and teardown separately reported",
+      "requested_workers": 32
+    },
+    "actual": {
+      "policy_version": 1,
+      "mode": "persistent_spawn_pool",
+      "workers": 32,
+      "requested_workers": 32,
+      "affinity_limit": 128,
+      "shared_history_bytes": 62464000,
+      "child_history_readonly": true,
+      "child_environment": {
+        "CUDA_VISIBLE_DEVICES": "",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "PXR_WORK_THREAD_LIMIT": "1"
+      }
+    },
+    "setup_seconds": 6.802744781000001,
+    "teardown_seconds": 0.039125258999774815,
+    "case_seconds": 47.38352773199949
+  },
+  "episodes": [
+    {
+      "phase": "warmup_samples",
+      "index": 0,
+      "recorded_worlds": 128,
+      "independent_counts_and_raw_clocks_passed": true,
+      "raw_capacity_passed": true,
+      "physical_failure_count": 0,
+      "physical_failures": []
+    },
+    {
+      "phase": "samples",
+      "index": 0,
+      "recorded_worlds": 128,
+      "independent_counts_and_raw_clocks_passed": true,
+      "raw_capacity_passed": true,
+      "physical_failure_count": 1,
+      "physical_failures": [
+        {
+          "world": 76,
+          "helper_reason": "diagnostic world: failed world/time/finite evidence",
+          "raw_evidence": {
+            "world": 76,
+            "passed": false,
+            "finite": true,
+            "time_progression": true,
+            "clock": {
+              "passed": true,
+              "backend_clock_precision": "float32",
+              "recorded_clock_precision": "float32",
+              "allowed_observation_ulps": 1,
+              "integration_count_passed": true,
+              "recorded_physics_steps": 40000,
+              "expected_physics_steps": 40000,
+              "mismatched_frame_count": 0,
+              "maximum_observation_ulp_error": 0.0,
+              "expected_final_raw_time_s": 39.98965072631836,
+              "nominal_integrated_duration_s": 40.0
+            },
+            "final_time_s": 39.98965072631836,
+            "error": null,
+            "box_task": {
+              "schema_version": 1,
+              "task": "two_cube_pick_place_into_box",
+              "robot": "so101",
+              "frames": 2000,
+              "simulation_seconds": 40.0,
+              "phase": "done",
+              "bin_lower": [
+                0.19,
+                0.055,
+                0.03
+              ],
+              "bin_upper": [
+                0.42,
+                0.245,
+                0.11499999999999999
+              ],
+              "table_z": 0.024,
+              "tool_clearance_m": 0.06441893428564072,
+              "objects": {
+                "red_cube": {
+                  "frame": 2000,
+                  "time": 40.0,
+                  "bounds_min": [
+                    0.20457659661769867,
+                    0.07777287065982819,
+                    0.02993874065577984
+                  ],
+                  "bounds_max": [
+                    0.2659831941127777,
+                    0.13922199606895447,
+                    0.0740170031785965
+                  ],
+                  "center": [
+                    0.23527988977730274,
+                    0.10849743336439133,
+                    0.05197787331417203
+                  ],
+                  "inside": true,
+                  "max_point_speed": 7.222393833217211e-06,
+                  "jaw_contacts": [
+                    0,
+                    0
+                  ],
+                  "jaw_normal_forces_N": [
+                    0.0,
+                    0.0
+                  ],
+                  "open_fraction": 0.9999792575836182,
+                  "whole_object_clearance_m": 0.005938740655779838,
+                  "initially_outside_bin": true,
+                  "grasped": true,
+                  "lifted": true,
+                  "carried": true,
+                  "release_commanded": true,
+                  "released": true,
+                  "dropped_before_release": false,
+                  "grasp_time": 3.98,
+                  "lift_time": 6.28,
+                  "carry_time": 9.88,
+                  "release_command_time": 11.22,
+                  "release_time": 12.46,
+                  "max_loaded_bilateral_frames": 423,
+                  "full_lift_frames": 271,
+                  "carry_frames": 190,
+                  "min_lift_clearance_m": 0.01015512666106224,
+                  "carry_distance_m": 0.26144744057631464,
+                  "release_open_fraction": 0.8041856288909912,
+                  "detached_settled_frames": 598,
+                  "min_jaw_normal_force_N": 38.36347961425781,
+                  "success": true
+                },
+                "blue_cube": {
+                  "frame": 2000,
+                  "time": 40.0,
+                  "bounds_min": [
+                    0.2699663043022156,
+                    0.07694418728351593,
+                    0.029938803985714912
+                  ],
+                  "bounds_max": [
+                    0.3295797109603882,
+                    0.13655522465705872,
+                    0.0739651620388031
+                  ],
+                  "center": [
+                    0.2997730076313019,
+                    0.10674970597028732,
+                    0.05195198208093643
+                  ],
+                  "inside": true,
+                  "max_point_speed": 3.469350122031756e-05,
+                  "jaw_contacts": [
+                    0,
+                    0
+                  ],
+                  "jaw_normal_forces_N": [
+                    0.0,
+                    0.0
+                  ],
+                  "open_fraction": 0.9999792575836182,
+                  "whole_object_clearance_m": 0.005938803985714912,
+                  "initially_outside_bin": true,
+                  "grasped": true,
+                  "lifted": true,
+                  "carried": true,
+                  "release_commanded": true,
+                  "released": true,
+                  "dropped_before_release": false,
+                  "grasp_time": 20.04,
+                  "lift_time": 21.86,
+                  "carry_time": 25.46,
+                  "release_command_time": 26.82,
+                  "release_time": 28.06,
+                  "max_loaded_bilateral_frames": 393,
+                  "full_lift_frames": 272,
+                  "carry_frames": 190,
+                  "min_lift_clearance_m": 0.010060440957546234,
+                  "carry_distance_m": 0.2631513221856465,
+                  "release_open_fraction": 0.8019094467163086,
+                  "detached_settled_frames": 27,
+                  "min_jaw_normal_force_N": 37.84273147583008,
+                  "success": false
+                }
+              },
+              "success": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "physical_exclusion": {
+    "world": 76,
+    "object": "blue_cube",
+    "terminal_settled_frames": 27,
+    "required_terminal_settled_frames": 50
+  }
+}

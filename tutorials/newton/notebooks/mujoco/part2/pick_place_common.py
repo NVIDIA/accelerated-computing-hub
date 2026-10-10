@@ -183,6 +183,11 @@ def load_pick_place_model(xml_path: Path, spec: RobotSpec | None = None) -> mujo
     """
     spec = spec or active_robot()
     model = mujoco.MjModel.from_xml_path(str(xml_path))
+    # The legacy SO-101 stack needs a larger line-search budget. Set it on
+    # the native model so CPU execution and GPU upload share the same option.
+    # Box scenes retain their separately configured solver settings.
+    if spec.key == "so101" and Path(xml_path).name == "scene_pick_place.xml":
+        model.opt.ls_iterations = max(50, model.opt.ls_iterations)
     if spec.arm_force_limit is None:
         return model
     gripper = set(spec.gripper_actuator_names)

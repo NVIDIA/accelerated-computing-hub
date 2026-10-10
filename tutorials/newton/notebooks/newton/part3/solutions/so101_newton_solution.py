@@ -11,6 +11,7 @@
 
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
@@ -200,11 +201,30 @@ class Example:
             choices=("so101", "rebot"),
             help="Manipulator to load (default: so101).",
         )
+        parser.add_argument("--task", choices=("stack", "box"), default="stack")
         parser.set_defaults(num_frames=600)
         return parser
 
 
+def selected_task(argv=None):
+    """Choose the example using the same task syntax as the full parsers."""
+    parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    parser.add_argument("--task", choices=("stack", "box"), default="stack")
+    args, _ = parser.parse_known_args(argv)
+    return args.task
+
+
 if __name__ == "__main__":
+    # Parse both --task box and --task=box before choosing the example.
+    if selected_task() == "box":
+        from box_newton_demo import main
+        main()
+        raise SystemExit(0)
     parser = Example.create_parser()
     viewer, args = newton.examples.init(parser)
-    newton.examples.run(Example(viewer, args), args)
+    if args.viewer == "gl" and not args.headless:
+        from viewer_loop import run_stack_gl
+        if not run_stack_gl(viewer, lambda: Example(viewer, args), args):
+            raise SystemExit(130)
+    else:
+        newton.examples.run(Example(viewer, args), args)

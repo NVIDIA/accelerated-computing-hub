@@ -1,0 +1,1349 @@
+{
+  "schema_version": 1,
+  "state": "local_review_candidate_not_published",
+  "scope": "Community ALOHA native MuJoCo/MJWarp reference; not Newton API or two-cube task validation",
+  "files": {
+    "fetch_reference_assets.py": {
+      "sha256": "d3166430ab691a409cd095a8ed7596978b02d0ea8ca1e0e1409115107f9eefe9",
+      "bytes": 3389
+    },
+    "resource-config.json": {
+      "sha256": "9814b52bc18f79572352b78bf9436fa9c5c5afcc34c90cdac90c040484859d29",
+      "bytes": 462
+    },
+    "PROVENANCE.json": {
+      "sha256": "99d309cebda1a23743f595f8886868c9e2f169d698cd048705f27340f9b8bd08",
+      "bytes": 1001
+    },
+    "collect_reference_sweep.py": {
+      "sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381",
+      "bytes": 15800
+    },
+    "RUNNING.md": {
+      "sha256": "624f998342cb508ad8d67aacb27194e31f90cbc97cfa24290b8c592ff3c3d1ce",
+      "bytes": 5561
+    },
+    "ASSET_ORIGINS.md": {
+      "sha256": "4bf686c4310b256290ba88332c9fb14ba4dc9c5881db0412e5e24512370759a1",
+      "bytes": 2428
+    },
+    "requirements-blog3.txt": {
+      "sha256": "7972d7d098837379ef34c4847d26ab1cb5c6e0556853d00f56c9216e1ad32267",
+      "bytes": 67
+    },
+    "make_figures.py": {
+      "sha256": "d3c7153c48a567700b959a29b8f1cb5676ed1b0be0b5ff252f0156426311e4f8",
+      "bytes": 4821
+    },
+    "requirements-blog2.txt": {
+      "sha256": "c2eacbd5bccab428b2b577294730e047787c0687e2da592f268f455790796f6f",
+      "bytes": 53
+    },
+    "README.md": {
+      "sha256": "9fcae4c286ac2358cb029f55418c014449886aad45d645ca29966375a1a6e385",
+      "bytes": 4689
+    },
+    "run_reference.py": {
+      "sha256": "88a8dea5182428035401ff2a97f91230302e28a2eee9d73aa6cc532578c37657",
+      "bytes": 6482
+    },
+    "requirements-figures.txt": {
+      "sha256": "be923c642695914a2c78b1fe8cd465496994e45d41c89ae86b5962883f01eb27",
+      "bytes": 19
+    },
+    "reference_replay_probe.py": {
+      "sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+      "bytes": 26585
+    },
+    "assets-manifest.json": {
+      "sha256": "87790d12695c9639d09f74a4562e2fa66271abb522e2bdbd48acc1cc52759831",
+      "bytes": 54288
+    },
+    "provenance/copied-source-identity.json": {
+      "sha256": "05b2392159886be1c9f82fa8e37ac206851c5db03fddab2cb2ef07fa64c1126a",
+      "bytes": 4043
+    },
+    "provenance/release-checks.json": {
+      "sha256": "d597bb9b59351c07eabb98ed25d0dca0c7e9f67041ba7af38dfc423ac2a37617",
+      "bytes": 455
+    },
+    "audit/package_audit.py": {
+      "sha256": "23b61a5e31a203e6b4fbcbf7eed7eb40ee4f601b3bff41085cada5e8070e13c9",
+      "bytes": 6152
+    },
+    "audit/summary.json": {
+      "sha256": "bf0afec39436a7a3a627b8438bd34ebaf73cf92cd29fdb41e31769b8f3694327",
+      "bytes": 88317
+    },
+    "audit/health-summary.json": {
+      "sha256": "810a1556f8d5c4242001bd9713918ba3a67451ab5da6f8db68cdb60f04a3af05",
+      "bytes": 151784
+    },
+    "audit/hardware.json": {
+      "sha256": "b1b8d15448f18c3b5a3907d27720a5b5ab6d611daccb92853e4e6c33008d3258",
+      "bytes": 1193
+    },
+    "audit/PACKAGE_MANIFEST.json": {
+      "sha256": "8276e77df4db973bf4a96e7c327456e6cb2e0bcf0e6b426b1eb42ee186186c8f",
+      "bytes": 2329
+    },
+    "audit/paired-results.csv": {
+      "sha256": "ffdab84dccc944872a5d9f405e90db50ce5328498fb565071f13f174e635f282",
+      "bytes": 6350
+    },
+    "audit/episode-timings.csv": {
+      "sha256": "3915bee57626ad6fa6a0fdbcfaa293c77e00cc54e9bd690f77f66ec50cf894d8",
+      "bytes": 23803
+    },
+    "audit/generate_reference_figures.py": {
+      "sha256": "b6ec61fa5cfdf6efc7f8c902c0b8ce2a7b999af6d52f1a2b72ab7a7c7c0acdab",
+      "bytes": 5145
+    },
+    "audit/RESULTS.md": {
+      "sha256": "dc32a813ea0bcf4767613c29b3ad3e6af1adb548142b76e0a9d6eb7f9fe52259",
+      "bytes": 3097
+    },
+    "audit/audit-receipt.json": {
+      "sha256": "a7e3dc73f803d05f01ba44c7ff0822a0fa889475e4f5c6068cbc342b399207b0",
+      "bytes": 2320
+    },
+    "audit/figures-blog3/blog3-reference.pdf": {
+      "sha256": "8b59e05208470fd2d9a524f71c694d693b218ce5330b48d7ea1ad689272a053d",
+      "bytes": 24104
+    },
+    "audit/figures-blog3/blog3-reference.png": {
+      "sha256": "309e9bba43d0eb6a86a5a0f53100de36460684067e81c927b6c85adf758a6231",
+      "bytes": 281209
+    },
+    "audit/figures-blog3/figure-provenance.json": {
+      "sha256": "7741b1590dfb6c63577f026be5e7552bfdb1a0275578a50b8d89a9d09f0b7dbc",
+      "bytes": 424
+    },
+    "audit/figures-blog3/caption.txt": {
+      "sha256": "21fd800105764df717d2d392c63acf5d95354bed9a656fe6f75d22b8f62ff32b",
+      "bytes": 853
+    },
+    "audit/figures-blog3/blog3-reference.svg": {
+      "sha256": "b7c2f29a9b6ab74bd87830dc727008a2c5aee404bddfb4ce1437bb71bfb7b024",
+      "bytes": 36805
+    },
+    "audit/figures-blog2/blog2-reference.svg": {
+      "sha256": "32f582a6cfde083236f808f4769ea3cdba443250eeb609050f011c5bc745441b",
+      "bytes": 36829
+    },
+    "audit/figures-blog2/blog2-reference.pdf": {
+      "sha256": "59600e0973a251b26e8e393c0e838ff705e9e20ecf6e4aaa68fda92f77d4d0bc",
+      "bytes": 24086
+    },
+    "audit/figures-blog2/blog2-reference.png": {
+      "sha256": "0c1134e97fad80830900b28e6e43fe8b2774043d4766b04ad8d64baa31452f96",
+      "bytes": 282993
+    },
+    "audit/figures-blog2/figure-provenance.json": {
+      "sha256": "1e24d5866248f75b3997d10f20f5f68314c2be327a9b2d13f86f577f6a9c58e6",
+      "bytes": 424
+    },
+    "audit/figures-blog2/caption.txt": {
+      "sha256": "21fd800105764df717d2d392c63acf5d95354bed9a656fe6f75d22b8f62ff32b",
+      "bytes": 853
+    },
+    "provenance/preparation/PREPARATION_CHECKS.json": {
+      "sha256": "386b8b7be5ba8be40dac9578c2e9a9b3d14befc4834fe18677a2eef75051a858",
+      "bytes": 1335
+    },
+    "provenance/preparation/PREPARATION_MANIFEST.json": {
+      "sha256": "4025bd2e5f33f89c1882f339fb8131b6901a13b83f25f7d49a9e9c3c4fa105a3",
+      "bytes": 2318
+    },
+    "provenance/workstation-study/launch-receipt.json": {
+      "sha256": "e7650821079617fa632023a4613edc01de88dd65191f423ea8cbb26a0bf5d05c",
+      "bytes": 231
+    },
+    "provenance/workstation-study/plan.json": {
+      "sha256": "82f2cc4e699884ffbf5d8c50a52fe03a451d00b328262eaf83c51b9d9aa676ba",
+      "bytes": 58625
+    },
+    "provenance/workstation-study/supervisor.py": {
+      "sha256": "584dec70a7118e0e029ddfdcaf9c20f08272249314187d8f020317d33c17e448",
+      "bytes": 3426
+    },
+    "provenance/workstation-study/memory-estimate.json": {
+      "sha256": "d1d685fd2216f06fe19405781e3cd3250ce567eade65185194bdc3ecabea1e96",
+      "bytes": 1302
+    },
+    "provenance/workstation-study/README.md": {
+      "sha256": "4d658f00d1f6f0fd785abc4ce1e965c8b259bc9b964e0b21d299710fc1989369",
+      "bytes": 3018
+    },
+    "provenance/workstation-study/supervisor.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "provenance/workstation-study/preparation-receipt.json": {
+      "sha256": "c6f596870aaa23a8d728dcf687c7f8bf705751178438d4808000927de4783634",
+      "bytes": 1470
+    },
+    "provenance/workstation-study/plan.status.json": {
+      "sha256": "88e1408a02a478f7284b9cdee4973f73038d5ea236a381adf85a4bf133b2050b",
+      "bytes": 55759
+    },
+    "provenance/workstation-study/launch-source-manifest.json": {
+      "sha256": "a2f19b30387d44330fbb332d6f3385721641c22adb7e6295112b2563674a0edf",
+      "bytes": 44243
+    },
+    "evidence/logs/blog3-gpu-w32-aloha-pot.launch.log": {
+      "sha256": "e20d57ec627aac5fbd56ae4cc70051a3ead630f4f8deced87af8a8b6275e89d7",
+      "bytes": 5175
+    },
+    "evidence/logs/blog2-cpu-w16-aloha-pot.launch.log": {
+      "sha256": "08a2144b0b474f005be2e0da59e69358b7f90007e3b3b0d9e10629844a877005",
+      "bytes": 119
+    },
+    "evidence/logs/blog2-cpu-w1024-aloha-pot.launch.log": {
+      "sha256": "4d68dd5d211b86dbb7a9b59123eee146e28201361d66b0492375a981c618315c",
+      "bytes": 117
+    },
+    "evidence/logs/blog3-gpu-w2048-aloha-pot.launch.log": {
+      "sha256": "e4d45290d9749b8010b33f1613ba9d6e29dbfe61cd2715277637da836fa68534",
+      "bytes": 5176
+    },
+    "evidence/logs/blog3-gpu-w1-aloha-pot.launch.log": {
+      "sha256": "e57569c16de72ca14d5768ea59bb220bd8ee1f4c3e95551a71fa1790a9cf5d3b",
+      "bytes": 5176
+    },
+    "evidence/logs/blog2-gpu-w512-aloha-pot.launch.log": {
+      "sha256": "f57e0a227466e5028880889065a91cb0878cf8d544f10d2a83d2322a481af2b2",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-cpu-w256-aloha-pot.launch.log": {
+      "sha256": "8e6af90d6506ede8c8f9dd968275d1a9747a772c0a7b5cbcad3973fd9a1e4951",
+      "bytes": 119
+    },
+    "evidence/logs/blog3-cpu-w512-aloha-pot.launch.log": {
+      "sha256": "11328b962eff038e8360a90aa414299684ca4dac7dd2b45983f9cfd7559aac54",
+      "bytes": 117
+    },
+    "evidence/logs/blog3-gpu-w64-aloha-pot.launch.log": {
+      "sha256": "b090bb5737ad858dc4937b965638d48f23347b1cff73bfb0ad12dec1068fc1c8",
+      "bytes": 5175
+    },
+    "evidence/logs/blog2-gpu-w256-aloha-pot.launch.log": {
+      "sha256": "7d531f107fe3d0bf97b65230cd913b597bb670a81630031c707f10f008ab4ebb",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-cpu-w1024-aloha-pot.launch.log": {
+      "sha256": "d4fd106262c794b13a2b0c906308dd90b7050a9d46e64b265774e18cd497cf6a",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-cpu-w64-aloha-pot.launch.log": {
+      "sha256": "3e47e79e6acf510e153b8e69413d84fe7b94ccc6548d91e1d370c81078fed80f",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-gpu-w2048-aloha-pot.launch.log": {
+      "sha256": "3c1df618cd5d2a314c8255f4372382ec182f4244f8ef78b727a2033f5bed88b9",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-gpu-w256-aloha-pot.launch.log": {
+      "sha256": "c906c7343767c418e3304e48c7053d7d930976516e3f8cfc6ab8cbe981cf475f",
+      "bytes": 5175
+    },
+    "evidence/logs/blog2-cpu-w512-aloha-pot.launch.log": {
+      "sha256": "730eb3f656be9200f28ef6174848a12537702020e284873756e846b6f1587a8d",
+      "bytes": 117
+    },
+    "evidence/logs/blog2-gpu-w1-aloha-pot.launch.log": {
+      "sha256": "662790b8637d82c2ac4dec4ce051d192367984d9250dfdd34f6d415f4d8cc1c9",
+      "bytes": 4115
+    },
+    "evidence/logs/blog2-cpu-w256-aloha-pot.launch.log": {
+      "sha256": "889113f93753e9b9456a7371006eb8fd006c8f4a5f318af6714015b924b29569",
+      "bytes": 116
+    },
+    "evidence/logs/blog3-gpu-w512-aloha-pot.launch.log": {
+      "sha256": "0ce27c28ff7ea152bed493895465f6da9422b3a36bd554bcaab918adbfc34979",
+      "bytes": 5175
+    },
+    "evidence/logs/blog3-gpu-w16-aloha-pot.launch.log": {
+      "sha256": "7a5c8aa465755920ccce2c9553cb4ab2421600eaa18fde4d548c61658efadc5e",
+      "bytes": 5176
+    },
+    "evidence/logs/blog2-cpu-w32-aloha-pot.launch.log": {
+      "sha256": "5a4f9ee540c7d4e159e99cb62692f8658e89c709ca996cfb37c26eb59b803b8a",
+      "bytes": 119
+    },
+    "evidence/logs/blog3-cpu-w32-aloha-pot.launch.log": {
+      "sha256": "7147acab5f46145412599261d4e69e15a15d4b8d13b732bc2163851ca7d7aea6",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-gpu-w16-aloha-pot.launch.log": {
+      "sha256": "b6ba9618eaee09d30a5c764ad504089502e0b449dbda5b7d769e88ebfe71a4a6",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-cpu-w1-aloha-pot.launch.log": {
+      "sha256": "2012a6478bcebbc388c37b4552fe431fe8cc3d4481a6cce12d393d4665702fd7",
+      "bytes": 119
+    },
+    "evidence/logs/blog2-gpu-w128-aloha-pot.launch.log": {
+      "sha256": "333a73154e6abd731168e05293a4cda6098472dab51f5e0a7ea929e8becdc5a9",
+      "bytes": 4115
+    },
+    "evidence/logs/blog3-cpu-w64-aloha-pot.launch.log": {
+      "sha256": "19df2319d19cd345413012dae96a113aefc9fe4cc3cfb1cee630da7bf55a6554",
+      "bytes": 118
+    },
+    "evidence/logs/blog3-cpu-w2048-aloha-pot.launch.log": {
+      "sha256": "e7be8f44b5fea32c7487957ec2e0ce64205341d38cde68a9a5b3a7e1e0e7b531",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-gpu-w1024-aloha-pot.launch.log": {
+      "sha256": "f31a7496a5ebc310dc674026982f25ba01b8dbfa9436f9e10074d5a83dad171b",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-cpu-w128-aloha-pot.launch.log": {
+      "sha256": "b420dc408d82b1ef6133c942163bea51761a92ced85076847e2007d243933ebc",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-gpu-w64-aloha-pot.launch.log": {
+      "sha256": "149325cb3be53e24f3f188b754c413e1cef50bde1b540d8b26d6fd5e7e95ef9f",
+      "bytes": 4114
+    },
+    "evidence/logs/blog2-cpu-w2048-aloha-pot.launch.log": {
+      "sha256": "20a80f37ce0581d5cf32889c6316d5e1461f32cf556f5a594badb549e3908da5",
+      "bytes": 116
+    },
+    "evidence/logs/blog2-cpu-w128-aloha-pot.launch.log": {
+      "sha256": "5198fe5265884d4c777b8e5271fbabb1bc70e7819544d6bececd5a45d9728b33",
+      "bytes": 118
+    },
+    "evidence/logs/blog3-cpu-w16-aloha-pot.launch.log": {
+      "sha256": "b8c30a2bbe35299a1201275f7b33b953b2cb556dad29fd94f685f4ad93056319",
+      "bytes": 118
+    },
+    "evidence/logs/blog2-gpu-w32-aloha-pot.launch.log": {
+      "sha256": "67bbe6eaf4568fe28d987a0e18fd8fd128cc5bcfae76c97069f9b4ef86f9d6ac",
+      "bytes": 4114
+    },
+    "evidence/logs/blog3-gpu-w1024-aloha-pot.launch.log": {
+      "sha256": "f1c2612813c46f51f36fb665a9aff461bd2c0fe2c54e94680dc6846dae14fb37",
+      "bytes": 5175
+    },
+    "evidence/logs/blog2-cpu-w1-aloha-pot.launch.log": {
+      "sha256": "530f7466f55a4d52c17a86d9a606ec693846b245d76b03ceeb566e2f2b3d99f8",
+      "bytes": 119
+    },
+    "evidence/logs/blog3-gpu-w128-aloha-pot.launch.log": {
+      "sha256": "83e6e5cc17fb221ed1e891d2e904fbd4d521619ce571a1425f95a799eb2c9a43",
+      "bytes": 5176
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/results.json": {
+      "sha256": "b7fe7d5a71a8235bfaed7da974cdf91829cc84ff901b2755bd47ae6d6eeed767",
+      "bytes": 43701
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog2-cpu-w128-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d",
+      "bytes": 1690
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "9b13ab1c4e12c8fef5a944318ced1e95d453930f184f69f703182a45ef0f7669",
+      "bytes": 3277
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/results.json": {
+      "sha256": "346211a2dcb29d60a1111b0e08a49d153e75bdfbcf8ad919ebacbb9974ab691b",
+      "bytes": 59088
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "9cf6f5add5f34c86106e7367d87cb625a546c4ff4163c07288f5c6639f3d0a57",
+      "bytes": 3277
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "b1f04259d7aa7424a44478066eecc413b59cef89defa42c0a3ffb90d6cd6eb99",
+      "bytes": 3193
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "bc517ba6dbc2965e4ec5ecddd5f68300ca59ff1a75ace057e8e02ce96b85b3c9",
+      "bytes": 3242
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "e4c77eb1008eba5da7a452cdc77e0dab5fd7224cc3b0defe037d7fb62e24a162",
+      "bytes": 3224
+    },
+    "evidence/results/blog3-gpu-w16-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "9added52a35ef9f6fe0c136e0aa0dbe901064d0406a2edcff2da6073052d5f7a",
+      "bytes": 3260
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/results.json": {
+      "sha256": "1ca80c3e736dc08f58842bc0630a40c82d8eb25a372d84b7720fbe9c2d7e253d",
+      "bytes": 43696
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog2-cpu-w1024-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799",
+      "bytes": 4703
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/results.json": {
+      "sha256": "c14dbc9318bcd3d19d758d4994e86f31e6f5563eb09e4df30b4ed8e14be4df68",
+      "bytes": 43699
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-cpu-w1024-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850",
+      "bytes": 4698
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "34087bb5638801e77415f2ba071e9737432a73722784bfc95f2eaaedead2c82d",
+      "bytes": 40262
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/results.json": {
+      "sha256": "c5cf8e100601960fa8394e3f6bc7a164a5547dad799ec79ba276611f45ba363d",
+      "bytes": 77783
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "516b153aaf250088909f3b0ea26b0248ae31b38f4a4fc3e50c7cd6feb91b6131",
+      "bytes": 40344
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "3d3498b31ade52d9f3860ca11951d7c34b668494b3bf58af6c63db33ab6e03b5",
+      "bytes": 40391
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "49e23cc5302d0140179d1c1489cc744cc5273022cf94e7ac4e2c88f906d71256",
+      "bytes": 40435
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "f64a9deeb4736a62408386159789855f348b560f7c4a952dc1ce6aafba576e55",
+      "bytes": 40437
+    },
+    "evidence/results/blog3-gpu-w256-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "2375edb94c064f809fbf3cfcd81577f5d5b57deb7ce37a4f85e1f7266dec7f44",
+      "bytes": 40248
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/results.json": {
+      "sha256": "724ed158c5ef19b1b4f5b695dd6f39d8e6d9e8937abca751d995779d808b5737",
+      "bytes": 43696
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-cpu-w512-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8",
+      "bytes": 2986
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "fcee8787035d4e3a3b49027d6793d64f84936846c1139c6e8d8e16555e01e3ce",
+      "bytes": 3264
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/results.json": {
+      "sha256": "48aefeda5a24f1de3718cac1c6d9e7639b8cfd98bad9e8e7cf8a5b80ba7d6e65",
+      "bytes": 57348
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "e928403e4a6d1ad83ab3aee76967ecbd1d1f4ada92ebcfc2f90db7fa76cda847",
+      "bytes": 3259
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "837992e69bf7b7e4ad7e36b4b0053488b350a43cba4626b32ad249af40e75fd0",
+      "bytes": 3235
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "be8621bb26c91465efeb50b365878f099ae4b3fbb3ed389ed23800ff07ce19ce",
+      "bytes": 3245
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "d77f119ef7275e46bfd1c1678222b570c318c58f178ea47d0c9b5f53ba756702",
+      "bytes": 3263
+    },
+    "evidence/results/blog2-gpu-w16-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "bfdfe00ba6fd98b67b553207a05c40356f953777fcdf0a7f3314bdc37ceac25e",
+      "bytes": 3255
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "75d54afe8f73036c9b3e949b5a684ce63934d9b83d12a163efa315ce2c0cfad4",
+      "bytes": 79813
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/results.json": {
+      "sha256": "34a9cdd630b47d8e2107cfd3c6dc59c069012a6c39daef529929ab03e8cd3816",
+      "bytes": 57330
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "f3e1b25923be6c87db855e683d763d237cbf0064e7d9bf46f38a83bf4db1b886",
+      "bytes": 79893
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "df6cbc652956ae3a511e1a1393d707e6f77152deef6ef5f908fe7b97e7f96ea9",
+      "bytes": 79858
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "a41c5d22f71c4648ce4b6e23f57e361f3f4b35b7db1e7dce264eac8085e4d9d8",
+      "bytes": 79653
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "018fa481a874b3c15d8ceaafc423ec8442846ceeabe86334943957038a6c2b16",
+      "bytes": 79831
+    },
+    "evidence/results/blog2-gpu-w512-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "3c4410198b0150c7d7354ffdfb354828785784cb837f24079d55236037194d18",
+      "bytes": 79776
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "70007d9f5c437248a46ef13e16d9efb4df9d0c41b6c8d81972cb87a2540e12ae",
+      "bytes": 158459
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/results.json": {
+      "sha256": "c94e98e995d625891c65a5e5cae6d2b4c4487ea5933d86daf7247af93a2ab2b3",
+      "bytes": 57321
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "bbef16070b77ae9b0c4cfa07737281a0f5b327a8e81b1338adbd29f454d1a820",
+      "bytes": 158497
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "fc45b12fcac3dd39b37c5bda361892ab2d7307b94ac06fe60c3291f50559cc43",
+      "bytes": 158404
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "563bb65f5e959dc5ceb8338282a783cbd2b5886437b1f9806a5592b7d6bec7a0",
+      "bytes": 158348
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "641622d3bf4fc55f0a7876f75bb3e78cbdfb6f5797edbaccd7b8717d71dd4f8e",
+      "bytes": 158599
+    },
+    "evidence/results/blog2-gpu-w1024-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "1604261be142cc79b00eef12126565fe17abba418276eae6247543f39234e3ab",
+      "bytes": 158449
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/results.json": {
+      "sha256": "58f3d5e73a649a535d3f9a4bb511651939591d185fb881c002e0cd3bd79f5e86",
+      "bytes": 43707
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog3-cpu-w256-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2",
+      "bytes": 2125
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "00c554f949f328ea8840f807a5e78c7533a6f24927cbdb108eb0e04c2b60ccad",
+      "bytes": 20717
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/results.json": {
+      "sha256": "9d9b9c08190ed3514f0e5786ebc142bda52cbe6e9314511b9e4425a8b1106fac",
+      "bytes": 57341
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "116fb035f46ef0d3de21d9fdc3050e3eb6dd40dc48aa729d775c265d3df94585",
+      "bytes": 20792
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "7d8a26602de5eff2a9e9f4b6725378faa796fbb40f5106fe35582dc014db9009",
+      "bytes": 20689
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "8007da6d00aede4df569d5006f8fd3a5e20be3c777b6abec1614a388db5f377a",
+      "bytes": 20746
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "09c912e6c6b07755f687cffcf7555f43e9e9ca0661e311d2bfcbedbd4c66e24d",
+      "bytes": 20666
+    },
+    "evidence/results/blog2-gpu-w128-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "e7e75016365aefbb7d0cf805ea681192c1ccaf7b3e3487d48f659fd759ed6524",
+      "bytes": 20709
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "30e952f4a673e391d2252aa9d7c7a06a0beae5ebe4f67eb18a58834b73726927",
+      "bytes": 158057
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/results.json": {
+      "sha256": "faa5c4882d79cf5eb838ca6180d5170c63ebdd610e6d7d1301fb3c811ab0ec47",
+      "bytes": 137680
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "6f10eb971d88270befdc7b516fbfe0db52122027d61c29571dd6e89abc9a241d",
+      "bytes": 157972
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "df861798450ad30628a5bc29e8d55fb5868093845a9bccb8a130a563cc5c7e81",
+      "bytes": 158168
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "4152988db69bf47018492ebfe814bbcdbf49336c0619b131915876465cdd2a9b",
+      "bytes": 158168
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "57d590b1d2d83633a3a9fea48148a5d6fd7c0b8cf5060c4ba3ae06ee438c1104",
+      "bytes": 158013
+    },
+    "evidence/results/blog3-gpu-w1024-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "644a104ffcc0e424a5aef2a9ed839a94cf16cb4c752b68de39abce20984649f6",
+      "bytes": 157960
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/results.json": {
+      "sha256": "e88b650b9203fa58a099510c48df173663184fbcbbc214001cf5707a0f6a5f66",
+      "bytes": 43689
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w2048-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5",
+      "bytes": 8131
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/results.json": {
+      "sha256": "2d9b3821e57862b348be09716e849bd8bef2329db0eba5c47cd53e8a43855acc",
+      "bytes": 43709
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog2-cpu-w64-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee",
+      "bytes": 1452
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/results.json": {
+      "sha256": "676c51c47b051ca47d0724cc43d31d558909fd0af70794de2f1064ec1d4c6e64",
+      "bytes": 43697
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog3-cpu-w2048-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76",
+      "bytes": 8126
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/results.json": {
+      "sha256": "75847feefee78d53d8af8f9df8af953bfeb30f8adc9bce2d5e41fca0ee371157",
+      "bytes": 43711
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog2-cpu-w32-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80",
+      "bytes": 1326
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/results.json": {
+      "sha256": "d8fdf98111c7bdc8edf004e53948338bc312154ee98de638694a287f10f47411",
+      "bytes": 43711
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog3-cpu-w64-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c",
+      "bytes": 1449
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "44c04efa301e8c6469e991381a98c76c9967bc969347005f063b7de4aef4e2ec",
+      "bytes": 315786
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/results.json": {
+      "sha256": "84bae69bab845e6bb5985be779409d7db6118707914b1afba1998fed1160aecb",
+      "bytes": 57319
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "26ac0b69d189adc126210811acfa2351f9ad6ac6e0376072a6ec87edd28ae45e",
+      "bytes": 315714
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "8fbfa40f1cb001ed4851af5de0d4fbf243580ad4295c43a67e27bb6525650b3d",
+      "bytes": 315946
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "3a893a5a78de2ca117d38b68afcac48d18fc6b740c67ac63d91c912ddf4a0b54",
+      "bytes": 316217
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "962a77e450da7b9cbe331e7ff088a095236b320c4983a82a7baa71378d775789",
+      "bytes": 315882
+    },
+    "evidence/results/blog2-gpu-w2048-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "ecdc0d043fbeccf9d06156e618bb5bea9473faee77d202676c5458a9e6f5d405",
+      "bytes": 315750
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/results.json": {
+      "sha256": "76bb9b11609ae8de81cca8f00209ba71d6983478533a37c7cd084a5a9c687256",
+      "bytes": 43716
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-cpu-w32-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54",
+      "bytes": 1311
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "576231d1a00b677e283667e41f423316d6987939555940aeaa27b0fd695e17a7",
+      "bytes": 315038
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/results.json": {
+      "sha256": "d4e440df8e5b0951837552ee4c4c88605f029af56936de83bb02ff519505d82d",
+      "bytes": 217570
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "461484e01b8d23e37e434470991d3632840e559f2e6ac90519326b98e9da16a9",
+      "bytes": 315367
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "77907672e407dd48ea403edf56e6851147303553633027dea4102bb9244e199a",
+      "bytes": 315346
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "b30c2ab02b6cf8f85fd2cbf2027084ef12358c4317e3c2600fb7bc489a4ddd27",
+      "bytes": 315213
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "44a169e0e0dab6899bfca2f1f9c6ed9dbc0b4d9847a51b68597a273c97588241",
+      "bytes": 314944
+    },
+    "evidence/results/blog3-gpu-w2048-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "03bfbf5d068390605420792d93846f43b1fd5f3834f08edc7ad48e991f714aff",
+      "bytes": 314683
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "6b6ca5fe1e131395af640de5d11fd4c7c3a0d45d56532e94788c78cb30eda2d1",
+      "bytes": 780
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/results.json": {
+      "sha256": "268d9965acaed29a69b6f89a4ee2d4ed3612fd85067f5ec06dc832565d92e579",
+      "bytes": 57335
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "1f93cdcfe4258c323bab7575c5fa89048a99028e5ebbafb4e55327371deaeebc",
+      "bytes": 778
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "d1db1b7da617b32cca956e06d332b416cca200305683d20026be4552130a8da5",
+      "bytes": 779
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "a6131449146b454b4ae931f10fa6db7cefb99cab254915734df2dcd1d7fcc9a7",
+      "bytes": 779
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "ee416839051e88269cf6eb8a90ee8f7c7bb8637e0ca2d5df320f4721be614332",
+      "bytes": 778
+    },
+    "evidence/results/blog2-gpu-w1-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "e762e5bcf60aceed0cc570c261461a956729346c07b2672e8fbad2762c77daf0",
+      "bytes": 778
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/results.json": {
+      "sha256": "74234ba13e20ea203486ae3fadb11ac5c97d13cde19e78021c473c57b71a9cff",
+      "bytes": 43716
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w16-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7",
+      "bytes": 1213
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/results.json": {
+      "sha256": "bf096ab8f8faba7080fbdae78fb44a477e1015a685b41bb616aef159d1789002",
+      "bytes": 43720
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog3-cpu-w1-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7",
+      "bytes": 1095
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/results.json": {
+      "sha256": "bec03762357acedf8b69cff4bd60ecffdeadcf98428908a3c0e1898dfb5f89a4",
+      "bytes": 43714
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog2-cpu-w16-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d",
+      "bytes": 1221
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "889d13c7438e5cae7ea6faa17efa37fe4a05c6d86d8dd794f77b407111b599ba",
+      "bytes": 780
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/results.json": {
+      "sha256": "a4411f1bd3c9a810cd43195b0192508e2161c5af468d34d229c6d0ab4c8739c2",
+      "bytes": 57901
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "db36e9c028078f4044a4c2f32e5539337b5d58aeb50085bfcd3f73ceeac83fd2",
+      "bytes": 780
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "1c680590b999438173c603af542c9fe424f9b97e207d9c0773b0ef367f2c1ad5",
+      "bytes": 780
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "859043626fd8676fc849dda12416795e223dcd0fd8a37d03697e3b4d975ce0aa",
+      "bytes": 780
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "01a244af492f903fd645e6bb15395fb069be72c6cb91c48d2a7f17a5808a4c13",
+      "bytes": 779
+    },
+    "evidence/results/blog3-gpu-w1-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "e00736830d0cb6882f35ba2ddb1bbf496ca13002e97dad68c512f1ef24cb8762",
+      "bytes": 779
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "da51ff4db846b94b044e4b93f7776fe78275bf10904b6f7a4405867590e7f18f",
+      "bytes": 5724
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/results.json": {
+      "sha256": "c4fb21eb363a6ac3ea99b4a30007c4a09f89f2d0b2b04ddc7c8e474c079ec9b8",
+      "bytes": 57342
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "e416b658db40c4f1aa778a67b52599d0dd4f57ae7d2f15767540d3d591a68669",
+      "bytes": 5772
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "b046d2f1bef53833bc522412284f26870d2badd71f0d8e3d6e80c7f42d2c5236",
+      "bytes": 5812
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "0f37b6ce6ff56bba8f17976e3b245fc4c7b5d5c914b0b36f4ea38f1aa0700379",
+      "bytes": 5772
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "2923a0d6cdab5091f4d53644108c5c3e0bd9b8261037dd36b64718d602a9485f",
+      "bytes": 5784
+    },
+    "evidence/results/blog2-gpu-w32-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "f1f076f5942d908469dcfb6204e97172b25aa8dffafc9a024297537dbed786e4",
+      "bytes": 5758
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "48658c550fe772b1c1560b01ebf14224fcfa054b60b4b2938979f4aa6be8edaf",
+      "bytes": 79707
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/results.json": {
+      "sha256": "2516de2ae22a9b9c1600948a7ac4acb5c5bd16be8aa11d2f75fbb687bfd28056",
+      "bytes": 97752
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "48d12333c03cda6d7b58c30d1554bbf28c84d8a1f7266b0073d8d2e2f9518f98",
+      "bytes": 79462
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "78033186b5f49d203abd0dcd6debb6a5cc16474fa9154669786372047c35d7a3",
+      "bytes": 79659
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "638599f63023220383a86c7a47a60aefbeeee4952dd0b31d8d3f244155717498",
+      "bytes": 79666
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "1991c11683264b6c3ef90f3cc96f06e554001dba50154d6a590a56f3b7e64788",
+      "bytes": 79621
+    },
+    "evidence/results/blog3-gpu-w512-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "afcaf97f8fe9ca242f2f0f6eea3f9955aedf8694298ecb7c5f3c5afacedfd664",
+      "bytes": 79741
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/results.json": {
+      "sha256": "58e7e4f08e025c0943baee6bdd037f9b70a9edfc93ae1b7ec34113bd2f7ff0d3",
+      "bytes": 43715
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog2-cpu-w1-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423",
+      "bytes": 1103
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "f6d906e6b5f8ae759599c21580c230dcfc5561e99f7aa6a2596256afba26f282",
+      "bytes": 20723
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/results.json": {
+      "sha256": "2e723cb9df443100cd2456134c5047c56d08d0447a86f9eafab69899bdde7d5d",
+      "bytes": 67823
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "abeb1ca3e36e01a5f40152050cf18800c82c534753d376dd842a91d10d377c65",
+      "bytes": 20718
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "f6b9c898765724c5dd834e4cd41e1cfe2c9bacd77866d58682c9bce9af1185e5",
+      "bytes": 20690
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "678f7af34350a744920a2812e6bdb94d56018fe5728738bb8fb37c893d9d5706",
+      "bytes": 20745
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "d42ff61e2ff547354542b218fc83b1a19249cb7a7dece646081e909f09253d46",
+      "bytes": 20670
+    },
+    "evidence/results/blog3-gpu-w128-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "62af248429df255f8462c7b9865924b39e86f1962fd8f5692a87940499ae84e0",
+      "bytes": 20660
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "7ee4b9a3a2be44a8c931bb0666743561e4a4b3f72c6b4da15b39fd71eef14354",
+      "bytes": 10765
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/results.json": {
+      "sha256": "282d65fe82d5551f5ffe1076f8f7cbb11d4dcfbac68cb81d07216c3da64c7ccf",
+      "bytes": 57343
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "ab3a706515028bf17490ff61429f1fc79d2d1de6434d4900125cac61688ef1df",
+      "bytes": 10787
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "a2476318b91b2001ba3ac9f1ccff14a420b05ec15a0e852ae92a4e18afc4b66c",
+      "bytes": 10779
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "c57d2916e77ebe12ecc79dab1f6af6c2950fb395550b271c43e236290904c897",
+      "bytes": 10765
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "73754e085a0d08379aa19bf5c7715e65fb9342f02807a81f8fd798c244a9d5b2",
+      "bytes": 10771
+    },
+    "evidence/results/blog2-gpu-w64-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "b544d1ae0058268e6c0ac14f558c01c6ec9022b9889f39d7fb81bd081e171e39",
+      "bytes": 10751
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/results.json": {
+      "sha256": "ad83b7a39bfe96d2c1a1092e5c3b40c04758efc91f416fafd49b0fe710e55805",
+      "bytes": 43697
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-cpu-w256-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331",
+      "bytes": 2128
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "9296387e3946b88714e854313e6dad53b560f2ed61616d67c83470d558953b5e",
+      "bytes": 40318
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/results.json": {
+      "sha256": "b5c5784ec816bd92d9e03b6e3affd2f78f83b76527bcfc17fcdd455900cc25d8",
+      "bytes": 57329
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "b4440154ebba44317d0602101abf87d6b84623f966e44ebaf5259d9b7285467d",
+      "bytes": 40373
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "6fe3e441a8c5155757e1cc8671547e3d7647ab8d54338d699fd46f6c11915213",
+      "bytes": 40481
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "47943809dc2b08def674e8be6e99cfbc1952f737d344068f6816640a216e2ff3",
+      "bytes": 40456
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "4cfaff06c31eff599e2a8b9d0f50695502d8a685fe10024682d58432d67d1910",
+      "bytes": 40383
+    },
+    "evidence/results/blog2-gpu-w256-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "d90d9b11eb4a23a0a863b90999a191a891e72ea1d39edf46efa4137349245220",
+      "bytes": 40315
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/results.json": {
+      "sha256": "41e3b79d06bf629871e0d514159ecc5dfb6bb63d1af1d2dcc9ca757e489a2b98",
+      "bytes": 43711
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-cpu-w128-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a",
+      "bytes": 1674
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "243d53c25c2f213f9a015c102872ebc7fb63e567e21b05b02b79406203e1138b",
+      "bytes": 5789
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/results.json": {
+      "sha256": "ab608bddc982e466d8ef2eeab22ef051b74dd4a7deec7d5faef1f23dd228cdbe",
+      "bytes": 60324
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "b09465a6228932656de85d7ee31241bea7836fd05e13154d0f882d1b9a31859b",
+      "bytes": 5720
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "43cf6f3436b9600f93ad87960ac729c1fc73d9c99e00bbbf95853a5c614c753d",
+      "bytes": 5755
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "d416b8dff52a5c3693d8b8aac51d6be84d95e6fcc9dfc39ef9a3e8d97f75002e",
+      "bytes": 5754
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "9cc0d8a9ce5ccd0bebb7cccd62ce5ed7992c7cd1b76040e99d38661890374e95",
+      "bytes": 5732
+    },
+    "evidence/results/blog3-gpu-w32-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "c8546eeb857c3df587659e71a8213e93cad92b4aa06e064ea5941114a21161fd",
+      "bytes": 5741
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "a1f8fe2c375362472e9f7669b240987c773d69f38f5b155832c848bc960ded32",
+      "bytes": 10732
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/results.json": {
+      "sha256": "70c6d030b27fcafecb28f2445e053b1a1099b3abf441c71e5bb48875e9f3fe5d",
+      "bytes": 62826
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "e6b2ee7da830c6193d8bd7ed344e24f33448e4d2b036f66b09b50c42147db2eb",
+      "bytes": 10723
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "f3a149821864f5fed77211bb49e1f57dd6a51d2aa3f6357bc69b1e5fd1500203",
+      "bytes": 10733
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "4da8dadf005d8d82addf5b43fd81b60c4d2c7a8e4e1100f1a759da3fb616f29b",
+      "bytes": 10805
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "0dbf8dcdf96a9a656e5d6a6737b7a544d1065a940aafeee0dafca9c7cdaef2f6",
+      "bytes": 10755
+    },
+    "evidence/results/blog3-gpu-w64-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "507128d272bebea4a8cb3e20349a18d0436c8f0954e834844ccfc326c5cc3625",
+      "bytes": 10797
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/measured-01-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/results.json": {
+      "sha256": "cdfd9344d18f6a19fe52647a51d2a3917870e6a7a6e8fc9143e2a6f86c2c91d6",
+      "bytes": 43703
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/measured-05-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/measured-02-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/warmup-00-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/measured-03-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    },
+    "evidence/results/blog3-cpu-w512-aloha-pot/measured-04-endpoints.npz": {
+      "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596",
+      "bytes": 2982
+    }
+  },
+  "total_bytes": 11425858,
+  "source_runner_sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0"
+}

@@ -1,0 +1,396 @@
+{
+  "article": 3,
+  "protocol_version": 2,
+  "execution_revision": "parallel-host-validation-v1",
+  "physics_steps_per_world": 40000,
+  "physics_timestep_seconds": 0.001,
+  "acceptance_auditor_sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e",
+  "accepted_figure_points": 26,
+  "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8",
+  "source_file_sha256": {
+    "part3/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "part3/benchmark_newton_batch.py": "bf2b6b44626f159e8f73d7bd516145ee789e55af64705106a0dc8d208970b095",
+    "part3/benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+    "part3/benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+    "part3/box_task.py": "6de52961b97adda41c6514a5b8a3099cceaa97327813d3fe1af81fb27427c911",
+    "part3/clean_table_scene.py": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+    "part3/clean_table_task.py": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+    "part3/clean_the_table.py": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+    "part3/final_check.py": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+    "part3/migration_benchmark.py": "6b004f4464afacb9000090cf85a293c14b7d6c5319b50cdbd6243e2bd71bdaec",
+    "part3/newton_assets.py": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+    "part3/newton_scene.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+    "part3/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "part3/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "part3/so101_newton.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+    "part3/solutions/clean_step_00_add_bin.py": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+    "part3/solutions/clean_step_01_add_garment.py": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+    "part3/solutions/clean_step_02_add_cable.py": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+    "part3/solutions/clean_step_03_build_coupled_solver.py": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+    "part3/solutions/clean_step_04_simulate.py": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+    "part3/solutions/clean_table_scene_solution.py": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+    "part3/solutions/clean_the_table_solution.py": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+    "part3/solutions/newton_scene_solution.py": "3bc5c4bdf52c3eeb3de41d5a84768ee0dd27ab79758f9ed450977c7081ed8c98",
+    "part3/solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+    "part3/solutions/step_00_imports.py": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+    "part3/solutions/step_01_builder.py": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+    "part3/solutions/step_02_add_mjcf.py": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+    "part3/solutions/step_03_joint_targets.py": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+    "part3/solutions/step_04_props.py": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+    "part3/solutions/step_05_finalize.py": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+    "part3/solutions/step_06_state.py": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+    "part3/solutions/step_07_solver.py": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+    "part3/solutions/step_08_substep_loop.py": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+    "part3/solutions/step_09_cuda_graph.py": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+    "part3/utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+    "requirements.lock.txt": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98"
+  },
+  "files": {
+    "source.tar.gz": {
+      "sha256": "85c3d28a1237263415683c920a3bc984eb33fe6f234aa77766c8a2b339b4c9b5",
+      "bytes": 192575,
+      "source_files": 37
+    },
+    "preflight-v3-evidence.tar.gz": {
+      "sha256": "065e94185683ae1da92d9ea0b268b91bf072f5a746e75d1939b8a32aed539f1a",
+      "bytes": 796661,
+      "role": "preflight_context_only"
+    },
+    "preflight-summary.json": {
+      "sha256": "ac7a0854c0290db8cf2a8c071300fa954035b1b4ead6c33015d049cc422836ce",
+      "bytes": 8400,
+      "role": "preflight_context_only"
+    },
+    "preflight-failure-audit.json": {
+      "sha256": "41262ddca05c5f7be8231ab133756a1ab1a7e7962ed94a3f69dfad4e8b758352",
+      "bytes": 9499,
+      "role": "preflight_context_only"
+    },
+    "so101/results.json.gz": {
+      "sha256": "1ebc2a8bdcefad89060a72bb38dc0f0b760762df01f3999518409f5df280046d",
+      "uncompressed_sha256": "cfbc9f9bb91da2fd31d9e20cab938942213ebe2b108b15b780385b3935e5225c",
+      "bytes": 2795769,
+      "uncompressed_bytes": 186531726,
+      "case_count": 18,
+      "run_status": "incomplete_or_failed",
+      "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8"
+    },
+    "so101/summary.csv": {
+      "sha256": "57fa38331738b117bb1e5438d8ed466557b1002ebf6d32dfd1acb87ea8bdea1c",
+      "source_sha256": "f3247ed5b909feb3b0eb9fac12989e1a4b39c3a0c177a2593c177a3ac0ea570c",
+      "bytes": 3231
+    },
+    "so101/summary.md": {
+      "sha256": "3ec962827d526ac49543540aaed333ee25f68f888d4d77a758fb4c07b1ae045e",
+      "source_sha256": "3ec962827d526ac49543540aaed333ee25f68f888d4d77a758fb4c07b1ae045e",
+      "bytes": 4658
+    },
+    "so101/raw-run.tar.gz": {
+      "sha256": "7ebe12c6bf3ad670d078d03c0537a87527c1e1e78927c4adb3c37d7c92b326a4",
+      "bytes": 5493661,
+      "member_sha256": {
+        "newton-batch-newton_cpu-w1-t1.config.json": "67c068fda664297ee10fcc0941af024f0b630e505102f9b16097c2a4a6549e3a",
+        "newton-batch-newton_cpu-w1-t1.json": "081ec4386eb83a13a70abe8bc765adba32fcfec1eada71077015f62308601361",
+        "newton-batch-newton_cpu-w1-t1.log": "344d5190bc59539001de7c6269c554db86c0033f9ea6692e1888c504518b9d3f",
+        "newton-batch-newton_cpu-w1024-t32.config.json": "d20f595942b7cf81618daa991bd569912cf4e26a09d4c40147a517cc1f3de790",
+        "newton-batch-newton_cpu-w1024-t32.json": "3515692972c6eb1ff8bbc6e983338c7092e7ad4427827505bd59e55f7a2d3013",
+        "newton-batch-newton_cpu-w1024-t32.log": "2c9ca781a818ea90740f8918bce5e8ab0ceaf1947ad33f4107a20b4542288649",
+        "newton-batch-newton_cpu-w128-t32.config.json": "55ab7b39a36769d881f112d5bd1badc120efb59b92767de382063803fdc27bb1",
+        "newton-batch-newton_cpu-w128-t32.json": "68e56f24230107d74062c75fd774dac85743b8a56ca147dd452be1c7064b7739",
+        "newton-batch-newton_cpu-w128-t32.log": "f843a29816f62028a6022fd353757202df59b79ab355921b00c81f7b69f823bb",
+        "newton-batch-newton_cpu-w16-t16.config.json": "b040b15ea2de1b501d2d7c3743ba9d909f04db01621e7fddfd639d6bb9859f1e",
+        "newton-batch-newton_cpu-w16-t16.json": "b5cca7b6e4ef3f007bbb9e04ab5ce4370ba4d6b0ce6a802540ab14ef75b2c450",
+        "newton-batch-newton_cpu-w16-t16.log": "2d03a9e042fa7c0e8a0b19bfb9217e4fd00ade83e28773186487033a5269099b",
+        "newton-batch-newton_cpu-w2048-t32.config.json": "cba3a86d3fddab7c195b96e60379ba4bd591bf19cefc470b18a9cfe91e3310d9",
+        "newton-batch-newton_cpu-w2048-t32.json": "b765c6c5987f0d6345aa51e5a4901f6fd2cb9ce4df1c01fb0ebc5d442f5815cd",
+        "newton-batch-newton_cpu-w2048-t32.log": "354a8d498a62e60610358ba56543bbc40c7ad6ffbab42f2afe96c35ef14b5d4f",
+        "newton-batch-newton_cpu-w256-t32.config.json": "3b52b068004c21864fa8fe8effff5761459374c679cfd24cade73abf8647ed00",
+        "newton-batch-newton_cpu-w256-t32.json": "cdc93598f9361727ea607fa1f9dfcc94bdda21fef12b53f7c3220a09cf43e826",
+        "newton-batch-newton_cpu-w256-t32.log": "3846338f5a5bb7c703554bcbd6d45cba2949d234aecff3fc7145d8a1fa6b7751",
+        "newton-batch-newton_cpu-w32-t32.config.json": "924b71d11675f8304091f082c800ba9ac5606ceea897897655089f0394c640a2",
+        "newton-batch-newton_cpu-w32-t32.json": "33ceba26295f39bd39ad95f868fa7e74dc4bf0a62a6de29f02efacab7ac27277",
+        "newton-batch-newton_cpu-w32-t32.log": "b0274d8213e1b1b2e31ef647b06a1bb12e7b1ce8db3537464e1ba2d4f00cc7de",
+        "newton-batch-newton_cpu-w512-t32.config.json": "77ae28996d7f0b884eae1e997547e17958a8a3461bde704447cdac73f1299374",
+        "newton-batch-newton_cpu-w512-t32.json": "4ca5b77c0c54d73cfcae9c9c40b299ec2da8366c35edec9b2c85ec3f902f80d6",
+        "newton-batch-newton_cpu-w512-t32.log": "d42b76677910330bd4b43542c64d813f2777cf2b4e88853e596583c3105fb03c",
+        "newton-batch-newton_cpu-w64-t32.config.json": "5b4e2a5e87e2d85edddbec05ac9d4e5b0838c813f0db2915b2d24c4b9b253be1",
+        "newton-batch-newton_cpu-w64-t32.json": "c984a3f4ed1a98139a6a7f58effe8a633c1743bafa5f09bf075cc1c4a7cdc156",
+        "newton-batch-newton_cpu-w64-t32.log": "7d7befbc585a83101c8addd8cb08f3058b7cf2c347f10e81980bf2cfbe28507e",
+        "newton-batch-newton_cuda-w1-t1.config.json": "b6787b4b95f802f9ef8ee814a1e16e0f6da3e5767c99fe6872a21a99081ac32f",
+        "newton-batch-newton_cuda-w1-t1.json": "5b9e1b7b4b26340b8dbaee3112167fb6e0130079545fbd4f5a6609830fb3f74f",
+        "newton-batch-newton_cuda-w1-t1.log": "ed6325c2ce17cc58166dcc028ec4c843aa391a36af5bce358397c3d90d6ce77e",
+        "newton-batch-newton_cuda-w1024-t1.config.json": "aa1aa33edd4910546dd13fe2f95ba1333e657e91d3451db3333cc7c025e07e9a",
+        "newton-batch-newton_cuda-w1024-t1.json": "975f2de9df8a0b848809cb67e28901ce613caef925e77cfdfe03169371609761",
+        "newton-batch-newton_cuda-w1024-t1.log": "799e92f24780b1e1352f6dba37da5e46ba809fba84721eb3c05422e5d7397b9b",
+        "newton-batch-newton_cuda-w128-t1.config.json": "478e301474be05d6dc4c41e86681dab583449f636b28b63de43836d1c27ed21c",
+        "newton-batch-newton_cuda-w128-t1.json": "2a0caa06b8224453b1d42907cec808fe44121f0c885ca561e8f147d4ec9cc46e",
+        "newton-batch-newton_cuda-w128-t1.log": "f8e381d9ed4fb6d34d0f734dfc3b6d144fc376b5705a15dd09c31dc92cb1e873",
+        "newton-batch-newton_cuda-w16-t1.config.json": "14d448f6da190f7d8fb4e5ae2b31b9df1aee6d095d376d1cb5361c6a32c74908",
+        "newton-batch-newton_cuda-w16-t1.json": "2e7ee38d4de3bd94b07c798022dc895c4370d34d47888fc7860037276a0795b3",
+        "newton-batch-newton_cuda-w16-t1.log": "3550238647dc0a888bdc3ee1c9517829d5e54f1a7171a028e679c8336a035678",
+        "newton-batch-newton_cuda-w2048-t1.config.json": "e9744a1156b9355e8c0c4db5a098e1e580bc8b625e786024ee1981dd5fca7c55",
+        "newton-batch-newton_cuda-w2048-t1.json": "c799cd143a89578289113c3c1a620985dc1dc5b6d44f1d9d1ccc2621a9683a16",
+        "newton-batch-newton_cuda-w2048-t1.log": "fde8ce1e9d316f4386269ab74256c4cb1ef9b4dc87b320c016bedb7c3e86de4e",
+        "newton-batch-newton_cuda-w256-t1.config.json": "c70fefe2c74eae61e1b7c0ded3992b4a3873d48ad3721635e318e9627d748dc9",
+        "newton-batch-newton_cuda-w256-t1.json": "7485f7d73dab6f226c529c10f08719e115c72afa7fb7b0ab14c2a92a1c1a80e8",
+        "newton-batch-newton_cuda-w256-t1.log": "b1d72cf5bfa37a2791e10867680ba402f1862ba4eb6836faebe19bad6182e95b",
+        "newton-batch-newton_cuda-w32-t1.config.json": "5e0664b1e09f29a2964eb834c0daeb57770d2ad0fe96a7edf8d3aa268a6a5193",
+        "newton-batch-newton_cuda-w32-t1.json": "f83d9cc32c2bf0023336c0017706cdca93183726a2fa4c3f20ca69d6f99e3529",
+        "newton-batch-newton_cuda-w32-t1.log": "93a4fbdc95601324e05b0c8ec1e2d2d1e854f07a5e453854b43decf66f6118b4",
+        "newton-batch-newton_cuda-w512-t1.config.json": "8c479b07a01cf948db6a92830bacfeb4c8a677a39cacf27beda4111adc346c3f",
+        "newton-batch-newton_cuda-w512-t1.json": "845236203ec1cf7051c9fe68e458cae05beb315e687e3d3e194d19cb88ee0124",
+        "newton-batch-newton_cuda-w512-t1.log": "6ad2afc184a1bc5ace5b111d65e7b1c63989a971efe4668f4e5fe4f080a60083",
+        "newton-batch-newton_cuda-w64-t1.config.json": "3cb1030278283fe166f775a10fbc01d7ef80e2c7d0011bb80af2ef97926cb12f",
+        "newton-batch-newton_cuda-w64-t1.json": "df960ba50f3165b461e3e7bb0efc4e8dcc3b1dc696d582909715df74c3f5c1f8",
+        "newton-batch-newton_cuda-w64-t1.log": "990f41e6561600bff3ac0938869760930fe72bc72490ea9d242f3af146af69eb",
+        "preflight.json": "12d31b943a4c5aee076d3ae356c031548d5204ec05abd1e879dfe1e724afcd6a",
+        "results.json": "cfbc9f9bb91da2fd31d9e20cab938942213ebe2b108b15b780385b3935e5225c",
+        "summary.csv": "f3247ed5b909feb3b0eb9fac12989e1a4b39c3a0c177a2593c177a3ac0ea570c",
+        "summary.md": "3ec962827d526ac49543540aaed333ee25f68f888d4d77a758fb4c07b1ae045e"
+      }
+    },
+    "rebot/results.json.gz": {
+      "sha256": "432cdccac1c68592c0506b042d036f0c57579ed582fb3b4fdb66e7411c6084ce",
+      "uncompressed_sha256": "2617761c062fb842921b2fd6d0f1b36743a966a804b8f5d1af34fd76ecae1486",
+      "bytes": 3387705,
+      "uncompressed_bytes": 200137447,
+      "case_count": 18,
+      "run_status": "incomplete_or_failed",
+      "source_aggregate_sha256": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8"
+    },
+    "rebot/summary.csv": {
+      "sha256": "e3e6595d8804b0c7a0446a9a6c3a81dd1ad242274e4dba8cca4bfd20845b1e58",
+      "source_sha256": "38017731e7822f3f612c392bc244092dfac16f81229a4ee94d1a820bdc39cede",
+      "bytes": 3216
+    },
+    "rebot/summary.md": {
+      "sha256": "0064e225052ff1204e8bac639e70eea267c77e414b8d96880b45e89e1ac35a56",
+      "source_sha256": "0064e225052ff1204e8bac639e70eea267c77e414b8d96880b45e89e1ac35a56",
+      "bytes": 4658
+    },
+    "rebot/raw-run.tar.gz": {
+      "sha256": "c1e1ca4ea9a71215b161acc5b4c4b208c5263c8c8ff9bb886757219f8f82131c",
+      "bytes": 6663153,
+      "member_sha256": {
+        "newton-batch-newton_cpu-w1-t1.config.json": "5492ed18d55453a714b31e91aa70a342f34011437b4f051273197254b77eada3",
+        "newton-batch-newton_cpu-w1-t1.json": "f5e49b092ac9dabfcfd6c2301836a4f56b698aca1d0e90b4037896e8baeb07eb",
+        "newton-batch-newton_cpu-w1-t1.log": "344d5190bc59539001de7c6269c554db86c0033f9ea6692e1888c504518b9d3f",
+        "newton-batch-newton_cpu-w1024-t32.config.json": "91ae284e30b54c75d801c83c6600c99f3b1b27678594eb249b9b0be1f99c77cd",
+        "newton-batch-newton_cpu-w1024-t32.json": "68736ef28b73d1f74aeca646b884ef4d218bbef2c3915d6da7a10db80cae540b",
+        "newton-batch-newton_cpu-w1024-t32.log": "a48e496ecab0d2bcf8355d7d2eb67f5551da33703e54d9ebdb0a5384f55b07d4",
+        "newton-batch-newton_cpu-w128-t32.config.json": "d52c9b2a420a57b7190fb51244a9c2eca824cd11983c568adc9b742e20e94438",
+        "newton-batch-newton_cpu-w128-t32.json": "7fd957006ac582251e34810eeb193010a7930faaa9b0881c46980d38cb4f77ab",
+        "newton-batch-newton_cpu-w128-t32.log": "df6a9319f033a4dd3189056c83c84cfd44f11051e39f48fb1c9a90e1b53eef3f",
+        "newton-batch-newton_cpu-w16-t16.config.json": "acf8cdd68c7178145a8c93cc2f6d75cdba8a9724a7bbf3436bb16d80d88e5125",
+        "newton-batch-newton_cpu-w16-t16.json": "ce8670458ba2a8647efa72c2b2a60e10bff2c717c5d7a552e4fa59681f663dc2",
+        "newton-batch-newton_cpu-w16-t16.log": "d817221725743a37f897b817de9dddbbead74201f3adc105a22d707406b1ccac",
+        "newton-batch-newton_cpu-w2048-t32.config.json": "668ceb7da68d45166b9c37c40f3f4e1bc2260943dae6d98aeb341d7aac99ba83",
+        "newton-batch-newton_cpu-w2048-t32.json": "6acab783f28d54ecb26a78a76118b0b5df5ae42dbee15b3dd59c72203e9cbe76",
+        "newton-batch-newton_cpu-w2048-t32.log": "8e08329225922475145ac07e4ad1317d07bfe4c16c514ae56bc9577319374489",
+        "newton-batch-newton_cpu-w256-t32.config.json": "3ef981caf4faed0af16339f35b06d751eb5719446f49cbbe39e0bc0b192f2616",
+        "newton-batch-newton_cpu-w256-t32.json": "bf163f5c7d69bfccd7dee46a8032336dee0153e2abd7d2cb6f51dae853bfed49",
+        "newton-batch-newton_cpu-w256-t32.log": "4561ff5b5d38508ff00fc4efcb534c70ab70fb3679cd04cfcd6037b7c422732d",
+        "newton-batch-newton_cpu-w32-t32.config.json": "2e25160498e0669ffafdf5277f7c3f362859fd294e696dcf07d840709f1452d5",
+        "newton-batch-newton_cpu-w32-t32.json": "f7e1621112c8340a81f00b66d7f722fef6a59e10042dea146ca88dcaf91d0540",
+        "newton-batch-newton_cpu-w32-t32.log": "f40d3a72ec560d893ca01085ad43c7dfc6759b125aa56b3f2f318ad53263083d",
+        "newton-batch-newton_cpu-w512-t32.config.json": "9d5470e2e1451fe969018dabcbd216210cd1bdaa4485b2086fc1fa8c442bc398",
+        "newton-batch-newton_cpu-w512-t32.json": "3f750fbc3293d4640544853658d43d90ede8ea40476343d9713be083cc04f54a",
+        "newton-batch-newton_cpu-w512-t32.log": "3212a5ad87df5efc320e6257ce9ec72bdab6d895793fad94405ef48c7e29c7be",
+        "newton-batch-newton_cpu-w64-t32.config.json": "a35e882d6186eeefbc384bf305e497db69320f743b3bec711d14b44357472a9d",
+        "newton-batch-newton_cpu-w64-t32.json": "d13ecd5ef746166e12aa445d1bbaa770f2c50d54bb2cf2d355c0ea2d2df0d4ed",
+        "newton-batch-newton_cpu-w64-t32.log": "b65be6ff6a4fb8b04d54539229c3381739f136d5e7ad8924aaf28e4bc3c58505",
+        "newton-batch-newton_cuda-w1-t1.config.json": "903bdcbff5265d9ed3f2e93512a8aa3f8c58a62ffdaa7e24294ba1c84a8b051d",
+        "newton-batch-newton_cuda-w1-t1.json": "ccd83a29674b3d3839fd72c6da71c8cd7f6246a0dbb532fee5966060e6cdb7a2",
+        "newton-batch-newton_cuda-w1-t1.log": "0a57833518deabdb3064694df441cab1abdfdac2210d4766ee0cf74a521459ae",
+        "newton-batch-newton_cuda-w1024-t1.config.json": "378b09be23f4b094b45f9a893fa824e02bfc6f93fe489a00d299964132cde72b",
+        "newton-batch-newton_cuda-w1024-t1.json": "25f4a8869edbe61afe9b37e9ef3e3147b494e9671ffede7fdce0bb9610818979",
+        "newton-batch-newton_cuda-w1024-t1.log": "73d22003546b0545e2871a99f695cc5589f46d664da5a0f150f2868105025918",
+        "newton-batch-newton_cuda-w128-t1.config.json": "dddad08360d660a93460760a649c1f2adeb6f01efd386d2b7e0aa1900cb00354",
+        "newton-batch-newton_cuda-w128-t1.json": "07858935995a6c1d2f88e84b66adb6e0e2357bba9691af3d6620ae7612003894",
+        "newton-batch-newton_cuda-w128-t1.log": "096326b5c83dc63d43ca93f666dc709d1077c36df05a1277c376a0245f7cb98f",
+        "newton-batch-newton_cuda-w16-t1.config.json": "6b25783d5264af11416a9dc658180a646b68360aac24bf3c9b8c1fa1387275f5",
+        "newton-batch-newton_cuda-w16-t1.json": "9fb89cf9213a13257dbcb87e67f48c6d752b18341c9e455e518dcb9a57749140",
+        "newton-batch-newton_cuda-w16-t1.log": "aeebb88dc5f3d4cd598b6e7afc99a3385b3bb5f13b7e2568be368e7b4e1064ef",
+        "newton-batch-newton_cuda-w2048-t1.config.json": "c87620874e0e83bd92d4021fe6e009fe0d25c02ac4ad8e63c8ced247a08a2958",
+        "newton-batch-newton_cuda-w2048-t1.json": "3a169a414bb925dcb97022ea06200ee821f499b6f2085297ba6f549e73dff209",
+        "newton-batch-newton_cuda-w2048-t1.log": "8421e1a3e8a8249b4ace172472a72d777b8d24a67198cc410c00fdfc1a899822",
+        "newton-batch-newton_cuda-w256-t1.config.json": "bd44bdbfd957232b8ab637956fd5d224a57ba9a351ec44cf4b5f0442f2a08d57",
+        "newton-batch-newton_cuda-w256-t1.json": "0a2fce9f2ec50fa673c37428f94b3961f6051cb8f661ed08cda491e3f277acbf",
+        "newton-batch-newton_cuda-w256-t1.log": "9820771f721d8b49b519fda463006d2d427599f4a89e4cad90621fbe4f12bc45",
+        "newton-batch-newton_cuda-w32-t1.config.json": "9e85adbc90c8a138e12154abf8da415d37a612408f6300577d1d8cce2324f826",
+        "newton-batch-newton_cuda-w32-t1.json": "1273db0098855dec97a6b3ab2dd8bf0f0f278232a082c7b270c00aee4d1b9fea",
+        "newton-batch-newton_cuda-w32-t1.log": "cd229802d99ca6ba418ac648f746732f8e787c46f0ceaa8a05df2e7a9ee7e245",
+        "newton-batch-newton_cuda-w512-t1.config.json": "0933530af9429dcaf201c47d4c0986187904dacb65ea7a1dc3321b7edf4f4881",
+        "newton-batch-newton_cuda-w512-t1.json": "8236818593ec7c645ba3ea9142f2e4b54c967ab1f80acc46ac2e07eb74f77cbf",
+        "newton-batch-newton_cuda-w512-t1.log": "117d3278220b5945c1af8495ab4536d38aed0386f1d31cfe789cfe4d127a652c",
+        "newton-batch-newton_cuda-w64-t1.config.json": "1f33c680912312cb876128da7b30dd0c664ee856c2af2cce6d1ed2fbc95893e4",
+        "newton-batch-newton_cuda-w64-t1.json": "da83367026935951072c1fdef31f2efac1ac0f25f6c15c25333e7ed40f445a80",
+        "newton-batch-newton_cuda-w64-t1.log": "b8a23aa63cd80254613d1b3e4ab3c0eb0395114bc4adf9d235c416f9bce9d6d4",
+        "preflight.json": "a8ba69c08af02c3b8db64dfa40a53a6455c191980981d54a0a9984841e040bce",
+        "results.json": "2617761c062fb842921b2fd6d0f1b36743a966a804b8f5d1af34fd76ecae1486",
+        "summary.csv": "38017731e7822f3f612c392bc244092dfac16f81229a4ee94d1a820bdc39cede",
+        "summary.md": "0064e225052ff1204e8bac639e70eea267c77e414b8d96880b45e89e1ac35a56"
+      }
+    },
+    "audit.json": {
+      "sha256": "91cdd0c75648942216ac82bc0ac1675f29559e52e796b2986cda2d0d96daa347",
+      "bytes": 496557
+    },
+    "README.md": {
+      "sha256": "4a4f1604f557d924a884f12d3dac563b9f5b5323ec6e0de846b204728bc97ca8",
+      "bytes": 11316
+    },
+    "figures/fig_box_cpu_gpu_checked_results.caption.txt": {
+      "sha256": "4ac87e21264b98741fe7a48e386c23292f894d4e6544dffcfd69c1736aeb97a6",
+      "bytes": 3350,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.pdf": {
+      "sha256": "a73f36e88be08c968112766ec05c01237e53d5f9ce84ba8ae9a7fba77af6cc6d",
+      "bytes": 32140,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.png": {
+      "sha256": "eef4654c58ec7168bf8b76c2d2ca405aee4349331be18701c75e6017489aec30",
+      "bytes": 392278,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.svg": {
+      "sha256": "f18c0646a4e65491e4b3e625d9efb4464a3bbe35cd7b671247588cba16372293",
+      "bytes": 47962,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.caption.txt": {
+      "sha256": "f2d4a3d2d284d76d37a7fb485905d85cd2fecc2787856ff75c1536222b1ffb5f",
+      "bytes": 3208,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.data.json": {
+      "sha256": "b635ed1ac896c1a1355e6d1d98ca55e7295d7a60c9af955cea02eec0d3cc2b6b",
+      "bytes": 182302,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.pdf": {
+      "sha256": "88eea9137f0a052436ff4c76bc790f30a2c0323359f05161e3c9e8ba90ea9e1f",
+      "bytes": 32299,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.png": {
+      "sha256": "6f0b54015bc9061befdd86829ad6f95846dae0a27932bcb41da0fc64a27ca183",
+      "bytes": 395277,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.svg": {
+      "sha256": "216ca88a3f553862de3328c463f46d73f9b9dffbda1cc8563ff68397e50546a7",
+      "bytes": 47401,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/gen_fig_box_cpu_gpu_scaling.py": {
+      "sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e",
+      "bytes": 54074,
+      "role": "figure_or_reproducibility_asset"
+    }
+  },
+  "source_archive_canonical_paths": {
+    "Article_3/part3/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "Article_3/part3/benchmark_newton_batch.py": "bf2b6b44626f159e8f73d7bd516145ee789e55af64705106a0dc8d208970b095",
+    "Article_3/part3/benchmark_workflows.py": "5a08ae4fb57797ee3f96edcceb3ca929e48b0043a72cd39d6fef6c0b71e2c237",
+    "Article_3/part3/benchmark_workload.py": "977b367c5167270ca1627f07ec84aac53c1a2fb0757e3a4c438c029b2faddd19",
+    "Article_3/part3/box_task.py": "6de52961b97adda41c6514a5b8a3099cceaa97327813d3fe1af81fb27427c911",
+    "Article_3/part3/clean_table_scene.py": "ef2b5197a74e27bdeb192eb4d40f6ac90d404eb74f023df26eb8ba67e937bc38",
+    "Article_3/part3/clean_table_task.py": "3b79e3c671651295a9cda74cd80c0d0a576202723e3783a78dc563be85bf29f1",
+    "Article_3/part3/clean_the_table.py": "e5b71d9c780b0f7800f66e3a764e369f60b6e32befbe7b493c2757bac30367ce",
+    "Article_3/part3/final_check.py": "ccb9ccba207b245869b2cbd9beec2287dfe45da05d62bf72e472d91fa6e13a83",
+    "Article_3/part3/migration_benchmark.py": "6b004f4464afacb9000090cf85a293c14b7d6c5319b50cdbd6243e2bd71bdaec",
+    "Article_3/part3/newton_assets.py": "0e0a76c5467c6acf65517439fe26ba45488a793227b4cb84efcf11ad5a615771",
+    "Article_3/part3/newton_scene.py": "9a95940961d2ceb4c2dac1b0986675d1974324483371fa048cb78b7e8e4a6f7a",
+    "Article_3/part3/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "Article_3/part3/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "Article_3/part3/so101_newton.py": "cb19535d3f0abab05e29160e4e5f3786268a89eefe582fe235412647e6801088",
+    "Article_3/part3/solutions/clean_step_00_add_bin.py": "6597869d0d3b7d0f37bf7a7b6d8f97ee5eabef1609b8e56fed0a80e168743d9c",
+    "Article_3/part3/solutions/clean_step_01_add_garment.py": "feeafa72d67c9acfc298ccb868a9a0ea9411a1115e38b0d6c389c9b69a51e0c4",
+    "Article_3/part3/solutions/clean_step_02_add_cable.py": "a4f5ab00c80a1d8d980742983257a153e545f2e95ce5406663c3ae15ecc913b7",
+    "Article_3/part3/solutions/clean_step_03_build_coupled_solver.py": "32c522d7cfcc98d61a2f99f128a259ab3834d8cb2fa13c6ec9a380f30e31faae",
+    "Article_3/part3/solutions/clean_step_04_simulate.py": "99789fc993bf1029b55dd875a0a173a667b2c948ed9094e4d6eed29e5f758746",
+    "Article_3/part3/solutions/clean_table_scene_solution.py": "0d92bbd829177a2bb416fa4ead036a1f4b48d8953d3f78a78bc7b1070de26f9f",
+    "Article_3/part3/solutions/clean_the_table_solution.py": "ef7f553dcdb3071d4d83fe8d2270b98b35926901235990d29b17f0a533cbcfb6",
+    "Article_3/part3/solutions/newton_scene_solution.py": "3bc5c4bdf52c3eeb3de41d5a84768ee0dd27ab79758f9ed450977c7081ed8c98",
+    "Article_3/part3/solutions/so101_newton_solution.py": "14c820057a0788a78fbd0de6953919b027801eb5b3b3d6767804dbc2ab7d22ca",
+    "Article_3/part3/solutions/step_00_imports.py": "468c80eaf6347f438323b3b422bc81f4ce7d41c0587df8a4c9ca74803c59c523",
+    "Article_3/part3/solutions/step_01_builder.py": "861c0311ad40fc492ca2cd4e7e9645af2dd3e440b2853b3896ad13942f363a56",
+    "Article_3/part3/solutions/step_02_add_mjcf.py": "d7dbbccd853ab98f13c29b2248d3cdf648b816c1ad53ef5fcf322b45d9b1bae7",
+    "Article_3/part3/solutions/step_03_joint_targets.py": "64f04f912cbcae739037843f17a879d49c0743263297ba8a077ccd9e21574b7f",
+    "Article_3/part3/solutions/step_04_props.py": "7b41badfe66adb84ab6a852a3d81b565aca8e17f34cd0552754836ca3c989f60",
+    "Article_3/part3/solutions/step_05_finalize.py": "b58740abf8ae637628a5480cb80e2e0ab777392cd2c3cd92fd2f4bf8b1ecdb79",
+    "Article_3/part3/solutions/step_06_state.py": "bf5fb1f84df8b9e9c4c71a3209a1da056e989a7fc56d599e6f4a0c76b5a82260",
+    "Article_3/part3/solutions/step_07_solver.py": "75c61b101503748a2e51b83a3232b78c46257fd67e93683cefb77dcf815a4de7",
+    "Article_3/part3/solutions/step_08_substep_loop.py": "9e302f81f96607a2bf8aebd8f699bda8ea8c63e1e407419db727a32a4dacc224",
+    "Article_3/part3/solutions/step_09_cuda_graph.py": "f3865c67814b6cf220ceaeb8c862c9109f06001a970ce6bb4854117f5d04fb44",
+    "Article_3/part3/utils.py": "f4ef21e7b73fb39e8ba66e47eaf9be79402ed1f396960d49ff688170c7de97fc",
+    "Article_3/requirements.lock.txt": "607ad988df1e15a18ed3d0f9eac0a305cba3ab419b3838a9732330c617831a98",
+    "Article_3/requirements.txt": "7455cb591974aa3f943c138348f87af75701fc5e68a47dafe5b2b5401a4bfbac"
+  },
+  "preflight_context": {
+    "kind": "frozen_preflight_context",
+    "bundle": "preflight-v3-evidence.tar.gz",
+    "bundle_sha256": "065e94185683ae1da92d9ea0b268b91bf072f5a746e75d1939b8a32aed539f1a",
+    "reports": 8,
+    "cases": 16,
+    "passed_cases": 15,
+    "excluded_cases": 1,
+    "cases_by_article": {
+      "2": {
+        "passed": 8,
+        "excluded": 0
+      },
+      "3": {
+        "passed": 7,
+        "excluded": 1
+      }
+    },
+    "world_episodes_audited": 2064,
+    "included_in_full_sweep_statistics": false,
+    "publication_eligible": false,
+    "source_archives": {
+      "2": "393cee3b35522b30a0f0a669d02c61ff06c24e2d84f36f591a9910ae07150c3d",
+      "3": "85c3d28a1237263415683c920a3bc984eb33fe6f234aa77766c8a2b339b4c9b5"
+    },
+    "source_aggregates": {
+      "2": "8d39e63de5e991f6bb83e10050783bbdd4658786a3899e1633ca8413bbcf807e",
+      "3": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8"
+    },
+    "original_failure_report_sha256": "7d181ded75ee8f4982c9f193f9d96e74d3397764dd18529092f52b4a58018994",
+    "failure_reason": {
+      "object": "blue_cube",
+      "terminal_settled_frames": 27,
+      "required_terminal_settled_frames": 50
+    },
+    "preservation_rule": "All eight preflights remain immutable; later independent outcomes never replace this failure or enter these counts.",
+    "full_sweep_source_matches_preflight": true
+  },
+  "figures": {
+    "statistics": "median and observed min/max of five accepted repetitions; not confidence intervals",
+    "metrics": [
+      "simulation",
+      "checked"
+    ],
+    "accepted_points": 26,
+    "excluded_points": 10,
+    "renderer": {
+      "matplotlib": "3.10.7",
+      "png_dpi": 300,
+      "figure_inches": [
+        12.8,
+        7.2
+      ],
+      "x_scale": "log2",
+      "y_scale": "log10",
+      "colors": {
+        "cpu": "#0072B2",
+        "gpu": "#D55E00"
+      },
+      "script_sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e"
+    },
+    "data": "figures/fig_box_cpu_gpu_scaling.data.json"
+  }
+}

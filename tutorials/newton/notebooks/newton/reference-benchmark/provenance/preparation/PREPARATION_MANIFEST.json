@@ -1,0 +1,77 @@
+{
+  "files": [
+    {
+      "path": "ASSET_ORIGINS.md",
+      "bytes": 2428,
+      "sha256": "4bf686c4310b256290ba88332c9fb14ba4dc9c5881db0412e5e24512370759a1"
+    },
+    {
+      "path": "PREPARATION_CHECKS.json",
+      "bytes": 1335,
+      "sha256": "386b8b7be5ba8be40dac9578c2e9a9b3d14befc4834fe18677a2eef75051a858"
+    },
+    {
+      "path": "PROVENANCE.json",
+      "bytes": 1001,
+      "sha256": "99d309cebda1a23743f595f8886868c9e2f169d698cd048705f27340f9b8bd08"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5561,
+      "sha256": "624f998342cb508ad8d67aacb27194e31f90cbc97cfa24290b8c592ff3c3d1ce"
+    },
+    {
+      "path": "assets-manifest.json",
+      "bytes": 54288,
+      "sha256": "87790d12695c9639d09f74a4562e2fa66271abb522e2bdbd48acc1cc52759831"
+    },
+    {
+      "path": "collect_reference_sweep.py",
+      "bytes": 15800,
+      "sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381"
+    },
+    {
+      "path": "fetch_reference_assets.py",
+      "bytes": 3389,
+      "sha256": "d3166430ab691a409cd095a8ed7596978b02d0ea8ca1e0e1409115107f9eefe9"
+    },
+    {
+      "path": "make_figures.py",
+      "bytes": 4821,
+      "sha256": "d3c7153c48a567700b959a29b8f1cb5676ed1b0be0b5ff252f0156426311e4f8"
+    },
+    {
+      "path": "reference_replay_probe.py",
+      "bytes": 26585,
+      "sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0"
+    },
+    {
+      "path": "requirements-blog2.txt",
+      "bytes": 53,
+      "sha256": "c2eacbd5bccab428b2b577294730e047787c0687e2da592f268f455790796f6f"
+    },
+    {
+      "path": "requirements-blog3.txt",
+      "bytes": 67,
+      "sha256": "7972d7d098837379ef34c4847d26ab1cb5c6e0556853d00f56c9216e1ad32267"
+    },
+    {
+      "path": "requirements-figures.txt",
+      "bytes": 19,
+      "sha256": "be923c642695914a2c78b1fe8cd465496994e45d41c89ae86b5962883f01eb27"
+    },
+    {
+      "path": "resource-config.json",
+      "bytes": 462,
+      "sha256": "9814b52bc18f79572352b78bf9436fa9c5c5afcc34c90cdac90c040484859d29"
+    },
+    {
+      "path": "run_reference.py",
+      "bytes": 6482,
+      "sha256": "88a8dea5182428035401ff2a97f91230302e28a2eee9d73aa6cc532578c37657"
+    }
+  ],
+  "source_files": 14,
+  "bytes": 122291,
+  "status": "Prepared for review; no repository publication, remote transfer or job launch"
+}

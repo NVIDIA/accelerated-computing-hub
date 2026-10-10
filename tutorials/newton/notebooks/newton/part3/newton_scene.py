@@ -1,3 +1,4 @@
+# Optional earlier stacking exercise. The primary box exercise is box_newton_exercise.py.
 # SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
 # SPDX-License-Identifier: MIT
 #

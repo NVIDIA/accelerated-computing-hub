@@ -188,20 +188,6 @@ spec = get_robot({robot!r})
         """)
 
     def test_newton_contact_peak_rejects_both_truncation_boundaries(self):
-        import json
-        import re
-
-        notebook_path = PART3 / '02__mujoco_to_newton.ipynb'
-        notebook = json.loads(notebook_path.read_text())
-        step_eight, = (
-            ''.join(cell['source']) for cell in notebook['cells']
-            if cell['cell_type'] == 'markdown'
-            and ''.join(cell['source']).startswith('### Step 8.')
-        )
-        notebook_loop, = (
-            code for code in re.findall(r'```python\n(.*?)```', step_eight, re.S)
-            if code.startswith('for _ in range(self.sim_substeps):')
-        )
         self.run_probe('so101', f"""
             from pathlib import Path
             import so101_newton as exercise
@@ -217,14 +203,15 @@ spec = get_robot({robot!r})
             model = builder.finalize()
             snippet = Path({str(PART3 / 'solutions' / 'step_08_substep_loop.py')!r})
             snippet_code = compile(snippet.read_text(), str(snippet), 'exec')
-            notebook_code = compile({notebook_loop!r}, {str(notebook_path)!r} + ':Step8', 'exec')
             # Real contacts overflow either Newton's own allocation or the
             # smaller Newton-to-MJWarp transfer buffer. The latter clips before
             # filtering contacts and does not set MJWarp's overflow flags.
-            # Execute the literal teaching loop at both boundaries as well.
+            # Notebook 02 now teaches the box task. Its optional stack exercise
+            # retains this external solution loop; check both real implementations
+            # at both truncation boundaries, independently of Markdown headings.
             for loop_source, pipeline_capacity, transfer_capacity in (
-                ('reference', 16, 1), ('solution_snippet', 1, 16),
-                ('notebook', 16, 1), ('notebook', 1, 16),
+                ('reference', 16, 1), ('reference', 1, 16),
+                ('solution_snippet', 16, 1), ('solution_snippet', 1, 16),
             ):
                 example = Example.__new__(Example)
                 example.model = model
@@ -239,14 +226,13 @@ spec = get_robot({robot!r})
                     njmax=32, nconmax=transfer_capacity, integrator='implicitfast',
                 )
                 newton.eval_fk(model, model.joint_q, model.joint_qd, example.state_0)
-                # Markdown teaching code must preserve the real contact peak,
-                # just like the full reference and the external step solution.
+                # The complete reference and external step solution must both
+                # preserve the peak after the current contact count falls to zero.
                 def advance():
                     if loop_source == 'reference':
                         example.simulate()
                     else:
-                        code = snippet_code if loop_source == 'solution_snippet' else notebook_code
-                        exec(code, dict(self=example, wp=wp,
+                        exec(snippet_code, dict(self=example, wp=wp,
                                         _record_contact_peak=exercise._record_contact_peak))
                 advance()
                 assert int(example.contact_peak.numpy()[0]) == 2, (loop_source, pipeline_capacity, transfer_capacity)
