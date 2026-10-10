@@ -1,0 +1,39 @@
+Warp 1.15.0 initialized:
+   CUDA Toolkit 12.9, Driver 13.4
+   Devices:
+     "cpu"      : "CPU"
+     "cuda:0"   : "NVIDIA RTX PRO 6000 Blackwell Workstation Edition" (95 GiB, sm_120, mempool enabled)
+     "cuda:1"   : "NVIDIA RTX PRO 6000 Blackwell Workstation Edition" (95 GiB, sm_120, mempool enabled)
+   CUDA peer access:
+     Supported fully (all-directional)
+   Kernel cache:
+     /home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache/1.15.0
+Warp device: cuda:1
+Module mujoco_warp._src.smooth 075317a load on device 'cuda:1' took 2.84 ms  (cached)
+Module mujoco_warp._src.collision_driver adba295 load on device 'cuda:1' took 0.30 ms  (cached)
+Module _nxn_broadphase__locals__kernel_70bd807f 70bd807 load on device 'cuda:1' took 0.28 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_abd9ded1 abd9ded load on device 'cuda:1' took 0.58 ms  (cached)
+Module ccd_kernel_builder__locals__ccd_kernel_264a25cb 264a25c load on device 'cuda:1' took 0.84 ms  (cached)
+Module _primitive_narrowphase__locals__primitive_narrowphase_c0418744 c041874 load on device 'cuda:1' took 0.61 ms  (cached)
+Module mujoco_warp._src.constraint 74774a2 load on device 'cuda:1' took 0.81 ms  (cached)
+Module _efc_contact_init__locals__kernel_ee7db883 ee7db88 load on device 'cuda:1' took 0.28 ms  (cached)
+Module _efc_contact_jac_dense__locals__kernel_ae632932 a5933cd load on device 'cuda:1' took 0.32 ms  (cached)
+Module _efc_contact_update__locals__kernel_e54acee6 e54acee load on device 'cuda:1' took 0.28 ms  (cached)
+Module mujoco_warp._src.forward 38725d0 load on device 'cuda:1' took 0.56 ms  (cached)
+Module mujoco_warp._src.passive 0eb070f load on device 'cuda:1' took 0.42 ms  (cached)
+Module mujoco_warp._src.forward ce7cd41 load on device 'cuda:1' took 0.65 ms  (cached)
+Module mujoco_warp._src.support ca784c5 load on device 'cuda:1' took 0.25 ms  (cached)
+Module _tile_cholesky_factorize_solve__locals__cholesky_factorize_solve_c89a0284 a4f3633 load on device 'cuda:1' took 56.99 ms  (cached)
+Module mujoco_warp._src.solver 59308bb load on device 'cuda:1' took 0.63 ms  (cached)
+Module solve_init_jaref__locals__kernel_d53218df d53218d load on device 'cuda:1' took 0.29 ms  (cached)
+Module mul_m_dense__locals___mul_m_dense_24c2414a 24c2414 load on device 'cuda:1' took 0.30 ms  (cached)
+Module update_constraint_efc__locals__kernel_841b0e9f 841b0e9 load on device 'cuda:1' took 0.27 ms  (cached)
+Module update_constraint_gauss_cost__locals__kernel_f2d7d7af f2d7d7a load on device 'cuda:1' took 0.26 ms  (cached)
+Module update_gradient_JTDAJ_dense_tiled__locals__kernel_2500dabf b797276 load on device 'cuda:1' took 0.51 ms  (cached)
+Module update_gradient_cholesky__locals__kernel_27b5703c 74269aa load on device 'cuda:1' took 57.74 ms  (cached)
+Module linesearch_iterative__locals__kernel_35c103d5 303a195 load on device 'cuda:1' took 778.95 ms  (compiled)
+Module mujoco_warp._src.sensor 73a7567 load on device 'cuda:1' took 0.84 ms  (cached)
+Loaded: /home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2/.generated/robotstudio_so101/scene_pick_place_box.xml
+Part 2 — MJWarp | SO-101 | nworld=1 | IK on CPU, mjw.step on GPU | dt=0.00100s
+Module mujoco_warp._src.derivative 04e1bfa load on device 'cuda:1' took 0.48 ms  (cached)
+box check: PASS — both cubes grasped, lifted, carried, released and settled; 40.00 simulated seconds

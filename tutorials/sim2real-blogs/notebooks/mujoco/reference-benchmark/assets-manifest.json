@@ -1,0 +1,1261 @@
+{
+  "schema": 1,
+  "description": "Pinned minimal ALOHA pot replay files, downloaded from upstream; licenses and asset provenance remain distinct. PartNet-derived pot/lid mesh terms are not independently verified.",
+  "commits": {
+    "mujoco_warp": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+    "mujoco_menagerie": "affef0836947b64cc06c4ab1cbf0152835693374"
+  },
+  "files": [
+    {
+      "path": "assets/angled_extrusion.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/angled_extrusion.stl",
+      "bytes": 448184,
+      "sha256": "10e6e10a1a5c1efcf743884f7f0dad14c6cc3e15790695bfe5b7038c43f8a4c4",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/corner_bracket.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/corner_bracket.stl",
+      "bytes": 234284,
+      "sha256": "75e40b0b807f51d238638cd44e787413d8590c1fcd28dff7beaa549c126f1fd0",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/d405_solid.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/d405_solid.stl",
+      "bytes": 1242284,
+      "sha256": "8a9a84dd9c9a67687e5ad0b37a7ed334dbfea6b0f995fef28524cc8da5f21ed2",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_1000.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_1000.stl",
+      "bytes": 40084,
+      "sha256": "7a8b99ef84ffd7e91382af9aa733f815a7747c207f64e0499c5889a58d58c8de",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_1220.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_1220.stl",
+      "bytes": 40084,
+      "sha256": "5b5203c92dfe03b94ed5a679c6cec1f61e48d6d202b5fa03abb032d63313676e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_150.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_150.stl",
+      "bytes": 40084,
+      "sha256": "39029c2f95faef3dab1340e4beec221d6866e694e4df0b22795eed6f00b5f893",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_2040_1000.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_2040_1000.stl",
+      "bytes": 84084,
+      "sha256": "acaff3be15f686064b6ec8b985758866b2bf51aed0a9b793d8c8242dde43ee0a",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_2040_880.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_2040_880.stl",
+      "bytes": 84084,
+      "sha256": "3bb04a77ca20a14178aa59f8ef1ef50d26695e748639677b24f0be11efc016d8",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/extrusion_600.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/extrusion_600.stl",
+      "bytes": 40084,
+      "sha256": "25c87bd6a975f1a561e547e8c490ffe4b59d8a962634548242b1f4a5c6607268",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-10_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-10_col_collision_0.obj",
+      "bytes": 27520,
+      "sha256": "a735ac7d4b7ac00a6699adb51a3a512467daf3976a184212b10700d3f2a7fed4",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-10_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-10_col_collision_1.obj",
+      "bytes": 11573,
+      "sha256": "f8749ba44ad3f76b27a664eb72b6a0fca48bdbedceeac67be814f95bfacc71e1",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-10_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-10_col_collision_2.obj",
+      "bytes": 23527,
+      "sha256": "cf468b49610f705e69cd5a541db53e42bb281d9fc0b0278576e477f8491251d6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-11_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-11_col_collision_0.obj",
+      "bytes": 2704,
+      "sha256": "0e57aa4a4277f6dfcc98c79ec074fd9e7b8a4b8ecc86c3c2b63d1dc7e12a16a6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_0.obj",
+      "bytes": 8308,
+      "sha256": "3b2fed9780cc26aa96b144385b7df8711994f7de44c4385f66865b1629f496be",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_1.obj",
+      "bytes": 7542,
+      "sha256": "459b849e35b0ae444d18886165f202a081d0785622216d95132bc44d11e4979a",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_2.obj",
+      "bytes": 6872,
+      "sha256": "39e936d5262f477955fd14f5e469c347c70de76e879b1c717307b569e9e08b2f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_3.obj",
+      "bytes": 8168,
+      "sha256": "f74c5026c4ec7dd11fc7c5db5f3fc876e6233b71e9ea1a85a55e11816528f406",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_4.obj",
+      "bytes": 8511,
+      "sha256": "a4186b87c8b5ba5106d96491eee006a0bdc2b863aac1075457755f9a25d71ccd",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_5.obj",
+      "bytes": 8146,
+      "sha256": "2248d6af33c61c75c103061cf24a435741b43040b415a1e3e37895a238129c09",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_6.obj",
+      "bytes": 6487,
+      "sha256": "9d806896fb27b1033aa2a13c9258614b87ad8ae1684ac447757d205f93c1022e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-13_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-13_col_collision_7.obj",
+      "bytes": 8835,
+      "sha256": "9c66f2255df3ab0763a97162981393c46a3591e46d635978cacd603a905be73e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_0.obj",
+      "bytes": 18485,
+      "sha256": "f84f5d15035f028fec621b51fbf82ec0ca56d67569e04a9805004de6841aba69",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_1.obj",
+      "bytes": 11871,
+      "sha256": "4a7395aa1663ba4bc8960f87c9458752b7fe74e9389cb30a4faf022dec8dff5b",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_2.obj",
+      "bytes": 12481,
+      "sha256": "af1c92e064c303f1d28804333863d4d66707278279c24fe410f5391ae585e788",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_3.obj",
+      "bytes": 20493,
+      "sha256": "b78c42f60374ffccdfa60835db7e1ed14af3a2bd499493da6faf947dc81d7338",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_4.obj",
+      "bytes": 10001,
+      "sha256": "a7ba0fa9f1a1c7808e07ea1cbc46a3640c459912d5cdf34db76a9af6fb25b292",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_5.obj",
+      "bytes": 11679,
+      "sha256": "009d1bc2ec1efca20dbbbfd477b5ac0b23cba2540b52867c391c107dba82f931",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_6.obj",
+      "bytes": 18913,
+      "sha256": "b84beb1ceab5088c702d0bc8ccd531b6cbb58f8dadc28714f3df44bf3daba0e4",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_7.obj",
+      "bytes": 11035,
+      "sha256": "c11e3f867cfd4b962fcc3759e9e7a3a735a3103d89ffd65f52ae9b2b30861659",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-14_col_collision_8.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-14_col_collision_8.obj",
+      "bytes": 14658,
+      "sha256": "8a4cada130c3eaf7170457a9584cab89d339d5d407ac7e821c681c70666b3830",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-17_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-17_col_collision_0.obj",
+      "bytes": 56405,
+      "sha256": "37bf90fe306a1b038896d1f9912d0ea9b483732d7ba79f903b160452ab4125c1",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-17_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-17_col_collision_1.obj",
+      "bytes": 64277,
+      "sha256": "be06c950b200a941567e935e8c1507845c680bba0fd0070d35b897555d08e7d4",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-17_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-17_col_collision_2.obj",
+      "bytes": 57758,
+      "sha256": "09ec99dce78894a05789136661c2c2d72181d80ab6e7e7ff580dd38bb4521f70",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-17_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-17_col_collision_3.obj",
+      "bytes": 64560,
+      "sha256": "6e931912333adf68b0924fcc40820924f42b28036a8dbb973de11aa5cba90321",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-19_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-19_col_collision_0.obj",
+      "bytes": 2775,
+      "sha256": "372203da4e85d741dcb1cd079b0cc37a64c80379f0478421bafb342dc2c96515",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_0.obj",
+      "bytes": 11913,
+      "sha256": "35303b47ee94675b6e3e7c8c5d062857256020b8746895179044bf62ef62016c",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_1.obj",
+      "bytes": 12772,
+      "sha256": "8613175ed49a787846880a73032ad531a7b01a320c82cd48f5102e27ea552eab",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_10.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_10.obj",
+      "bytes": 4373,
+      "sha256": "3d1e15c896d72b0d4f6525ef871d6d66ef70af4c7c225159542e665d3226717e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_11.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_11.obj",
+      "bytes": 5543,
+      "sha256": "70e308e2da79c878b4fc240eeff3ba9efb2a46c3a0287c1afdb980d847410c97",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_12.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_12.obj",
+      "bytes": 5435,
+      "sha256": "9cfe32093de2442e707b8e6a90cc0dc2bce63fd0abc37936a7d86d3745c8f84f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_13.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_13.obj",
+      "bytes": 5013,
+      "sha256": "0a2c257bb518dba9982b59fb0013841758ed686dfc3d367569d2e3fb9dd57dd9",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_14.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_14.obj",
+      "bytes": 5137,
+      "sha256": "8d4cf5414a0c4d34b361686599117e1d90d83773c4d5d6698fcc7ecfc62ee664",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_15.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_15.obj",
+      "bytes": 5974,
+      "sha256": "3a6466c0ec60f36ef838468107e272dc5856b29b918cd7db2bd4c5d7479909ee",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_16.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_16.obj",
+      "bytes": 4489,
+      "sha256": "a6579ae83dc99b9791d8374513f77aeae191644853dc568f2fbc9b7c6d90d287",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_17.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_17.obj",
+      "bytes": 5264,
+      "sha256": "c94d1071bdd4a5db5012a4a197a0c72645a4c964d11c836324d1e26375e1d576",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_18.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_18.obj",
+      "bytes": 5100,
+      "sha256": "1160a0a668f9b87f571eacd1f5303266edd6e054b1c35318c5823f8abca16f15",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_2.obj",
+      "bytes": 12319,
+      "sha256": "1dda4c2cef73a1ff983140ed6968b8668f48063d77a4313b8a8c467ad202b496",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_3.obj",
+      "bytes": 12913,
+      "sha256": "43f8371c0251ca5eacaeb0e4b8d7944d50a7d164a312e4c0d6ed15d472afdad7",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_4.obj",
+      "bytes": 8120,
+      "sha256": "ffa40225e200a73576b014910c23a4482b870b1e692224d65329ab9d74ac921f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_5.obj",
+      "bytes": 5396,
+      "sha256": "7824b5df4326880356233da2f191a14e89eb4ed8e34f1073e6428d815f8b3907",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_6.obj",
+      "bytes": 4314,
+      "sha256": "8f7200c258e6ba9198c6a56e24cf8da53b62ba0cbbe87a64922f96eaed59a67b",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_7.obj",
+      "bytes": 5752,
+      "sha256": "2bea0b9733be60c0eb29dbd363db13983363dee382bc35479f70438bfe7611c1",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_8.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_8.obj",
+      "bytes": 5106,
+      "sha256": "6e6895cbac76ef9e1c8ebaa48bc6844d28e4c14ef97542d20e3679bbbd6f0dec",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-21_col_collision_9.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-21_col_collision_9.obj",
+      "bytes": 4247,
+      "sha256": "d89995a1b11cef7bf04d7f5c635b22492f5a8f78895f49d13086382b4ec133ea",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_0.obj",
+      "bytes": 10360,
+      "sha256": "5e47d1fce3233db1fdb6a9d1db948d3d7c8705cccec7d0a80f38b5b7fb56be56",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_1.obj",
+      "bytes": 10680,
+      "sha256": "5d95219f6278c736d9fea3aac02a51cf6cd7b5145b17e8e22ad0a5aaa250141f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_2.obj",
+      "bytes": 10988,
+      "sha256": "23bec25b79f1295e5a198137efab92bb16f29d18451ed9e6b4a889aa3e4188aa",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_3.obj",
+      "bytes": 10401,
+      "sha256": "03d3879b586ea691aea522ad6c3cc462ed3446ea673cb7399f584c79f57062b6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_4.obj",
+      "bytes": 7664,
+      "sha256": "bd22e306ae1acd415994ef4768f1f333453cb6a55adbb1cd44e0bec73939a6d8",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_5.obj",
+      "bytes": 10556,
+      "sha256": "de2658d6b3570e4e723c09c7e93fd42f25307d89502f6211197788b146e30638",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_6.obj",
+      "bytes": 11674,
+      "sha256": "54dd8602fa59d71c65b1ac148eb9b70d35fbec31f8c7daf293942639e03179b3",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-22_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-22_col_collision_7.obj",
+      "bytes": 10148,
+      "sha256": "a6b437696966e716f3dd370cd13d319bb55b91ac2f52ba738d02941547bbfe6c",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_0.obj",
+      "bytes": 9253,
+      "sha256": "7186e0b82f2c216c7c5729a109f9d943790611c2bef5a375174f46d4aad78e35",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_1.obj",
+      "bytes": 9368,
+      "sha256": "c570039330d0b91cf71453eae7c9a60794d83efdcf56203600a54de3d44a5a32",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_10.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_10.obj",
+      "bytes": 4843,
+      "sha256": "f7f97d359cf9ad9d21f2a553e6c2bd8d99288a953fad0f24b963422276add00f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_11.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_11.obj",
+      "bytes": 4494,
+      "sha256": "63fd9283c2af795c50b2c5d392d41c0092d98752fe08bb8a1832fd66154337d9",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_12.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_12.obj",
+      "bytes": 3196,
+      "sha256": "35a00a4f9aa4e7c1cc19f49581e6977837868331d158526cb61c56b529b9e369",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_13.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_13.obj",
+      "bytes": 4022,
+      "sha256": "0f8be13116b9281def9d0a7536e6ebd7825e8a4f7c49595759b5371e9fcd2b8b",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_14.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_14.obj",
+      "bytes": 4558,
+      "sha256": "0844b7935ab53faad5def24f38b55aa1138ed3680b0672395f8eb7736517625b",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_15.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_15.obj",
+      "bytes": 3854,
+      "sha256": "85cf0d0ac6f7b470ace19cae40cf13636276984847a2db8b9abb72d43ec5282e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_16.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_16.obj",
+      "bytes": 3809,
+      "sha256": "0c2595d1d31204d89e0ffdd652b6729d4e9c013be4a09b9be54f5a7985326192",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_17.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_17.obj",
+      "bytes": 3944,
+      "sha256": "e1ed822a1c9edc199600b737e8a91f045d46b7e7fb17ae63c54c46db2eb74dc6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_18.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_18.obj",
+      "bytes": 5265,
+      "sha256": "7351b7c07b38b250ef38ea9f0e5b3bf804e6bc1204b7f66500920479394299dc",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_2.obj",
+      "bytes": 9400,
+      "sha256": "660768d0286991cca27ca61868bcf6036f04b99c5e02b92b5f07068da58392ed",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_3.obj",
+      "bytes": 9494,
+      "sha256": "6aa516828e58e00734f1ed2b44fe0193e13719f2f554b66fb92ee5ff82195875",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_4.obj",
+      "bytes": 5841,
+      "sha256": "f23db7ed6df4d09abc32a53e8bdd08c7061b8ca5614b913274f8bea935cffdf3",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_5.obj",
+      "bytes": 4475,
+      "sha256": "1432c63a948d35eadf66b6764108c020095a2d7b4d64685b8c5b18f77f70d647",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_6.obj",
+      "bytes": 3729,
+      "sha256": "bce42ff0450535f267a19227933b0840a46d6c688b72ba0da65bfbf147fa57c5",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_7.obj",
+      "bytes": 3604,
+      "sha256": "8b1d3951ef7adaa4fb3abc52de77b8012d9eacddf62413445dc769ebd3917653",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_8.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_8.obj",
+      "bytes": 3333,
+      "sha256": "0530f04244979786e1dd6266c039b52b9f2dccfe003e0346ca8e50d7c1dd60a3",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-23_col_collision_9.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-23_col_collision_9.obj",
+      "bytes": 3739,
+      "sha256": "259dd3f818b3d2d916e1c8d2011e3caff52099ec660c866e850ecb88788a7f00",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-25_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-25_col_collision_0.obj",
+      "bytes": 72952,
+      "sha256": "64af08a12ba8847673a48bb0483db4317c5f32447ab24e1e12688ef3b527efe2",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-25_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-25_col_collision_1.obj",
+      "bytes": 18316,
+      "sha256": "ac2f45ee367c67230895f7f16cb81409b8fead71f7a3032f23a638a845f7f2ef",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-26_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-26_col_collision_0.obj",
+      "bytes": 74310,
+      "sha256": "de0551bf147fa400248dfef77eafea2ec9b05081fa7bdbb865d9c07f3154cd37",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-26_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-26_col_collision_1.obj",
+      "bytes": 18555,
+      "sha256": "8c6c6e362151ef7bef685de4ab897739fa57854e63aab5355bff023f552f53da",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-27_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-27_col_collision_0.obj",
+      "bytes": 2700,
+      "sha256": "4fd690cc98aeddd939f2d37d0cf577009298414b35cc599441958d4980853ce8",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-29_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-29_col_collision_0.obj",
+      "bytes": 71632,
+      "sha256": "ac0347c48688a1b90c8444a024d6b0fad1b25ea0269d6eb2cc9dc56dfaa533d5",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-29_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-29_col_collision_1.obj",
+      "bytes": 17023,
+      "sha256": "21caeb72c17e978ee3d1b31939e46f96caff16c6b5ad4bf34fe2ecc95db0e1c8",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-30_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-30_col_collision_0.obj",
+      "bytes": 74412,
+      "sha256": "cb99d5f6ca4c29b5e8d63cadf016f91e285cc9ee319666c87e7f86e448b242fe",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-30_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-30_col_collision_1.obj",
+      "bytes": 18430,
+      "sha256": "618fad38cd5e2c984b7e5114c3ba9fed70420f0f19ed869debc59a043916f97e",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-31_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-31_col_collision_0.obj",
+      "bytes": 2747,
+      "sha256": "92d672ffff6ceafd79161778850f01b98876a56d7ca052f33245b02a581388d6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_0.obj",
+      "bytes": 8050,
+      "sha256": "e614aeb9e5ece9341e6cd2c2d4bd1ec9241a7b8049e9d9bd784fa3aed93a64e6",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_1.obj",
+      "bytes": 6827,
+      "sha256": "35731fa8ea89a89b7fc4a833b137c4e953473a1eebc3641b708457af645db9dc",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_2.obj",
+      "bytes": 8904,
+      "sha256": "c6dfc6ae8073a7521c5aa85ce61acc0b21ddc827167209258b45ca6b124366a9",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_3.obj",
+      "bytes": 8713,
+      "sha256": "0b80c864fed995effdf285058e062c884f1972de5c7cfcf7f50f89a5114fbf54",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_4.obj",
+      "bytes": 7772,
+      "sha256": "9a45d29b898eb346b95b09058bb76a36b19ef1b37f85f28ea2ff0612f5d97d3a",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_5.obj",
+      "bytes": 7899,
+      "sha256": "e35ccc1655a2689a8041c4716457f63dec0a06adc18b4fa6306c438c1fc9a845",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_6.obj",
+      "bytes": 7729,
+      "sha256": "cf9b9bfd4254147890b169cb6be8a5d4ae031e997d3e4e4ea67738904bf27a2f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_7.obj",
+      "bytes": 5379,
+      "sha256": "acb26360184d5256ddaf92d1d746423ebe837cc623ecb47fdd26fe1f6c7573c0",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-5_col_collision_8.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-5_col_collision_8.obj",
+      "bytes": 6496,
+      "sha256": "b077bb1319cf981fee1877a3b9f9c1d913b09ad597af032376c43894ff229c13",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_0.obj",
+      "bytes": 15217,
+      "sha256": "29f2d9061a883b4f86e50ce5590bb5736ca1075d85bfdd8796d56c0d2fb99b27",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_1.obj",
+      "bytes": 12601,
+      "sha256": "de6ae8bcd35ed49c84bfa1b88632da2781349f1ee0056a2bb8cd9c32e394e8ee",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_2.obj",
+      "bytes": 12420,
+      "sha256": "f16b7c0e80797d28de7bdd64bf022cbd5c40deea3430f01fa7c84fed006ddddb",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_3.obj",
+      "bytes": 16321,
+      "sha256": "96a332bea6db01e064231a014c9b2fcb5076f621e68710f56cefa908388f86ee",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_4.obj",
+      "bytes": 15496,
+      "sha256": "2a6b37e1538d5c0fb5d595bc3a62a93d2af4a92c73aa12b4d6d8bbff58c04669",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_5.obj",
+      "bytes": 13697,
+      "sha256": "a881f2b032d5421a17e1c411223a669dc2c959f06adb64aa9e490f66a4a61e97",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_6.obj",
+      "bytes": 13572,
+      "sha256": "d1ab4f4138eb0f1c113563459a9890b3839e150ecf0222c68e6fa56b63ba4f9f",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-6_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-6_col_collision_7.obj",
+      "bytes": 14985,
+      "sha256": "57cb043671e1f4af770be79090a52f4236bc544bd2288745ffd0071357776a2a",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_0.obj",
+      "bytes": 8166,
+      "sha256": "52e471889e7a9fa8cb4e107309961d47df20f6adf67d0d1246bae034212eec79",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_1.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_1.obj",
+      "bytes": 7180,
+      "sha256": "7e5d7503be53c8a0bc690d23e93607558db481eed57d026cea69fe0e7ced3851",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_2.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_2.obj",
+      "bytes": 7456,
+      "sha256": "cd44a0cad7f174bfafe42e2575a301c77321d85d714fa9b484096bde79a6e866",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_3.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_3.obj",
+      "bytes": 8035,
+      "sha256": "9d4714feb720e14e235cc9bc22819c7e913572003bc319867478677c92c495ff",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_4.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_4.obj",
+      "bytes": 7597,
+      "sha256": "e03424ef7308beb49e4dd2071adce96594f15bc6c383a20ac084c6ed502773fd",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_5.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_5.obj",
+      "bytes": 6363,
+      "sha256": "6aeafe560a7623944367b230cee4992c130c6ec5efa69d82aa3941e207736345",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_6.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_6.obj",
+      "bytes": 8525,
+      "sha256": "41a790e9db2a477bb3723d85970320ac0bfc905c2ddd82628c6f60ba68c94075",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_7.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_7.obj",
+      "bytes": 4311,
+      "sha256": "95b38610062ab79b35a1132599736a68b6b7aa4cd9865f7b5522df35472f5203",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-7_col_collision_8.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-7_col_collision_8.obj",
+      "bytes": 5903,
+      "sha256": "bccbbe48ea52e941f82200a6e115322f673889bd7a440b6d9fecc00790c5853a",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/original-8_col_collision_0.obj",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/assets/original-8_col_collision_0.obj",
+      "bytes": 2723,
+      "sha256": "d453406068077733aba99ebc39555d72c404387d302fd3c185939cc8eeb696ed",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/overhead_mount.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/overhead_mount.stl",
+      "bytes": 1899284,
+      "sha256": "54d031aae8599f7ae69adaa834bd5435928484e5815ce4acce964522a115c2db",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/tablelegs.obj",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/tablelegs.obj",
+      "bytes": 10174,
+      "sha256": "2514d9d8cd8974e29d95116d9f5b50c1beba5e746e3955f6ccb5ccb594ac6796",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/tabletop.obj",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/tabletop.obj",
+      "bytes": 4702,
+      "sha256": "3d88abdc152ebe3dabec44100fcbcbb179c132b1b903c97220225a8ba0232687",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_1_base.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_1_base.stl",
+      "bytes": 99984,
+      "sha256": "d100cafe656671ca8fde98fb6a4cf2d1b746995c51c61c25ad9ea2715635d146",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_2_shoulder.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_2_shoulder.stl",
+      "bytes": 63884,
+      "sha256": "139745a74055cb0b23430bb5bc032bf68cf7bea5e4975c8f4c04107ae005f7f0",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_3_upper_arm.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_3_upper_arm.stl",
+      "bytes": 102984,
+      "sha256": "900f236320dd3d500870c5fde763b2d47502d51e043a5c377875e70237108729",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_4_upper_forearm.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_4_upper_forearm.stl",
+      "bytes": 49584,
+      "sha256": "4104fc54bbfb8a9b533029f1e7e3ade3d54d638372b3195daa0c98f57e0295b5",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_5_lower_forearm.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_5_lower_forearm.stl",
+      "bytes": 99884,
+      "sha256": "66814e27fa728056416e25e02e89eb7d34c51d51c51e7c3df873829037ddc6b8",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_6_wrist.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_6_wrist.stl",
+      "bytes": 70784,
+      "sha256": "90eb145c85627968c3776ae6de23ccff7e112c9dd713c46bc9acdfdaa859a048",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_7_gripper_bar.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_7_gripper_bar.stl",
+      "bytes": 723384,
+      "sha256": "b76420544e84102b1cd30745f3c6c2675f9bf08a656808101f32b6466a33f2ee",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_7_gripper_prop.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_7_gripper_prop.stl",
+      "bytes": 456684,
+      "sha256": "4536e8975278953841f25391dccef10907859e69c71b9f06f794fef6dfc5959c",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_7_gripper_wrist_mount.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_7_gripper_wrist_mount.stl",
+      "bytes": 2314484,
+      "sha256": "50c54e0486d3e349785163dbce209313f7b4b3feadc252ab2e2c9e55a5d0e7ef",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_8_custom_finger_left.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_8_custom_finger_left.stl",
+      "bytes": 1531384,
+      "sha256": "5853af5b66dd9fc954b6705a883d8569c96536d86775d094f3670befaff67a93",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/vx300s_8_custom_finger_right.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/vx300s_8_custom_finger_right.stl",
+      "bytes": 1530484,
+      "sha256": "9a1bbd942b887f27e2680b4c99dd3b3d2f73578fa9a87cc0f4dd1da3cf88b2e2",
+      "kind": "runtime"
+    },
+    {
+      "path": "assets/wormseye_mount.stl",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/assets/wormseye_mount.stl",
+      "bytes": 1955684,
+      "sha256": "0c939865a1adfc8a148817d6e12d8a04541a192ab9b6af37c94e3cae8330aa64",
+      "kind": "runtime"
+    },
+    {
+      "path": "lift_pot.npz",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/lift_pot.npz",
+      "bytes": 121480,
+      "sha256": "0a0a082bb1a9d5c35a4a045518c72035869fb4dd044685fc734f125605923d28",
+      "kind": "runtime"
+    },
+    {
+      "path": "scene_pot.xml",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/scene_pot.xml",
+      "bytes": 78632,
+      "sha256": "410e6489f6b0f6744caf1f07ff36bfafa42e8c3fb17fefc1737750547f44078f",
+      "kind": "runtime"
+    },
+    {
+      "path": "LICENSE.mujoco-warp",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "LICENSE",
+      "bytes": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
+      "kind": "attribution"
+    },
+    {
+      "path": "LICENSE.aloha",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/LICENSE",
+      "bytes": 1502,
+      "sha256": "21868447315ac2b10e592d08958c1035b19a32cf39e9165b23033f68390098cb",
+      "kind": "attribution"
+    },
+    {
+      "path": "README.upstream-benchmark.md",
+      "upstream_repo": "google-deepmind/mujoco_warp",
+      "commit": "79c37d3e8630aba40c2b8023fa9a073fb27b62d0",
+      "upstream_path": "benchmarks/aloha/README.md",
+      "bytes": 2347,
+      "sha256": "899cfd15a7bc8e0ef3215c65728c0fc9b2b6e4a5e601636c9e0e62c0dc2bff87",
+      "kind": "attribution"
+    },
+    {
+      "path": "README.upstream-robot.md",
+      "upstream_repo": "google-deepmind/mujoco_menagerie",
+      "commit": "affef0836947b64cc06c4ab1cbf0152835693374",
+      "upstream_path": "aloha/README.md",
+      "bytes": 2203,
+      "sha256": "fd0c71740a6ae730f8a3c600c36c6a322178d5556aabaf9a5c197d2ab9bfb659",
+      "kind": "attribution"
+    }
+  ]
+}

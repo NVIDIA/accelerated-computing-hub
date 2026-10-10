@@ -1,0 +1,106 @@
+{
+  "archive": "study-execution.tar.gz",
+  "archive_bytes": 52509,
+  "archive_sha256": "bb339e394c5a8a6224126735bf970d4d8cd2240b60e46a2229c2ba0989c519d9",
+  "created_utc": "2026-10-10T00:46:38.560998+00:00",
+  "member_count": 19,
+  "members": {
+    "artifact-manifest.json": {
+      "bytes": 9412,
+      "sha256": "6822b73d3ca66b9b35ba698c7526f7d195d6f934bdef483c34720613e3de4cbd"
+    },
+    "concurrent-load.jsonl": {
+      "bytes": 951052,
+      "sha256": "40782302c22036b84109921c9f6d79ca1d42f85649022e1e4b14c875e9fb0bfa"
+    },
+    "expanded-case-plan.json": {
+      "bytes": 33763,
+      "sha256": "14698ac2b76c73a94f3b997a8a4dcb055e74b66d1a9488c3e8415b8dc4aed0b6"
+    },
+    "final-box-article2-rebot-matched-tolerance.launch.log": {
+      "bytes": 1660,
+      "sha256": "2abe43fbe18265173387104d31fc92075f078099f2b57206bd3423ef5aeeb4b0"
+    },
+    "final-box-article2-so101-matched-tolerance.launch.log": {
+      "bytes": 1646,
+      "sha256": "5f5a8c97c2ed5c97a5652d9f4f77bcee660830dd3b7b916a0360cb4224d07e90"
+    },
+    "final-box-article3-rebot-matched-tolerance.launch.log": {
+      "bytes": 1777,
+      "sha256": "e3b1cdb068df492b06c1e5456fb9ae850601febf1ec8a2f5414b3d381bcaf611"
+    },
+    "final-box-article3-so101-matched-tolerance.launch.log": {
+      "bytes": 1763,
+      "sha256": "176c26845da3db193f2483725a29b0e88e1558c73a515ed373232c42bf0add49"
+    },
+    "launch-source-manifest.json": {
+      "bytes": 8657,
+      "sha256": "b3d49760411694851d5486db6a7e681e485ef2574e1d2d9853169afc4eec979c"
+    },
+    "load-monitor.launch-receipt.json": {
+      "bytes": 217,
+      "sha256": "6a9169c7ef6635ddd178b96e056f581d8be07930f6e76850f5862a83291c0c13"
+    },
+    "load-monitor.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "monitor_study_load.py": {
+      "bytes": 2164,
+      "sha256": "b763981d198d79b7471cb28603524af6050108453c51dd5e62e05fd311c6a2d1"
+    },
+    "plan.json": {
+      "bytes": 8323,
+      "sha256": "b8c2eccb862815c77326ec05f36c107bccb37d65ba8550730b81e3f13deb8142"
+    },
+    "plan.launch-receipt.json": {
+      "bytes": 309,
+      "sha256": "47fdee302a480e337e9caf50f31b64f2ee25e9478ffcca8c129d5cdcbcdb151c"
+    },
+    "plan.status.json": {
+      "bytes": 7279,
+      "sha256": "4e8270bb57357d7f170d2c7acad92fd8ee25efa3d34a6836d0572171f92e73ad"
+    },
+    "plan.supervisor.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "preparation-receipt.json": {
+      "bytes": 1837,
+      "sha256": "c94917a4691ecd83e069b261b027b9b612cf28fbb0e2e39c4e110c1e3b56600d"
+    },
+    "root-release.json": {
+      "bytes": 1797,
+      "sha256": "d5c6bf5031c43b99e9577e8f72fd39b12a1813f169df168173ae688f70e5e747"
+    },
+    "source-manifest.json": {
+      "bytes": 16622,
+      "sha256": "1ec770be746368a49e2199298b72d431d79e41aee0736fb87ce6f95da6b7bc73"
+    },
+    "supervisor.py": {
+      "bytes": 3426,
+      "sha256": "584dec70a7118e0e029ddfdcaf9c20f08272249314187d8f020317d33c17e448"
+    }
+  },
+  "sampling": {
+    "first_utc": "2026-10-09T18:04:09.742465+00:00",
+    "last_utc": "2026-10-09T23:52:54.787405+00:00",
+    "limitation": "Periodic samples cannot establish exclusivity or rule out activity between samples; shared workstation context is retained.",
+    "max_actual_gap_seconds": 30.256106,
+    "min_actual_gap_seconds": 30.074574,
+    "requested_interval_seconds": 30,
+    "samples": 695,
+    "selected_gpu": 0,
+    "selected_gpu_other_compute_above_5_percent_flags": 0
+  },
+  "source_caution": "monitor_study_load.py is the retained local monitor source; the launch receipt itself does not carry its executed-code digest. Runtime archive and plan remain separately pinned by the original study contract.",
+  "source_or_reports_modified": false,
+  "source_root": "/private/tmp/blogs-gpu-repair-20261009/final-box-sweep-v4",
+  "study_revision": "final-box-sweep-v4-matched-tolerance-gpu0",
+  "supervisor": {
+    "finished_utc": "2026-10-09T23:52:43.522655+00:00",
+    "status": "finished",
+    "terminal_cases": 72,
+    "terminal_jobs": 4
+  }
+}

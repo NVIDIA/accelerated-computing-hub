@@ -1,0 +1,21 @@
+{
+  "input_summary": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep-independent-audit/summary.json",
+  "collector_sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381",
+  "stack": "blog3",
+  "accepted_counts": [
+    1,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "expected_resources": {
+    "device": "cuda:1",
+    "workers": 32
+  },
+  "partial": false
+}

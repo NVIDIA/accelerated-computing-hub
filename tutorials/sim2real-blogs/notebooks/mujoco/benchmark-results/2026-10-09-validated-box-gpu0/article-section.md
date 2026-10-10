@@ -1,0 +1,27 @@
+## When is migration worth it?
+
+We compared native MuJoCo CPU and MuJoCo Warp on the same task with SO-101 and reBot: pick up both cubes, place them in the receiving box, and withdraw the gripper. Each world completes 40 simulated seconds. We tested nine batch sizes, from one to 2048 independent worlds.
+
+The table shows median simulation seconds across five repetitions after one full warm-up, measured on shared AMD Ryzen Threadripper PRO 9985WX 64-Cores and one NVIDIA RTX PRO 6000 Blackwell Workstation Edition. The CPU uses up to 32 persistent workers, capped by world count; the GPU uses one device. Reset, commands, integration and grasp-verification observations are included. Inverse kinematics is precomputed before timing and replayed identically on both backends.
+
+| Worlds | SO-101 CPU (s) | SO-101 GPU (s) | reBot CPU (s) | reBot GPU (s) |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 1.2682 | 15.6355 | 1.1887 | 19.4162 |
+| 16 | 1.4631 | 17.9851 | 1.3369 | 21.5820 |
+| 32 | 1.4754 | 19.3022 | 1.3536 | 23.0548 |
+| 64 | 2.9472 | 20.5499 | 2.6919 | 24.0782 |
+| 128 | 5.8159 | 22.6108 | 5.3933 | 25.4998 |
+| 256 | 11.7220 | 24.0796 | 10.6702 | 27.3368 |
+| 512 | 23.2236 | 25.7572 | 21.1583 | Excluded |
+| 1024 | 45.8203 | 29.2140 | 42.0190 | 32.0479 |
+| 2048 | 90.2232 | 34.4835 | 83.1366 | 38.1011 |
+
+For SO-101, the first tested batch faster on GPU was 1024 worlds; the CPU took 2.62 times as long at 2048 worlds. For reBot, the first tested batch faster on GPU was 1024 worlds; the CPU took 2.18 times as long at 2048 worlds. These observations apply to the tested sizes, rather than universal crossover thresholds.
+
+Including host output collection and task validation: For SO-101, the first tested batch faster on GPU was 1024 worlds; the CPU took 2.36 times as long at 2048 worlds. For reBot, the first tested batch faster on GPU was 1024 worlds; the CPU took 2.00 times as long at 2048 worlds. These medians sum all three costs within each repetition. Setup, compilation, warm-up and validator teardown remain separate.
+
+Excluded configurations: reBot GPU at 512 worlds. 35 of 36 configurations passed every required episode. Every accepted world must physically grasp, lift, carry, release and settle both cubes inside the box. One failed episode excludes the entire configuration and its timing from comparisons; exact physical and numerical checks are in the guide.
+
+Use the [benchmark notebook](https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/part2/02_Notebook_CPU_GPU_Benchmark.ipynb) to reproduce the task. The [companion benchmark guide](https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/BENCHMARK.md) explains the measurement method; [full results](https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/benchmark-results/2026-10-09-validated-box-gpu0/README.md) retain ratios, ranges, failures and hardware configuration. These community measurements are not official product benchmarks or evidence of lower-end GPU, Colab or Brev performance.
+
+The companion also includes an [ALOHA pot-and-lid replay](https://github.com/johnnynunez/blogs/blob/feature/blog2-validated-gpu-box/Article_2/reference-benchmark/README.md) comparing native MuJoCo on CPU with MuJoCo Warp on GPU. It is a separate workload and does not measure Newton's API or this box task.

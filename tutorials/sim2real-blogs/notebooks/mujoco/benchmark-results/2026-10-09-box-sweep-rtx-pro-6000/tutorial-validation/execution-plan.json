@@ -1,0 +1,61 @@
+{
+  "purpose": "Executionv3 online teaching reference correctness only",
+  "lock_file": "/home/johnny/Projects/blogs-box-sweep-20261008/supervisor/workstation-benchmark.lock",
+  "stop_on_nonzero": false,
+  "jobs": [
+    {
+      "id": "tutorial-v3-article2-so101",
+      "cwd": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2",
+      "output_dir": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/so101",
+      "warp_cache": "/home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache",
+      "environment": {
+        "PXR_WORK_THREAD_LIMIT": "1",
+        "WARP_CACHE_PATH": "/home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache"
+      },
+      "command": [
+        "/home/johnny/Projects/blog3-verification-20261003/Article_2/.venv/bin/python",
+        "-u",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2/solutions/so101_mjwarp_solution.py",
+        "--robot",
+        "so101",
+        "--task",
+        "box",
+        "--device",
+        "cuda:1",
+        "--sim-substeps",
+        "20",
+        "--headless-steps",
+        "2000",
+        "--report",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/so101/box-task-report.json"
+      ]
+    },
+    {
+      "id": "tutorial-v3-article2-rebot",
+      "cwd": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2",
+      "output_dir": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/rebot",
+      "warp_cache": "/home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache",
+      "environment": {
+        "PXR_WORK_THREAD_LIMIT": "1",
+        "WARP_CACHE_PATH": "/home/johnny/Projects/blogs-full-sweep-20261008/article2-warp-cache"
+      },
+      "command": [
+        "/home/johnny/Projects/blog3-verification-20261003/Article_2/.venv/bin/python",
+        "-u",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2/solutions/so101_mjwarp_solution.py",
+        "--robot",
+        "rebot",
+        "--task",
+        "box",
+        "--device",
+        "cuda:1",
+        "--sim-substeps",
+        "20",
+        "--headless-steps",
+        "2000",
+        "--report",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/rebot/box-task-report.json"
+      ]
+    }
+  ]
+}

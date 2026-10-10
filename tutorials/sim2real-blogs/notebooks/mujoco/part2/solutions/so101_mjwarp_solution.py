@@ -27,8 +27,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import mujoco_warp as mjw  # noqa: E402
 import warp as wp  # noqa: E402
 
-from gpu_checks import check_mjwarp_state, require_cuda  # noqa: E402
-
 from pick_place_common import (  # noqa: E402
     PickPlaceController,
     apply_arm_ctrl,
@@ -36,12 +34,9 @@ from pick_place_common import (  # noqa: E402
     load_pick_place_model,
     reset_cubes,
     resolve_pick_place_scene,
-    validate_stack,
 )
 from robots import add_robot_arg, get_robot  # noqa: E402
 from utils import (  # noqa: E402
-    maybe_relaunch_with_mjpython,
-    mjpython_viewer_error,
     print_asset_setup_help,
 )
 
@@ -61,24 +56,31 @@ def run_demo(
     headless_steps: int = 0,
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
-    test: bool = False,
 ) -> None:
-    """Migration-check mode: one world, mirrored for rendering and inspection."""
-    if fps <= 0 or sim_substeps <= 0 or headless_steps < 0:
-        raise ValueError("fps and sim_substeps must be positive; headless_steps must be non-negative.")
-    if test and headless_steps <= 0:
-        raise ValueError("--test requires --headless-steps greater than zero.")
+    """Parity mode: one world on the GPU, mirrored back for the viewer."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
-    device = require_cuda()
+    wp.init()
+    device = wp.get_device()
     print(f"Warp device: {device}")
 
     mjm = load_pick_place_model(xml_path, spec)
     # Pin the physics clock BEFORE put_model so the device copy inherits it.
     mjm.opt.timestep = (1.0 / fps) / sim_substeps
+    if box_task:
+        mjm.opt.iterations, mjm.opt.ls_iterations, mjm.opt.impratio = 100, 50, 100
+        mjm.opt.tolerance = 1e-6  # Shared CPU/CUDA stopping target.
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
+
+    # Initialize above the first cube before physics, as in the shared task.
+    controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
+    pending_phase = controller.phase_name() if box_task else None
+    pending_ctrl = controller.step(mjm, mjd, 1.0 / fps).astype(np.float32) if box_task else None
+    if box_task:
+        apply_arm_ctrl(mjm, mjd, pending_ctrl)
+
 
     # Step 1: upload the compiled model to the device.
     m = mjw.put_model(mjm)
@@ -92,7 +94,6 @@ def run_demo(
     wp.copy(d.ctrl, wp.array(mjd.ctrl[None, :], dtype=wp.float32, device=device))
     mjw.forward(m, d)
 
-    controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
     frame_dt = 1.0 / fps
     sim_dt = frame_dt / sim_substeps
 
@@ -103,8 +104,13 @@ def run_demo(
 
     def simulate_frame() -> None:
         nonlocal frame_idx
-        commanded_phase = controller.phase_name()
-        ctrl = controller.step(mjm, mjd, frame_dt)
+        if box_task and frame_idx == 0:
+            commanded_phase, ctrl = pending_phase, pending_ctrl
+        else:
+            commanded_phase = controller.phase_name()
+            ctrl = controller.step(mjm, mjd, frame_dt)
+        if box_task:
+            ctrl = np.asarray(ctrl, dtype=np.float32)
         for _ in range(sim_substeps):
             mjd.ctrl[: mjm.nu] = ctrl
 
@@ -113,7 +119,6 @@ def run_demo(
 
             # Step 5: the one line that defines Part 2.
             mjw.step(m, d)
-
             if box_task:
                 assert_mjwarp_capacity(d)
 
@@ -123,17 +128,13 @@ def run_demo(
 
         frame_idx += 1
         if box_task:
-            # Preserve GPU-solved contact forces when importing the observed state.
+            # Pull actual GPU-solved contacts and forces, not CPU recomputed ones.
             mjw.forward(m, d)
             assert_mjwarp_capacity(d)
             mjw.get_data_into(mjd, mjm, d, world_id=0)
             box_task.observe(mjm, mjd, frame=frame_idx, time=frame_idx / fps, phase=commanded_phase)
 
-    if headless_steps > 0:
-        for _ in range(headless_steps):
-            simulate_frame()
-        diagnostics = check_mjwarp_state(d)
-        print(f"Solver iteration-limit flags: {diagnostics or 'none'}")
+    def report_completion() -> None:
         if box_task:
             report = box_task.report()
             report.update(backend='mujoco_warp', device=str(device))
@@ -150,30 +151,28 @@ def run_demo(
         blue = mjd.xpos[mujoco.mj_name2id(mjm, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")]
         xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
         dz = float(red[2] - blue[2])
-        print(f"Headless complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
+        print(f"Task complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
         print(f"stack check: xy_err={xy_err:.3f} m  dz={dz:.3f} m")
-        if test:
-            metrics = validate_stack(mjm, mjd, spec, controller_done=controller.done)
-            print(f"Stack validation passed: {metrics}")
         return
 
-    try:
-        viewer_ctx = mujoco.viewer.launch_passive(mjm, mjd)
-    except RuntimeError as exc:
-        raise mjpython_viewer_error(SCRIPT_NAME, exc) from exc
 
-    with viewer_ctx as viewer:
-        apply_viewer_camera(viewer, spec)
-        print("Viewer shows the MJWarp sim. Space = pause, Esc = quit.")
-        while viewer.is_running():
-            t0 = time.time()
+    if headless_steps > 0:
+        for _ in range(headless_steps):
             simulate_frame()
-            # Mirrored qpos/qvel require refreshed CPU kinematics for rendering.
-            mujoco.mj_forward(mjm, mjd)
-            viewer.sync()
-            elapsed = time.time() - t0
-            if elapsed < frame_dt:
-                time.sleep(frame_dt - elapsed)
+        report_completion()
+        return
+
+    # The interactive lesson has the same finite horizon as the headless example.
+    # Rendering, pause and cancellation do not advance the controller clock.
+    from viewer_loop import run_passive_frames
+
+    complete = run_passive_frames(
+        mjm, mjd, simulate_frame,
+        frames=round((40 if box_task else 12) * fps), fps=fps,
+        configure_viewer=lambda viewer: apply_viewer_camera(viewer, spec),
+    )
+    if complete:
+        report_completion()
 
 
 def benchmark(
@@ -185,15 +184,15 @@ def benchmark(
     njmax: int | None = None,
     steps: int = 200,
 ) -> None:
-    """Time physics stepping with fixed controls; exclude task/IK and transfers."""
-    if nworld <= 0 or steps <= 0:
-        raise ValueError("nworld and steps must be positive.")
+    """Throughput mode: many worlds, nothing leaves the GPU."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
-    device = require_cuda()
+    wp.init()
+    device = wp.get_device()
+    if not device.is_cuda:
+        print("Benchmark needs a CUDA device; Warp is running on CPU.", file=sys.stderr)
 
     mjm = load_pick_place_model(xml_path, spec)
-    mjm.opt.timestep = 0.002  # Match the default 50 Hz / 10-substep demo.
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
@@ -229,10 +228,7 @@ def benchmark(
     wp.synchronize()
     elapsed = time.perf_counter() - t0
 
-    diagnostics = check_mjwarp_state(d)  # Deliberately outside the timed region.
     total = steps * nworld
-    print(f"Physics-only, fixed controls | timestep={mjm.opt.timestep:g}s | warmup=10")
-    print(f"Solver iteration-limit flags: {diagnostics or 'none'}")
     print(f"nworld={nworld}  steps={steps}  graph={'yes' if graph else 'no'}")
     print(f"{elapsed:.3f} s for {total:,} world-steps")
     print(f"{total / elapsed:,.0f} world-steps/second")
@@ -243,7 +239,7 @@ def main() -> None:
     add_robot_arg(parser)
     parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
     parser.add_argument("--report", type=Path, default=None, help="Save measured --task box results as JSON.")
-    parser.add_argument("--device", default=None, help="CUDA device, for example cuda:0 or cuda:1.")
+    parser.add_argument("--device", default=None, help="Warp device, for example cuda:0 or cuda:1.")
     parser.add_argument("--menagerie-path", type=Path, default=None)
     parser.add_argument("--fps", type=int, default=50)
     parser.add_argument("--sim-substeps", type=int, default=10)
@@ -251,12 +247,9 @@ def main() -> None:
     parser.add_argument("--njmax", type=int, default=None)
     parser.add_argument("--headless-steps", type=int, default=0)
     parser.add_argument("--benchmark", action="store_true")
-    parser.add_argument("--test", action="store_true", help="Require a completed, settled task in headless mode.")
     parser.add_argument("--nworld", type=int, default=4096)
     parser.add_argument("--steps", type=int, default=200)
     args = parser.parse_args()
-    if args.test and (args.headless_steps <= 0 or args.benchmark):
-        parser.error("--test requires --headless-steps greater than zero and cannot accompany --benchmark")
     if args.report and args.task != "box":
         parser.error("--report requires --task box")
     if args.benchmark and args.task == "box":
@@ -298,10 +291,8 @@ def main() -> None:
         headless_steps=args.headless_steps,
         box_task=box_task,
         report_path=args.report,
-        test=args.test,
     )
 
 
 if __name__ == "__main__":
-    maybe_relaunch_with_mjpython()
     main()

@@ -10,7 +10,8 @@
 #  picks up a red cube and stacks it on a blue cube using a real friction grasp.
 #  Default robot is the SO-101; pass --robot rebot for the Seeed reBot DevArm.
 #  Everything runs on the CPU with stock MuJoCo, in double precision, in a
-#  single world. It provides the reference task for the GPU migration in Part 2.
+#  single world. It is the ground truth that Part 2 (MJWarp) and Article 3 / Part 3
+#  (Newton) are compared against.
 #
 #  The three objects every MuJoCo program is built around:
 #      mujoco.MjModel  — the compiled, read-only model (geometry, inertia, ...)
@@ -27,13 +28,12 @@
 #  YOUR TASK
 #  ---------------------------------------------------------------------------
 #  Search this file for "TODO Step" and complete each one, following the
-#  instructions in 02__pick_and_place.ipynb. If you get stuck, the
+#  instructions in 02_Notebook_Pick_and_Place.ipynb. If you get stuck, the
 #  snippet for each step is in solutions/step_NN_*.py and the finished file is
 #  solutions/so101_pick_place_solution.py.
 #
 #  Run it:
-#      python   so101_pick_place.py                    # Linux / Windows
-#      mjpython so101_pick_place.py                    # macOS (passive viewer)
+#      python   so101_pick_place.py                    # Linux / macOS / Windows
 #      python   so101_pick_place.py --headless-steps 600 --debug
 #      python   so101_pick_place.py --robot rebot --headless-steps 600
 
@@ -64,8 +64,6 @@ from pick_place_common import (
 )
 from robots import add_robot_arg, get_robot
 from utils import (
-    maybe_relaunch_with_mjpython,
-    mjpython_viewer_error,
     print_asset_setup_help,
 )
 
@@ -81,9 +79,9 @@ def run_demo(
     fps: int = 50,
     sim_substeps: int = 10,
     headless_steps: int = 0,
+    debug: bool = False,
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
-    debug: bool = False,
 ) -> None:
     """Build the model, then run the pick-and-place loop on MuJoCo CPU.
 
@@ -113,12 +111,22 @@ def run_demo(
     # waypoints into joint targets (waypoints + IK + gradual gripper close).
     #   controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
     controller = None
+    # Initialize the arm above the first cube before any physics step.
+    # The pending command is consumed once at frame0; payloads remain free.
+    pending_phase = controller.phase_name() if box_task else None
+    pending_ctrl = controller.step(model, data, 1.0 / fps).astype(np.float32) if box_task else None
+    if box_task:
+        apply_arm_ctrl(model, data, pending_ctrl)
+
 
     frame_dt = 1.0 / fps
     sim_dt = frame_dt / sim_substeps
     # Pin the physics clock to the controller rates (the SO-101 MJCF ships
     # timestep=0.005, which would silently desync controller and physics).
     model.opt.timestep = sim_dt
+    if box_task:
+        model.opt.iterations, model.opt.ls_iterations, model.opt.impratio = 100, 50, 100
+        model.opt.tolerance = 1e-6  # Shared CPU/CUDA stopping target.
 
     print(f"Loaded: {xml_path}")
     print(f"Part 1 — MuJoCo CPU | {spec.display_name} | actuators={model.nu} | nq={model.nq} | dt={sim_dt:.5f}s")
@@ -146,14 +154,19 @@ def run_demo(
     def simulate_frame() -> None:
         # One control frame = one IK solve + several physics substeps.
         nonlocal frame_idx
-        commanded_phase = controller.phase_name()
-        ctrl = controller.step(model, data, frame_dt)
+        if box_task and frame_idx == 0:
+            commanded_phase, ctrl = pending_phase, pending_ctrl
+        else:
+            commanded_phase = controller.phase_name()
+            ctrl = controller.step(model, data, frame_dt)
+        if box_task:
+            ctrl = np.asarray(ctrl, dtype=np.float32)
 
         # TODO Step 4: advance the physics. For each of the sim_substeps:
         #   1. copy the controller output into data.ctrl[: model.nu]
         #   2. call mujoco.mj_step(model, data)
         # This is the line that defines Part 1 — in Part 2 it becomes
-        # mjw.step(m, d).
+        # mjw.step(m, d) and in Part 3 solver.step(...).
 
         if box_task:
             mujoco.mj_forward(model, data)
@@ -162,9 +175,7 @@ def run_demo(
         debug_frame()
         frame_idx += 1
 
-    if headless_steps > 0:
-        for _ in range(headless_steps):
-            simulate_frame()
+    def report_completion() -> None:
         if box_task:
             report = box_task.report()
             report.update(backend='mujoco', device="cpu")
@@ -177,24 +188,27 @@ def run_demo(
         # TODO Step 5: report the final cube positions so you can verify the
         # stack succeeded. Read data.xpos[red_body] and data.xpos[blue_body];
         # a good stack has matching XY and a Z gap of roughly 2 * 0.022 m.
-        print("Headless complete.")
+        print("Task complete.")
         return
 
-    try:
-        viewer_ctx = mujoco.viewer.launch_passive(model, data)
-    except RuntimeError as exc:
-        raise mjpython_viewer_error(SCRIPT_NAME, exc) from exc
 
-    with viewer_ctx as viewer:
-        apply_viewer_camera(viewer, spec)
-        print("MuJoCo viewer — Space = pause, Esc = quit.")
-        while viewer.is_running():
-            t0 = time.time()
+    if headless_steps > 0:
+        for _ in range(headless_steps):
             simulate_frame()
-            viewer.sync()
-            elapsed = time.time() - t0
-            if elapsed < frame_dt:
-                time.sleep(frame_dt - elapsed)
+        report_completion()
+        return
+
+    # The interactive lesson has the same finite horizon as the headless example.
+    # Rendering, pause and cancellation do not advance the controller clock.
+    from viewer_loop import run_passive_frames
+
+    complete = run_passive_frames(
+        model, data, simulate_frame,
+        frames=round((40 if box_task else 12) * fps), fps=fps,
+        configure_viewer=lambda viewer: apply_viewer_camera(viewer, spec),
+    )
+    if complete:
+        report_completion()
 
 
 def main() -> None:
@@ -237,5 +251,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    maybe_relaunch_with_mjpython()
     main()

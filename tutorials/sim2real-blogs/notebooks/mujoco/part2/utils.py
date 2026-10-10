@@ -23,10 +23,8 @@ _EXECUTABLE_PATH_RE = re.compile(r"@executable_path/(.+) \(offset \d+\)\Z")
 def default_cache_dir(spec: RobotSpec | None = None) -> Path:
     spec = spec or get_robot()
     if "MUJOCO_MENAGERIE_CACHE" in os.environ:
-        root = Path(os.environ["MUJOCO_MENAGERIE_CACHE"]).expanduser()
-    else:
-        root = Path.home() / ".cache"
-    return root / spec.cache_dirname / spec.menagerie_ref
+        return Path(os.environ["MUJOCO_MENAGERIE_CACHE"]) / spec.cache_dirname
+    return Path.home() / ".cache" / spec.cache_dirname
 
 
 def _env_menagerie_root(spec: RobotSpec) -> Path | None:
@@ -51,18 +49,6 @@ def download_robot_sparse(spec: RobotSpec, cache_root: Path) -> Path:
     """Sparse-clone only ``spec.folder`` into cache_root."""
     robot_path = cache_root / spec.folder
     if robot_path.exists():
-        revision = subprocess.run(
-            ["git", "-C", str(cache_root), "rev-parse", "HEAD"],
-            capture_output=True, text=True, check=False,
-        )
-        actual = revision.stdout.strip()
-        if revision.returncode or actual != spec.menagerie_ref:
-            raise RuntimeError(
-                f"Managed asset cache {cache_root} is not at the pinned commit "
-                f"{spec.menagerie_ref} (found {actual or 'no Git revision'}). "
-                "Set MUJOCO_MENAGERIE_CACHE to a fresh directory, or use "
-                "--menagerie-path to explicitly select your own checkout."
-            )
         return robot_path
 
     cache_root.mkdir(parents=True, exist_ok=True)

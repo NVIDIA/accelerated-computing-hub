@@ -1,0 +1,63 @@
+{
+  "status": "finished",
+  "pid": 459762,
+  "started_utc": "2026-10-08T23:50:04.786013+00:00",
+  "plan_sha256": "973a7b6831e77d71b8af9c6f5d30c57e0bdb35d270fb6df821f4d0c63b10dc04",
+  "jobs": [
+    {
+      "id": "tutorial-v3-article2-so101",
+      "started_utc": "2026-10-08T23:50:04.786341+00:00",
+      "status": "passed",
+      "command": [
+        "/home/johnny/Projects/blog3-verification-20261003/Article_2/.venv/bin/python",
+        "-u",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2/solutions/so101_mjwarp_solution.py",
+        "--robot",
+        "so101",
+        "--task",
+        "box",
+        "--device",
+        "cuda:1",
+        "--sim-substeps",
+        "20",
+        "--headless-steps",
+        "2000",
+        "--report",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/so101/box-task-report.json"
+      ],
+      "output_dir": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/so101",
+      "launch_log": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/supervisor/tutorial-v3-article2-so101.launch.log",
+      "pid": 459764,
+      "returncode": 0,
+      "finished_utc": "2026-10-08T23:52:19.692286+00:00"
+    },
+    {
+      "id": "tutorial-v3-article2-rebot",
+      "started_utc": "2026-10-08T23:52:19.692773+00:00",
+      "status": "passed",
+      "command": [
+        "/home/johnny/Projects/blog3-verification-20261003/Article_2/.venv/bin/python",
+        "-u",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/sources/Article_2/part2/solutions/so101_mjwarp_solution.py",
+        "--robot",
+        "rebot",
+        "--task",
+        "box",
+        "--device",
+        "cuda:1",
+        "--sim-substeps",
+        "20",
+        "--headless-steps",
+        "2000",
+        "--report",
+        "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/rebot/box-task-report.json"
+      ],
+      "output_dir": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/tutorial/article2/rebot",
+      "launch_log": "/home/johnny/Projects/blogs-box-sweep-v3-20261009/supervisor/tutorial-v3-article2-rebot.launch.log",
+      "pid": 462575,
+      "returncode": 0,
+      "finished_utc": "2026-10-08T23:54:39.921943+00:00"
+    }
+  ],
+  "finished_utc": "2026-10-08T23:54:39.922368+00:00"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "name": "blog2-build",
+    "command": [
+      "docker",
+      "build",
+      "--progress=plain",
+      "-t",
+      "blogs-hub-refresh-blog2:20261010-v2",
+      "-f",
+      "/home/johnny/Projects/blogs-hub-refresh-20261010/blog2-context-v2/tutorials/sim2real-blogs/brev/dockerfile",
+      "/home/johnny/Projects/blogs-hub-refresh-20261010/blog2-context-v2"
+    ],
+    "started_utc": "2026-10-10T08:27:34.829315+00:00",
+    "finished_utc": "2026-10-10T08:27:38.548562+00:00",
+    "exit_code": 0,
+    "log_sha256": "14c986bc937e3c9f43897a97c9aaac178a385cc6fea1d7f9411065f3d3135c4b"
+  },
+  {
+    "name": "blog2-suite",
+    "command": [
+      "docker",
+      "run",
+      "--rm",
+      "--name",
+      "blogs-hub-refresh-blog2",
+      "--gpus",
+      "device=GPU-87c0fe81-bcfb-b636-9eec-e56fd88c33c3",
+      "--shm-size=4g",
+      "-e",
+      "PXR_WORK_THREAD_LIMIT=1",
+      "-e",
+      "NEWTON_NOTEBOOKS_EXECUTE=0",
+      "-e",
+      "ARTICLE2_NOTEBOOKS_EXECUTE=1",
+      "--entrypoint",
+      "bash",
+      "blogs-hub-refresh-blog2:20261010-v2",
+      "/accelerated-computing-hub/tutorials/sim2real-blogs/brev/test.bash"
+    ],
+    "started_utc": "2026-10-10T08:27:38.548909+00:00",
+    "finished_utc": "2026-10-10T08:35:24.308945+00:00",
+    "exit_code": 0,
+    "log_sha256": "e2137abfaaaa7c029148f7bb043e31226485a6d0ab062f044f7939ea22c40aa1"
+  }
+]

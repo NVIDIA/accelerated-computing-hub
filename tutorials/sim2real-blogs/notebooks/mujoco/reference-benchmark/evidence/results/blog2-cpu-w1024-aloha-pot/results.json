@@ -1,0 +1,1066 @@
+{
+  "config": {
+    "assets": "/home/johnny/Projects/blogs-gpu-repair-20261009/reference-full-sweep/sources/frozen-v3/aloha-pot",
+    "stack": "blog2",
+    "backend": "cpu",
+    "worlds": 1024,
+    "workers": 32,
+    "device": "cuda:1",
+    "mode": "replay",
+    "steps": 0,
+    "warmups": 1,
+    "repeats": 5,
+    "graph_steps": 10,
+    "nconmax": 256,
+    "njmax": 1024,
+    "output": "/home/johnny/Projects/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot"
+  },
+  "versions": {
+    "mujoco": "3.8.0",
+    "mujoco-warp": "3.8.0.3",
+    "warp-lang": "1.15.0"
+  },
+  "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "machine": "x86_64",
+  "source_sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+  "scene_sha256": "410e6489f6b0f6744caf1f07ff36bfafa42e8c3fb17fefc1737750547f44078f",
+  "replay_sha256": "0a0a082bb1a9d5c35a4a045518c72035869fb4dd044685fc734f125605923d28",
+  "control_tape_sha256": "2ea25430581d5df71b8c91b41fa4552b96f2e12a04fba39150dc6cc61f68b20f",
+  "steps": 1001,
+  "dt": 0.002,
+  "model_dimensions": {
+    "nq": 24,
+    "nv": 23,
+    "nu": 14,
+    "na": 0,
+    "nbody": 26,
+    "ngeom": 204
+  },
+  "solver_options": {
+    "timestep": 0.002,
+    "tolerance": 1e-06,
+    "ls_tolerance": 1e-06,
+    "iterations": 100.0,
+    "ls_iterations": 50.0,
+    "impratio": 10.0,
+    "solver": 2.0,
+    "integrator": 0.0,
+    "cone": 1.0
+  },
+  "samples": [
+    {
+      "simulation_seconds": 1.1333827920025215,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.26447943900711834,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    },
+    {
+      "simulation_seconds": 1.1106286569993244,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.26379006999195553,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    },
+    {
+      "simulation_seconds": 1.1076319260027958,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.2643054439977277,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    },
+    {
+      "simulation_seconds": 1.1139443319989368,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.2630909959989367,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    },
+    {
+      "simulation_seconds": 1.1128863630001433,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.27223436000349466,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    }
+  ],
+  "warmups": [
+    {
+      "simulation_seconds": 1.2621871229930548,
+      "output_collection_seconds": 0.0,
+      "history_transfer_seconds": 0.0,
+      "validation_seconds": 0.2879740009957459,
+      "diagnostics": {},
+      "validation": {
+        "passed": true,
+        "checks": {
+          "finite_history": true,
+          "all_world_step_clocks": true,
+          "joint_0_coarse_position_bound": true,
+          "joint_1_coarse_position_bound": true,
+          "joint_2_coarse_position_bound": true,
+          "joint_3_coarse_position_bound": true,
+          "joint_4_coarse_position_bound": true,
+          "joint_5_coarse_position_bound": true,
+          "joint_6_coarse_position_bound": true,
+          "joint_7_coarse_position_bound": true,
+          "joint_8_coarse_position_bound": true,
+          "joint_9_coarse_position_bound": true,
+          "joint_10_coarse_position_bound": true,
+          "joint_11_coarse_position_bound": true,
+          "joint_12_coarse_position_bound": true,
+          "joint_13_coarse_position_bound": true,
+          "joint_14_coarse_position_bound": true,
+          "joint_15_coarse_position_bound": true,
+          "joint_17_coarse_position_bound": true,
+          "unit_free_ball_quaternions": true,
+          "free_translation_within_scene_extent": true,
+          "coarse_velocity_bound": true,
+          "upstream_intended_pot_height": true,
+          "upstream_intended_lid_height": true
+        },
+        "physical_health": {
+          "checks": {
+            "joint_0_coarse_position_bound": true,
+            "joint_1_coarse_position_bound": true,
+            "joint_2_coarse_position_bound": true,
+            "joint_3_coarse_position_bound": true,
+            "joint_4_coarse_position_bound": true,
+            "joint_5_coarse_position_bound": true,
+            "joint_6_coarse_position_bound": true,
+            "joint_7_coarse_position_bound": true,
+            "joint_8_coarse_position_bound": true,
+            "joint_9_coarse_position_bound": true,
+            "joint_10_coarse_position_bound": true,
+            "joint_11_coarse_position_bound": true,
+            "joint_12_coarse_position_bound": true,
+            "joint_13_coarse_position_bound": true,
+            "joint_14_coarse_position_bound": true,
+            "joint_15_coarse_position_bound": true,
+            "joint_17_coarse_position_bound": true,
+            "unit_free_ball_quaternions": true,
+            "free_translation_within_scene_extent": true,
+            "coarse_velocity_bound": true,
+            "upstream_intended_pot_height": true,
+            "upstream_intended_lid_height": true
+          },
+          "diagnostics": {
+            "max_quaternion_norm_error": 1.1102230246251565e-15,
+            "max_free_translation_excursion_m": 0.06323182558918758,
+            "max_abs_qvel": 5.221288423791062,
+            "max_velocity_bound_fraction": 0.00891999386733756,
+            "checkpoints": [
+              {
+                "frame": 0,
+                "raw_time_min": 0.002,
+                "pot_z_min": 0.06996076029802323,
+                "pot_z_max": 0.06996076029802323,
+                "lid_z_min": 0.06996076029802323,
+                "lid_z_max": 0.06996076029802323
+              },
+              {
+                "frame": 249,
+                "raw_time_min": 0.5000000000000003,
+                "pot_z_min": 0.06607006061649344,
+                "pot_z_max": 0.06607006061649344,
+                "lid_z_min": 0.06567215451802044,
+                "lid_z_max": 0.06567215451802044
+              },
+              {
+                "frame": 749,
+                "raw_time_min": 1.500000000000001,
+                "pot_z_min": 0.06611580582169085,
+                "pot_z_max": 0.06611580582169085,
+                "lid_z_min": 0.0940768971400624,
+                "lid_z_max": 0.0940768971400624
+              },
+              {
+                "frame": 874,
+                "raw_time_min": 1.7500000000000013,
+                "pot_z_min": 0.06608681540598746,
+                "pot_z_max": 0.06608681540598746,
+                "lid_z_min": 0.11668413531111821,
+                "lid_z_max": 0.11668413531111821
+              },
+              {
+                "frame": 1000,
+                "raw_time_min": 2.002000000000001,
+                "pot_z_min": 0.10907957447872454,
+                "pot_z_max": 0.10907957447872454,
+                "lid_z_min": 0.16895253683710934,
+                "lid_z_max": 0.16895253683710934
+              }
+            ],
+            "pot_body_id": 22,
+            "lid_body_id": 25
+          },
+          "policy": {
+            "quaternion_norm_error_max": 0.0003452669770922512,
+            "quaternion_threshold_basis": "sqrt(float32 machine epsilon), numerical guard only",
+            "free_translation_displacement_max_m": 0.6,
+            "free_linear_speed_max_m_per_s": 300.0,
+            "bound_basis": "authored scene extent, complete joint ranges, and one physics timestep; coarse explosion guard",
+            "upstream_coarse_lift": {
+              "applied": true,
+              "pot_z_gt": 0.069,
+              "lid_z_gt": 0.16,
+              "source": "https://github.com/google-deepmind/mujoco_warp/blob/v3.12.0/mujoco_warp/_src/unroll_test.py#L38-L56",
+              "adaptation": "benchmark asset scene and verified body IDs; not identical upstream fixture; no grasp/contact/hold success claim"
+            }
+          }
+        },
+        "final_raw_clock_min": 2.002000000000001,
+        "final_raw_clock_max": 2.002000000000001,
+        "scope": "coarse physical/numerical health plus source-derived final heights for full replay; no box-task claim"
+      }
+    }
+  ],
+  "status": "complete",
+  "setup_seconds": 0.08370080799795687,
+  "backend_metadata": {
+    "cpu_threads": 32,
+    "native_path": "mujoco.rollout persistent C++ thread pool",
+    "timed_scope": "native reset, control replay, integration, full physics state history, CPU dispatch/completion",
+    "dtype": "float64",
+    "capacity_checks": "native dynamic allocation; divergence clocks checked for every world and step",
+    "effective_model": {
+      "compiled_model_sha256": "5c5433dc4c08466f618118a824006fbc86f99e301ca3cbc6956d914b16b14074",
+      "fields": {
+        "qpos0": {
+          "shape": [
+            24
+          ],
+          "dtype": "float64",
+          "native_sha256": "c637eaf1e661e643d97b5eb768775899e5467cf1e2e61793156a397395aa8746",
+          "float32_sha256": "966cd575eba4533314057ba1f6afe14182bc8f7e70c4efbfb019356f71672106"
+        },
+        "body_mass": {
+          "shape": [
+            26
+          ],
+          "dtype": "float64",
+          "native_sha256": "dad6d9066cb39a36865999628c673e90d92efbb23cb376081735238d5e03fedf",
+          "float32_sha256": "2a76185a764593c5355764434fa29804d0195aaa2a5267644d78c626c9bd7281"
+        },
+        "body_inertia": {
+          "shape": [
+            26,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "d0781d0b007f13ebdaa624dee991297bd299da0abc7fa72023541f3862ecc553",
+          "float32_sha256": "5fd6639fb18776625df0c238ac3b7a7ca4bafdf7bdd1303f1efd619bd21afc39"
+        },
+        "body_pos": {
+          "shape": [
+            26,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "9d4877c39e91778f4912aae3416376d455e47b84231e0250922c6e99d7b8e830",
+          "float32_sha256": "a202e2155403181aba46ec0dbfae09b9ae09fe45808a251cc2454753e182c28a"
+        },
+        "body_quat": {
+          "shape": [
+            26,
+            4
+          ],
+          "dtype": "float64",
+          "native_sha256": "caa68dc807a1119258666a71ea78b8faa7361ad816a1a013950c5a4d070e0be0",
+          "float32_sha256": "6e244dce05fac1bab8313897f049729bf452ed6f1bed249a7cef3db8320715d1"
+        },
+        "jnt_type": {
+          "shape": [
+            18
+          ],
+          "dtype": "int32",
+          "native_sha256": "8ff15dbc597d7c9fb790e407b00242e89705be374659bc44078705e813c5f6de",
+          "float32_sha256": null
+        },
+        "jnt_bodyid": {
+          "shape": [
+            18
+          ],
+          "dtype": "int32",
+          "native_sha256": "c43c25c2ce0dbecaa5552607dbfecfe27588b7ab0e80000a4c0a06028f1af4c5",
+          "float32_sha256": null
+        },
+        "jnt_pos": {
+          "shape": [
+            18,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "1fe2373734955e60c172999142934b52e69ba7ab9039b3c18ea54082ba32afcd",
+          "float32_sha256": "a5645e7a3fa0866cde8842c4dab96567507c3d1a3c028b816bc63f6966367b70"
+        },
+        "jnt_axis": {
+          "shape": [
+            18,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "451e5b8c361c0a016900477e0871fba0c3233035bcf3f8c70d00a1a0ee20e6f2",
+          "float32_sha256": "a5ce5ad02fb8dbe9c7ed5b66f954db4f09e6a9aa473d7bdbe6c38643da70b30f"
+        },
+        "jnt_range": {
+          "shape": [
+            18,
+            2
+          ],
+          "dtype": "float64",
+          "native_sha256": "851572989b442ee79186218b868ecaff2cac5c57b6d31bc846c4d203f801f69f",
+          "float32_sha256": "0bc6a71b2e79560d5af112fcb64b7371f7923e26bbaa94528982c1720f7bd6c8"
+        },
+        "geom_type": {
+          "shape": [
+            204
+          ],
+          "dtype": "int32",
+          "native_sha256": "1a74e4e8797769494d4eb49f119d391fe36cc36dd57accb99ec6a19db2c0091c",
+          "float32_sha256": null
+        },
+        "geom_bodyid": {
+          "shape": [
+            204
+          ],
+          "dtype": "int32",
+          "native_sha256": "a6f39febe1108640a48587d40837ced6ab4bdca3fcd1e068e010866a4fe26d00",
+          "float32_sha256": null
+        },
+        "geom_pos": {
+          "shape": [
+            204,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "e1eabd76896bab0b268a834c4865304e21d49ec9eb49897d2134607de9f34497",
+          "float32_sha256": "d0aa195f3e0a1ee27dc61dee44e266759cd8ed382b920d6356db5cb19de04c1a"
+        },
+        "geom_quat": {
+          "shape": [
+            204,
+            4
+          ],
+          "dtype": "float64",
+          "native_sha256": "c9640d9f7d8b5d4ea3c2393e6180485c268b9582cc300146994a97af17c3d329",
+          "float32_sha256": "3eaaddbeacbb3d6307e985f3980bdd05125c621e044f18f5fbcfd5665622f99b"
+        },
+        "geom_size": {
+          "shape": [
+            204,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "406ae5feb5a69553188d70f376a295ba58f17cea4db66cfa8c49dff507da3ea9",
+          "float32_sha256": "8cfad4440608f6256ed1feeab307fcded29e3660b7859998c50285c71784a8ef"
+        },
+        "geom_friction": {
+          "shape": [
+            204,
+            3
+          ],
+          "dtype": "float64",
+          "native_sha256": "6f2335c4f1f263186b20a4c18f2d315d53854686252f5ed3cd9c798a373b6036",
+          "float32_sha256": "e28c960dcb1944f22710b5ddca6f618ee8041758c6dad9c9b65e22073b209289"
+        },
+        "geom_solref": {
+          "shape": [
+            204,
+            2
+          ],
+          "dtype": "float64",
+          "native_sha256": "2eddff865b4d4fc5997570df916947566f48e02b535b91a1315bda71fc0d912b",
+          "float32_sha256": "10e3cbbe09866c9d7d02c0e969bc764668c68425e21fd0a5abcda5ffe6a317da"
+        },
+        "geom_solimp": {
+          "shape": [
+            204,
+            5
+          ],
+          "dtype": "float64",
+          "native_sha256": "d87dbd9f6e9194df46396cf4a1249374af24f6211c7382219b36a59ea19894cc",
+          "float32_sha256": "4b9a7180607073de471ce73aae2dbe4f5bd15a755c9ca801060deaaa5fa5f2ae"
+        },
+        "dof_damping": {
+          "shape": [
+            23
+          ],
+          "dtype": "float64",
+          "native_sha256": "41df6dee9c51a0df3965eba4443b77900854cfe883fb9c8415e03ad8d96b2fb6",
+          "float32_sha256": "5d1c308a7ca9f67cd8f8a95bf68c6bc16fc503c77360473bf9c34b2375b9ca78"
+        },
+        "dof_armature": {
+          "shape": [
+            23
+          ],
+          "dtype": "float64",
+          "native_sha256": "dee98efd160b905222b844341b3a5ce614ea43a6a0e390ecdbb87fa1dd61221d",
+          "float32_sha256": "6a2fe44d4b088c8f293eb7c61fa3b9853e5a26274b5468fa79c2a489461d8511"
+        },
+        "actuator_trnid": {
+          "shape": [
+            14,
+            2
+          ],
+          "dtype": "int32",
+          "native_sha256": "e51caa9949b0605a1a847e3659dfecaf94f1bc958406fc59967dd58662358e67",
+          "float32_sha256": null
+        },
+        "actuator_ctrlrange": {
+          "shape": [
+            14,
+            2
+          ],
+          "dtype": "float64",
+          "native_sha256": "7defc55336a7100594824099d8315a6af1e6d5ba061b9755dbc6077223c45699",
+          "float32_sha256": "d79a217a544f4c278fc60644986f82686212ffa65bdeb3551d5bf94204ba10a1"
+        },
+        "actuator_gainprm": {
+          "shape": [
+            14,
+            10
+          ],
+          "dtype": "float64",
+          "native_sha256": "9331554611dd306d5c01645797d1521b00f85c60b415dba1c049a0c62eec2e4c",
+          "float32_sha256": "d13debe77d0958cde360bb4a7093706fa4bb38a2c7f0debc14cc12ecd831966e"
+        },
+        "actuator_biasprm": {
+          "shape": [
+            14,
+            10
+          ],
+          "dtype": "float64",
+          "native_sha256": "845947d2b4e440195d835f831bb35b7f2c70fbc13f76ec4e97fe276eccaae678",
+          "float32_sha256": "9870dc6ff4a212449e7b5720608fc5b9db613efa6afbeb6686cf5eccaaae86a2"
+        }
+      },
+      "options": {
+        "timestep": 0.002,
+        "tolerance": 1e-06,
+        "ls_tolerance": 1e-06,
+        "iterations": 100.0,
+        "ls_iterations": 50.0,
+        "impratio": 10.0,
+        "solver": 2.0,
+        "integrator": 0.0,
+        "cone": 1.0,
+        "disableflags": 0.0,
+        "enableflags": 0.0
+      }
+    }
+  },
+  "median_simulation_seconds": 1.1128863630001433,
+  "median_checked_history_seconds": 1.3770353279978735,
+  "world_steps_per_second": 921050.0138007962
+}

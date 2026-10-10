@@ -1,0 +1,1167 @@
+{
+  "schema_version": 1,
+  "state": "prepared_immutable_not_launched",
+  "created_utc": "2026-10-09T16:41:11.064009+00:00",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "4d658f00d1f6f0fd785abc4ce1e965c8b259bc9b964e0b21d299710fc1989369",
+      "bytes": 3018
+    },
+    {
+      "path": "cli-help.txt",
+      "sha256": "3273382ae3c4e0922d22070bd53eacc674da4f185c7c84c23314630ed2bae25e",
+      "bytes": 1344
+    },
+    {
+      "path": "configs/blog2-cpu-w1-aloha-pot.json",
+      "sha256": "99203b43b339cc6460fbcca2d0f5e3895e27e57af94183bc61b5b84c1bf3f816",
+      "bytes": 1733
+    },
+    {
+      "path": "configs/blog2-cpu-w1024-aloha-pot.json",
+      "sha256": "b99303411e681ceee00aca36d86973ad7e68e54da39f06bdcef18545f28e5fe8",
+      "bytes": 1749
+    },
+    {
+      "path": "configs/blog2-cpu-w128-aloha-pot.json",
+      "sha256": "1d1a81f00228baa6cc1c9a89ead831cabf6d0620a3a21814062f08e03c66ccce",
+      "bytes": 1744
+    },
+    {
+      "path": "configs/blog2-cpu-w16-aloha-pot.json",
+      "sha256": "80445819b48f1e032a1b0c2c30af3a48f1c5b12face288025b0cf28964338d69",
+      "bytes": 1739
+    },
+    {
+      "path": "configs/blog2-cpu-w2048-aloha-pot.json",
+      "sha256": "8488655b3f5ab92e193101906b7603e0020ee04cbbb713c56912f198242e9dbc",
+      "bytes": 1749
+    },
+    {
+      "path": "configs/blog2-cpu-w256-aloha-pot.json",
+      "sha256": "00ece7ed307e14e5aa2c74b06676cb9600a423732199ce85bfec8bf769fd3ce4",
+      "bytes": 1744
+    },
+    {
+      "path": "configs/blog2-cpu-w32-aloha-pot.json",
+      "sha256": "3aabc2efec44cfd46aa0a353825743ac42878f8e755853c0978f86adde769c9d",
+      "bytes": 1739
+    },
+    {
+      "path": "configs/blog2-cpu-w512-aloha-pot.json",
+      "sha256": "7fdca9f49b36219e81c153308eed79e0ae7f41f05bf801251bd912a7fd81f773",
+      "bytes": 1744
+    },
+    {
+      "path": "configs/blog2-cpu-w64-aloha-pot.json",
+      "sha256": "39609e74b319dc47d69c845e3a4aa8ec1546f7dfeec8d38e5c08e3063994e2aa",
+      "bytes": 1739
+    },
+    {
+      "path": "configs/blog2-gpu-w1-aloha-pot.json",
+      "sha256": "039ae62fb55c61c607f216b6130c206328babbbec16cfd7f7dcf6d335af0a2a6",
+      "bytes": 1733
+    },
+    {
+      "path": "configs/blog2-gpu-w1024-aloha-pot.json",
+      "sha256": "4d35e71d8268d52b34205ca708fd9c44fc8e102920b723f16b9490fbed02cdee",
+      "bytes": 1748
+    },
+    {
+      "path": "configs/blog2-gpu-w128-aloha-pot.json",
+      "sha256": "06cf9fdfe413433ba34fb410704915575dc698dd67ca16807630c804a2aada5f",
+      "bytes": 1743
+    },
+    {
+      "path": "configs/blog2-gpu-w16-aloha-pot.json",
+      "sha256": "f12d2758255954331a0b385d897103179369ed7f6a183e0b00dec0a7e3799403",
+      "bytes": 1738
+    },
+    {
+      "path": "configs/blog2-gpu-w2048-aloha-pot.json",
+      "sha256": "4e82b26f621449570c7823e33c8c6c749275c4abf14bab9617a99cb51505ffd1",
+      "bytes": 1748
+    },
+    {
+      "path": "configs/blog2-gpu-w256-aloha-pot.json",
+      "sha256": "69cbfa5f055aa7cb12bde377890700836e43d55f5471c3f989239943d8a28a11",
+      "bytes": 1743
+    },
+    {
+      "path": "configs/blog2-gpu-w32-aloha-pot.json",
+      "sha256": "d4b841eacfe6ba5ea9074943102924b85030514da5c96ec1477b360098707c07",
+      "bytes": 1738
+    },
+    {
+      "path": "configs/blog2-gpu-w512-aloha-pot.json",
+      "sha256": "1d104672bb0e0911085c638ea02f7c20e6b1d23e2f40ec86f72514a40f0ce7d0",
+      "bytes": 1743
+    },
+    {
+      "path": "configs/blog2-gpu-w64-aloha-pot.json",
+      "sha256": "b3a0fec8926113abbf160ea3a4c9a4fd7fe76b034afb59bde6d6ac636c68fba1",
+      "bytes": 1738
+    },
+    {
+      "path": "configs/blog3-cpu-w1-aloha-pot.json",
+      "sha256": "bb1fdba416fc3e495dd44d0121965e9b7fff6fc188581c50753ba476846021cb",
+      "bytes": 1777
+    },
+    {
+      "path": "configs/blog3-cpu-w1024-aloha-pot.json",
+      "sha256": "8d4d5eaae174ec59defff9094042acd4e68f57b4bf277c59adc6300da40c1037",
+      "bytes": 1793
+    },
+    {
+      "path": "configs/blog3-cpu-w128-aloha-pot.json",
+      "sha256": "b24a25b126a878795f3299802cce343799ac46f02d430c3d2e3adddda00119dc",
+      "bytes": 1788
+    },
+    {
+      "path": "configs/blog3-cpu-w16-aloha-pot.json",
+      "sha256": "9ccdf8f1f257bdc1980c03f1c500957fbfab300aecc351d0ac066293412a67a6",
+      "bytes": 1783
+    },
+    {
+      "path": "configs/blog3-cpu-w2048-aloha-pot.json",
+      "sha256": "7446c2cf84185c0df0d6a6826b12f734b23b19997b1b13887560fcce1eaa9e74",
+      "bytes": 1793
+    },
+    {
+      "path": "configs/blog3-cpu-w256-aloha-pot.json",
+      "sha256": "a416ce531c45dada0827f2eca5add24492068993083997bb2960dcc26047c778",
+      "bytes": 1788
+    },
+    {
+      "path": "configs/blog3-cpu-w32-aloha-pot.json",
+      "sha256": "e4e627d1f90300e7ad353e4abfdb2645b2a3bf361626c00bd61abebe19be543d",
+      "bytes": 1783
+    },
+    {
+      "path": "configs/blog3-cpu-w512-aloha-pot.json",
+      "sha256": "1b525c07422b22b6c93574defc17817cf3acee5de6f098bfc1545f6bdd6d9b54",
+      "bytes": 1788
+    },
+    {
+      "path": "configs/blog3-cpu-w64-aloha-pot.json",
+      "sha256": "4284ed4a773bc93f73e572a3687ba5155a576f879559126b36b9aab2361438e8",
+      "bytes": 1783
+    },
+    {
+      "path": "configs/blog3-gpu-w1-aloha-pot.json",
+      "sha256": "792a52ec689130246f9086cd2e13eca231f187f23f39881c8d2e084961c2817a",
+      "bytes": 1777
+    },
+    {
+      "path": "configs/blog3-gpu-w1024-aloha-pot.json",
+      "sha256": "8cead9faf0958b068b8c4df037ac85380f3e732baa78abee312ad24a4870ab8c",
+      "bytes": 1792
+    },
+    {
+      "path": "configs/blog3-gpu-w128-aloha-pot.json",
+      "sha256": "3bc5b7da9f64e52fceb844e44bd1e6117ed34b99aab82328c26d47064e170a5d",
+      "bytes": 1787
+    },
+    {
+      "path": "configs/blog3-gpu-w16-aloha-pot.json",
+      "sha256": "da3771213350886be94e51779f03f78d652b44e9c343ef97acfc7124afb4198c",
+      "bytes": 1782
+    },
+    {
+      "path": "configs/blog3-gpu-w2048-aloha-pot.json",
+      "sha256": "f528b5fe8b85b5584c485870e7517efab51978c6320253ca7f54c18e69d23e59",
+      "bytes": 1792
+    },
+    {
+      "path": "configs/blog3-gpu-w256-aloha-pot.json",
+      "sha256": "99b6ef7bd97c1c35f9eb7ab40099e9ee3fba6799faa4d546f28ac7f90b4e161e",
+      "bytes": 1787
+    },
+    {
+      "path": "configs/blog3-gpu-w32-aloha-pot.json",
+      "sha256": "462072e5ab16d8bde9c3a0ea8073540641d7b5b0840ccbd207e1514eb515d472",
+      "bytes": 1782
+    },
+    {
+      "path": "configs/blog3-gpu-w512-aloha-pot.json",
+      "sha256": "4c6b4d8d18e6bb2bb6b5d12cb82e019452289e52a9a9946be2c1321151478025",
+      "bytes": 1787
+    },
+    {
+      "path": "configs/blog3-gpu-w64-aloha-pot.json",
+      "sha256": "bd677173e04d9d99313e131298647aacbbab04f650c3543736aef14bb6f840c7",
+      "bytes": 1782
+    },
+    {
+      "path": "memory-estimate.json",
+      "sha256": "d1d685fd2216f06fe19405781e3cd3250ce567eade65185194bdc3ecabea1e96",
+      "bytes": 1302
+    },
+    {
+      "path": "plan.json",
+      "sha256": "82f2cc4e699884ffbf5d8c50a52fe03a451d00b328262eaf83c51b9d9aa676ba",
+      "bytes": 58625
+    },
+    {
+      "path": "preparation-receipt.json",
+      "sha256": "c6f596870aaa23a8d728dcf687c7f8bf705751178438d4808000927de4783634",
+      "bytes": 1470
+    },
+    {
+      "path": "sources/frozen-v3/README.md",
+      "sha256": "9ad3b4230dc8730c6d2d07af07c000b913618ddbb827782f0c183e6974f79ecb",
+      "bytes": 9821
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/CHANGELOG.md",
+      "sha256": "0f5e46c3cbed97b80b18bb9bf56342b3ef17c5aef2dc55ad861e467567fde574",
+      "bytes": 138
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/LICENSE",
+      "sha256": "21868447315ac2b10e592d08958c1035b19a32cf39e9165b23033f68390098cb",
+      "bytes": 1502
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/README.md",
+      "sha256": "899cfd15a7bc8e0ef3215c65728c0fc9b2b6e4a5e601636c9e0e62c0dc2bff87",
+      "bytes": 2347
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/__init__.py",
+      "sha256": "6b1276c1890301d2c45fd9d35a7addb1dddd6eff96ba0e44c1d13a4680f8017e",
+      "bytes": 1346
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/aloha.png",
+      "sha256": "821b9ba1baf427e4b4cef4279208614ebb4d705eb836bc3685317466554ce809",
+      "bytes": 1623426
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/aloha.xml",
+      "sha256": "e010a84a309367046ba18827a130ee2ce08b1d2217070593773cfd4fd8f3a3c8",
+      "bytes": 18989
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/aloha_wrist.png",
+      "sha256": "fa82875ea4f06b027c067659a55dccc62799b4f8509f5d0756790a6183e1f7d7",
+      "bytes": 1959369
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/angled_extrusion.stl",
+      "sha256": "10e6e10a1a5c1efcf743884f7f0dad14c6cc3e15790695bfe5b7038c43f8a4c4",
+      "bytes": 448184
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/corner_bracket.stl",
+      "sha256": "75e40b0b807f51d238638cd44e787413d8590c1fcd28dff7beaa549c126f1fd0",
+      "bytes": 234284
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/d405_solid.stl",
+      "sha256": "8a9a84dd9c9a67687e5ad0b37a7ed334dbfea6b0f995fef28524cc8da5f21ed2",
+      "bytes": 1242284
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_1000.stl",
+      "sha256": "7a8b99ef84ffd7e91382af9aa733f815a7747c207f64e0499c5889a58d58c8de",
+      "bytes": 40084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_1220.stl",
+      "sha256": "5b5203c92dfe03b94ed5a679c6cec1f61e48d6d202b5fa03abb032d63313676e",
+      "bytes": 40084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_150.stl",
+      "sha256": "39029c2f95faef3dab1340e4beec221d6866e694e4df0b22795eed6f00b5f893",
+      "bytes": 40084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_2040_1000.stl",
+      "sha256": "acaff3be15f686064b6ec8b985758866b2bf51aed0a9b793d8c8242dde43ee0a",
+      "bytes": 84084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_2040_880.stl",
+      "sha256": "3bb04a77ca20a14178aa59f8ef1ef50d26695e748639677b24f0be11efc016d8",
+      "bytes": 84084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/extrusion_600.stl",
+      "sha256": "25c87bd6a975f1a561e547e8c490ffe4b59d8a962634548242b1f4a5c6607268",
+      "bytes": 40084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/interbotix_black.png",
+      "sha256": "4cd224156bbaab1ddf1b92b90d46c54835a8b41f61bc258b2f216c2618e062cf",
+      "bytes": 1994
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-10_col_collision_0.obj",
+      "sha256": "a735ac7d4b7ac00a6699adb51a3a512467daf3976a184212b10700d3f2a7fed4",
+      "bytes": 27520
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-10_col_collision_1.obj",
+      "sha256": "f8749ba44ad3f76b27a664eb72b6a0fca48bdbedceeac67be814f95bfacc71e1",
+      "bytes": 11573
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-10_col_collision_2.obj",
+      "sha256": "cf468b49610f705e69cd5a541db53e42bb281d9fc0b0278576e477f8491251d6",
+      "bytes": 23527
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-11_col_collision_0.obj",
+      "sha256": "0e57aa4a4277f6dfcc98c79ec074fd9e7b8a4b8ecc86c3c2b63d1dc7e12a16a6",
+      "bytes": 2704
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_0.obj",
+      "sha256": "3b2fed9780cc26aa96b144385b7df8711994f7de44c4385f66865b1629f496be",
+      "bytes": 8308
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_1.obj",
+      "sha256": "459b849e35b0ae444d18886165f202a081d0785622216d95132bc44d11e4979a",
+      "bytes": 7542
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_2.obj",
+      "sha256": "39e936d5262f477955fd14f5e469c347c70de76e879b1c717307b569e9e08b2f",
+      "bytes": 6872
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_3.obj",
+      "sha256": "f74c5026c4ec7dd11fc7c5db5f3fc876e6233b71e9ea1a85a55e11816528f406",
+      "bytes": 8168
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_4.obj",
+      "sha256": "a4186b87c8b5ba5106d96491eee006a0bdc2b863aac1075457755f9a25d71ccd",
+      "bytes": 8511
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_5.obj",
+      "sha256": "2248d6af33c61c75c103061cf24a435741b43040b415a1e3e37895a238129c09",
+      "bytes": 8146
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_6.obj",
+      "sha256": "9d806896fb27b1033aa2a13c9258614b87ad8ae1684ac447757d205f93c1022e",
+      "bytes": 6487
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-13_col_collision_7.obj",
+      "sha256": "9c66f2255df3ab0763a97162981393c46a3591e46d635978cacd603a905be73e",
+      "bytes": 8835
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_0.obj",
+      "sha256": "f84f5d15035f028fec621b51fbf82ec0ca56d67569e04a9805004de6841aba69",
+      "bytes": 18485
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_1.obj",
+      "sha256": "4a7395aa1663ba4bc8960f87c9458752b7fe74e9389cb30a4faf022dec8dff5b",
+      "bytes": 11871
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_2.obj",
+      "sha256": "af1c92e064c303f1d28804333863d4d66707278279c24fe410f5391ae585e788",
+      "bytes": 12481
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_3.obj",
+      "sha256": "b78c42f60374ffccdfa60835db7e1ed14af3a2bd499493da6faf947dc81d7338",
+      "bytes": 20493
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_4.obj",
+      "sha256": "a7ba0fa9f1a1c7808e07ea1cbc46a3640c459912d5cdf34db76a9af6fb25b292",
+      "bytes": 10001
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_5.obj",
+      "sha256": "009d1bc2ec1efca20dbbbfd477b5ac0b23cba2540b52867c391c107dba82f931",
+      "bytes": 11679
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_6.obj",
+      "sha256": "b84beb1ceab5088c702d0bc8ccd531b6cbb58f8dadc28714f3df44bf3daba0e4",
+      "bytes": 18913
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_7.obj",
+      "sha256": "c11e3f867cfd4b962fcc3759e9e7a3a735a3103d89ffd65f52ae9b2b30861659",
+      "bytes": 11035
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-14_col_collision_8.obj",
+      "sha256": "8a4cada130c3eaf7170457a9584cab89d339d5d407ac7e821c681c70666b3830",
+      "bytes": 14658
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-17_col_collision_0.obj",
+      "sha256": "37bf90fe306a1b038896d1f9912d0ea9b483732d7ba79f903b160452ab4125c1",
+      "bytes": 56405
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-17_col_collision_1.obj",
+      "sha256": "be06c950b200a941567e935e8c1507845c680bba0fd0070d35b897555d08e7d4",
+      "bytes": 64277
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-17_col_collision_2.obj",
+      "sha256": "09ec99dce78894a05789136661c2c2d72181d80ab6e7e7ff580dd38bb4521f70",
+      "bytes": 57758
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-17_col_collision_3.obj",
+      "sha256": "6e931912333adf68b0924fcc40820924f42b28036a8dbb973de11aa5cba90321",
+      "bytes": 64560
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-19_0.obj",
+      "sha256": "318ef1af440c3fce4a6cb8779f5ba18d13d1d5be1e6398ad2734242c11b97c03",
+      "bytes": 35123
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-19_col_collision_0.obj",
+      "sha256": "372203da4e85d741dcb1cd079b0cc37a64c80379f0478421bafb342dc2c96515",
+      "bytes": 2775
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_0.obj",
+      "sha256": "2453816f9e0ee934333d36acbb98eeed9a4d5a6f55d149f91673c5ae64ea6ada",
+      "bytes": 86669
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_0.obj",
+      "sha256": "35303b47ee94675b6e3e7c8c5d062857256020b8746895179044bf62ef62016c",
+      "bytes": 11913
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_1.obj",
+      "sha256": "8613175ed49a787846880a73032ad531a7b01a320c82cd48f5102e27ea552eab",
+      "bytes": 12772
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_10.obj",
+      "sha256": "3d1e15c896d72b0d4f6525ef871d6d66ef70af4c7c225159542e665d3226717e",
+      "bytes": 4373
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_11.obj",
+      "sha256": "70e308e2da79c878b4fc240eeff3ba9efb2a46c3a0287c1afdb980d847410c97",
+      "bytes": 5543
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_12.obj",
+      "sha256": "9cfe32093de2442e707b8e6a90cc0dc2bce63fd0abc37936a7d86d3745c8f84f",
+      "bytes": 5435
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_13.obj",
+      "sha256": "0a2c257bb518dba9982b59fb0013841758ed686dfc3d367569d2e3fb9dd57dd9",
+      "bytes": 5013
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_14.obj",
+      "sha256": "8d4cf5414a0c4d34b361686599117e1d90d83773c4d5d6698fcc7ecfc62ee664",
+      "bytes": 5137
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_15.obj",
+      "sha256": "3a6466c0ec60f36ef838468107e272dc5856b29b918cd7db2bd4c5d7479909ee",
+      "bytes": 5974
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_16.obj",
+      "sha256": "a6579ae83dc99b9791d8374513f77aeae191644853dc568f2fbc9b7c6d90d287",
+      "bytes": 4489
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_17.obj",
+      "sha256": "c94d1071bdd4a5db5012a4a197a0c72645a4c964d11c836324d1e26375e1d576",
+      "bytes": 5264
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_18.obj",
+      "sha256": "1160a0a668f9b87f571eacd1f5303266edd6e054b1c35318c5823f8abca16f15",
+      "bytes": 5100
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_2.obj",
+      "sha256": "1dda4c2cef73a1ff983140ed6968b8668f48063d77a4313b8a8c467ad202b496",
+      "bytes": 12319
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_3.obj",
+      "sha256": "43f8371c0251ca5eacaeb0e4b8d7944d50a7d164a312e4c0d6ed15d472afdad7",
+      "bytes": 12913
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_4.obj",
+      "sha256": "ffa40225e200a73576b014910c23a4482b870b1e692224d65329ab9d74ac921f",
+      "bytes": 8120
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_5.obj",
+      "sha256": "7824b5df4326880356233da2f191a14e89eb4ed8e34f1073e6428d815f8b3907",
+      "bytes": 5396
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_6.obj",
+      "sha256": "8f7200c258e6ba9198c6a56e24cf8da53b62ba0cbbe87a64922f96eaed59a67b",
+      "bytes": 4314
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_7.obj",
+      "sha256": "2bea0b9733be60c0eb29dbd363db13983363dee382bc35479f70438bfe7611c1",
+      "bytes": 5752
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_8.obj",
+      "sha256": "6e6895cbac76ef9e1c8ebaa48bc6844d28e4c14ef97542d20e3679bbbd6f0dec",
+      "bytes": 5106
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-21_col_collision_9.obj",
+      "sha256": "d89995a1b11cef7bf04d7f5c635b22492f5a8f78895f49d13086382b4ec133ea",
+      "bytes": 4247
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_0.obj",
+      "sha256": "2dd8339f5f5814ccffa2c0fd590110583d39be6b3ae6a0d725959dc9a5929e39",
+      "bytes": 47784
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_0.obj",
+      "sha256": "5e47d1fce3233db1fdb6a9d1db948d3d7c8705cccec7d0a80f38b5b7fb56be56",
+      "bytes": 10360
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_1.obj",
+      "sha256": "5d95219f6278c736d9fea3aac02a51cf6cd7b5145b17e8e22ad0a5aaa250141f",
+      "bytes": 10680
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_2.obj",
+      "sha256": "23bec25b79f1295e5a198137efab92bb16f29d18451ed9e6b4a889aa3e4188aa",
+      "bytes": 10988
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_3.obj",
+      "sha256": "03d3879b586ea691aea522ad6c3cc462ed3446ea673cb7399f584c79f57062b6",
+      "bytes": 10401
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_4.obj",
+      "sha256": "bd22e306ae1acd415994ef4768f1f333453cb6a55adbb1cd44e0bec73939a6d8",
+      "bytes": 7664
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_5.obj",
+      "sha256": "de2658d6b3570e4e723c09c7e93fd42f25307d89502f6211197788b146e30638",
+      "bytes": 10556
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_6.obj",
+      "sha256": "54dd8602fa59d71c65b1ac148eb9b70d35fbec31f8c7daf293942639e03179b3",
+      "bytes": 11674
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-22_col_collision_7.obj",
+      "sha256": "a6b437696966e716f3dd370cd13d319bb55b91ac2f52ba738d02941547bbfe6c",
+      "bytes": 10148
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_0.obj",
+      "sha256": "b08a76726e79c3001a228fb44a739b2c8e10bf800d56607fdfcf36c941df1ed7",
+      "bytes": 28465
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_0.obj",
+      "sha256": "7186e0b82f2c216c7c5729a109f9d943790611c2bef5a375174f46d4aad78e35",
+      "bytes": 9253
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_1.obj",
+      "sha256": "c570039330d0b91cf71453eae7c9a60794d83efdcf56203600a54de3d44a5a32",
+      "bytes": 9368
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_10.obj",
+      "sha256": "f7f97d359cf9ad9d21f2a553e6c2bd8d99288a953fad0f24b963422276add00f",
+      "bytes": 4843
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_11.obj",
+      "sha256": "63fd9283c2af795c50b2c5d392d41c0092d98752fe08bb8a1832fd66154337d9",
+      "bytes": 4494
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_12.obj",
+      "sha256": "35a00a4f9aa4e7c1cc19f49581e6977837868331d158526cb61c56b529b9e369",
+      "bytes": 3196
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_13.obj",
+      "sha256": "0f8be13116b9281def9d0a7536e6ebd7825e8a4f7c49595759b5371e9fcd2b8b",
+      "bytes": 4022
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_14.obj",
+      "sha256": "0844b7935ab53faad5def24f38b55aa1138ed3680b0672395f8eb7736517625b",
+      "bytes": 4558
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_15.obj",
+      "sha256": "85cf0d0ac6f7b470ace19cae40cf13636276984847a2db8b9abb72d43ec5282e",
+      "bytes": 3854
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_16.obj",
+      "sha256": "0c2595d1d31204d89e0ffdd652b6729d4e9c013be4a09b9be54f5a7985326192",
+      "bytes": 3809
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_17.obj",
+      "sha256": "e1ed822a1c9edc199600b737e8a91f045d46b7e7fb17ae63c54c46db2eb74dc6",
+      "bytes": 3944
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_18.obj",
+      "sha256": "7351b7c07b38b250ef38ea9f0e5b3bf804e6bc1204b7f66500920479394299dc",
+      "bytes": 5265
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_2.obj",
+      "sha256": "660768d0286991cca27ca61868bcf6036f04b99c5e02b92b5f07068da58392ed",
+      "bytes": 9400
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_3.obj",
+      "sha256": "6aa516828e58e00734f1ed2b44fe0193e13719f2f554b66fb92ee5ff82195875",
+      "bytes": 9494
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_4.obj",
+      "sha256": "f23db7ed6df4d09abc32a53e8bdd08c7061b8ca5614b913274f8bea935cffdf3",
+      "bytes": 5841
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_5.obj",
+      "sha256": "1432c63a948d35eadf66b6764108c020095a2d7b4d64685b8c5b18f77f70d647",
+      "bytes": 4475
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_6.obj",
+      "sha256": "bce42ff0450535f267a19227933b0840a46d6c688b72ba0da65bfbf147fa57c5",
+      "bytes": 3729
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_7.obj",
+      "sha256": "8b1d3951ef7adaa4fb3abc52de77b8012d9eacddf62413445dc769ebd3917653",
+      "bytes": 3604
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_8.obj",
+      "sha256": "0530f04244979786e1dd6266c039b52b9f2dccfe003e0346ca8e50d7c1dd60a3",
+      "bytes": 3333
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-23_col_collision_9.obj",
+      "sha256": "259dd3f818b3d2d916e1c8d2011e3caff52099ec660c866e850ecb88788a7f00",
+      "bytes": 3739
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-25_0.obj",
+      "sha256": "d5ca635d9917fcc317c8b91cb9cb79bc5fe5f557f84ff0cad3712b14516885b4",
+      "bytes": 56323
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-25_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-25_col_collision_0.obj",
+      "sha256": "64af08a12ba8847673a48bb0483db4317c5f32447ab24e1e12688ef3b527efe2",
+      "bytes": 72952
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-25_col_collision_1.obj",
+      "sha256": "ac2f45ee367c67230895f7f16cb81409b8fead71f7a3032f23a638a845f7f2ef",
+      "bytes": 18316
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-26_0.obj",
+      "sha256": "d728e7299d360385f52d98242fe4d2ce174cfddae42ad3ef89ce76d7a4ac4e52",
+      "bytes": 56587
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-26_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-26_col_collision_0.obj",
+      "sha256": "de0551bf147fa400248dfef77eafea2ec9b05081fa7bdbb865d9c07f3154cd37",
+      "bytes": 74310
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-26_col_collision_1.obj",
+      "sha256": "8c6c6e362151ef7bef685de4ab897739fa57854e63aab5355bff023f552f53da",
+      "bytes": 18555
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-27_0.obj",
+      "sha256": "ca0e85bd6a6b84151d5ac50631b5e022aa44994032f7cdaf22b79fc043926440",
+      "bytes": 34078
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-27_col_collision_0.obj",
+      "sha256": "4fd690cc98aeddd939f2d37d0cf577009298414b35cc599441958d4980853ce8",
+      "bytes": 2700
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-29_0.obj",
+      "sha256": "a2e71e892b841755274133f396ad9bc5fca1808f6e5b77b095470e60566683fe",
+      "bytes": 56747
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-29_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-29_col_collision_0.obj",
+      "sha256": "ac0347c48688a1b90c8444a024d6b0fad1b25ea0269d6eb2cc9dc56dfaa533d5",
+      "bytes": 71632
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-29_col_collision_1.obj",
+      "sha256": "21caeb72c17e978ee3d1b31939e46f96caff16c6b5ad4bf34fe2ecc95db0e1c8",
+      "bytes": 17023
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-30_0.obj",
+      "sha256": "1c17787ad57876054bdd581451fed893c35bd914748996ebd72cd641e54e952a",
+      "bytes": 56459
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-30_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-30_col_collision_0.obj",
+      "sha256": "cb99d5f6ca4c29b5e8d63cadf016f91e285cc9ee319666c87e7f86e448b242fe",
+      "bytes": 74412
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-30_col_collision_1.obj",
+      "sha256": "618fad38cd5e2c984b7e5114c3ba9fed70420f0f19ed869debc59a043916f97e",
+      "bytes": 18430
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-31_0.obj",
+      "sha256": "217624d3e8da6a3774740d42662af79dc23db1363b9dede261341f7c7b9ae70b",
+      "bytes": 34362
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-31_col_collision_0.obj",
+      "sha256": "92d672ffff6ceafd79161778850f01b98876a56d7ca052f33245b02a581388d6",
+      "bytes": 2747
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_0.obj",
+      "sha256": "e30988768e0cf6ac6f0b5e64d3854b9ac9af11ea2f4225f39879a300b3eec8af",
+      "bytes": 33947
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_0.obj",
+      "sha256": "e614aeb9e5ece9341e6cd2c2d4bd1ec9241a7b8049e9d9bd784fa3aed93a64e6",
+      "bytes": 8050
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_1.obj",
+      "sha256": "35731fa8ea89a89b7fc4a833b137c4e953473a1eebc3641b708457af645db9dc",
+      "bytes": 6827
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_2.obj",
+      "sha256": "c6dfc6ae8073a7521c5aa85ce61acc0b21ddc827167209258b45ca6b124366a9",
+      "bytes": 8904
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_3.obj",
+      "sha256": "0b80c864fed995effdf285058e062c884f1972de5c7cfcf7f50f89a5114fbf54",
+      "bytes": 8713
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_4.obj",
+      "sha256": "9a45d29b898eb346b95b09058bb76a36b19ef1b37f85f28ea2ff0612f5d97d3a",
+      "bytes": 7772
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_5.obj",
+      "sha256": "e35ccc1655a2689a8041c4716457f63dec0a06adc18b4fa6306c438c1fc9a845",
+      "bytes": 7899
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_6.obj",
+      "sha256": "cf9b9bfd4254147890b169cb6be8a5d4ae031e997d3e4e4ea67738904bf27a2f",
+      "bytes": 7729
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_7.obj",
+      "sha256": "acb26360184d5256ddaf92d1d746423ebe837cc623ecb47fdd26fe1f6c7573c0",
+      "bytes": 5379
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-5_col_collision_8.obj",
+      "sha256": "b077bb1319cf981fee1877a3b9f9c1d913b09ad597af032376c43894ff229c13",
+      "bytes": 6496
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_0.obj",
+      "sha256": "869421f9173bc2c88d8d21c6181dc7fbad1f02aa8c623e3d08d1e70b2ad5e627",
+      "bytes": 33717
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_0.obj.mtl",
+      "sha256": "e413cd6c9c26bacdf18ddf564b51b308c55b88114ef5819d0e9d3badbf19498f",
+      "bytes": 201
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_0.obj",
+      "sha256": "29f2d9061a883b4f86e50ce5590bb5736ca1075d85bfdd8796d56c0d2fb99b27",
+      "bytes": 15217
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_1.obj",
+      "sha256": "de6ae8bcd35ed49c84bfa1b88632da2781349f1ee0056a2bb8cd9c32e394e8ee",
+      "bytes": 12601
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_2.obj",
+      "sha256": "f16b7c0e80797d28de7bdd64bf022cbd5c40deea3430f01fa7c84fed006ddddb",
+      "bytes": 12420
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_3.obj",
+      "sha256": "96a332bea6db01e064231a014c9b2fcb5076f621e68710f56cefa908388f86ee",
+      "bytes": 16321
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_4.obj",
+      "sha256": "2a6b37e1538d5c0fb5d595bc3a62a93d2af4a92c73aa12b4d6d8bbff58c04669",
+      "bytes": 15496
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_5.obj",
+      "sha256": "a881f2b032d5421a17e1c411223a669dc2c959f06adb64aa9e490f66a4a61e97",
+      "bytes": 13697
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_6.obj",
+      "sha256": "d1ab4f4138eb0f1c113563459a9890b3839e150ecf0222c68e6fa56b63ba4f9f",
+      "bytes": 13572
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-6_col_collision_7.obj",
+      "sha256": "57cb043671e1f4af770be79090a52f4236bc544bd2288745ffd0071357776a2a",
+      "bytes": 14985
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_0.obj",
+      "sha256": "554f097d5a04692b487ad79c8473e6901dc8ca6afc724f3c386df47be349a23f",
+      "bytes": 22224
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_0.obj",
+      "sha256": "52e471889e7a9fa8cb4e107309961d47df20f6adf67d0d1246bae034212eec79",
+      "bytes": 8166
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_1.obj",
+      "sha256": "7e5d7503be53c8a0bc690d23e93607558db481eed57d026cea69fe0e7ced3851",
+      "bytes": 7180
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_2.obj",
+      "sha256": "cd44a0cad7f174bfafe42e2575a301c77321d85d714fa9b484096bde79a6e866",
+      "bytes": 7456
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_3.obj",
+      "sha256": "9d4714feb720e14e235cc9bc22819c7e913572003bc319867478677c92c495ff",
+      "bytes": 8035
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_4.obj",
+      "sha256": "e03424ef7308beb49e4dd2071adce96594f15bc6c383a20ac084c6ed502773fd",
+      "bytes": 7597
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_5.obj",
+      "sha256": "6aeafe560a7623944367b230cee4992c130c6ec5efa69d82aa3941e207736345",
+      "bytes": 6363
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_6.obj",
+      "sha256": "41a790e9db2a477bb3723d85970320ac0bfc905c2ddd82628c6f60ba68c94075",
+      "bytes": 8525
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_7.obj",
+      "sha256": "95b38610062ab79b35a1132599736a68b6b7aa4cd9865f7b5522df35472f5203",
+      "bytes": 4311
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-7_col_collision_8.obj",
+      "sha256": "bccbbe48ea52e941f82200a6e115322f673889bd7a440b6d9fecc00790c5853a",
+      "bytes": 5903
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/original-8_col_collision_0.obj",
+      "sha256": "d453406068077733aba99ebc39555d72c404387d302fd3c185939cc8eeb696ed",
+      "bytes": 2723
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/overhead_mount.stl",
+      "sha256": "54d031aae8599f7ae69adaa834bd5435928484e5815ce4acce964522a115c2db",
+      "bytes": 1899284
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/small_meta_table_diffuse.png",
+      "sha256": "25b1b7e25fb1066686a15538d6f01caba168a888e5be29679533f789e3da745d",
+      "bytes": 339701
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/tablelegs.obj",
+      "sha256": "2514d9d8cd8974e29d95116d9f5b50c1beba5e746e3955f6ccb5ccb594ac6796",
+      "bytes": 10174
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/tabletop.obj",
+      "sha256": "3d88abdc152ebe3dabec44100fcbcbb179c132b1b903c97220225a8ba0232687",
+      "bytes": 4702
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_1_base.stl",
+      "sha256": "d100cafe656671ca8fde98fb6a4cf2d1b746995c51c61c25ad9ea2715635d146",
+      "bytes": 99984
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_2_shoulder.stl",
+      "sha256": "139745a74055cb0b23430bb5bc032bf68cf7bea5e4975c8f4c04107ae005f7f0",
+      "bytes": 63884
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_3_upper_arm.stl",
+      "sha256": "900f236320dd3d500870c5fde763b2d47502d51e043a5c377875e70237108729",
+      "bytes": 102984
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_4_upper_forearm.stl",
+      "sha256": "4104fc54bbfb8a9b533029f1e7e3ade3d54d638372b3195daa0c98f57e0295b5",
+      "bytes": 49584
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_5_lower_forearm.stl",
+      "sha256": "66814e27fa728056416e25e02e89eb7d34c51d51c51e7c3df873829037ddc6b8",
+      "bytes": 99884
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_6_wrist.stl",
+      "sha256": "90eb145c85627968c3776ae6de23ccff7e112c9dd713c46bc9acdfdaa859a048",
+      "bytes": 70784
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper.stl",
+      "sha256": "786c1077bfd226f14219581b11d5f19464ca95b17132e0bb7532503568f5af90",
+      "bytes": 450084
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper_bar.stl",
+      "sha256": "b76420544e84102b1cd30745f3c6c2675f9bf08a656808101f32b6466a33f2ee",
+      "bytes": 723384
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper_camera.stl",
+      "sha256": "2c6e9cbe7ea071b375255bc2bb21e0bbb3fcdf021148d30caaccb3a0cbb4943e",
+      "bytes": 673384
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper_prop.stl",
+      "sha256": "4536e8975278953841f25391dccef10907859e69c71b9f06f794fef6dfc5959c",
+      "bytes": 456684
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper_prop_bar.stl",
+      "sha256": "4405d670c359652c5d373af9d90326c143b57b0860c3046f7d831826dc1d5b4d",
+      "bytes": 1625384
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_7_gripper_wrist_mount.stl",
+      "sha256": "50c54e0486d3e349785163dbce209313f7b4b3feadc252ab2e2c9e55a5d0e7ef",
+      "bytes": 2314484
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_8_custom_finger_left.stl",
+      "sha256": "5853af5b66dd9fc954b6705a883d8569c96536d86775d094f3670befaff67a93",
+      "bytes": 1531384
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/vx300s_8_custom_finger_right.stl",
+      "sha256": "9a1bbd942b887f27e2680b4c99dd3b3d2f73578fa9a87cc0f4dd1da3cf88b2e2",
+      "bytes": 1530484
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/assets/wormseye_mount.stl",
+      "sha256": "0c939865a1adfc8a148817d6e12d8a04541a192ab9b6af37c94e3cae8330aa64",
+      "bytes": 1955684
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/filtered_cartesian_actuators.xml",
+      "sha256": "78a8ef82596d4cb17a777522733f0950d841d1098343bd039e42c1eb2fb2fa64",
+      "bytes": 3046
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/joint_position_actuators.xml",
+      "sha256": "ce843cf0cfecea5ec1f117eb4257d4249dc2296e92e5f2ffb40f2e0178109bc6",
+      "bytes": 1155
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/keyframe_ctrl.xml",
+      "sha256": "b232fdc187f5660f2a35665c984e2b0634d152be8c0dce65437179025078146a",
+      "bytes": 245
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/keyframe_no_act.xml",
+      "sha256": "2de15d0457c4674d3e78a94da7bc9e3c02ce6f2d408736553385820ced9d3592",
+      "bytes": 165
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/lift_pot.npz",
+      "sha256": "0a0a082bb1a9d5c35a4a045518c72035869fb4dd044685fc734f125605923d28",
+      "bytes": 121480
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/mjx_aloha.patch",
+      "sha256": "1804424c62233e111798ce4b837e0a9b40e08ba5e8b98c888bb553ae9d3b1eb4",
+      "bytes": 8693
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/mjx_filtered_cartesian_actuators.patch",
+      "sha256": "a95c97120c3fa10108ebacf4e61cb5c6153b33bf782cd1ae0779313e8c6affe2",
+      "bytes": 1604
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/mjx_scene.patch",
+      "sha256": "28368bbed90c0061fe9bba74a2b3bc0b713c6c38934a778a7833663b1cc01a84",
+      "bytes": 1722
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/pick_clutter.npz",
+      "sha256": "0b1d9e0c28c447152f6bdffc43a26df7796816d7d34a4698ba3bd811f56c97c1",
+      "bytes": 333440
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/rollout_cloth.webp",
+      "sha256": "c6116b96f094fd94e82b050d2f36906bc48ba7e7272ea953d631c95638a77939",
+      "bytes": 573774
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/rollout_clutter.webp",
+      "sha256": "60eea85327a9bb1e4a9b2db9673630d07e96bfa177654a1edd8f2dcd41b4d655",
+      "bytes": 2123396
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/rollout_pot.webp",
+      "sha256": "2a87f55526761da5148f899f75c66117b290fd82d635323158f10748c1547b6c",
+      "bytes": 468766
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/rollout_sdf.webp",
+      "sha256": "1295072d9af598f214a1e758e26248fb7d3bcba2ce3d94d12574997d13ec8552",
+      "bytes": 569738
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/scene.xml",
+      "sha256": "cce45903afdc1e0f5f1fa7bdd1b6ccc0cae1d4d675331572b7c4e7ff5c30fcea",
+      "bytes": 5362
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/scene_cloth.xml",
+      "sha256": "8c57516bfbd4a63580b47e0bf09d4918f7e79c526f804d9791af67a1c930e755",
+      "bytes": 5787
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/scene_clutter.xml",
+      "sha256": "03523ba567c79eedbfbf2e117e8870a082a3a61c905635462686c876544ff73f",
+      "bytes": 154554
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/scene_pot.xml",
+      "sha256": "410e6489f6b0f6744caf1f07ff36bfafa42e8c3fb17fefc1737750547f44078f",
+      "bytes": 78632
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot/scene_sdf.xml",
+      "sha256": "1dca87b2d532992d15709fbaa0c8a3c18130e781726af1fddd5d7e1d4d636509",
+      "bytes": 6118
+    },
+    {
+      "path": "sources/frozen-v3/aloha-pot-manifest.json",
+      "sha256": "cf0cbb694fef13b65cadd478ba912e46fc3a3770ea62ff5d2f8cee60e66fd1ea",
+      "bytes": 30698
+    },
+    {
+      "path": "sources/frozen-v3/candidate-run-plan.json",
+      "sha256": "fe0930e18af914bf8428ede7509b0c839ab5c1dfd357cdba0f33bb536ee74139",
+      "bytes": 23426
+    },
+    {
+      "path": "sources/frozen-v3/menagerie-asset-manifest.json",
+      "sha256": "394321f7ef7d026153375b70068db581ec44a0798aee792c3a297443b2686b38",
+      "bytes": 9918
+    },
+    {
+      "path": "sources/frozen-v3/preparation-receipt.json",
+      "sha256": "6e953f033756ccdddb835efc21e2a18dc86c32dc5e4b57153adf3457743213d7",
+      "bytes": 793
+    },
+    {
+      "path": "sources/frozen-v3/reference_replay_probe.py",
+      "sha256": "3ebe1a83688e0289db5bda1feb61af2c82056861e4f9408b38c36cedd3ebcfb0",
+      "bytes": 26585
+    },
+    {
+      "path": "sources/frozen-v3/review-manifest.json",
+      "sha256": "3c471cac33bc8a85be66e36981315dd161457c0202580c2128c5785c028f1848",
+      "bytes": 33494
+    },
+    {
+      "path": "sources/frozen-v3/source-downloads.json",
+      "sha256": "668ece6f88724d37ce80f6ca545f341ee07a9e3ff2da4871bdafeff9735055ff",
+      "bytes": 489
+    },
+    {
+      "path": "supervisor.py",
+      "sha256": "584dec70a7118e0e029ddfdcaf9c20f08272249314187d8f020317d33c17e448",
+      "bytes": 3426
+    }
+  ]
+}

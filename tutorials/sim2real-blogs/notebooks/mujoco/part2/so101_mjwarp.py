@@ -24,10 +24,10 @@
 #
 #  Two modes live in this file:
 #
-#      migration-check mode (default, one world)
-#          Mirrors world 0 into CPU MjData for rendering and task inspection.
-#          Waypoint IK still uses its command-based scratch state on the CPU.
-#          This checks migration behavior; it is not a throughput measurement.
+#      parity mode (default, --nworld 1)
+#          Mirrors world 0 back into a CPU MjData so the MuJoCo viewer and the
+#          IK solve keep working exactly as in Part 1. Great for proving the
+#          migration is correct; useless for throughput.
 #
 #      throughput mode (--benchmark --nworld N)
 #          Keeps everything on device, captures `mjw.step` into a CUDA graph and
@@ -37,7 +37,7 @@
 #  YOUR TASK
 #  ---------------------------------------------------------------------------
 #  Search this file for "TODO Step" and complete each one, following
-#  03__mujoco_warp.ipynb. Per-step snippets are in solutions/step_NN_*.py and
+#  01_Notebook_MJWarp.ipynb. Per-step snippets are in solutions/step_NN_*.py and
 #  the finished file is solutions/so101_mjwarp_solution.py.
 #
 #  Run it:
@@ -62,7 +62,6 @@ import numpy as np
 #   import mujoco_warp as mjw
 #   import warp as wp
 
-from gpu_checks import check_mjwarp_state, require_cuda
 from pick_place_common import (
     PickPlaceController,
     apply_arm_ctrl,
@@ -73,8 +72,6 @@ from pick_place_common import (
 )
 from robots import add_robot_arg, get_robot
 from utils import (
-    maybe_relaunch_with_mjpython,
-    mjpython_viewer_error,
     print_asset_setup_help,
 )
 
@@ -95,21 +92,33 @@ def run_demo(
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
 ) -> None:
-    """Migration-check mode: one world on the GPU, mirrored back for the viewer."""
+    """Parity mode: one world on the GPU, mirrored back for the viewer."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
-    device = require_cuda()
+    wp.init()
+    device = wp.get_device()
     print(f"Warp device: {device}")
 
     # Compile the MJCF on the host exactly like Part 1. We keep `mjd` (a CPU
     # MjData) around for two reasons: to seed the GPU state, and to mirror
-    # world 0 back for rendering and task inspection.
+    # world 0 back so the viewer and the IK solve keep working.
     mjm = load_pick_place_model(xml_path, spec)
     # Pin the physics clock BEFORE put_model so the device copy inherits it.
     mjm.opt.timestep = (1.0 / fps) / sim_substeps
+    if box_task:
+        mjm.opt.iterations, mjm.opt.ls_iterations, mjm.opt.impratio = 100, 50, 100
+        mjm.opt.tolerance = 1e-6  # Shared CPU/CUDA stopping target.
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
+
+    # Initialize above the first cube before physics, as in the shared task.
+    controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
+    pending_phase = controller.phase_name() if box_task else None
+    pending_ctrl = controller.step(mjm, mjd, 1.0 / fps).astype(np.float32) if box_task else None
+    if box_task:
+        apply_arm_ctrl(mjm, mjd, pending_ctrl)
+
 
     # TODO Step 1: upload the compiled model to the GPU.
     # mjw.put_model() turns an mjModel into an mjw.Model whose fields are Warp
@@ -123,7 +132,7 @@ def run_demo(
     #   nworld  - how many worlds to simulate in parallel
     #   nconmax - expected contacts per world
     #   njmax   - maximum constraints per world (a hard limit)
-    # Use nworld=1 here to compare the task outcome with Part 1.
+    # Use nworld=1 here so the visual result matches Part 1 exactly.
     #   d = ...
     d = None
 
@@ -133,7 +142,6 @@ def run_demo(
     # array of shape (nq,) becomes (1, nq) via mjd.qpos[None, :].
     # Copy qpos, qvel and ctrl, then call mjw.forward(m, d).
 
-    controller = box_task.make_controller() if box_task else PickPlaceController(spec=spec)
     frame_dt = 1.0 / fps
     sim_dt = frame_dt / sim_substeps
 
@@ -144,11 +152,16 @@ def run_demo(
 
     def simulate_frame() -> None:
         nonlocal frame_idx
-        commanded_phase = controller.phase_name()
-        # Waypoint IK runs on a separate CPU scratch state derived from previous
-        # commands. Mirrored device state supports rendering and task inspection;
-        # this scripted controller does not use measured-state feedback.
-        ctrl = controller.step(mjm, mjd, frame_dt)
+        # IK still runs on the CPU mjd (cheap and exact). Only the dynamics move
+        # to the GPU: push ctrl -> device, step, pull state -> host so the next
+        # IK solve and the viewer see the updated configuration.
+        if box_task and frame_idx == 0:
+            commanded_phase, ctrl = pending_phase, pending_ctrl
+        else:
+            commanded_phase = controller.phase_name()
+            ctrl = controller.step(mjm, mjd, frame_dt)
+        if box_task:
+            ctrl = np.asarray(ctrl, dtype=np.float32)
         for _ in range(sim_substeps):
             mjd.ctrl[: mjm.nu] = ctrl
 
@@ -162,23 +175,19 @@ def run_demo(
             if box_task:
                 assert_mjwarp_capacity(d)
 
-            # TODO Step 6: mirror world 0 to the host for rendering and task
-            # inspection. d.qpos is a Warp array; .numpy() copies it back,
-            # and index [0] selects world 0.
+            # TODO Step 6: mirror world 0 back to the host so the CPU-side IK
+            # and the viewer stay in sync. d.qpos is a Warp array; .numpy()
+            # copies it back, and index [0] selects world 0.
 
         frame_idx += 1
         if box_task:
-            # Preserve GPU-solved contact forces when importing the observed state.
+            # Pull actual GPU-solved contacts and forces, not CPU recomputed ones.
             mjw.forward(m, d)
             assert_mjwarp_capacity(d)
             mjw.get_data_into(mjd, mjm, d, world_id=0)
             box_task.observe(mjm, mjd, frame=frame_idx, time=frame_idx / fps, phase=commanded_phase)
 
-    if headless_steps > 0:
-        for _ in range(headless_steps):
-            simulate_frame()
-        diagnostics = check_mjwarp_state(d)
-        print(f"Solver iteration-limit flags: {diagnostics or 'none'}")
+    def report_completion() -> None:
         if box_task:
             report = box_task.report()
             report.update(backend='mujoco_warp', device=str(device))
@@ -195,27 +204,28 @@ def run_demo(
         blue = mjd.xpos[mujoco.mj_name2id(mjm, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")]
         xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
         dz = float(red[2] - blue[2])
-        print(f"Headless complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
+        print(f"Task complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
         print(f"stack check: xy_err={xy_err:.3f} m  dz={dz:.3f} m")
         return
 
-    try:
-        viewer_ctx = mujoco.viewer.launch_passive(mjm, mjd)
-    except RuntimeError as exc:
-        raise mjpython_viewer_error(SCRIPT_NAME, exc) from exc
 
-    with viewer_ctx as viewer:
-        apply_viewer_camera(viewer, spec)
-        print("Viewer shows the MJWarp sim. Space = pause, Esc = quit.")
-        while viewer.is_running():
-            t0 = time.time()
+    if headless_steps > 0:
+        for _ in range(headless_steps):
             simulate_frame()
-            # Mirrored qpos/qvel require refreshed CPU kinematics for rendering.
-            mujoco.mj_forward(mjm, mjd)
-            viewer.sync()
-            elapsed = time.time() - t0
-            if elapsed < frame_dt:
-                time.sleep(frame_dt - elapsed)
+        report_completion()
+        return
+
+    # The interactive lesson has the same finite horizon as the headless example.
+    # Rendering, pause and cancellation do not advance the controller clock.
+    from viewer_loop import run_passive_frames
+
+    complete = run_passive_frames(
+        mjm, mjd, simulate_frame,
+        frames=round((40 if box_task else 12) * fps), fps=fps,
+        configure_viewer=lambda viewer: apply_viewer_camera(viewer, spec),
+    )
+    if complete:
+        report_completion()
 
 
 def benchmark(
@@ -227,17 +237,15 @@ def benchmark(
     njmax: int | None = None,
     steps: int = 200,
 ) -> None:
-    """Time physics with fixed controls, excluding task/IK and transfers."""
-    if nworld <= 0 or steps <= 0:
-        raise ValueError("nworld and steps must be positive.")
+    """Throughput mode: many worlds, nothing leaves the GPU."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
-    device = require_cuda()
+    wp.init()
+    device = wp.get_device()
     if not device.is_cuda:
-        raise RuntimeError("GPU throughput measurements require an NVIDIA CUDA device.")
+        print("Benchmark needs a CUDA device; Warp is running on CPU.", file=sys.stderr)
 
     mjm = load_pick_place_model(xml_path, spec)
-    mjm.opt.timestep = 0.002
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
@@ -255,7 +263,7 @@ def benchmark(
     # mjw.step is dozens of small kernel launches; replaying a captured graph
     # removes nearly all of that launch overhead. Capture once with
     # wp.ScopedCapture(), then replay with wp.capture_launch(graph).
-    # This tutorial requires CUDA; capture the graph on the selected CUDA device.
+    # Fall back to calling mjw.step directly when there is no CUDA device.
     graph = None
 
     def advance() -> None:
@@ -274,9 +282,6 @@ def benchmark(
     wp.synchronize()
     elapsed = time.perf_counter() - t0
 
-    diagnostics = check_mjwarp_state(d)  # Outside the timed region.
-    print(f"Physics-only, fixed controls | timestep={mjm.opt.timestep:g}s | warmup=10")
-    print(f"Solver iteration-limit flags: {diagnostics or 'none'}")
     total = steps * nworld
     print(f"nworld={nworld}  steps={steps}  graph={'yes' if graph else 'no'}")
     print(f"{elapsed:.3f} s for {total:,} world-steps")
@@ -288,7 +293,7 @@ def main() -> None:
     add_robot_arg(parser)
     parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
     parser.add_argument("--report", type=Path, default=None, help="Save measured --task box results as JSON.")
-    parser.add_argument("--device", default=None, help="CUDA device, for example cuda:0 or cuda:1.")
+    parser.add_argument("--device", default=None, help="Warp device, for example cuda:0 or cuda:1.")
     parser.add_argument("--menagerie-path", type=Path, default=None)
     parser.add_argument("--fps", type=int, default=50)
     parser.add_argument("--sim-substeps", type=int, default=10)
@@ -344,5 +349,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    maybe_relaunch_with_mjpython()
     main()

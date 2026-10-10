@@ -1,0 +1,3 @@
+mujoco==3.8.0
+mujoco-warp==3.8.0.3
+warp-lang==1.15.0

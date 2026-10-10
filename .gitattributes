@@ -1,3 +1,7 @@
+tutorials/sim2real-blogs/**/*.svg filter=lfs diff=lfs merge=lfs -text
+tutorials/sim2real-blogs/**/reference-benchmark/**/*.csv -text whitespace=cr-at-eol
+tutorials/sim2real-blogs/**/*.gz filter=lfs diff=lfs merge=lfs -text
+tutorials/sim2real-blogs/**/*.npz filter=lfs diff=lfs merge=lfs -text
 *.pptx filter=lfs diff=lfs merge=lfs -text
 *.pdf filter=lfs diff=lfs merge=lfs -text
 *.png filter=lfs diff=lfs merge=lfs -text
