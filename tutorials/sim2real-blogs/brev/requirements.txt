@@ -1,29 +1,12 @@
-# Warp
-warp-lang==1.17.0
-
-# Robotics simulation (same versions as notebooks/mujoco/requirements.txt)
-mujoco==3.12.0
-mujoco-warp==3.12.0
-
-# Arrays
-numpy==2.5.3
-
-# Scientific/numeric
+# Notebook/UI and test tools only. The Dockerfile first installs the unchanged
+# notebooks/mujoco/requirements.lock.txt with --require-hashes (MuJoCo 3.8.0,
+# MuJoCo Warp 3.8.0.3, Warp 1.15.0), then constrains these additions to that lock.
 scipy
-
-# Visualization
-matplotlib==3.11.2
 ipympl
 Pillow
-
-# Dark mode detection
-jupyter-dark-detect == 0.1.0
-
-# Jupyter
+jupyter-dark-detect==0.1.0
 jupyter
 jupyter-server-proxy
 jupyterlab
 jupyterlab-execute-time
-
-# Tutorial validation
 pytest

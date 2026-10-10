@@ -1,0 +1,414 @@
+{
+  "article": 2,
+  "protocol_version": 2,
+  "execution_revision": "parallel-host-validation-v1",
+  "physics_steps_per_world": 40000,
+  "physics_timestep_seconds": 0.001,
+  "acceptance_auditor_sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e",
+  "accepted_figure_points": 29,
+  "source_aggregate_sha256": "8d39e63de5e991f6bb83e10050783bbdd4658786a3899e1633ca8413bbcf807e",
+  "source_file_sha256": {
+    "part2/benchmark_box.py": "f5a380e315a06c7bd7e7110dc6978cf2df796348ddb7574e91a070f74588be5a",
+    "part2/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "part2/benchmark_workload.py": "d5a233723bb16d8175f2f412409e4f5cb0aaf00f8a500e1a47b2485893ea068e",
+    "part2/box_task.py": "6de52961b97adda41c6514a5b8a3099cceaa97327813d3fe1af81fb27427c911",
+    "part2/migration_benchmark.py": "2cc65829bccf45e33ae40d7d4fb51e116cd80874cd905b7d0952053e43775ff8",
+    "part2/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "part2/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "part2/scaling_study.py": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+    "part2/so101_mjwarp.py": "73660368d32baea1a25a1c8e0b601331c029f8034cbce640a822479162662064",
+    "part2/solutions/so101_mjwarp_solution.py": "9eb27a83539ca4ef3510d2de0c1914483ef4c8946426458916536f72161dba0b",
+    "part2/solutions/step_00_imports.py": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+    "part2/solutions/step_01_put_model.py": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+    "part2/solutions/step_02_make_data.py": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+    "part2/solutions/step_03_seed_state.py": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+    "part2/solutions/step_04_push_ctrl.py": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+    "part2/solutions/step_05_mjw_step.py": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+    "part2/solutions/step_06_pull_state.py": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+    "part2/solutions/step_07_cuda_graph.py": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+    "part2/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "requirements.lock.txt": "4ab4a1d1c0514f157b6411526e9e70c3e1a538039798f1bd165bf16a2f68f53d"
+  },
+  "files": {
+    "source.tar.gz": {
+      "sha256": "393cee3b35522b30a0f0a669d02c61ff06c24e2d84f36f591a9910ae07150c3d",
+      "bytes": 95453,
+      "source_files": 21
+    },
+    "preflight-v3-evidence.tar.gz": {
+      "sha256": "065e94185683ae1da92d9ea0b268b91bf072f5a746e75d1939b8a32aed539f1a",
+      "bytes": 796661,
+      "role": "preflight_context_only"
+    },
+    "preflight-summary.json": {
+      "sha256": "ac7a0854c0290db8cf2a8c071300fa954035b1b4ead6c33015d049cc422836ce",
+      "bytes": 8400,
+      "role": "preflight_context_only"
+    },
+    "preflight-failure-audit.json": {
+      "sha256": "41262ddca05c5f7be8231ab133756a1ab1a7e7962ed94a3f69dfad4e8b758352",
+      "bytes": 9499,
+      "role": "preflight_context_only"
+    },
+    "so101/results.json.gz": {
+      "sha256": "ea47ee2b0d7996868d627c0c76491880610e97c488e05377c748e3dbc59eb9f0",
+      "uncompressed_sha256": "3cd0c018d33d03269601e1373038ba47d3e9c80188e484f25c66b251881c1f6b",
+      "bytes": 3289037,
+      "uncompressed_bytes": 197110996,
+      "case_count": 18,
+      "run_status": "incomplete_or_failed",
+      "source_aggregate_sha256": "8d39e63de5e991f6bb83e10050783bbdd4658786a3899e1633ca8413bbcf807e"
+    },
+    "so101/summary.csv": {
+      "sha256": "bd6dc6c380bc6b14e4ac55683b5ea82df586e4b7fa6ee2347934f9395d2edca9",
+      "source_sha256": "bd6dc6c380bc6b14e4ac55683b5ea82df586e4b7fa6ee2347934f9395d2edca9",
+      "bytes": 3255
+    },
+    "so101/summary.md": {
+      "sha256": "55638f66909ddc8682605c12ec01a897e2a634cf58dde71a30a3c2277f5f7e9b",
+      "source_sha256": "55638f66909ddc8682605c12ec01a897e2a634cf58dde71a30a3c2277f5f7e9b",
+      "bytes": 3379
+    },
+    "so101/raw-run.tar.gz": {
+      "sha256": "c9fbf2170ea60e6bffd70289105aae5537ea99321927357fd04ba19057c3186c",
+      "bytes": 6467330,
+      "member_sha256": {
+        "preflight.json": "2c4ada817853517d51368737fb56c3bc54cc28ffec1872ad28b74effe3d45ebc",
+        "replay-box-mjwarp-w1-t1.config.json": "7e4788eb9e69a64d55a5aa8f2ad6e535ac8173ce4811bd74798ac58140b05281",
+        "replay-box-mjwarp-w1-t1.json": "aa631a23cbcb5d90c4dd8290bafe972f55957232fc24331fe28cebbff7135d78",
+        "replay-box-mjwarp-w1-t1.log": "04e0b2cf44568ad464f97540d2f6e814dbd9c76df24c591f3d35c3a4a20ef22c",
+        "replay-box-mjwarp-w1024-t1.config.json": "f094a8d8556de5d929e36bae962aeaa060702c5fbe9c7eaa00e53ed0cb007866",
+        "replay-box-mjwarp-w1024-t1.json": "bbf025a8e083265754f7c1b9da1163616d614e2698748a228cdc1743af69795e",
+        "replay-box-mjwarp-w1024-t1.log": "1651b9229c4ecbd47e41ba5641818648ef1c8667355715ff3cfa5505b601adcc",
+        "replay-box-mjwarp-w128-t1.config.json": "0ef678c89242facf7bfd809dfb226996c4c863c2bcc0b272174533e7afc4ecbb",
+        "replay-box-mjwarp-w128-t1.json": "a5ef4b2b9b11beb7f8a361c6af97c3828818b850b8b7f444876b2a9e662e8bd5",
+        "replay-box-mjwarp-w128-t1.log": "1c05eac9addb0953e0aa1981be16b8843071632828d29820bf3deb53e4fe6698",
+        "replay-box-mjwarp-w16-t1.config.json": "1e87f3688462b7c2024b542bb19d4fbdb35ee830b5d0ddd317638d8e48d17320",
+        "replay-box-mjwarp-w16-t1.json": "2204d227aea5b30238af57e364e80f4433a9b2e670d87420fce9f5e06c4a3489",
+        "replay-box-mjwarp-w16-t1.log": "85f7705161a40358a26f1ce6ff8162fc06bbd809e0f09dfd11e637830332a39b",
+        "replay-box-mjwarp-w2048-t1.config.json": "49c8eea142b37df5e257c3833547c1fe44e6975770b4c53b69f89ad6cb43e55d",
+        "replay-box-mjwarp-w2048-t1.json": "edad32a5c71b778f4fec9a4bead320aed80791f2777631462210f2c689bcc28a",
+        "replay-box-mjwarp-w2048-t1.log": "8498e6697c96671ee5c62ae61b8ccf38b966addf02e2571c0d79072022971f0d",
+        "replay-box-mjwarp-w256-t1.config.json": "f89943afe035a38d6a130edea50f23ce7e3dbcf64f58679d530fc755f048a7eb",
+        "replay-box-mjwarp-w256-t1.json": "77b504f6438f1f268eaa778ee4be4a2b3d63177c0c7473d2eb0d8cac8a07d574",
+        "replay-box-mjwarp-w256-t1.log": "08a9da2b535f7a57b8767a73ad5bf8d04c705fc5de2673bb032081c18e633b2d",
+        "replay-box-mjwarp-w32-t1.config.json": "909962c53261f62f2ff8d9deae86b7bade908688f5d4ad73f1a50e387f00c154",
+        "replay-box-mjwarp-w32-t1.json": "565594881932b689cf38e7e2a9e0dca01a12d5c3453821be01df75d8b5b743c6",
+        "replay-box-mjwarp-w32-t1.log": "1f9f613f48458d5d81b4022fa54473d271ffce15e1e5e28686f897791017bd4e",
+        "replay-box-mjwarp-w512-t1.config.json": "2eece8abed605aee6fd08e99ad5ff549d419e40f963c8b0d80ab278743101458",
+        "replay-box-mjwarp-w512-t1.json": "43f2b3cd7de075de77c5864c77a1bbd1fecbdb8d7cabbf2ac12228b8e5b8d776",
+        "replay-box-mjwarp-w512-t1.log": "09c7302394906a6759f0602f88564c9f28e203d688862ef0473b875a11bf9836",
+        "replay-box-mjwarp-w64-t1.config.json": "9725dc68a8dafd0ffd403db33fb503e7cf15ec6c8d5555615480021f1b6ddcb9",
+        "replay-box-mjwarp-w64-t1.json": "faa8693d0c3c2bd8c555fbdf3afb294d02a26637e60800b4ba8ac6a6c6ec30be",
+        "replay-box-mjwarp-w64-t1.log": "805ea13e06cff48465f8dc42bf0c5e095a5fe4ea208e63e48cfb40a958d8379b",
+        "replay-box-mujoco-w1-t1.config.json": "502ede4d4b86f62cbc2adb1bf0d44cdd6786d23655568751e7ae3dd4bc3c7973",
+        "replay-box-mujoco-w1-t1.json": "9256058f736606b2e1a741fed69d860321ee0c0dee0170f921e711eb8055a0f2",
+        "replay-box-mujoco-w1-t1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w1024-t32.config.json": "75a26f32dd27f42504b49fa89b2e7558697d452651e19a9f495ba6d7dfbc7435",
+        "replay-box-mujoco-w1024-t32.json": "dd946b4576af9ec491953b4259743002f247464db8fd4214a376ca191cef07e2",
+        "replay-box-mujoco-w1024-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w128-t32.config.json": "d15bb92f2b42087fec58186aa4331c5e5da1b1d5d55fe37b42b9c8c258b14494",
+        "replay-box-mujoco-w128-t32.json": "1f897db87ab3f73c82954b8a013adba5edb85b41b77b31d45eca59c592061019",
+        "replay-box-mujoco-w128-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w16-t16.config.json": "e88f510249997d216323fb97b80922e86e82b9f261475932e7fa0e15079e87fb",
+        "replay-box-mujoco-w16-t16.json": "3eed96e0f0301aec42260b8c239083e52e13b659c030814fe1446550273d5bb3",
+        "replay-box-mujoco-w16-t16.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w2048-t32.config.json": "5c94d912d70ac659c37096cf4eb6d9ed4aea665639066a55325fb57a35b1bf71",
+        "replay-box-mujoco-w2048-t32.json": "f10bc10a5c1d6ee0851b564cb16774dd9574e27fc2804ca32ee1739520730cd0",
+        "replay-box-mujoco-w2048-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w256-t32.config.json": "ed30d407329dc53a9528463b29fa736229bde484ed01529e1310c429a37ebe81",
+        "replay-box-mujoco-w256-t32.json": "0cc12aa1cdf2d6de9f1e13c42a7d659c9195a46d8c9207525745ae6c0f475725",
+        "replay-box-mujoco-w256-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w32-t32.config.json": "fd6b34d3eaf5228491bddeb22be4963386ecb85357f2eb1b1a05c7517751903b",
+        "replay-box-mujoco-w32-t32.json": "c471428aaea532550362db4e5f1f9a7759d5e86dea03c008ba70487cb633d895",
+        "replay-box-mujoco-w32-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w512-t32.config.json": "7f78f31d08a5df7d78b4036fd9e4b97e2662ab7d2e8463f705e418e68b305df5",
+        "replay-box-mujoco-w512-t32.json": "7a1ac87a7023106ee2332c24d79bb358849ff0ee39f30d3bbb1d8a8820fafd62",
+        "replay-box-mujoco-w512-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w64-t32.config.json": "08997f181c49785aa5cb4c49f3483a760e7460416c07474fac49d49485571db9",
+        "replay-box-mujoco-w64-t32.json": "4646d283e76f1834487e7690988c1b195e1c50ac41482bf7392dbfcc810640d0",
+        "replay-box-mujoco-w64-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "results.json": "3cd0c018d33d03269601e1373038ba47d3e9c80188e484f25c66b251881c1f6b",
+        "summary.csv": "bd6dc6c380bc6b14e4ac55683b5ea82df586e4b7fa6ee2347934f9395d2edca9",
+        "summary.md": "55638f66909ddc8682605c12ec01a897e2a634cf58dde71a30a3c2277f5f7e9b"
+      }
+    },
+    "rebot/results.json.gz": {
+      "sha256": "0dcbc9755fb8032cedc3b21605934ff6a0ada7a300316d19b9c67a774b833643",
+      "uncompressed_sha256": "276ac6d291891e8085649eec5fb69b9b4e6615c9d0087309ed5ad4e3ae043df9",
+      "bytes": 3550236,
+      "uncompressed_bytes": 202961620,
+      "case_count": 18,
+      "run_status": "incomplete_or_failed",
+      "source_aggregate_sha256": "8d39e63de5e991f6bb83e10050783bbdd4658786a3899e1633ca8413bbcf807e"
+    },
+    "rebot/summary.csv": {
+      "sha256": "13c5061ed2adc9ef83f70e9d56509a58685b14eab3d1fd9f92069216b18dd447",
+      "source_sha256": "13c5061ed2adc9ef83f70e9d56509a58685b14eab3d1fd9f92069216b18dd447",
+      "bytes": 3145
+    },
+    "rebot/summary.md": {
+      "sha256": "bfa23e70ad82604830d581b15bce5581ee961fd17e81a455a410c27ec290137d",
+      "source_sha256": "bfa23e70ad82604830d581b15bce5581ee961fd17e81a455a410c27ec290137d",
+      "bytes": 3315
+    },
+    "rebot/raw-run.tar.gz": {
+      "sha256": "8c622797f75ff114f141d4fa24208b3aa1a74040598c63a09356398f53bf56b3",
+      "bytes": 6963833,
+      "member_sha256": {
+        "preflight.json": "a692cd1f03f063ef9f632f501349162a1e46b58dc8155eeaf988eb022c75698b",
+        "replay-box-mjwarp-w1-t1.config.json": "fb928aa09948d2753bcf44baac9102b564d8774375784d857998da63a4efd4cd",
+        "replay-box-mjwarp-w1-t1.json": "7dcfb15bdfb057e598bcc3f10a4faed6615f009c8ad7be9c0875a5cd80e5f786",
+        "replay-box-mjwarp-w1-t1.log": "6afae2d1d458cfbd78dd0572d99809e33eda1f3ef67c7d81b65f0412c7b0db48",
+        "replay-box-mjwarp-w1024-t1.config.json": "8a102450d5c357b1f9a85e7c933559b073c65d703f86db1d941424ce5dcf5a5c",
+        "replay-box-mjwarp-w1024-t1.json": "62971de91015224d5300e4dae3a414fe31705706b450479f2d15d17a71c8921b",
+        "replay-box-mjwarp-w1024-t1.log": "704c3c1abacca8443b53b095bcc73473bbbd352a3e4a4df8e0da40832cf800c7",
+        "replay-box-mjwarp-w128-t1.config.json": "a7680fb5c3f02248d1b56b9f523019dd01d125f4837693a65b2dd13e563497cb",
+        "replay-box-mjwarp-w128-t1.json": "e18e097a96e10353c05f939e0ff34fad40eecbb11e7a0ada05b7c9e3505fb638",
+        "replay-box-mjwarp-w128-t1.log": "f873302fd096cd0243b831b8d6549738a5139a1ab6708a1e5970d84b09741763",
+        "replay-box-mjwarp-w16-t1.config.json": "1a9faf629a3305a8fb06fd75c7e54fae1bf9af56ad7baaade02c690362841ece",
+        "replay-box-mjwarp-w16-t1.json": "89fcab0018bf77600a0c42830bab99d2b835bfe3cb16c5963e7a6fad67350f96",
+        "replay-box-mjwarp-w16-t1.log": "e829660e56dcc13daab6ffb6bafb94e0212bdd0357a1f14dfed511fd173d40a8",
+        "replay-box-mjwarp-w2048-t1.config.json": "a75638b5b27fa1f7ac830dbeefaad13ea3980b1d5f7e08f2f5ec7869a85670c9",
+        "replay-box-mjwarp-w2048-t1.json": "90d1d1a715a9a745f8b9aaaa9591a56204341c079199416d1ac05087f27e64ac",
+        "replay-box-mjwarp-w2048-t1.log": "5541327630556b08086effc7dc19a5367743a42647cbc443868f3f79afafa597",
+        "replay-box-mjwarp-w256-t1.config.json": "fb94007df2837b905ef30871d1ac8fef48361cceae8e7128611822e141929b5f",
+        "replay-box-mjwarp-w256-t1.json": "5f9862479345ed52b6b4b7a597930d295f030e71fe42144b25a744c08cbd3735",
+        "replay-box-mjwarp-w256-t1.log": "1e32d67c895ed4c400872be0e3c9e0abe6fae1bb1d674239a43ba4be2b7da7af",
+        "replay-box-mjwarp-w32-t1.config.json": "50da437d358f3e6cce851d78e1092ab049b43325b381a4981a25f88d5c0ba311",
+        "replay-box-mjwarp-w32-t1.json": "0434280e5ffd83f73e8f2f957f82f0bcbb7d2eab21199b20a405b60aa626e667",
+        "replay-box-mjwarp-w32-t1.log": "4f1e40dad82aaee63991114f9aec5a446d7dda21bfb6ec3230b242822e81eeae",
+        "replay-box-mjwarp-w512-t1.config.json": "d26c1b3edc52d3771ef0f34db97c98661568e0561bfd81df1731fc2523897325",
+        "replay-box-mjwarp-w512-t1.json": "ea58dad51997ec524e954bacecd568cb46f1deb766757fd24f99ef62177ce28c",
+        "replay-box-mjwarp-w512-t1.log": "14343ab6443aee6c3e6c694e02cff6417ae0bd700e654c773be3c67aff28fb71",
+        "replay-box-mjwarp-w64-t1.config.json": "0e067ffa14c9ad0a058086450523da91bc682b4c9771ddbbc4a1f6ddd299c2c2",
+        "replay-box-mjwarp-w64-t1.json": "5b0b0abae22a7916e542ca583a3378f7581d9e67dc8ea1d68a36498de7e74ccb",
+        "replay-box-mjwarp-w64-t1.log": "752b7a9361494c91897225b5c9f098e6979ca772f8aeb140d85bb2dd20cfb1b8",
+        "replay-box-mujoco-w1-t1.config.json": "8c7c5e8edc2e5461ea560adc20b09bdbe04c0293d7995f5cc6f6f26f04ef923b",
+        "replay-box-mujoco-w1-t1.json": "5393f32bd0c159aba247b2b3a4178dc92d50b341d5c9d09fdd0301357d5d4212",
+        "replay-box-mujoco-w1-t1.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w1024-t32.config.json": "119af9431c1b744b9d0395bf6454e773e411d8264ca55237147e2e545a6dac73",
+        "replay-box-mujoco-w1024-t32.json": "9e29385b1bf32f966f75bb7b8d23e5bb7b421cbc492492973063b3a580f07460",
+        "replay-box-mujoco-w1024-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w128-t32.config.json": "2b3931d993fc2083f8ce039e9cba05a84e7aa627adad348605a273a5cdcd537f",
+        "replay-box-mujoco-w128-t32.json": "922fee64488c40fb264089c78bd98a7512259221e27ebf8333ec1949ce8b33d1",
+        "replay-box-mujoco-w128-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w16-t16.config.json": "916a3e42cb510a3b2bcc763f4195404dd0346cfb584de94475f0e2eeb3f38efc",
+        "replay-box-mujoco-w16-t16.json": "16e23d3135e6bafab2ee2d110ed10faa7a6a5fc233c5706d697c782638e64993",
+        "replay-box-mujoco-w16-t16.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w2048-t32.config.json": "0303ca682d1b7d820132bae7c6e61b5dfe635e2fb3ee045b45d1cb037781eb05",
+        "replay-box-mujoco-w2048-t32.json": "c661e33975dc5a22dba407c67469d53bfb642ca22abba59191292eececd1a180",
+        "replay-box-mujoco-w2048-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w256-t32.config.json": "bfed44b5fdebffba78115e93201da5e9d613c2936542836157b5848f23abd6ad",
+        "replay-box-mujoco-w256-t32.json": "8a0d173a8603bed95ee2ed91e887e558d774c91e8a075a93db26175264c8a637",
+        "replay-box-mujoco-w256-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w32-t32.config.json": "ac62bf45ec9376cce7374e5bd67666d6d8480250a0edceb990f4a0921d6c98f6",
+        "replay-box-mujoco-w32-t32.json": "40f7ff917aad9cb2ccfa7d35589acdba41c7c6afe218007a8c8d48c5a253a90f",
+        "replay-box-mujoco-w32-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w512-t32.config.json": "0a7559ed7afceb28b29a0af4a0ba5aa665a7e32a6d7c62ddcd3e31b1254a091c",
+        "replay-box-mujoco-w512-t32.json": "fdc59c4386a2852a4eff0d3ec8a110f87fbc46112f65896623d5776e32ba0445",
+        "replay-box-mujoco-w512-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "replay-box-mujoco-w64-t32.config.json": "01503f38a84f2d7cd529cd57b1e0ea39761a8115da58cbf71e6ed9c5ad028467",
+        "replay-box-mujoco-w64-t32.json": "c681c5bcec194a6d7675596bcff1522d8dbe5dfd1fe373a4104ae6e4c6d0ca89",
+        "replay-box-mujoco-w64-t32.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "results.json": "276ac6d291891e8085649eec5fb69b9b4e6615c9d0087309ed5ad4e3ae043df9",
+        "summary.csv": "13c5061ed2adc9ef83f70e9d56509a58685b14eab3d1fd9f92069216b18dd447",
+        "summary.md": "bfa23e70ad82604830d581b15bce5581ee961fd17e81a455a410c27ec290137d"
+      }
+    },
+    "audit.json": {
+      "sha256": "cf45be5e4f0c94c99659afbe618abf08ad0e8d003760d7c8bac5163ca4d283eb",
+      "bytes": 486613
+    },
+    "README.md": {
+      "sha256": "696ed4dfb657108dae23fac9cad844493d318a8d7067fd53e41c6404043d0498",
+      "bytes": 11173
+    },
+    "figures/fig_box_cpu_gpu_checked_results.caption.txt": {
+      "sha256": "1c464cdc3655b89bbcbab30697f6ecfa8edc7095840642ea42f7e1d13a52d16f",
+      "bytes": 3260,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.pdf": {
+      "sha256": "0cde7c51f48204613429d9b3dd3b86a619b804d117034bd133a2ec6ee05b4794",
+      "bytes": 35327,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.png": {
+      "sha256": "953209aeb9f70de6a24ef90d03fd153493b6d65a146179c3322220d4a3b30132",
+      "bytes": 402117,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_checked_results.svg": {
+      "sha256": "f5a518f33b1816989c3aaada3c06ed74067deb4fd5cbf6e887092c04f66d3201",
+      "bytes": 49786,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.caption.txt": {
+      "sha256": "a659f63e6165920cb8d4fc60d8bd5d86e6481f3fcffe54d6d0eb9bd1b82e2426",
+      "bytes": 3118,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.data.json": {
+      "sha256": "f4a8c2b51b9308a2ac402cbd4d779ba2bb3f63f31f92c6f253740bda7d415755",
+      "bytes": 192239,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.pdf": {
+      "sha256": "bc396035bc2bf3aa00aa5ad93c7cd8395f2727803e93f59bc1d3187cbf869fc0",
+      "bytes": 35383,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.png": {
+      "sha256": "0e9ac42214e0404a772fe49306511f2d345e8099b3fdbfef4850002accdef1d0",
+      "bytes": 405091,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/fig_box_cpu_gpu_scaling.svg": {
+      "sha256": "708efdf01ed0bb27531215add29d3c3c63df7dfb2b1490698b5755231c01e749",
+      "bytes": 50071,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "figures/gen_fig_box_cpu_gpu_scaling.py": {
+      "sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e",
+      "bytes": 54074,
+      "role": "figure_or_reproducibility_asset"
+    },
+    "tutorial-validation/README.md": {
+      "sha256": "6d5b8901928160090cb941f3a30ef323a8428bc120c2e32958c3f1c934d07c5c",
+      "bytes": 935,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/execution-plan.json": {
+      "sha256": "973a7b6831e77d71b8af9c6f5d30c57e0bdb35d270fb6df821f4d0c63b10dc04",
+      "bytes": 2351,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/execution-status.json": {
+      "sha256": "9b9041516fba92fd2ccccedd5da23742adef669d9857d6039515f584230dcace",
+      "bytes": 2300,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/manifest.json": {
+      "sha256": "1b40e85562e6a579cb3f4a40d1f40df66a1799add2f28b00dda0c5a0c8762d0c",
+      "bytes": 1974,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/rebot/box-task-report.json": {
+      "sha256": "fb969726cdb9f2ca3b8df63b39a386478108f6d2dbf53aae58fd337862d67c17",
+      "bytes": 3267,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/rebot/execution.log": {
+      "sha256": "00c9b55136b08d1efd928dc9135ffe3fda171d49d31ae227d503ae2362d6b5ae",
+      "bytes": 3625,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/so101/box-task-report.json": {
+      "sha256": "677f6b59930983c8321e77814a88432aa4c134c65b98d9e05c89cd3649250747",
+      "bytes": 3238,
+      "role": "teaching_correctness_only"
+    },
+    "tutorial-validation/so101/execution.log": {
+      "sha256": "d7ba371d4dbd65f43f9becdbf74489ad47179b993dbe9bd3ea91ecdcb5e0ef02",
+      "bytes": 3369,
+      "role": "teaching_correctness_only"
+    }
+  },
+  "source_archive_canonical_paths": {
+    "Article_2/part2/benchmark_box.py": "f5a380e315a06c7bd7e7110dc6978cf2df796348ddb7574e91a070f74588be5a",
+    "Article_2/part2/benchmark_box_protocol.py": "7732631c9743b14e7c7c968f131e744687818eac4f728402ca703f22a3891722",
+    "Article_2/part2/benchmark_workload.py": "d5a233723bb16d8175f2f412409e4f5cb0aaf00f8a500e1a47b2485893ea068e",
+    "Article_2/part2/box_task.py": "6de52961b97adda41c6514a5b8a3099cceaa97327813d3fe1af81fb27427c911",
+    "Article_2/part2/migration_benchmark.py": "2cc65829bccf45e33ae40d7d4fb51e116cd80874cd905b7d0952053e43775ff8",
+    "Article_2/part2/pick_place_common.py": "6c17379c9e411c33cb5395f9f8e08122e4fbd6ceba555f41b112a7dd4b1a01b7",
+    "Article_2/part2/robots.py": "16363051109eb024b448ea2fc511ad74a2f686aca2fcb9113191acd06fa605ad",
+    "Article_2/part2/scaling_study.py": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
+    "Article_2/part2/so101_mjwarp.py": "73660368d32baea1a25a1c8e0b601331c029f8034cbce640a822479162662064",
+    "Article_2/part2/solutions/so101_mjwarp_solution.py": "9eb27a83539ca4ef3510d2de0c1914483ef4c8946426458916536f72161dba0b",
+    "Article_2/part2/solutions/step_00_imports.py": "69e7c6ae4ecdbc9906fa8d4b2137ed495b430d6dc640e6dae151c373b96d006e",
+    "Article_2/part2/solutions/step_01_put_model.py": "ee6396c12d761303bada71ed1e5687356acb265fedd181116d3037596feaa07d",
+    "Article_2/part2/solutions/step_02_make_data.py": "61449516b84b0ab8fdf1260792c8e4b92d0627173c3efee871df7b7d4ded05d1",
+    "Article_2/part2/solutions/step_03_seed_state.py": "e8eecb70d1215a157a958dfc5764fe9008038946058e8d51a49e3620b0c7ce62",
+    "Article_2/part2/solutions/step_04_push_ctrl.py": "20eba3f9e54523d24a6c0f2bddc2eae36c17acb5512b38a12d1012e6f33f3a5a",
+    "Article_2/part2/solutions/step_05_mjw_step.py": "aff777c2ba57391ca1863ec7e16403239ae9ec4ea12151e55beb7c7f4251bd82",
+    "Article_2/part2/solutions/step_06_pull_state.py": "6edaf86074f51e8a6a95fc485d844e477c4954f5b87bb137bfecff61eb99efd4",
+    "Article_2/part2/solutions/step_07_cuda_graph.py": "1da275516f3cce0689dc8adce6fbcbabe66ee92d002537eb803aad4f62e38615",
+    "Article_2/part2/utils.py": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
+    "Article_2/requirements.lock.txt": "4ab4a1d1c0514f157b6411526e9e70c3e1a538039798f1bd165bf16a2f68f53d",
+    "Article_2/requirements.txt": "f4857d7b0c3090a9cb1bd1c371e495b48c4a636f1e7538d14d501952d8157ddd"
+  },
+  "preflight_context": {
+    "kind": "frozen_preflight_context",
+    "bundle": "preflight-v3-evidence.tar.gz",
+    "bundle_sha256": "065e94185683ae1da92d9ea0b268b91bf072f5a746e75d1939b8a32aed539f1a",
+    "reports": 8,
+    "cases": 16,
+    "passed_cases": 15,
+    "excluded_cases": 1,
+    "cases_by_article": {
+      "2": {
+        "passed": 8,
+        "excluded": 0
+      },
+      "3": {
+        "passed": 7,
+        "excluded": 1
+      }
+    },
+    "world_episodes_audited": 2064,
+    "included_in_full_sweep_statistics": false,
+    "publication_eligible": false,
+    "source_archives": {
+      "2": "393cee3b35522b30a0f0a669d02c61ff06c24e2d84f36f591a9910ae07150c3d",
+      "3": "85c3d28a1237263415683c920a3bc984eb33fe6f234aa77766c8a2b339b4c9b5"
+    },
+    "source_aggregates": {
+      "2": "8d39e63de5e991f6bb83e10050783bbdd4658786a3899e1633ca8413bbcf807e",
+      "3": "fd903b2b98ac9fd330ccd9d78d43c9eba39a0f73e08986f4eeaf72195891b6c8"
+    },
+    "original_failure_report_sha256": "7d181ded75ee8f4982c9f193f9d96e74d3397764dd18529092f52b4a58018994",
+    "failure_reason": {
+      "object": "blue_cube",
+      "terminal_settled_frames": 27,
+      "required_terminal_settled_frames": 50
+    },
+    "preservation_rule": "All eight preflights remain immutable; later independent outcomes never replace this failure or enter these counts.",
+    "full_sweep_source_matches_preflight": true
+  },
+  "figures": {
+    "statistics": "median and observed min/max of five accepted repetitions; not confidence intervals",
+    "metrics": [
+      "simulation",
+      "checked"
+    ],
+    "accepted_points": 29,
+    "excluded_points": 7,
+    "renderer": {
+      "matplotlib": "3.10.7",
+      "png_dpi": 300,
+      "figure_inches": [
+        12.8,
+        7.2
+      ],
+      "x_scale": "log2",
+      "y_scale": "log10",
+      "colors": {
+        "cpu": "#0072B2",
+        "gpu": "#D55E00"
+      },
+      "script_sha256": "07e27cd4d2601ed913883e979cb631b121b699b42d4e2fa14fd3fa28f239327e"
+    },
+    "data": "figures/fig_box_cpu_gpu_scaling.data.json"
+  },
+  "tutorial_validation": {
+    "purpose": "online GPU teaching correctness only; excluded from benchmark timing/ratios",
+    "robots": [
+      "so101",
+      "rebot"
+    ],
+    "successful_episodes": 2,
+    "internal_manifest": "tutorial-validation/manifest.json",
+    "executed_source_archive_sha256": "393cee3b35522b30a0f0a669d02c61ff06c24e2d84f36f591a9910ae07150c3d"
+  }
+}

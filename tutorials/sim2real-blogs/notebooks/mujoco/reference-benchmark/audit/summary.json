@@ -1,0 +1,1966 @@
+{
+  "collector_sha256": "f5cb8b96df45f7bb131771ced2866c4dec1b4df9357e7ac57efeadf7d8cd9381",
+  "expected_resources": {
+    "device": "cuda:1",
+    "workers": 32
+  },
+  "scope": "adapted ALOHA replay pipeline; native MuJoCo versus MuJoCo Warp; not Newton API or two-cube task validation",
+  "limitations": [
+    "Endpoint artifacts and recorded all-history checks audited; intermediate trajectories were not persisted.",
+    "Float64 CPU and float32 GPU retain full state history with different bandwidth cost.",
+    "Coarse physical health and final-height checks do not prove grasp/contact/hold success.",
+    "Hardware inventory/utilization and supervisory run receipts require separate review."
+  ],
+  "expected_reports": 36,
+  "accepted_reports": 36,
+  "expected_pairs": 18,
+  "accepted_pairs": 18,
+  "reports": [
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 1,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.037402725996798836,
+        "median_checked_history_seconds": 0.038306079994072206,
+        "world_steps_per_second": 26762.75520895648
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1103,
+          "sha256": "a9f252f43d1151d359d358a5748a2259c94026bd805a66d448e8ca45d1994423"
+        }
+      ],
+      "report_sha256": "58e7e4f08e025c0943baee6bdd037f9b70a9edfc93ae1b7ec34113bd2f7ff0d3",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 1,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.5295908789994428,
+        "median_checked_history_seconds": 0.5308056779904291,
+        "world_steps_per_second": 1890.1382929615243
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 779,
+          "sha256": "a6131449146b454b4ae931f10fa6db7cefb99cab254915734df2dcd1d7fcc9a7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 780,
+          "sha256": "6b6ca5fe1e131395af640de5d11fd4c7c3a0d45d56532e94788c78cb30eda2d1"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 779,
+          "sha256": "d1db1b7da617b32cca956e06d332b416cca200305683d20026be4552130a8da5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 778,
+          "sha256": "ee416839051e88269cf6eb8a90ee8f7c7bb8637e0ca2d5df320f4721be614332"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 778,
+          "sha256": "e762e5bcf60aceed0cc570c261461a956729346c07b2672e8fbad2762c77daf0"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 778,
+          "sha256": "1f93cdcfe4258c323bab7575c5fa89048a99028e5ebbafb4e55327371deaeebc"
+        }
+      ],
+      "report_sha256": "268d9965acaed29a69b6f89a4ee2d4ed3612fd85067f5ec06dc832565d92e579",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 16,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.039172068994957954,
+        "median_checked_history_seconds": 0.04243150899128523,
+        "world_steps_per_second": 408862.7537662487
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w16-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1221,
+          "sha256": "b4c47418302f59d7eb23f27be3629a0325b7d9ef5f1475e0ff8e96cd7e766c0d"
+        }
+      ],
+      "report_sha256": "bec03762357acedf8b69cff4bd60ecffdeadcf98428908a3c0e1898dfb5f89a4",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 16,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.6785028090089327,
+        "median_checked_history_seconds": 0.6819983780005714,
+        "world_steps_per_second": 23604.91332879529
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 3245,
+          "sha256": "be8621bb26c91465efeb50b365878f099ae4b3fbb3ed389ed23800ff07ce19ce"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 3264,
+          "sha256": "fcee8787035d4e3a3b49027d6793d64f84936846c1139c6e8d8e16555e01e3ce"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 3235,
+          "sha256": "837992e69bf7b7e4ad7e36b4b0053488b350a43cba4626b32ad249af40e75fd0"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 3263,
+          "sha256": "d77f119ef7275e46bfd1c1678222b570c318c58f178ea47d0c9b5f53ba756702"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 3255,
+          "sha256": "bfdfe00ba6fd98b67b553207a05c40356f953777fcdf0a7f3314bdc37ceac25e"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w16-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 3259,
+          "sha256": "e928403e4a6d1ad83ab3aee76967ecbd1d1f4ada92ebcfc2f90db7fa76cda847"
+        }
+      ],
+      "report_sha256": "48aefeda5a24f1de3718cac1c6d9e7639b8cfd98bad9e8e7cf8a5b80ba7d6e65",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 32,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.039719591004541144,
+        "median_checked_history_seconds": 0.04564515801030211,
+        "world_steps_per_second": 806453.4198334968
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w32-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1326,
+          "sha256": "d22d2d1ae04d9ed458f6b9325e65814d6fe6fb8396e8b7058d45c9a26428cc80"
+        }
+      ],
+      "report_sha256": "75847feefee78d53d8af8f9df8af953bfeb30f8adc9bce2d5e41fca0ee371157",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 32,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.7261340699915309,
+        "median_checked_history_seconds": 0.7307479510054691,
+        "world_steps_per_second": 44113.06578738772
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 5772,
+          "sha256": "0f37b6ce6ff56bba8f17976e3b245fc4c7b5d5c914b0b36f4ea38f1aa0700379"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 5724,
+          "sha256": "da51ff4db846b94b044e4b93f7776fe78275bf10904b6f7a4405867590e7f18f"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 5812,
+          "sha256": "b046d2f1bef53833bc522412284f26870d2badd71f0d8e3d6e80c7f42d2c5236"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 5784,
+          "sha256": "2923a0d6cdab5091f4d53644108c5c3e0bd9b8261037dd36b64718d602a9485f"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 5758,
+          "sha256": "f1f076f5942d908469dcfb6204e97172b25aa8dffafc9a024297537dbed786e4"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w32-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 5772,
+          "sha256": "e416b658db40c4f1aa778a67b52599d0dd4f57ae7d2f15767540d3d591a68669"
+        }
+      ],
+      "report_sha256": "c4fb21eb363a6ac3ea99b4a30007c4a09f89f2d0b2b04ddc7c8e474c079ec9b8",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 64,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.07895896199624985,
+        "median_checked_history_seconds": 0.09212794099585153,
+        "world_steps_per_second": 811358.1837998669
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w64-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1452,
+          "sha256": "0ea30a3095a87203f82dcbcafdb4adbdb9bca31920994b2fed1115700260c0ee"
+        }
+      ],
+      "report_sha256": "2d9b3821e57862b348be09716e849bd8bef2329db0eba5c47cd53e8a43855acc",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 64,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.7728669940115651,
+        "median_checked_history_seconds": 0.7821724340028595,
+        "world_steps_per_second": 82891.36487440858
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 10765,
+          "sha256": "c57d2916e77ebe12ecc79dab1f6af6c2950fb395550b271c43e236290904c897"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 10765,
+          "sha256": "7ee4b9a3a2be44a8c931bb0666743561e4a4b3f72c6b4da15b39fd71eef14354"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 10779,
+          "sha256": "a2476318b91b2001ba3ac9f1ccff14a420b05ec15a0e852ae92a4e18afc4b66c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 10771,
+          "sha256": "73754e085a0d08379aa19bf5c7715e65fb9342f02807a81f8fd798c244a9d5b2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 10751,
+          "sha256": "b544d1ae0058268e6c0ac14f558c01c6ec9022b9889f39d7fb81bd081e171e39"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w64-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 10787,
+          "sha256": "ab3a706515028bf17490ff61429f1fc79d2d1de6434d4900125cac61688ef1df"
+        }
+      ],
+      "report_sha256": "282d65fe82d5551f5ffe1076f8f7cbb11d4dcfbac68cb81d07216c3da64c7ccf",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 128,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.15762496899696998,
+        "median_checked_history_seconds": 0.18971535001765005,
+        "world_steps_per_second": 812866.1392628917
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w128-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1690,
+          "sha256": "734d0a9829cf9592ad753821871cfb26bc98607443b217e459f8b9d29612649d"
+        }
+      ],
+      "report_sha256": "b7fe7d5a71a8235bfaed7da974cdf91829cc84ff901b2755bd47ae6d6eeed767",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 128,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.8267781500035198,
+        "median_checked_history_seconds": 0.8445216490072198,
+        "world_steps_per_second": 154972.64894996866
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 20746,
+          "sha256": "8007da6d00aede4df569d5006f8fd3a5e20be3c777b6abec1614a388db5f377a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 20717,
+          "sha256": "00c554f949f328ea8840f807a5e78c7533a6f24927cbdb108eb0e04c2b60ccad"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 20689,
+          "sha256": "7d8a26602de5eff2a9e9f4b6725378faa796fbb40f5106fe35582dc014db9009"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 20666,
+          "sha256": "09c912e6c6b07755f687cffcf7555f43e9e9ca0661e311d2bfcbedbd4c66e24d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 20709,
+          "sha256": "e7e75016365aefbb7d0cf805ea681192c1ccaf7b3e3487d48f659fd759ed6524"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w128-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 20792,
+          "sha256": "116fb035f46ef0d3de21d9fdc3050e3eb6dd40dc48aa729d775c265d3df94585"
+        }
+      ],
+      "report_sha256": "9d9b9c08190ed3514f0e5786ebc142bda52cbe6e9314511b9e4425a8b1106fac",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 256,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.3338521940022474,
+        "median_checked_history_seconds": 0.4122987059963634,
+        "world_steps_per_second": 767573.209353463
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w256-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 2128,
+          "sha256": "942aa788212e94db5c078e22f0336e7a7376208bac1d12fbb7c76d6a56fc1331"
+        }
+      ],
+      "report_sha256": "ad83b7a39bfe96d2c1a1092e5c3b40c04758efc91f416fafd49b0fe710e55805",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 256,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.8860442760051228,
+        "median_checked_history_seconds": 0.9349853800085839,
+        "world_steps_per_second": 289213.5381263029
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 40456,
+          "sha256": "47943809dc2b08def674e8be6e99cfbc1952f737d344068f6816640a216e2ff3"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 40318,
+          "sha256": "9296387e3946b88714e854313e6dad53b560f2ed61616d67c83470d558953b5e"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 40481,
+          "sha256": "6fe3e441a8c5155757e1cc8671547e3d7647ab8d54338d699fd46f6c11915213"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 40383,
+          "sha256": "4cfaff06c31eff599e2a8b9d0f50695502d8a685fe10024682d58432d67d1910"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 40315,
+          "sha256": "d90d9b11eb4a23a0a863b90999a191a891e72ea1d39edf46efa4137349245220"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w256-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 40373,
+          "sha256": "b4440154ebba44317d0602101abf87d6b84623f966e44ebaf5259d9b7285467d"
+        }
+      ],
+      "report_sha256": "b5c5784ec816bd92d9e03b6e3affd2f78f83b76527bcfc17fcdd455900cc25d8",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 512,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.5647304720041575,
+        "median_checked_history_seconds": 0.7145994080055971,
+        "world_steps_per_second": 907533.8155229331
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w512-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 2986,
+          "sha256": "8cbbf5e2c8ae33a644113c02f33d8414718f47c82fc9c5747cca25c1c3b932a8"
+        }
+      ],
+      "report_sha256": "724ed158c5ef19b1b4f5b695dd6f39d8e6d9e8937abca751d995779d808b5737",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 512,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.9471630300104152,
+        "median_checked_history_seconds": 1.0760744259896455,
+        "world_steps_per_second": 541102.2007418979
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 79653,
+          "sha256": "a41c5d22f71c4648ce4b6e23f57e361f3f4b35b7db1e7dce264eac8085e4d9d8"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 79813,
+          "sha256": "75d54afe8f73036c9b3e949b5a684ce63934d9b83d12a163efa315ce2c0cfad4"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 79858,
+          "sha256": "df6cbc652956ae3a511e1a1393d707e6f77152deef6ef5f908fe7b97e7f96ea9"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 79831,
+          "sha256": "018fa481a874b3c15d8ceaafc423ec8442846ceeabe86334943957038a6c2b16"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 79776,
+          "sha256": "3c4410198b0150c7d7354ffdfb354828785784cb837f24079d55236037194d18"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w512-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 79893,
+          "sha256": "f3e1b25923be6c87db855e683d763d237cbf0064e7d9bf46f38a83bf4db1b886"
+        }
+      ],
+      "report_sha256": "34a9cdd630b47d8e2107cfd3c6dc59c069012a6c39daef529929ab03e8cd3816",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 1024,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 1.1128863630001433,
+        "median_checked_history_seconds": 1.3770353279978735,
+        "world_steps_per_second": 921050.0138007962
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w1024-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 4703,
+          "sha256": "5b544ab5db8d7bae6175bf1e1127b3164f7bff5b3cad8239f629a38c220ca799"
+        }
+      ],
+      "report_sha256": "1ca80c3e736dc08f58842bc0630a40c82d8eb25a372d84b7720fbe9c2d7e253d",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 1024,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 1.0567605959950015,
+        "median_checked_history_seconds": 1.3123233849764802,
+        "world_steps_per_second": 969968.0361708419
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 158348,
+          "sha256": "563bb65f5e959dc5ceb8338282a783cbd2b5886437b1f9806a5592b7d6bec7a0"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 158459,
+          "sha256": "70007d9f5c437248a46ef13e16d9efb4df9d0c41b6c8d81972cb87a2540e12ae"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 158404,
+          "sha256": "fc45b12fcac3dd39b37c5bda361892ab2d7307b94ac06fe60c3291f50559cc43"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 158599,
+          "sha256": "641622d3bf4fc55f0a7876f75bb3e78cbdfb6f5797edbaccd7b8717d71dd4f8e"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 158449,
+          "sha256": "1604261be142cc79b00eef12126565fe17abba418276eae6247543f39234e3ab"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w1024-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 158497,
+          "sha256": "bbef16070b77ae9b0c4cfa07737281a0f5b327a8e81b1338adbd29f454d1a820"
+        }
+      ],
+      "report_sha256": "c94e98e995d625891c65a5e5cae6d2b4c4487ea5933d86daf7247af93a2ab2b3",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "cpu",
+      "worlds": 2048,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 2.208301617996767,
+        "median_checked_history_seconds": 2.7652413150062785,
+        "world_steps_per_second": 928336.9551029333
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-cpu-w2048-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 8131,
+          "sha256": "8ee6f1b3bd25e20cdc03a3c69a44a89e65c9d8fc9f3e91139982095de7fad3c5"
+        }
+      ],
+      "report_sha256": "e88b650b9203fa58a099510c48df173663184fbcbbc214001cf5707a0f6a5f66",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog2",
+      "backend": "gpu",
+      "worlds": 2048,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 1.307148842010065,
+        "median_checked_history_seconds": 1.8358462430041982,
+        "world_steps_per_second": 1568335.5514797715
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 316217,
+          "sha256": "3a893a5a78de2ca117d38b68afcac48d18fc6b740c67ac63d91c912ddf4a0b54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 315786,
+          "sha256": "44c04efa301e8c6469e991381a98c76c9967bc969347005f063b7de4aef4e2ec"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 315946,
+          "sha256": "8fbfa40f1cb001ed4851af5de0d4fbf243580ad4295c43a67e27bb6525650b3d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 315882,
+          "sha256": "962a77e450da7b9cbe331e7ff088a095236b320c4983a82a7baa71378d775789"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 315750,
+          "sha256": "ecdc0d043fbeccf9d06156e618bb5bea9473faee77d202676c5458a9e6f5d405"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog2-gpu-w2048-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 315714,
+          "sha256": "26ac0b69d189adc126210811acfa2351f9ad6ac6e0376072a6ec87edd28ae45e"
+        }
+      ],
+      "report_sha256": "84bae69bab845e6bb5985be779409d7db6118707914b1afba1998fed1160aecb",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 1,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.03127187599602621,
+        "median_checked_history_seconds": 0.032256145001156256,
+        "world_steps_per_second": 32009.592265177802
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1095,
+          "sha256": "0247393155778badb9c531fadacdf68769b9dc9a5df4c9ee7f090762499763f7"
+        }
+      ],
+      "report_sha256": "bf096ab8f8faba7080fbdae78fb44a477e1015a685b41bb616aef159d1789002",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 1,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.5008227729995269,
+        "median_checked_history_seconds": 0.5018272599991178,
+        "world_steps_per_second": 1998.7110290628607
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 780,
+          "sha256": "859043626fd8676fc849dda12416795e223dcd0fd8a37d03697e3b4d975ce0aa"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 780,
+          "sha256": "889d13c7438e5cae7ea6faa17efa37fe4a05c6d86d8dd794f77b407111b599ba"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 780,
+          "sha256": "1c680590b999438173c603af542c9fe424f9b97e207d9c0773b0ef367f2c1ad5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 779,
+          "sha256": "01a244af492f903fd645e6bb15395fb069be72c6cb91c48d2a7f17a5808a4c13"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 779,
+          "sha256": "e00736830d0cb6882f35ba2ddb1bbf496ca13002e97dad68c512f1ef24cb8762"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 780,
+          "sha256": "db36e9c028078f4044a4c2f32e5539337b5d58aeb50085bfcd3f73ceeac83fd2"
+        }
+      ],
+      "report_sha256": "a4411f1bd3c9a810cd43195b0192508e2161c5af468d34d229c6d0ab4c8739c2",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 16,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.03223002499726135,
+        "median_checked_history_seconds": 0.03534914099145681,
+        "world_steps_per_second": 496927.9422327755
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w16-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1213,
+          "sha256": "4933e23ee683497eb0e841d383f985b885f4643982c9a48d5406a6d96f3728b7"
+        }
+      ],
+      "report_sha256": "74234ba13e20ea203486ae3fadb11ac5c97d13cde19e78021c473c57b71a9cff",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 16,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.6468847770011052,
+        "median_checked_history_seconds": 0.6498610869894037,
+        "world_steps_per_second": 24758.659608977992
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 3242,
+          "sha256": "bc517ba6dbc2965e4ec5ecddd5f68300ca59ff1a75ace057e8e02ce96b85b3c9"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 3277,
+          "sha256": "9b13ab1c4e12c8fef5a944318ced1e95d453930f184f69f703182a45ef0f7669"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 3193,
+          "sha256": "b1f04259d7aa7424a44478066eecc413b59cef89defa42c0a3ffb90d6cd6eb99"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 3224,
+          "sha256": "e4c77eb1008eba5da7a452cdc77e0dab5fd7224cc3b0defe037d7fb62e24a162"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 3260,
+          "sha256": "9added52a35ef9f6fe0c136e0aa0dbe901064d0406a2edcff2da6073052d5f7a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w16-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 3277,
+          "sha256": "9cf6f5add5f34c86106e7367d87cb625a546c4ff4163c07288f5c6639f3d0a57"
+        }
+      ],
+      "report_sha256": "346211a2dcb29d60a1111b0e08a49d153e75bdfbcf8ad919ebacbb9974ab691b",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 32,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.03238805499859154,
+        "median_checked_history_seconds": 0.038335655990522355,
+        "world_steps_per_second": 989006.5952213856
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w32-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1311,
+          "sha256": "094f24d17a3f31faf2f875fa8bd388d7fdfef5a5a14d55acead32d8ae1248c54"
+        }
+      ],
+      "report_sha256": "76bb9b11609ae8de81cca8f00209ba71d6983478533a37c7cd084a5a9c687256",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 32,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.6811031969991745,
+        "median_checked_history_seconds": 0.6857900189934298,
+        "world_steps_per_second": 47029.58397659499
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 5754,
+          "sha256": "d416b8dff52a5c3693d8b8aac51d6be84d95e6fcc9dfc39ef9a3e8d97f75002e"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 5789,
+          "sha256": "243d53c25c2f213f9a015c102872ebc7fb63e567e21b05b02b79406203e1138b"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 5755,
+          "sha256": "43cf6f3436b9600f93ad87960ac729c1fc73d9c99e00bbbf95853a5c614c753d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 5732,
+          "sha256": "9cc0d8a9ce5ccd0bebb7cccd62ce5ed7992c7cd1b76040e99d38661890374e95"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 5741,
+          "sha256": "c8546eeb857c3df587659e71a8213e93cad92b4aa06e064ea5941114a21161fd"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w32-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 5720,
+          "sha256": "b09465a6228932656de85d7ee31241bea7836fd05e13154d0f882d1b9a31859b"
+        }
+      ],
+      "report_sha256": "ab608bddc982e466d8ef2eeab22ef051b74dd4a7deec7d5faef1f23dd228cdbe",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 64,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.06503766799869481,
+        "median_checked_history_seconds": 0.07765711098909378,
+        "world_steps_per_second": 985029.1680397526
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w64-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1449,
+          "sha256": "78e736401f008074b58feed65f74e45e38ddd228f3f9219352d97e7016af5b0c"
+        }
+      ],
+      "report_sha256": "d8fdf98111c7bdc8edf004e53948338bc312154ee98de638694a287f10f47411",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 64,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.7143300180032384,
+        "median_checked_history_seconds": 0.7230125210044207,
+        "world_steps_per_second": 89684.03732924124
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 10805,
+          "sha256": "4da8dadf005d8d82addf5b43fd81b60c4d2c7a8e4e1100f1a759da3fb616f29b"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 10732,
+          "sha256": "a1f8fe2c375362472e9f7669b240987c773d69f38f5b155832c848bc960ded32"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 10733,
+          "sha256": "f3a149821864f5fed77211bb49e1f57dd6a51d2aa3f6357bc69b1e5fd1500203"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 10755,
+          "sha256": "0dbf8dcdf96a9a656e5d6a6737b7a544d1065a940aafeee0dafca9c7cdaef2f6"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 10797,
+          "sha256": "507128d272bebea4a8cb3e20349a18d0436c8f0954e834844ccfc326c5cc3625"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w64-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 10723,
+          "sha256": "e6b2ee7da830c6193d8bd7ed344e24f33448e4d2b036f66b09b50c42147db2eb"
+        }
+      ],
+      "report_sha256": "70c6d030b27fcafecb28f2445e053b1a1099b3abf441c71e5bb48875e9f3fe5d",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 128,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.12858773200423457,
+        "median_checked_history_seconds": 0.16056938900146633,
+        "world_steps_per_second": 996424.7599901721
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w128-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 1674,
+          "sha256": "19fa7a845c017586e377fa03a3fd8c233b75945760f8e268eb995ba9c6ce6f8a"
+        }
+      ],
+      "report_sha256": "41e3b79d06bf629871e0d514159ecc5dfb6bb63d1af1d2dcc9ca757e489a2b98",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 128,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.7593187669990584,
+        "median_checked_history_seconds": 0.7771264550101478,
+        "world_steps_per_second": 168740.72598835014
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 20745,
+          "sha256": "678f7af34350a744920a2812e6bdb94d56018fe5728738bb8fb37c893d9d5706"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 20723,
+          "sha256": "f6d906e6b5f8ae759599c21580c230dcfc5561e99f7aa6a2596256afba26f282"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 20690,
+          "sha256": "f6b9c898765724c5dd834e4cd41e1cfe2c9bacd77866d58682c9bce9af1185e5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 20670,
+          "sha256": "d42ff61e2ff547354542b218fc83b1a19249cb7a7dece646081e909f09253d46"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 20660,
+          "sha256": "62af248429df255f8462c7b9865924b39e86f1962fd8f5692a87940499ae84e0"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w128-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 20718,
+          "sha256": "abeb1ca3e36e01a5f40152050cf18800c82c534753d376dd842a91d10d377c65"
+        }
+      ],
+      "report_sha256": "2e723cb9df443100cd2456134c5047c56d08d0447a86f9eafab69899bdde7d5d",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 256,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.23356442600197624,
+        "median_checked_history_seconds": 0.3104306839959463,
+        "world_steps_per_second": 1097153.3824154872
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w256-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 2125,
+          "sha256": "9c52306c435a6d6daa5234e45aee4168d967ef01523326995bb2d31b5aa448f2"
+        }
+      ],
+      "report_sha256": "58f3d5e73a649a535d3f9a4bb511651939591d185fb881c002e0cd3bd79f5e86",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 256,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.8117000970087247,
+        "median_checked_history_seconds": 0.8614167610066943,
+        "world_steps_per_second": 315702.8081484208
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 40435,
+          "sha256": "49e23cc5302d0140179d1c1489cc744cc5273022cf94e7ac4e2c88f906d71256"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 40262,
+          "sha256": "34087bb5638801e77415f2ba071e9737432a73722784bfc95f2eaaedead2c82d"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 40391,
+          "sha256": "3d3498b31ade52d9f3860ca11951d7c34b668494b3bf58af6c63db33ab6e03b5"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 40437,
+          "sha256": "f64a9deeb4736a62408386159789855f348b560f7c4a952dc1ce6aafba576e55"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 40248,
+          "sha256": "2375edb94c064f809fbf3cfcd81577f5d5b57deb7ce37a4f85e1f7266dec7f44"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w256-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 40344,
+          "sha256": "516b153aaf250088909f3b0ea26b0248ae31b38f4a4fc3e50c7cd6feb91b6131"
+        }
+      ],
+      "report_sha256": "c5cf8e100601960fa8394e3f6bc7a164a5547dad799ec79ba276611f45ba363d",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 512,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.5264084770024056,
+        "median_checked_history_seconds": 0.6736695949948626,
+        "world_steps_per_second": 973601.3426654183
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w512-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 2982,
+          "sha256": "8a0ffcb1a7b278f2d3d680236d1d8ab15e03cf331cc50f42187bb2cb8dd1a596"
+        }
+      ],
+      "report_sha256": "cdfd9344d18f6a19fe52647a51d2a3917870e6a7a6e8fc9143e2a6f86c2c91d6",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 512,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.8595585629955167,
+        "median_checked_history_seconds": 0.9978049529890995,
+        "world_steps_per_second": 596250.2406048082
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 79666,
+          "sha256": "638599f63023220383a86c7a47a60aefbeeee4952dd0b31d8d3f244155717498"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 79707,
+          "sha256": "48658c550fe772b1c1560b01ebf14224fcfa054b60b4b2938979f4aa6be8edaf"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 79659,
+          "sha256": "78033186b5f49d203abd0dcd6debb6a5cc16474fa9154669786372047c35d7a3"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 79621,
+          "sha256": "1991c11683264b6c3ef90f3cc96f06e554001dba50154d6a590a56f3b7e64788"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 79741,
+          "sha256": "afcaf97f8fe9ca242f2f0f6eea3f9955aedf8694298ecb7c5f3c5afacedfd664"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w512-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 79462,
+          "sha256": "48d12333c03cda6d7b58c30d1554bbf28c84d8a1f7266b0073d8d2e2f9518f98"
+        }
+      ],
+      "report_sha256": "2516de2ae22a9b9c1600948a7ac4acb5c5bd16be8aa11d2f75fbb687bfd28056",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 1024,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.9333087080012774,
+        "median_checked_history_seconds": 1.2131473699992057,
+        "world_steps_per_second": 1098268.9770409781
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w1024-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 4698,
+          "sha256": "630a0d46542072bdcc86a313de7394fd7d6f84506329799de751b6e022c05850"
+        }
+      ],
+      "report_sha256": "c14dbc9318bcd3d19d758d4994e86f31e6f5563eb09e4df30b4ed8e14be4df68",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 1024,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 0.9391663720016368,
+        "median_checked_history_seconds": 1.1985648499976378,
+        "world_steps_per_second": 1091418.975974806
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 158168,
+          "sha256": "4152988db69bf47018492ebfe814bbcdbf49336c0619b131915876465cdd2a9b"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 158057,
+          "sha256": "30e952f4a673e391d2252aa9d7c7a06a0beae5ebe4f67eb18a58834b73726927"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 158168,
+          "sha256": "df861798450ad30628a5bc29e8d55fb5868093845a9bccb8a130a563cc5c7e81"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 158013,
+          "sha256": "57d590b1d2d83633a3a9fea48148a5d6fd7c0b8cf5060c4ba3ae06ee438c1104"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 157960,
+          "sha256": "644a104ffcc0e424a5aef2a9ed839a94cf16cb4c752b68de39abce20984649f6"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w1024-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 157972,
+          "sha256": "6f10eb971d88270befdc7b516fbfe0db52122027d61c29571dd6e89abc9a241d"
+        }
+      ],
+      "report_sha256": "faa5c4882d79cf5eb838ca6180d5170c63ebdd610e6d7d1301fb3c811ab0ec47",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "cpu",
+      "worlds": 2048,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 1.8308716829924379,
+        "median_checked_history_seconds": 2.364990262009087,
+        "world_steps_per_second": 1119711.4571400946
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-cpu-w2048-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 8126,
+          "sha256": "53a67209a9d765045c9fc2faa460697f7defa10bd1d44a45e01de39bfc413f76"
+        }
+      ],
+      "report_sha256": "676c51c47b051ca47d0724cc43d31d558909fd0af70794de2f1064ec1d4c6e64",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    },
+    {
+      "stack": "blog3",
+      "backend": "gpu",
+      "worlds": 2048,
+      "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/results.json",
+      "accepted": true,
+      "issues": [],
+      "metrics": {
+        "median_simulation_seconds": 1.1443406860053074,
+        "median_checked_history_seconds": 1.6579121899994789,
+        "world_steps_per_second": 1791466.4968842084
+      },
+      "endpoint_artifacts": [
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/warmup-00-endpoints.npz",
+          "bytes": 315213,
+          "sha256": "b30c2ab02b6cf8f85fd2cbf2027084ef12358c4317e3c2600fb7bc489a4ddd27"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/measured-01-endpoints.npz",
+          "bytes": 315038,
+          "sha256": "576231d1a00b677e283667e41f423316d6987939555940aeaa27b0fd695e17a7"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/measured-02-endpoints.npz",
+          "bytes": 315346,
+          "sha256": "77907672e407dd48ea403edf56e6851147303553633027dea4102bb9244e199a"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/measured-03-endpoints.npz",
+          "bytes": 314944,
+          "sha256": "44a169e0e0dab6899bfca2f1f9c6ed9dbc0b4d9847a51b68597a273c97588241"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/measured-04-endpoints.npz",
+          "bytes": 314683,
+          "sha256": "03bfbf5d068390605420792d93846f43b1fd5f3834f08edc7ad48e991f714aff"
+        },
+        {
+          "path": "/private/tmp/blogs-gpu-repair-20261009/reference-full-sweep/results/blog3-gpu-w2048-aloha-pot/measured-05-endpoints.npz",
+          "bytes": 315367,
+          "sha256": "461484e01b8d23e37e434470991d3632840e559f2e6ac90519326b98e9da16a9"
+        }
+      ],
+      "report_sha256": "d4e440df8e5b0951837552ee4c4c88605f029af56936de83bb02ff519505d82d",
+      "status": "complete",
+      "warmup_count": 1,
+      "measured_count": 5,
+      "failed_checks": []
+    }
+  ],
+  "pairs": [
+    {
+      "stack": "blog2",
+      "worlds": 1,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.07062569896872825,
+      "checked_speedup_cpu_over_gpu": 0.07216591981286775,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 16,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.05773309774822501,
+      "checked_speedup_cpu_over_gpu": 0.06221643681277154,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 32,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.054700079015717315,
+      "checked_speedup_cpu_over_gpu": 0.0624636140922419,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 64,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.10216371330131911,
+      "checked_speedup_cpu_over_gpu": 0.11778469425773029,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 128,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.1906496549241159,
+      "checked_speedup_cpu_over_gpu": 0.22464237623827707,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 256,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.37678951610350137,
+      "checked_speedup_cpu_over_gpu": 0.4409680780169827,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 512,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.5962336515583253,
+      "checked_speedup_cpu_over_gpu": 0.6640799100381866,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 1024,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 1.05311114666638,
+      "checked_speedup_cpu_over_gpu": 1.049310973013373,
+      "issues": []
+    },
+    {
+      "stack": "blog2",
+      "worlds": 2048,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 1.6894033387972534,
+      "checked_speedup_cpu_over_gpu": 1.506248862367258,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 1,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.06244100245029343,
+      "checked_speedup_cpu_over_gpu": 0.06427738700606452,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 16,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.04982344019081204,
+      "checked_speedup_cpu_over_gpu": 0.054394918697498795,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 32,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.047552346166172516,
+      "checked_speedup_cpu_over_gpu": 0.05589999114712929,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 64,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.09104708798391833,
+      "checked_speedup_cpu_over_gpu": 0.10740769866780628,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 128,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.16934617922382264,
+      "checked_speedup_cpu_over_gpu": 0.2066193834559005,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 256,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.28774719488479467,
+      "checked_speedup_cpu_over_gpu": 0.3603722356564802,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 512,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.6124172332922838,
+      "checked_speedup_cpu_over_gpu": 0.6751515844622411,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 1024,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 0.9937629112636615,
+      "checked_speedup_cpu_over_gpu": 1.0121666508087541,
+      "issues": []
+    },
+    {
+      "stack": "blog3",
+      "worlds": 2048,
+      "accepted": true,
+      "simulation_speedup_cpu_over_gpu": 1.5999358454899386,
+      "checked_speedup_cpu_over_gpu": 1.4264870457402394,
+      "issues": []
+    }
+  ]
+}

@@ -216,8 +216,8 @@ class BoxPhysicsTests(unittest.TestCase):
                 before = original.read_bytes()
                 report = Path(directory) / "report.json"
                 process = subprocess.run([sys.executable, str(PART1 / "solutions/so101_pick_place_solution.py"),
-                    "--robot", robot, "--task", "box", "--headless-steps", "1800", "--report", str(report)],
-                    cwd=ROOT, capture_output=True, text=True, timeout=120)
+                    "--robot", robot, "--task", "box", "--sim-substeps", "20", "--headless-steps", "2000", "--report", str(report)],
+                    cwd=ROOT, capture_output=True, text=True, timeout=900)
                 self.assertEqual(process.returncode, 0, process.stdout + process.stderr)
                 self.assertEqual(original.read_bytes(), before, "Box scene generation modified the stack scene")
                 result = json.loads(report.read_text())

@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "task": "two_cube_pick_place_into_box",
+  "robot": "rebot",
+  "frames": 2000,
+  "simulation_seconds": 40.0,
+  "phase": "done",
+  "bin_lower": [
+    0.355,
+    0.055,
+    0.21800000000000003
+  ],
+  "bin_upper": [
+    0.585,
+    0.245,
+    0.30300000000000005
+  ],
+  "table_z": 0.21200000000000002,
+  "tool_clearance_m": 0.09130014691911276,
+  "objects": {
+    "red_cube": {
+      "frame": 2000,
+      "time": 40.0,
+      "bounds_min": [
+        0.38460220777126963,
+        0.08499138198955916,
+        0.21793858559920046
+      ],
+      "bounds_max": [
+        0.43999538935092275,
+        0.140424607767025,
+        0.2620105907122925
+      ],
+      "center": [
+        0.4122987985610962,
+        0.11270799487829208,
+        0.23997458815574646
+      ],
+      "inside": true,
+      "max_point_speed": 1.1813508617461538e-05,
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 0.9999999593604695,
+      "whole_object_clearance_m": 0.0059385855992004355,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 4.5,
+      "lift_time": 6.36,
+      "carry_time": 9.86,
+      "release_command_time": 11.22,
+      "release_time": 12.38,
+      "max_loaded_bilateral_frames": 369,
+      "full_lift_frames": 267,
+      "carry_frames": 190,
+      "min_lift_clearance_m": 0.010361209444701647,
+      "carry_distance_m": 0.26086284284826894,
+      "release_open_fraction": 0.8148346590724859,
+      "detached_settled_frames": 1382,
+      "min_jaw_normal_force_N": 19.328553438186646,
+      "success": true
+    },
+    "blue_cube": {
+      "frame": 2000,
+      "time": 40.0,
+      "bounds_min": [
+        0.456078914861253,
+        0.08243322246533352,
+        0.21793860159182804
+      ],
+      "bounds_max": [
+        0.5097450931267231,
+        0.13609759635466617,
+        0.2619684342358087
+      ],
+      "center": [
+        0.4829120039939881,
+        0.10926540940999985,
+        0.23995351791381836
+      ],
+      "inside": true,
+      "max_point_speed": 8.236706379449048e-06,
+      "jaw_contacts": [
+        0,
+        0
+      ],
+      "jaw_normal_forces_N": [
+        0.0,
+        0.0
+      ],
+      "open_fraction": 0.9999999593604695,
+      "whole_object_clearance_m": 0.005938601591828019,
+      "initially_outside_bin": true,
+      "grasped": true,
+      "lifted": true,
+      "carried": true,
+      "release_commanded": true,
+      "released": true,
+      "dropped_before_release": false,
+      "grasp_time": 20.08,
+      "lift_time": 21.96,
+      "carry_time": 25.44,
+      "release_command_time": 26.82,
+      "release_time": 27.98,
+      "max_loaded_bilateral_frames": 370,
+      "full_lift_frames": 267,
+      "carry_frames": 190,
+      "min_lift_clearance_m": 0.010670716982334821,
+      "carry_distance_m": 0.26215828519234985,
+      "release_open_fraction": 0.8148345744067972,
+      "detached_settled_frames": 602,
+      "min_jaw_normal_force_N": 19.390049934387207,
+      "success": true
+    }
+  },
+  "success": true,
+  "backend": "mujoco_warp",
+  "device": "cuda:1"
+}
