@@ -12,8 +12,8 @@
   "measured_source_archive": "benchmark-results/2026-10-09-validated-box-gpu0/source.tar.gz",
   "bootstrap": {
     "repository": "https://github.com/johnnynunez/accelerated-computing-hub.git",
-    "ref": "feature/blog2-validated-box-benchmark",
-    "status": "Contribution branch until the initial signed Hub runtime commit is available; final publication pins its full SHA.",
+    "ref": "cf96302fd7200fac5941aacd9d92b1c2c7b0f386",
+    "status": "Pinned to the initial signed Hub runtime commit.",
     "existing_checkout_policy": "Verify origin and resolved commit; refuse another revision without reset or overwrite."
   },
   "environment": {
@@ -953,8 +953,8 @@
       "source": "Article_2/part1/01_Notebook_MuJoCo_Fundamentals.ipynb",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb",
       "source_sha256": "0571c5de5a3fbddda7b2c1a7d4fb45746a36890fe217ad9c1e10e600977227df",
-      "destination_sha256": "bad6413f719e53f75bc2295c7eb9b785544e24b019c1890a62831df406491f76",
-      "destination_bytes": 24137,
+      "destination_sha256": "56f8a159a8a1bfde9ab14c0f6c2fea382f965f283dca73897b0cb54c3f1a915b",
+      "destination_bytes": 24140,
       "byte_identical": false,
       "scope": "notebook_layout_bootstrap_and_metadata",
       "source_bytes": 18717
@@ -963,8 +963,8 @@
       "source": "Article_2/part1/02_Notebook_Pick_and_Place.ipynb",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/02__pick_and_place.ipynb",
       "source_sha256": "68dd936da81914945da5832e464c5892b18f9e74a96be9902630419963fed9df",
-      "destination_sha256": "ada48533a9867d90b0ac6cd8d62a8f4499999ce436f2f3db69761babeeeaceef",
-      "destination_bytes": 16266,
+      "destination_sha256": "e46d819e8300b4e0f279100d7e6c36b040872e4aa69ab55f5acc43ce8ae744b1",
+      "destination_bytes": 16269,
       "byte_identical": false,
       "scope": "notebook_layout_bootstrap_and_metadata",
       "source_bytes": 10859
@@ -1113,8 +1113,8 @@
       "source": "Article_2/part2/01_Notebook_MJWarp.ipynb",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/03__mujoco_warp.ipynb",
       "source_sha256": "58415e3d3ce525c47a9aa72f4b24b05249e733952e0acd0a810894386e1129c9",
-      "destination_sha256": "bf137873ea48be8510b6b7eb9eae1b278d839765241ec0b08875630e7a5f9ed5",
-      "destination_bytes": 18015,
+      "destination_sha256": "cac136eae1cff2d153d81f0ae622bd66b3a1024cf95a7e6dfb0ee3ac02608af0",
+      "destination_bytes": 18018,
       "byte_identical": false,
       "scope": "notebook_layout_bootstrap_and_metadata",
       "source_bytes": 12605
@@ -1123,8 +1123,8 @@
       "source": "Article_2/part2/02_Notebook_CPU_GPU_Benchmark.ipynb",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb",
       "source_sha256": "ec59407aeaf8a17b41f13fcc8d6be45a9be3d5cd5b0800b4fd0e8d299ab3dc07",
-      "destination_sha256": "756bf46c9035a73bb4d2939eafcef99c578403e3b1be879b12fed621f3db46da",
-      "destination_bytes": 20030,
+      "destination_sha256": "02477151e8e2102f7143a477abb91fe8c59034b33b44acfb36eb187bf3ed81ef",
+      "destination_bytes": 20033,
       "byte_identical": false,
       "scope": "notebook_layout_bootstrap_and_metadata",
       "source_bytes": 19263
@@ -4999,7 +4999,7 @@
         {
           "cell_id": "50c026ff",
           "source_sha256": "82ccc0eeb66379dedc9cd82cb6079d7477efcfdc48cd631c0b859d5953566555",
-          "destination_sha256": "2b54587d6573f7dec053c25401b5499e6cfd7017abacbfb5eb6776a7f75ccb96",
+          "destination_sha256": "e923cccccce1ed1301c81c5d39b20571abfd251919554985b80b2236128537f5",
           "change": "Public Hub repository/ref and layout only"
         }
       ],
