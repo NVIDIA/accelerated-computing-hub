@@ -286,7 +286,7 @@
       "source": "Article_3/BENCHMARK.md",
       "destination": "notebooks/newton/BENCHMARK.md",
       "source_sha256": "bbbcf8b62407d0786208bf54324bfcb97bbecb46c35b98f813b9c67e57a6b264",
-      "destination_sha256": "5dfe634a2bc2b34e55c8b4cb18d99610901b4520f6cc5578f0548cb9e68691ed",
+      "destination_sha256": "73ca2c6cfbc370482286d3183123e2de9797b1680726f7a29ce09752f30f74e4",
       "changed": true,
       "adaptation": "Live documentation links/setup paths"
     },
@@ -4199,5 +4199,6 @@
     "Box acceptance/capacity fixtures use the Newton-local helper; the Article 2-only physical class is omitted, with Newton physical tests provided separately.",
     "The legacy Newton contact-capacity regression tests the complete reference and external Step 8 solution at BOTH real truncation boundaries; no dependency on the superseded stack Markdown in notebook 02."
   ],
-  "public_runtime_commit": "cc22d752570bd5e9d7e2fecd5e01695b7ceaeeca"
+  "public_runtime_commit": "cc22d752570bd5e9d7e2fecd5e01695b7ceaeeca",
+  "public_notebook_commit": "2d100e859b174ab67834d09c0f705d09a5b0d516"
 }
