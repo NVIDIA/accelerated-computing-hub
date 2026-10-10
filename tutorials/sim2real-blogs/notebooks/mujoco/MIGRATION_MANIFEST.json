@@ -26,7 +26,7 @@
     "container": "Installs the original hash lock, then adds UI/test packages constrained to installed pins.",
     "notebook_metadata": "Hub standard metadata is formatting policy, not a runtime Python version or GPU validation claim."
   },
-  "colab_notebook_revision": "feature/blog2-validated-box-benchmark",
+  "colab_notebook_revision": "0a5cd94b208e79dd443a5cf6393cd29df0d43d56",
   "derived_inventory_policy": "Current authored documents and any new root-owned container validation receipts are hashed from the current tree. Original imported runtime, dependency and evidence files remain exact-source guards.",
   "scope_counts": {
     "guide_or_notice_adaptation": 4,
@@ -43,8 +43,8 @@
       "source": "Article_2/BENCHMARK.md",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/BENCHMARK.md",
       "source_sha256": "1e8ffc053a0d5b57dcc353bbcae9d9a7536f7079ad29fef9ecaeb82f4bca1d5f",
-      "destination_sha256": "f852febb6da7f745a04c1c8b9100bc4fe68254c4423fdea81318069f641487d3",
-      "destination_bytes": 15772,
+      "destination_sha256": "30f07037afdb791071db68ea301aad92006c8182494a4aa0d590c8782251173f",
+      "destination_bytes": 15838,
       "byte_identical": false,
       "scope": "guide_or_notice_adaptation",
       "source_bytes": 15934
@@ -5017,8 +5017,8 @@
     },
     {
       "path": "tutorials/sim2real-blogs/README.md",
-      "sha256": "3823f072c9432122a8f226304d3c15a03e9a400a442b9e461709e7176872d36b",
-      "bytes": 3643
+      "sha256": "9328b81ecada7d4865880e746e2a2e80b81fde1285dfad988b266639cfc9fc33",
+      "bytes": 3698
     },
     {
       "path": "tutorials/sim2real-blogs/VALIDATION.md",

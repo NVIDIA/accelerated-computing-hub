@@ -106,7 +106,7 @@ The [ALOHA reference benchmark](reference-benchmark/README.md) compares native M
 
 ## Google Colab
 
-Open [the benchmark notebook on Colab](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/feature/blog2-validated-box-benchmark/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The pre-merge link uses the public contribution branch.
+Open [the benchmark notebook on Colab](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/0a5cd94b208e79dd443a5cf6393cd29df0d43d56/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The Colab link pins the published notebook revision; `REF` pins its runtime source.
 
 Review preflight on the assigned CPU/GPU before enabling measurements. Hosted hardware and runtime limits vary; this launch recipe is not a validated Colab box-task result. Download the report archive before disconnection. The CPU baseline belongs to the runtime.
 
@@ -115,8 +115,9 @@ Review preflight on the assigned CPU/GPU before enabling measurements. Hosted ha
 An existing Brev GPU VM can use the same repository and lock:
 
 ```bash
-GIT_LFS_SKIP_SMUDGE=1 git clone --branch feature/blog2-validated-box-benchmark https://github.com/johnnynunez/accelerated-computing-hub.git
+GIT_LFS_SKIP_SMUDGE=1 git clone --filter=blob:none https://github.com/johnnynunez/accelerated-computing-hub.git
 cd accelerated-computing-hub
+git checkout --detach cf96302fd7200fac5941aacd9d92b1c2c7b0f386
 git rev-parse HEAD  # retain the resolved source revision
 uv venv --python 3.12 .venv
 uv pip sync --python .venv/bin/python --require-hashes \
