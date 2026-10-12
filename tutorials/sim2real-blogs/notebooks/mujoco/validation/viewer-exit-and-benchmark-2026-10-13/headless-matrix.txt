@@ -1,0 +1,10 @@
+part1 stack so101 rc=0 :: Task complete: red cube stacked on blue (verified: xy_err=0.006 m (<= 0.015), dz=0.044 m (in [0.035, 0.055])).
+part1 box so101 rc=0 :: Task complete: both cubes are in the receiving box (verified).
+part1 stack rebot rc=0 :: Task complete: red cube stacked on blue (verified: xy_err=0.002 m (<= 0.015), dz=0.044 m (in [0.035, 0.055])).
+part1 box rebot rc=0 :: Task complete: both cubes are in the receiving box (verified).
+part1 scaffold-untouched stack rc=1 :: AttributeError: 'NoneType' object has no attribute 'opt'
+part2 stack so101 rc=0 :: Task complete: red cube stacked on blue (verified: xy_err=0.005 m (<= 0.015), dz=0.044 m (in [0.035, 0.055])).
+part2 box so101 rc=0 :: Task complete: both cubes are in the receiving box (verified).
+part2 stack rebot rc=0 :: Task complete: red cube stacked on blue (verified: xy_err=0.001 m (<= 0.015), dz=0.044 m (in [0.035, 0.055])).
+part2 box rebot rc=0 :: Task complete: both cubes are in the receiving box (verified).
+part2 scaffold-untouched stack rc=1 :: NameError: name 'wp' is not defined. Did you mean: 'np'?

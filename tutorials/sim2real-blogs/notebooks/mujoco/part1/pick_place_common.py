@@ -432,3 +432,46 @@ def apply_viewer_camera(viewer, spec: RobotSpec | None = None) -> None:
     viewer.cam.elevation = -25
     viewer.cam.distance = spec.camera_distance
     viewer.cam.lookat[:] = spec.camera_lookat
+
+
+# Stack acceptance thresholds quoted in the article (44 mm cubes).
+STACK_MAX_XY_ERROR_M = 0.015
+STACK_DZ_RANGE_M = (0.035, 0.055)
+STACK_MAX_BLUE_HEIGHT_ERROR_M = 0.010
+STACK_MAX_CUBE_SPEED_M_S = 0.05
+
+
+def check_stack(model: mujoco.MjModel, data: mujoco.MjData, spec: RobotSpec | None = None) -> tuple[bool, str]:
+    """Verify the settled red-on-blue stack. Returns (passed, one-line summary).
+
+    Call after the episode with host kinematics refreshed (mj_forward). Checks
+    only the final arrangement: centred within 15 mm, one cube edge apart
+    vertically, blue cube still on the table and both cubes at rest.
+    """
+    spec = spec or active_robot()
+    state = (data.qpos, data.qvel)
+    if not all(np.isfinite(values).all() for values in state):
+        return False, "simulation state is not finite"
+    red = data.xpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "red_cube")]
+    blue = data.xpos[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")]
+    xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
+    dz = float(red[2] - blue[2])
+    blue_err = float(abs(blue[2] - spec.cube_center_z))
+    speed = 0.0
+    for name in ("red_cube_joint", "blue_cube_joint"):
+        address = model.jnt_dofadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)]
+        speed = max(speed, float(np.linalg.norm(data.qvel[address:address + 3])))
+    lo, hi = STACK_DZ_RANGE_M
+    failures = []
+    if xy_err > STACK_MAX_XY_ERROR_M:
+        failures.append(f"xy_err {xy_err:.3f} m > {STACK_MAX_XY_ERROR_M}")
+    if not lo <= dz <= hi:
+        failures.append(f"dz {dz:.3f} m outside [{lo}, {hi}]")
+    if blue_err > STACK_MAX_BLUE_HEIGHT_ERROR_M:
+        failures.append(f"blue cube left the table ({blue_err:.3f} m)")
+    if speed > STACK_MAX_CUBE_SPEED_M_S:
+        failures.append(f"cubes still moving ({speed:.3f} m/s)")
+    measured = f"xy_err={xy_err:.3f} m (<= {STACK_MAX_XY_ERROR_M}), dz={dz:.3f} m (in [{lo}, {hi}])"
+    if failures:
+        return False, f"{measured}; failed: {'; '.join(failures)}"
+    return True, measured

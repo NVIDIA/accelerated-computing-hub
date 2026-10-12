@@ -114,7 +114,7 @@ class Integration(unittest.TestCase):
         data, windows, output = self.run_lesson("so101", cancel=True)
         self.assertEqual((windows[0].syncs, windows[0].closes), (10, 1))
         self.assertAlmostEqual(data.time, 0.2)
-        self.assertIn("Cancelled after 10/600", output)
+        self.assertIn("Stopped by Esc after 10/600", output)
         self.assertNotIn("stack check:", output)
         self.assertNotIn("Task complete", output)
         self.assertNotIn("PASS", output)

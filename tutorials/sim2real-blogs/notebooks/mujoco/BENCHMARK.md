@@ -38,6 +38,10 @@ Use the [benchmark notebook](part2/04__cpu_gpu_benchmark.ipynb) to reproduce the
 
 The companion also includes an [ALOHA pot-and-lid replay](reference-benchmark/README.md) comparing native MuJoCo on CPU with MuJoCo Warp on GPU. It is a separate workload and does not measure Newton's API or this box task.
 
+## Quick throughput check: `--benchmark` and `scaling_study.py`
+
+The Part 2 lesson also ships a physics-step microbenchmark (fixed controls, no IK, one CUDA graph). Its output now states what is measured, the units, a single-core CPU baseline, the aggregate real-time factor and the peak VRAM per batch. The [measured numbers and how they are expected to scale on RTX 5090 and RTX 3060](README.md#reading-the-benchmark-numbers) are in the Article 2 README. Use that microbenchmark to see how your GPU scales; use the box-task sweep on this page for CPU-vs-GPU conclusions.
+
 ## What the comparison measures
 
 Both backends use a 330 × 250 × 55 mm receiving-box interior and separate placement targets. The gripper lowers each held cube before opening, with a nominal 32 mm gap above the floor. The receiving floor uses direct `solref = (-4444.444444, -266.666667)`, retaining the mixed normal stiffness and doubling normal damping. Other materials, friction coefficients and default collision routes remain unchanged. The original physical grasp, lift, carry, release and settling gates still apply.

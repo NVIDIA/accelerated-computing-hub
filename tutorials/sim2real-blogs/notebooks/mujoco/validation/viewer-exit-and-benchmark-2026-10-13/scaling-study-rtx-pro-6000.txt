@@ -1,0 +1,93 @@
+------------------------------------------------------------------------------------------------
+MJWarp throughput scaling study (Part 2): how many worlds per second can one GPU step?
+------------------------------------------------------------------------------------------------
+Robot/scene : SO-101, arm holding its start pose over the cubes (controls fixed, no IK, no viewer)
+GPU         : NVIDIA RTX PRO 6000 Blackwell Workstation Edition (cuda:0), 188 SMs, 95 GiB VRAM, compute capability 12.0
+CPU         : AMD Ryzen Threadripper PRO 9985WX 64-Cores (128 logical cores)
+Physics     : timestep 2.0 ms; one 'step' = one mjw.step call that advances EVERY world by one timestep
+Timing      : 200 CUDA-graph replays after 10 warm-up steps, wall clock between two wp.synchronize() calls
+CPU baseline: classic MuJoCo mj_step, ONE world on ONE core = 52,856 steps/s (real-time factor 105.7x)
+------------------------------------------------------------------------------------------------
+Columns:
+  nworld       independent copies of the scene simulated together in one batch
+  ms/step      wall-clock milliseconds for one batched step (latency of the whole batch)
+  world-steps/s  nworld x steps / seconds: aggregate throughput, i.e. physics samples per second
+  vs 1 world   throughput relative to nworld=1 on the same GPU
+  vs CPU core  throughput relative to the single-core CPU baseline above
+  sim-s/s      simulated seconds produced per wall-clock second over all worlds (real-time factor)
+  peak VRAM    Warp memory high-water mark for this batch, temporaries included (+ ~0.5 GiB CUDA context)
+------------------------------------------------------------------------------------------------
+  nworld   ms/step   world-steps/s  vs 1 world  vs CPU core     sim-s/s  peak VRAM
+------------------------------------------------------------------------------------------------
+How to read this:
+  * Throughput (world-steps/s) is what matters for reinforcement learning and synthetic data:
+  * ms/step grows much more slowly than nworld while the GPU still has idle SMs, so throughput
+  * One world on a GPU is usually SLOWER than one CPU core (kernel launch latency, float32 batch
+  * Memory: about 826 KiB per world at the peak (contact and constraint buffers
+  * Other hardware: plateau throughput scales roughly with SM count x clock and memory bandwidth;
+  * This is a physics-step microbenchmark with fixed controls. The full two-cube task, with
+------------------------------------------------------------------------------------------------
+EXIT=0
+------------------------------------------------------------------------------------------------
+MJWarp throughput scaling study (Part 2): how many worlds per second can one GPU step?
+------------------------------------------------------------------------------------------------
+Robot/scene : Seeed reBot DevArm, arm holding its start pose over the cubes (controls fixed, no IK, no viewer)
+GPU         : NVIDIA RTX PRO 6000 Blackwell Workstation Edition (cuda:0), 188 SMs, 95 GiB VRAM, compute capability 12.0
+CPU         : AMD Ryzen Threadripper PRO 9985WX 64-Cores (128 logical cores)
+Physics     : timestep 2.0 ms; one 'step' = one mjw.step call that advances EVERY world by one timestep
+Timing      : 200 CUDA-graph replays after 10 warm-up steps, wall clock between two wp.synchronize() calls
+CPU baseline: classic MuJoCo mj_step, ONE world on ONE core = 46,133 steps/s (real-time factor 92.3x)
+------------------------------------------------------------------------------------------------
+Columns:
+  nworld       independent copies of the scene simulated together in one batch
+  ms/step      wall-clock milliseconds for one batched step (latency of the whole batch)
+  world-steps/s  nworld x steps / seconds: aggregate throughput, i.e. physics samples per second
+  vs 1 world   throughput relative to nworld=1 on the same GPU
+  vs CPU core  throughput relative to the single-core CPU baseline above
+  sim-s/s      simulated seconds produced per wall-clock second over all worlds (real-time factor)
+  peak VRAM    Warp memory high-water mark for this batch, temporaries included (+ ~0.5 GiB CUDA context)
+------------------------------------------------------------------------------------------------
+  nworld   ms/step   world-steps/s  vs 1 world  vs CPU core     sim-s/s  peak VRAM
+------------------------------------------------------------------------------------------------
+How to read this:
+  * Throughput (world-steps/s) is what matters for reinforcement learning and synthetic data:
+  * ms/step grows much more slowly than nworld while the GPU still has idle SMs, so throughput
+  * One world on a GPU is usually SLOWER than one CPU core (kernel launch latency, float32 batch
+  * Memory: about 4,686 KiB per world at the peak (contact and constraint buffers
+  * Other hardware: plateau throughput scales roughly with SM count x clock and memory bandwidth;
+  * This is a physics-step microbenchmark with fixed controls. The full two-cube task, with
+------------------------------------------------------------------------------------------------
+EXIT=0
+------------------------------------------------------------------------------------------------
+MJWarp throughput (Part 2 --benchmark): 2048 worlds, CUDA graph on
+------------------------------------------------------------------------------------------------
+Robot/scene : SO-101, arm holding its start pose over the cubes (controls fixed, no IK, no viewer)
+GPU         : NVIDIA RTX PRO 6000 Blackwell Workstation Edition (cuda:0), 188 SMs, 95 GiB VRAM, compute capability 12.0
+CPU         : AMD Ryzen Threadripper PRO 9985WX 64-Cores (128 logical cores)
+Physics     : timestep 2.0 ms; one 'step' = one mjw.step call that advances EVERY world by one timestep
+Timing      : 200 CUDA-graph replays after 10 warm-up steps, wall clock between two wp.synchronize() calls
+CPU baseline: classic MuJoCo mj_step, ONE world on ONE core = 52,543 steps/s (real-time factor 105.1x)
+------------------------------------------------------------------------------------------------
+Columns:
+  nworld       independent copies of the scene simulated together in one batch
+  ms/step      wall-clock milliseconds for one batched step (latency of the whole batch)
+  world-steps/s  nworld x steps / seconds: aggregate throughput, i.e. physics samples per second
+  vs 1 world   throughput relative to nworld=1 on the same GPU
+  vs CPU core  throughput relative to the single-core CPU baseline above
+  sim-s/s      simulated seconds produced per wall-clock second over all worlds (real-time factor)
+  peak VRAM    Warp memory high-water mark for this batch, temporaries included (+ ~0.5 GiB CUDA context)
+------------------------------------------------------------------------------------------------
+  nworld   ms/step   world-steps/s  vs 1 world  vs CPU core     sim-s/s  peak VRAM
+Total: 409,600 world-steps in 0.150 s. Sweep nworld with scaling_study.py to see the curve.
+------------------------------------------------------------------------------------------------
+How to read this:
+  * Throughput (world-steps/s) is what matters for reinforcement learning and synthetic data:
+  * ms/step grows much more slowly than nworld while the GPU still has idle SMs, so throughput
+  * One world on a GPU is usually SLOWER than one CPU core (kernel launch latency, float32 batch
+  * Memory: about 831 KiB per world at the peak (contact and constraint buffers
+  * Other hardware: plateau throughput scales roughly with SM count x clock and memory bandwidth;
+  * This is a physics-step microbenchmark with fixed controls. The full two-cube task, with
+------------------------------------------------------------------------------------------------
+EXIT=0
+Out of GPU memory for --nworld 65536: VRAM caps how many worlds fit. Use a smaller --nworld (scaling_study.py shows the largest size that fits).
+EXIT=1

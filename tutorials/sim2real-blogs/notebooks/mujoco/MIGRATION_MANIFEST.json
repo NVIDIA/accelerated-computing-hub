@@ -31,33 +31,35 @@
   "scope_counts": {
     "guide_or_notice_adaptation": 4,
     "historical_document": 1,
-    "immutable_evidence_or_reference_package": 428,
+    "immutable_evidence_or_reference_package": 434,
     "notebook_layout_bootstrap_and_metadata": 4,
-    "runtime": 35,
+    "runtime": 36,
     "dependency_definition": 2,
-    "test_path_or_hub_contract_adaptation": 11,
+    "test_path_or_hub_contract_adaptation": 14,
     "license": 4
   },
   "files": [
     {
       "source": "Article_2/BENCHMARK.md",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/BENCHMARK.md",
-      "source_sha256": "1e8ffc053a0d5b57dcc353bbcae9d9a7536f7079ad29fef9ecaeb82f4bca1d5f",
-      "destination_sha256": "30f07037afdb791071db68ea301aad92006c8182494a4aa0d590c8782251173f",
-      "destination_bytes": 15838,
+      "source_sha256": "a65a56e487551e7d687aa81e7816acfcf0002e27a7bd07ec2e61b492ccde118f",
+      "destination_sha256": "806f7c69c36cf171c18990b3992d12b6c48798e5d21e3c742f24a10b5f38610e",
+      "destination_bytes": 16412,
       "byte_identical": false,
       "scope": "guide_or_notice_adaptation",
-      "source_bytes": 15934
+      "source_bytes": 16508,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/README.md",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/README.md",
-      "source_sha256": "f7b5c64423fafb41fff1275be9dfb59494d16a6442c5d7e78f59260ba67cd089",
-      "destination_sha256": "9d3b00b9595d891ed11a388cc7b01177ea7a9cd787d3f5f0dec99029574229b9",
-      "destination_bytes": 10417,
+      "source_sha256": "adc8b1011d2f4615c0f21aea5e15261742ec36fbf4c9bb19e9f0e054011eb3e3",
+      "destination_sha256": "9165155ec23158ccddac558d72d9ab2d67f1294904fc628b1fd8081330ff3cfc",
+      "destination_bytes": 17018,
       "byte_identical": false,
       "scope": "guide_or_notice_adaptation",
-      "source_bytes": 8305
+      "source_bytes": 15087,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/THIRD_PARTY_NOTICES.md",
@@ -82,12 +84,13 @@
     {
       "source": "Article_2/VIEWER_VALIDATION.md",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/VIEWER_VALIDATION.md",
-      "source_sha256": "730819391c4ae4d0e7a5ce3846c4f3432519428ec8a1b92754fb609a26f88bde",
-      "destination_sha256": "aa2d67305b75ad900c21bdac44cf1b00c8f0749d20dc3e24aada5199046a0102",
-      "destination_bytes": 2615,
+      "source_sha256": "ea283ca3a1588d05bf6628f617e3e0222749f83c220172d2e976e6dd5c88d8f0",
+      "destination_sha256": "5d1792974f8c0a2a03cbd5921fba1f8cb7e22568b81b1283ef39b84eb5d47d0a",
+      "destination_bytes": 4036,
       "byte_identical": false,
       "scope": "guide_or_notice_adaptation",
-      "source_bytes": 2621
+      "source_bytes": 3994,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/benchmark-results/2026-10-08-full-sweep-rtx-pro-6000/README.md",
@@ -982,12 +985,13 @@
     {
       "source": "Article_2/part1/pick_place_common.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/pick_place_common.py",
-      "source_sha256": "81d7133d172aafaa0eba79b7c97cea3b675c7756cb33466701165452781b9348",
-      "destination_sha256": "81d7133d172aafaa0eba79b7c97cea3b675c7756cb33466701165452781b9348",
-      "destination_bytes": 17268,
+      "source_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
+      "destination_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
+      "destination_bytes": 19333,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 17268
+      "source_bytes": 19333,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part1/robots.py",
@@ -1002,22 +1006,24 @@
     {
       "source": "Article_2/part1/so101_pick_place.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/so101_pick_place.py",
-      "source_sha256": "2bffa5e22fceb9adaaffb726a0e1c4ee60ddad3f21d6864b41f612810cdd917b",
-      "destination_sha256": "2bffa5e22fceb9adaaffb726a0e1c4ee60ddad3f21d6864b41f612810cdd917b",
-      "destination_bytes": 10364,
+      "source_sha256": "cb9c267b72264529820ae5166ef6724515ae07a023d86405f45e9c19599f1bab",
+      "destination_sha256": "cb9c267b72264529820ae5166ef6724515ae07a023d86405f45e9c19599f1bab",
+      "destination_bytes": 11338,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 10364
+      "source_bytes": 11338,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part1/solutions/so101_pick_place_solution.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/solutions/so101_pick_place_solution.py",
-      "source_sha256": "a5f752fd24fbfc9e8969b424faebc1e31b2f79741d7c8e065728b767d240d025",
-      "destination_sha256": "a5f752fd24fbfc9e8969b424faebc1e31b2f79741d7c8e065728b767d240d025",
-      "destination_bytes": 8030,
+      "source_sha256": "2493d3e9a4954c41eeda3d3f4c2b4a30a997365a22d918e430290720313ae9dd",
+      "destination_sha256": "2493d3e9a4954c41eeda3d3f4c2b4a30a997365a22d918e430290720313ae9dd",
+      "destination_bytes": 8995,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 8030
+      "source_bytes": 8995,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part1/solutions/step_00_imports.py",
@@ -1072,12 +1078,13 @@
     {
       "source": "Article_2/part1/solutions/step_05_verify_stack.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/solutions/step_05_verify_stack.py",
-      "source_sha256": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
-      "destination_sha256": "4705e7e7e9e8c10d933e9a45327762b1324aa9ed6592263b95a0fa072acfcbbb",
-      "destination_bytes": 591,
+      "source_sha256": "341541ad9fdf35ed21f16710e73a0c0f7b43f0112deb3e6d896d7ed66772acfd",
+      "destination_sha256": "341541ad9fdf35ed21f16710e73a0c0f7b43f0112deb3e6d896d7ed66772acfd",
+      "destination_bytes": 594,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 591
+      "source_bytes": 594,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part1/utils.py",
@@ -1092,12 +1099,13 @@
     {
       "source": "Article_2/part1/viewer_loop.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/viewer_loop.py",
-      "source_sha256": "73199917bac3dd69111484e9661810a7e4a08fceb0d726320955fdf19cbd5208",
-      "destination_sha256": "73199917bac3dd69111484e9661810a7e4a08fceb0d726320955fdf19cbd5208",
-      "destination_bytes": 3188,
+      "source_sha256": "f42d7f0329cd63f8f74e3edec9f327f22fff0ebaca95601cb449ff092cc9287d",
+      "destination_sha256": "f42d7f0329cd63f8f74e3edec9f327f22fff0ebaca95601cb449ff092cc9287d",
+      "destination_bytes": 10762,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 3188
+      "source_bytes": 10762,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part1/viewer_window.py",
@@ -1182,12 +1190,13 @@
     {
       "source": "Article_2/part2/pick_place_common.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/pick_place_common.py",
-      "source_sha256": "81d7133d172aafaa0eba79b7c97cea3b675c7756cb33466701165452781b9348",
-      "destination_sha256": "81d7133d172aafaa0eba79b7c97cea3b675c7756cb33466701165452781b9348",
-      "destination_bytes": 17268,
+      "source_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
+      "destination_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
+      "destination_bytes": 19333,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 17268
+      "source_bytes": 19333,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part2/robots.py",
@@ -1202,32 +1211,35 @@
     {
       "source": "Article_2/part2/scaling_study.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/scaling_study.py",
-      "source_sha256": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
-      "destination_sha256": "3e39bb6015adcbde4aa2862f17d243de76ec49b3f34d51cd230b8c43b872dcab",
-      "destination_bytes": 4230,
+      "source_sha256": "f7db600923cf5d7d39401cf767dd40d9f0cf6d8fbc745123456816caa5f25299",
+      "destination_sha256": "f7db600923cf5d7d39401cf767dd40d9f0cf6d8fbc745123456816caa5f25299",
+      "destination_bytes": 5565,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 4230
+      "source_bytes": 5565,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part2/so101_mjwarp.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/so101_mjwarp.py",
-      "source_sha256": "fda6105cdd3c3f72bb8134d6b96ca2d854c7c658aa906f0afba75c8b50662715",
-      "destination_sha256": "fda6105cdd3c3f72bb8134d6b96ca2d854c7c658aa906f0afba75c8b50662715",
-      "destination_bytes": 14092,
+      "source_sha256": "a4d54e53d18546f6255ad3997ee25aa8d6efa4ea2a21769693ad48db8ed4ca07",
+      "destination_sha256": "a4d54e53d18546f6255ad3997ee25aa8d6efa4ea2a21769693ad48db8ed4ca07",
+      "destination_bytes": 16616,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 14092
+      "source_bytes": 16616,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part2/solutions/so101_mjwarp_solution.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/solutions/so101_mjwarp_solution.py",
-      "source_sha256": "10830b2061aab76540144e39606145300c05da745b39a2ec500d04d38ee07585",
-      "destination_sha256": "10830b2061aab76540144e39606145300c05da745b39a2ec500d04d38ee07585",
-      "destination_bytes": 10755,
+      "source_sha256": "0cfde3e59c413359c0612e4a4ab23f3b050e86885e56eb5687723e744fd6e6d6",
+      "destination_sha256": "0cfde3e59c413359c0612e4a4ab23f3b050e86885e56eb5687723e744fd6e6d6",
+      "destination_bytes": 13293,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 10755
+      "source_bytes": 13293,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part2/solutions/step_00_imports.py",
@@ -1322,12 +1334,13 @@
     {
       "source": "Article_2/part2/viewer_loop.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/viewer_loop.py",
-      "source_sha256": "73199917bac3dd69111484e9661810a7e4a08fceb0d726320955fdf19cbd5208",
-      "destination_sha256": "73199917bac3dd69111484e9661810a7e4a08fceb0d726320955fdf19cbd5208",
-      "destination_bytes": 3188,
+      "source_sha256": "f42d7f0329cd63f8f74e3edec9f327f22fff0ebaca95601cb449ff092cc9287d",
+      "destination_sha256": "f42d7f0329cd63f8f74e3edec9f327f22fff0ebaca95601cb449ff092cc9287d",
+      "destination_bytes": 10762,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 3188
+      "source_bytes": 10762,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "Article_2/part2/viewer_window.py",
@@ -4852,32 +4865,35 @@
     {
       "source": "tests/test_article2_viewer_integration.py",
       "destination": "tutorials/sim2real-blogs/test/test_article2_viewer_integration.py",
-      "source_sha256": "f4b855c8befd501321a07cd120b82cc1b919971624f89c492298e879d924f1e5",
-      "destination_sha256": "638e8f0b2aa7b2ba985b9f4c731ba4c62d6a1e0ce34c65977e68f0a7cccf570c",
-      "destination_bytes": 6868,
+      "source_sha256": "a6cab2685665f0fc1e7fb6373db1f607018ae73e2867bf784655b32c62b6e4f9",
+      "destination_sha256": "0a09f68afcae7df2c4dea2da18dbd2a84830eafc79d26903cda4b37436109ceb",
+      "destination_bytes": 6873,
       "byte_identical": false,
       "scope": "test_path_or_hub_contract_adaptation",
-      "source_bytes": 6861
+      "source_bytes": 6866,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "tests/test_article2_viewer_loop.py",
       "destination": "tutorials/sim2real-blogs/test/test_article2_viewer_loop.py",
-      "source_sha256": "18f8a7e9738df111c6fad0f021542f6f0b7677659b8c21522178105d36dbb966",
-      "destination_sha256": "99f0001165c67f617570a44f4c19401fe9e29944d13954ad74b646ff1eaa5f45",
-      "destination_bytes": 7292,
+      "source_sha256": "a712e1cc48411bbd13525f5b9ff883017e7fda5e1c28b1e18c40f0d8220154a8",
+      "destination_sha256": "8a2c6952b65f2ac635247f7e7914eba46164a5061550ea6e80deeb2be72947cd",
+      "destination_bytes": 7421,
       "byte_identical": false,
       "scope": "test_path_or_hub_contract_adaptation",
-      "source_bytes": 7278
+      "source_bytes": 7407,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "tests/test_article2_viewer_window.py",
       "destination": "tutorials/sim2real-blogs/test/test_article2_viewer_window.py",
-      "source_sha256": "b40340630d630afa9e87abefa090cba37e04cefb2d73477ab3a86848a0f09cbb",
-      "destination_sha256": "8a1c416277bd82df466b129f9d15994eed4d7c4a0296e7a2bbb82f93c5697865",
-      "destination_bytes": 10437,
+      "source_sha256": "d005c743a4ef835dd636d54dde42d8778d1c000db10fbe6662c0cc23d859f2eb",
+      "destination_sha256": "9d8489245566060f7a9c69b9afd3941a9f84bddb01df743e95da9da6e8f9ddc2",
+      "destination_bytes": 10475,
       "byte_identical": false,
       "scope": "test_path_or_hub_contract_adaptation",
-      "source_bytes": 10395
+      "source_bytes": 10433,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     },
     {
       "source": "tests/test_box_task.py",
@@ -4928,6 +4944,116 @@
       "byte_identical": true,
       "scope": "license",
       "source_bytes": 11358
+    },
+    {
+      "source": "Article_2/part2/benchmark_report.py",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/benchmark_report.py",
+      "source_sha256": "d7c7699be7b68fafe3491af3911280b9ce158bfe13147b185bf24cd3c17001db",
+      "destination_sha256": "d7c7699be7b68fafe3491af3911280b9ce158bfe13147b185bf24cd3c17001db",
+      "destination_bytes": 8673,
+      "byte_identical": true,
+      "scope": "runtime",
+      "source_bytes": 8673,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/README.md",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/README.md",
+      "source_sha256": "a936bd745dce61a83cf7d77fddf54ac7d1e491a54283912c3254a2c0c7d61fd8",
+      "destination_sha256": "a936bd745dce61a83cf7d77fddf54ac7d1e491a54283912c3254a2c0c7d61fd8",
+      "destination_bytes": 5108,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 5108,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/ctrl-c-during-warp-compile.json",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/ctrl-c-during-warp-compile.json",
+      "source_sha256": "53bf2715362b68b3f68561572593c4e643c6b3b5363bd451c651ff76d663348a",
+      "destination_sha256": "53bf2715362b68b3f68561572593c4e643c6b3b5363bd451c651ff76d663348a",
+      "destination_bytes": 445,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 445,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/headless-matrix.txt",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/headless-matrix.txt",
+      "source_sha256": "c32fb58b49fd7d3855d4b5f2149c4e25f7305bfd064b3e92388113799ef9ef32",
+      "destination_sha256": "c32fb58b49fd7d3855d4b5f2149c4e25f7305bfd064b3e92388113799ef9ef32",
+      "destination_bytes": 1088,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 1088,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/lifecycle-tests.txt",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/lifecycle-tests.txt",
+      "source_sha256": "ba38b42c7c7e577372a5b20eb38fe38f12196670a25ad4c1b5531f9d562829dd",
+      "destination_sha256": "ba38b42c7c7e577372a5b20eb38fe38f12196670a25ad4c1b5531f9d562829dd",
+      "destination_bytes": 11040,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 11040,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/scaling-study-rtx-pro-6000.txt",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/scaling-study-rtx-pro-6000.txt",
+      "source_sha256": "1dd4d9cc6def401697faacc891a57dfc61781b23b683b1736a49756e888a2231",
+      "destination_sha256": "1dd4d9cc6def401697faacc891a57dfc61781b23b683b1736a49756e888a2231",
+      "destination_bytes": 7911,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 7911,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "Article_2/validation/viewer-exit-and-benchmark-2026-10-13/x11-scenarios-before-after.jsonl",
+      "destination": "tutorials/sim2real-blogs/notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/x11-scenarios-before-after.jsonl",
+      "source_sha256": "a3a2104dc00842f6493a1ada8e70d0781f93319655516cad2359ba1b8c2ecfd9",
+      "destination_sha256": "a3a2104dc00842f6493a1ada8e70d0781f93319655516cad2359ba1b8c2ecfd9",
+      "destination_bytes": 5807,
+      "byte_identical": true,
+      "scope": "immutable_evidence_or_reference_package",
+      "source_bytes": 5807,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "tests/test_article2_ctrl_c.py",
+      "destination": "tutorials/sim2real-blogs/test/test_article2_ctrl_c.py",
+      "source_sha256": "785bd5a020ec61ec0e697c3d61645af0e0f8213aa0aabdd25a5dcb8a4ec699ad",
+      "destination_sha256": "fca300eb927f24092a7aa5fc77f9057fbf9b692ad868b6299691b623157693ff",
+      "destination_bytes": 9201,
+      "byte_identical": false,
+      "scope": "test_path_or_hub_contract_adaptation",
+      "source_bytes": 9194,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "tests/test_article2_viewer_x11.py",
+      "destination": "tutorials/sim2real-blogs/test/test_article2_viewer_x11.py",
+      "source_sha256": "cad732608be7e24c65fb0cda030223908f9079c5157f06ca7f81de49189541d0",
+      "destination_sha256": "44e72cd84c5680e7756fd4bbb9a747c9af7ede1b51c5f570d8cc58cdddf7141e",
+      "destination_bytes": 5942,
+      "byte_identical": false,
+      "scope": "test_path_or_hub_contract_adaptation",
+      "source_bytes": 5928,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "tests/x11_lifecycle_harness.py",
+      "destination": "tutorials/sim2real-blogs/test/x11_lifecycle_harness.py",
+      "source_sha256": "5c7e058b01a453203c10fd2771e279ae40a9cf1eba9df27d0ded13c0030e29b6",
+      "destination_sha256": "5c7e058b01a453203c10fd2771e279ae40a9cf1eba9df27d0ded13c0030e29b6",
+      "destination_bytes": 6560,
+      "byte_identical": true,
+      "scope": "test_path_or_hub_contract_adaptation",
+      "source_bytes": 6560,
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
     }
   ],
   "notebook_code_mapping": [
@@ -5114,5 +5240,18 @@
     "No local GPU, GUI, physics, Docker, hosted or network execution was performed by the porting agent.",
     "Local tests use the existing Newton environment only for mocks/static contracts; its physics versions cannot validate Blog 2 execution.",
     "Updated container/kernel/PC checks and final signed REF pin are root-owned separate steps."
+  ],
+  "source_updates": [
+    {
+      "date": "2026-10-13",
+      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33",
+      "summary": "Viewer always finishes and exits with a verified result; Ctrl+C exits within about 1 s in every phase (second Ctrl+C immediately); self-explanatory --benchmark/scaling_study output; X11 lifecycle and Ctrl+C tests. Entries carrying source_commit come from this update; all others still come from the top-level source_commit.",
+      "files_updated": 16,
+      "files_added": 10,
+      "not_ported": [
+        "README.md",
+        "tests/test_tutorial_scaffolds.py"
+      ]
+    }
   ]
 }
