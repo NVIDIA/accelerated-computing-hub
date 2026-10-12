@@ -23,6 +23,10 @@ import numpy as np
 # Solution files live in solutions/, so make the part folder importable.
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# Ctrl+C policy first, so it also covers the slow imports and setup below.
+from viewer_loop import EXIT_TASK_FAILED, install_ctrl_c, lesson_main  # noqa: E402
+install_ctrl_c()
+
 # Step 0: import the MuJoCo Python bindings.
 import mujoco  # noqa: E402
 import mujoco.viewer  # noqa: E402
@@ -32,6 +36,7 @@ from pick_place_common import (  # noqa: E402
     apply_arm_ctrl,
     apply_viewer_camera,
     aperture_center,
+    check_stack,
     load_pick_place_model,
     reset_cubes,
     resolve_pick_place_scene,
@@ -56,8 +61,11 @@ def run_demo(
     debug: bool = False,
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
-) -> None:
-    """Build the model, then run the pick-and-place loop on MuJoCo CPU."""
+) -> int:
+    """Build the model, then run the pick-and-place loop on MuJoCo CPU.
+
+    Returns the process exit code: 0 task verified (or viewer quit), 1 task
+    check failed, 130 Ctrl+C."""
     # Step 1: compiled model + mutable state.
     model = load_pick_place_model(xml_path, spec)
     data = mujoco.MjData(model)
@@ -130,46 +138,57 @@ def run_demo(
         debug_frame()
         frame_idx += 1
 
-    def report_completion() -> None:
+    def report_completion() -> bool:
         if box_task:
             report = box_task.report()
             report.update(backend='mujoco', device="cpu")
             if report_path is not None:
                 report_path.parent.mkdir(parents=True, exist_ok=True)
                 report_path.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
-            box_task.assert_complete()
+            try:
+                box_task.assert_complete()
+            except AssertionError as exc:
+                print(f"Task FAILED: box check did not pass: {exc}")
+                return False
             print(f"box check: PASS — both cubes grasped, lifted, carried, released and settled; {report['simulation_seconds']:.2f} simulated seconds")
-            return
+            print("Task complete: both cubes are in the receiving box (verified).")
+            return True
         # Step 5: report the final cube positions so the stack can be verified.
         red = data.xpos[red_body]
         blue = data.xpos[blue_body]
         xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
         dz = float(red[2] - blue[2])
-        print(f"Task complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
+        print(f"Final cube positions: red={np.round(red, 3)} blue={np.round(blue, 3)}")
         print(f"stack check: xy_err={xy_err:.3f} m  dz={dz:.3f} m")
-        return
+        mujoco.mj_forward(model, data)
+        passed, summary = check_stack(model, data, spec)
+        if passed:
+            print(f"Task complete: red cube stacked on blue (verified: {summary}).")
+        else:
+            print(f"Task FAILED: red cube is not stacked on blue ({summary}).")
+        return passed
 
 
     if headless_steps > 0:
         for _ in range(headless_steps):
             simulate_frame()
-        report_completion()
-        return
+        return 0 if report_completion() else EXIT_TASK_FAILED
 
     # The interactive lesson has the same finite horizon as the headless example.
     # Rendering, pause and cancellation do not advance the controller clock.
     from viewer_loop import run_passive_frames
 
-    complete = run_passive_frames(
+    result = run_passive_frames(
         model, data, simulate_frame,
         frames=round((40 if box_task else 12) * fps), fps=fps,
         configure_viewer=lambda viewer: apply_viewer_camera(viewer, spec),
     )
-    if complete:
-        report_completion()
+    if not result.complete:
+        return result.exit_code
+    return 0 if report_completion() else EXIT_TASK_FAILED
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description="Part 1 solution — MuJoCo CPU pick & place.")
     add_robot_arg(parser)
     parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
@@ -196,7 +215,7 @@ def main() -> None:
         print_asset_setup_help(SCRIPT_NAME)
         sys.exit(1)
 
-    run_demo(
+    return run_demo(
         xml_path,
         spec,
         fps=args.fps,
@@ -209,4 +228,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    lesson_main(main)

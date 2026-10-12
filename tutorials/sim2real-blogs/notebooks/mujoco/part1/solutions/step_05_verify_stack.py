@@ -9,5 +9,5 @@ red = data.xpos[red_body]
 blue = data.xpos[blue_body]
 xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
 dz = float(red[2] - blue[2])
-print(f"Headless complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
+print(f"Final cube positions: red={np.round(red, 3)} blue={np.round(blue, 3)}")
 print(f"stack check: xy_err={xy_err:.3f} m  dz={dz:.3f} m")

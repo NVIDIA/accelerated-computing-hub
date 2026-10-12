@@ -1,5 +1,17 @@
 # Viewer behavior and validation
 
+## 13 October 2026: finite exit, Ctrl+C and verified result
+
+After a tester ran an older copy of these lessons (the `launch_passive` version, also used by the accelerated-computing-hub port) the viewer loop was hardened and re-validated under a real X server with real key, close and SIGINT events:
+
+- the episode always ends: the window closes after 600 (stack) or 2,000 (box) frames, the task is checked, and the run prints `Task complete: … (verified …)` or `Task FAILED: …` and exits 0 or 1;
+- Space pauses, Esc/Q/closing the window quit (exit 0), Ctrl+C quits in every phase within about a second (exit 130), a second Ctrl+C exits immediately. The SIGINT handler only sets a flag while the window is open; the main thread notices it within one frame and tears down OpenGL/GLFW itself, so no buffer swap can follow a destroyed window;
+- when rendering is slower than real time, several physics frames run per rendered frame (physics is never skipped), so the 12 s stack episode takes about 15 s on software OpenGL instead of about 70 s.
+
+Evidence, before/after tables and the exact commands: [validation/viewer-exit-and-benchmark-2026-10-13](validation/viewer-exit-and-benchmark-2026-10-13/README.md). Tests: `tutorials/sim2real-blogs/test/test_article2_viewer_x11.py` (needs `DISPLAY` and `xdotool`, skips otherwise) and `tutorials/sim2real-blogs/test/test_article2_ctrl_c.py` (headless).
+
+## 10 October 2026
+
 The robot teaching viewer has a finite episode: 600 control frames for stacking, or 2,000 for placing both cubes in the box. Space pauses; Esc, Q, window close and Ctrl+C cancel without claiming task success. Camera orbit, pan and zoom remain available. Completed box runs execute their physical task checks; the legacy stack exercise prints diagnostic distances.
 
 The renderer now uses public MuJoCo and GLFW APIs on the main thread, including deterministic context cleanup. On Linux, both robots, both tasks and native CPU/MuJoCo Warp completed six checks each: automatic completion, Escape, Q, pause/resume, window close and Ctrl+C (**48 cases**). These used an actual NVIDIA desktop context on an RTX PRO 6000 Blackwell, not software-renderer inference.

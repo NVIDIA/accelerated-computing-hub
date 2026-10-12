@@ -11,9 +11,13 @@
 #  in this file is an exercise; it is the measurement tool used by
 #  01_Notebook_MJWarp.ipynb.
 #
-#  Run it:
+#  Run it (from Article_2/part2, needs a CUDA GPU):
 #      python scaling_study.py
-#      python scaling_study.py --worlds 1 64 1024 8192 --steps 100
+#      python scaling_study.py --worlds 1 64 1024 2048 8192 --steps 100
+#
+#  The output explains every column. In short: world-steps/s is aggregate
+#  physics throughput (what RL and data generation consume), compared with
+#  nworld=1 on the same GPU and with one classic-MuJoCo CPU core.
 
 from __future__ import annotations
 
@@ -27,6 +31,17 @@ import mujoco_warp as mjw
 import numpy as np
 import warp as wp
 
+from viewer_loop import install_ctrl_c, lesson_main
+from benchmark_report import (
+    Row,
+    measure_cpu_baseline,
+    is_out_of_memory,
+    mempool_peak,
+    quiet_warp,
+    print_header,
+    print_reading_guide,
+    print_row,
+)
 from pick_place_common import (
     apply_arm_ctrl,
     load_pick_place_model,
@@ -38,9 +53,10 @@ from robots import add_robot_arg, get_robot
 DEFAULT_WORLDS = (1, 16, 64, 256, 1024, 4096)
 
 
-def measure(mjm, mjd, nworld: int, *, nconmax: int, njmax: int, steps: int) -> dict:
+def measure(mjm, mjd, nworld: int, *, nconmax: int, njmax: int, steps: int) -> Row:
     """Time `steps` batched steps at a given world count."""
     device = wp.get_device()
+    wp.synchronize()
     m = mjw.put_model(mjm)
     d = mjw.make_data(mjm, nworld=nworld, nconmax=nconmax, njmax=njmax)
 
@@ -71,12 +87,7 @@ def measure(mjm, mjd, nworld: int, *, nconmax: int, njmax: int, steps: int) -> d
     wp.synchronize()
     elapsed = time.perf_counter() - t0
 
-    return {
-        "nworld": nworld,
-        "seconds": elapsed,
-        "per_step_ms": elapsed / steps * 1e3,
-        "world_steps_per_s": steps * nworld / elapsed,
-    }
+    return Row(nworld=nworld, steps=steps, seconds=elapsed, mem_bytes=mempool_peak(device))
 
 
 def main() -> None:
@@ -86,15 +97,20 @@ def main() -> None:
     parser.add_argument("--nconmax", type=int, default=None)
     parser.add_argument("--njmax", type=int, default=None)
     parser.add_argument("--menagerie-path", type=Path, default=None)
+    parser.add_argument("--device", default=None, help="Warp device, for example cuda:0 or cuda:1.")
+    parser.add_argument("--fps", type=int, default=50, help="Control rate; timestep = 1 / fps / sim-substeps.")
+    parser.add_argument("--sim-substeps", type=int, default=10)
     add_robot_arg(parser)
     args = parser.parse_args()
     spec = get_robot(args.robot)
     nconmax = spec.nconmax if args.nconmax is None else args.nconmax
     njmax = spec.njmax if args.njmax is None else args.njmax
 
+    quiet_warp()
     wp.init()
+    if args.device is not None:
+        wp.set_device(args.device)
     device = wp.get_device()
-    print(f"Warp device: {device}")
     if not device.is_cuda:
         print("No CUDA device found — numbers below are CPU fallback, not GPU scaling.\n", file=sys.stderr)
 
@@ -102,28 +118,37 @@ def main() -> None:
         args.menagerie_path, explicit=args.menagerie_path is not None, spec=spec
     )
     mjm = load_pick_place_model(xml_path, spec)
+    # Same physics clock as the lessons (50 Hz x 10 substeps -> 2 ms).
+    mjm.opt.timestep = (1.0 / args.fps) / args.sim_substeps
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
+    mujoco.mj_forward(mjm, mjd)
 
-    print(f"\n{spec.display_name}")
-    print(f"{'nworld':>8} {'ms/step':>10} {'world-steps/s':>16} {'speedup vs 1':>14}")
-    print("-" * 52)
+    cpu_rate = measure_cpu_baseline(mjm, mjd)
+    print_header(title="MJWarp throughput scaling study (Part 2): how many worlds per second can one GPU step?",
+                 device=device, timestep=mjm.opt.timestep, steps=args.steps,
+                 robot=spec.display_name, cpu_steps_per_s=cpu_rate)
 
-    baseline = None
-    for nworld in args.worlds:
-        row = measure(mjm, mjd, nworld, nconmax=nconmax, njmax=njmax, steps=args.steps)
-        baseline = baseline or row["world_steps_per_s"]
-        print(
-            f"{row['nworld']:>8} {row['per_step_ms']:>10.3f} "
-            f"{row['world_steps_per_s']:>16,.0f} {row['world_steps_per_s'] / baseline:>13.1f}x"
-        )
+    rows: list[Row] = []
+    one_world = None
+    for nworld in sorted(args.worlds):
+        try:
+            row = measure(mjm, mjd, nworld, nconmax=nconmax, njmax=njmax, steps=args.steps)
+        except (RuntimeError, MemoryError) as exc:
+            if not is_out_of_memory(exc):
+                raise
+            print(f"{nworld:>8}  out of GPU memory: this GPU cannot hold {nworld} worlds of this scene "
+                  "(VRAM limit on nworld). Sweep stopped here.")
+            break
+        rows.append(row)
+        if nworld == 1:
+            one_world = row.world_steps_per_s
+        print_row(row, baseline_ws=one_world, cpu_steps_per_s=cpu_rate, timestep=mjm.opt.timestep)
 
-    print(
-        "\nRead the ms/step column: it stays nearly flat while nworld grows by orders\n"
-        "of magnitude. That flatness is the whole value proposition of MJWarp."
-    )
+    print_reading_guide(rows, device=device, total_memory=getattr(device, "total_memory", None))
 
 
 if __name__ == "__main__":
-    main()
+    install_ctrl_c()
+    lesson_main(main)

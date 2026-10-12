@@ -185,7 +185,7 @@ class MacLaunchTests(unittest.TestCase):
                     # Execute only the real entrypoint AST with a fake main;
                     # imports, model construction and physics are never run.
                     code = compile(ast.fix_missing_locations(ast.Module(body=[entry], type_ignores=[])), name, 'exec')
-                    exec(code, {'__name__': '__main__', 'main': called})
+                    exec(code, {'__name__': '__main__', 'main': called, 'lesson_main': lambda entry: entry()})
                     called.assert_called_once_with()
             self.assertNotIn('maybe_relaunch_with_mjpython', (ROOT / name).read_text())
             self.assertNotIn('mjpython_viewer_error', (ROOT / name).read_text())

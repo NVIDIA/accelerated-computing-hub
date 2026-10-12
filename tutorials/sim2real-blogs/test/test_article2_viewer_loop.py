@@ -88,7 +88,7 @@ class ViewerLoopTests(unittest.TestCase):
                 h=Harness()
                 self.assertFalse(h.run(configure_viewer=lambda viewer:viewer.callback(key)))
                 self.assertEqual(h.frames,0);self.assertEqual(h.viewer.exits,1)
-                self.assertIn('Cancelled after 0/3',h.output.getvalue());self.assertNotIn('PASS',h.output.getvalue())
+                self.assertIn('Stopped by Esc after 0/3' if key==256 else 'Stopped by Q after 0/3',h.output.getvalue());self.assertNotIn('PASS',h.output.getvalue())
 
     def test_escape_after_sync_does_not_step_again(self):
         h=Harness();h.viewer.on_sync=lambda:h.viewer.callback(256)
@@ -98,7 +98,7 @@ class ViewerLoopTests(unittest.TestCase):
     def test_window_close_reports_incomplete(self):
         h=Harness();h.viewer.on_sync=lambda:setattr(h.viewer,'running',False)
         self.assertFalse(h.run());self.assertEqual(h.frames,1);self.assertEqual(h.viewer.exits,1)
-        self.assertIn('not checked',h.output.getvalue())
+        self.assertIn('Stopped by window close after 1/3',h.output.getvalue());self.assertIn('task check was skipped',h.output.getvalue())
 
     def test_interrupt_in_step_sleep_and_sync_closes_once_without_traceback(self):
         def interrupt():raise KeyboardInterrupt()

@@ -23,6 +23,10 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+# Ctrl+C policy first, so it also covers the slow imports and setup below.
+from viewer_loop import EXIT_TASK_FAILED, install_ctrl_c, lesson_main  # noqa: E402
+install_ctrl_c()
+
 # Step 0: MuJoCo Warp and Warp.
 import mujoco_warp as mjw  # noqa: E402
 import warp as wp  # noqa: E402
@@ -31,6 +35,7 @@ from pick_place_common import (  # noqa: E402
     PickPlaceController,
     apply_arm_ctrl,
     apply_viewer_camera,
+    check_stack,
     load_pick_place_model,
     reset_cubes,
     resolve_pick_place_scene,
@@ -40,6 +45,16 @@ from utils import (  # noqa: E402
     print_asset_setup_help,
 )
 
+from benchmark_report import (  # noqa: E402
+    Row,
+    is_out_of_memory,
+    measure_cpu_baseline,
+    mempool_peak,
+    quiet_warp,
+    print_header,
+    print_reading_guide,
+    print_row,
+)
 from box_task import BoxTask, assert_mjwarp_capacity
 
 SCRIPT_NAME = Path(__file__).name
@@ -56,8 +71,11 @@ def run_demo(
     headless_steps: int = 0,
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
-) -> None:
-    """Parity mode: one world on the GPU, mirrored back for the viewer."""
+) -> int:
+    """Parity mode: one world on the GPU, mirrored back for the viewer.
+
+    Returns the process exit code: 0 task verified (or viewer quit), 1 task
+    check failed, 130 Ctrl+C."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
     wp.init()
@@ -99,6 +117,8 @@ def run_demo(
 
     print(f"Loaded: {xml_path}")
     print(f"Part 2 — MJWarp | {spec.display_name} | nworld=1 | IK on CPU, mjw.step on GPU | dt={sim_dt:.5f}s")
+    print("Parity check: the SAME task as Part 1 with physics on the GPU (one world, state copied back every substep).")
+    print("This run checks correctness, not speed. For throughput: --benchmark --nworld 2048, or scaling_study.py.")
 
     frame_idx = 0
 
@@ -134,16 +154,21 @@ def run_demo(
             mjw.get_data_into(mjd, mjm, d, world_id=0)
             box_task.observe(mjm, mjd, frame=frame_idx, time=frame_idx / fps, phase=commanded_phase)
 
-    def report_completion() -> None:
+    def report_completion() -> bool:
         if box_task:
             report = box_task.report()
             report.update(backend='mujoco_warp', device=str(device))
             if report_path is not None:
                 report_path.parent.mkdir(parents=True, exist_ok=True)
                 report_path.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
-            box_task.assert_complete()
+            try:
+                box_task.assert_complete()
+            except AssertionError as exc:
+                print(f"Task FAILED: box check did not pass: {exc}")
+                return False
             print(f"box check: PASS — both cubes grasped, lifted, carried, released and settled; {report['simulation_seconds']:.2f} simulated seconds")
-            return
+            print("Task complete: both cubes are in the receiving box (verified).")
+            return True
         # qpos/qvel were mirrored from the device, but derived fields such as
         # xpos are stale until MuJoCo runs another forward pass on the host.
         mujoco.mj_forward(mjm, mjd)
@@ -151,28 +176,33 @@ def run_demo(
         blue = mjd.xpos[mujoco.mj_name2id(mjm, mujoco.mjtObj.mjOBJ_BODY, "blue_cube")]
         xy_err = float(np.linalg.norm(red[:2] - blue[:2]))
         dz = float(red[2] - blue[2])
-        print(f"Task complete. red={np.round(red, 3)} blue={np.round(blue, 3)}")
+        print(f"Final cube positions: red={np.round(red, 3)} blue={np.round(blue, 3)}")
         print(f"stack check: xy_err={xy_err:.3f} m  dz={dz:.3f} m")
-        return
+        passed, summary = check_stack(mjm, mjd, spec)
+        if passed:
+            print(f"Task complete: red cube stacked on blue (verified: {summary}).")
+        else:
+            print(f"Task FAILED: red cube is not stacked on blue ({summary}).")
+        return passed
 
 
     if headless_steps > 0:
         for _ in range(headless_steps):
             simulate_frame()
-        report_completion()
-        return
+        return 0 if report_completion() else EXIT_TASK_FAILED
 
     # The interactive lesson has the same finite horizon as the headless example.
     # Rendering, pause and cancellation do not advance the controller clock.
     from viewer_loop import run_passive_frames
 
-    complete = run_passive_frames(
+    result = run_passive_frames(
         mjm, mjd, simulate_frame,
         frames=round((40 if box_task else 12) * fps), fps=fps,
         configure_viewer=lambda viewer: apply_viewer_camera(viewer, spec),
     )
-    if complete:
-        report_completion()
+    if not result.complete:
+        return result.exit_code
+    return 0 if report_completion() else EXIT_TASK_FAILED
 
 
 def benchmark(
@@ -183,7 +213,8 @@ def benchmark(
     nconmax: int | None = None,
     njmax: int | None = None,
     steps: int = 200,
-) -> None:
+    timestep: float = 0.002,
+) -> int:
     """Throughput mode: many worlds, nothing leaves the GPU."""
     nconmax = spec.nconmax if nconmax is None else nconmax
     njmax = spec.njmax if njmax is None else njmax
@@ -193,10 +224,14 @@ def benchmark(
         print("Benchmark needs a CUDA device; Warp is running on CPU.", file=sys.stderr)
 
     mjm = load_pick_place_model(xml_path, spec)
+    mjm.opt.timestep = timestep  # same physics clock as the lessons
     mjd = mujoco.MjData(mjm)
     apply_arm_ctrl(mjm, mjd, spec.home_ctrl)
     reset_cubes(mjm, mjd, spec)
+    mujoco.mj_forward(mjm, mjd)
+    cpu_rate = measure_cpu_baseline(mjm, mjd)
 
+    wp.synchronize()
     m = mjw.put_model(mjm)
     d = mjw.make_data(mjm, nworld=nworld, nconmax=nconmax, njmax=njmax)
 
@@ -228,13 +263,17 @@ def benchmark(
     wp.synchronize()
     elapsed = time.perf_counter() - t0
 
-    total = steps * nworld
-    print(f"nworld={nworld}  steps={steps}  graph={'yes' if graph else 'no'}")
-    print(f"{elapsed:.3f} s for {total:,} world-steps")
-    print(f"{total / elapsed:,.0f} world-steps/second")
+    row = Row(nworld=nworld, steps=steps, seconds=elapsed, mem_bytes=mempool_peak(device))
+    print_header(title=f"MJWarp throughput (Part 2 --benchmark): {nworld} worlds, "
+                       f"CUDA graph {'on' if graph else 'off'}",
+                 device=device, timestep=timestep, steps=steps, robot=spec.display_name, cpu_steps_per_s=cpu_rate)
+    print_row(row, baseline_ws=None, cpu_steps_per_s=cpu_rate, timestep=timestep)
+    print(f"Total: {steps * nworld:,} world-steps in {elapsed:.3f} s. Sweep nworld with scaling_study.py to see the curve.")
+    print_reading_guide([row], device=device, total_memory=getattr(device, "total_memory", None))
+    return 0
 
 
-def main() -> None:
+def main() -> int:
     parser = argparse.ArgumentParser(description="Part 2 solution — MJWarp pick & place.")
     add_robot_arg(parser)
     parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
@@ -254,6 +293,8 @@ def main() -> None:
         parser.error("--report requires --task box")
     if args.benchmark and args.task == "box":
         parser.error("The checked box task uses a single world; omit --benchmark")
+    if args.benchmark:
+        quiet_warp()  # keep the benchmark table readable
     if args.device is not None:
         wp.set_device(args.device)
     spec = get_robot(args.robot)
@@ -271,17 +312,24 @@ def main() -> None:
         sys.exit(1)
 
     if args.benchmark:
-        benchmark(
-            xml_path,
-            spec,
-            nworld=args.nworld,
-            nconmax=args.nconmax,
-            njmax=args.njmax,
-            steps=args.steps,
-        )
-        return
+        try:
+            return benchmark(
+                xml_path,
+                spec,
+                nworld=args.nworld,
+                nconmax=args.nconmax,
+                njmax=args.njmax,
+                steps=args.steps,
+                timestep=(1.0 / args.fps) / args.sim_substeps,
+            )
+        except (RuntimeError, MemoryError) as exc:
+            if not is_out_of_memory(exc):
+                raise
+            print(f"Out of GPU memory for --nworld {args.nworld}: VRAM caps how many worlds fit. "
+                  "Use a smaller --nworld (scaling_study.py shows the largest size that fits).", file=sys.stderr)
+            return 1
 
-    run_demo(
+    return run_demo(
         xml_path,
         spec,
         fps=args.fps,
@@ -295,4 +343,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    lesson_main(main)

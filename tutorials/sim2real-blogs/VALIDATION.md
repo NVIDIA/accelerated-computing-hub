@@ -11,6 +11,7 @@ imported file and records each adaptation.
 - [Task-specific CPU/GPU study](notebooks/mujoco/benchmark-results/2026-10-09-validated-box-gpu0/README.md): both robots, nine environment counts, one complete warm-up and five repetitions. **35 of 36 configurations passed**. The reBot GPU 512 configuration failed its physical gate and supplies no accepted timing or ratio.
 - [Notebook execution](notebooks/mujoco/notebook-validation/2026-10-10/README.md): four source notebooks passed actual kernels, including both box lessons and measurement-disabled benchmark preflight. Fundamentals produced finite image pixels; this is not image visual QA.
 - [Viewer lifecycle](notebooks/mujoco/VIEWER_VALIDATION.md): finite completion and clean cancellation on the original Linux NVIDIA desktop, with the exact source relationship documented. The ordinary-Python macOS launch guard has regression coverage, not macOS GUI validation.
+- [Viewer exit, Ctrl+C and benchmark output, 13 October](notebooks/mujoco/validation/viewer-exit-and-benchmark-2026-10-13/README.md): reproduces a tester's report against the previous `launch_passive` lessons under a real X server, and validates the fix (every run ends with a verified result and exit code 0/1, Ctrl+C exits 130 within about a second, self-describing benchmark output). Imported from [NVIDIA-dev/newton_blogs#2](https://github.com/NVIDIA-dev/newton_blogs/pull/2).
 - [Legacy solver diagnostic](notebooks/mujoco/validation/legacy-linesearch-2026-10-10/README.md): original warning and diagnostic outcomes remain available. This is separate from the box benchmark.
 
 All original archives, result JSON, figures and recorded hashes are unchanged.
@@ -43,5 +44,6 @@ tests mock graphics; they do not open a desktop or establish GL validation.
 Set `ARTICLE2_NOTEBOOKS_EXECUTE=1` to execute the benchmark notebook's preflight
 in an actual kernel; measurements remain disabled. The optional CPU viewer
 integration check uses `RUN_ARTICLE2_VIEWER_CPU_TESTS=1` and is not a GUI test.
+`test/test_article2_viewer_x11.py` is a real-window GUI test: it runs the lesson scripts under an X server (Xvfb is enough) and sends real key presses, a window-manager close and Ctrl+C. It needs `DISPLAY` and `xdotool` and skips cleanly without them, so the container suite skips it. `test/test_article2_ctrl_c.py` checks the Ctrl+C exit contract with real signals and needs no display.
 
 The [fresh Hub container validation](hub-validation/2026-10-10/README.md) built the updated image and passed **151 tests with one optional viewer-integration skip**, including both robots on CPU/GPU and the real-kernel benchmark preflight. Its initial collection failure and corrected test-only rerun are preserved. Compose lifecycle, live Brev/Colab, lower-end GPU and macOS GUI validation remain unverified.
