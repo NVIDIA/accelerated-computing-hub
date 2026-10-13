@@ -29,8 +29,16 @@ Robots (switch with `--robot`):
 - `so101` — [SO-101](https://github.com/google-deepmind/mujoco_menagerie/tree/main/robotstudio_so101) (default) — model from [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie), Apache-2.0
 - `rebot` — [Seeed reBot DevArm](https://github.com/google-deepmind/mujoco_menagerie/tree/main/seeed_rebot_devarm) — model from MuJoCo Menagerie, MIT (c) 2026 Seeed Studio
 
-Robot models are downloaded on first use from pinned Menagerie commits.
-The measured Blog 2 helper reuses an existing robot folder without rechecking its Git revision or tracked files. For a reproducible fresh download, choose an empty `MUJOCO_MENAGERIE_CACHE`; preserve existing/custom assets and record their identity separately.
+**Setup:** follow the [Quickstart](../../README.md#quickstart-local) (one environment,
+one install command, then `python doctor.py`). This guide covers the lessons.
+
+Robot models are downloaded automatically on first use from pinned Menagerie
+commits; no environment variable is needed. The automatic cache is versioned by the
+pinned commit (`~/.cache/mujoco_menagerie/<commit>/`), reused only when Git confirms
+the pinned revision and unchanged robot files, and downloaded into a temporary folder
+that is renamed into place after that check. Anything else is moved aside, never
+deleted. Explicit `--menagerie-path` / `MUJOCO_MENAGERIE_PATH` folders are used as
+given; a path without the robot folder prints one note and the download continues.
 Diagnostic archives also preserve the model assets used in those checks, with
 their licenses. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for
 licenses and attribution.
@@ -126,21 +134,11 @@ Send measured results from those GPUs with `nvidia-smi` output; they replace the
 
 ## Reproduce the verified environment
 
-Use Python 3.12 and install from the repository root:
-
-```bash
-uv venv --python 3.12 .venv
-uv pip install --python .venv/bin/python --require-hashes -r tutorials/sim2real-blogs/notebooks/mujoco/requirements.lock.txt
-source .venv/bin/activate
-# Optional browser UI (the lock already supplies a notebook kernel):
-uv pip install jupyterlab
-jupyter lab
-```
-
-This Article 2 environment uses MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3 and Warp
-1.15.0, without Newton. It includes the notebook kernel and execution tools;
-use that kernel in your notebook editor or install `jupyterlab` for a browser
-interface. Article 3 has a separate Newton environment and its own benchmark protocol.
+The [Quickstart](../../README.md#quickstart-local) creates it: Python 3.12 with
+MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3 and Warp 1.15.0 from the unchanged hash lock,
+without Newton, then `python doctor.py` checks it. The lock includes the notebook
+kernel and execution tools; install `jupyterlab` for a browser interface.
+Article 3 has a separate Newton environment and its own benchmark protocol.
 
 ## Compare CPU and GPU throughput
 

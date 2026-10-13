@@ -17,6 +17,41 @@ See the [lesson guide](notebooks/mujoco/README.md), [benchmark method and result
 and [validation scope](VALIDATION.md). Reference implementations run by default;
 student exercises remain editable and optional stacking stays separate.
 
+## Quickstart (local)
+
+Linux (tested on Ubuntu) or macOS with `git` and internet access for the first run.
+An NVIDIA GPU is needed only for Part 2 and the GPU benchmark. This is the only local
+setup path; the lesson guide links back here.
+
+```bash
+git clone https://github.com/NVIDIA/accelerated-computing-hub.git
+cd accelerated-computing-hub/tutorials/sim2real-blogs
+curl -LsSf https://astral.sh/uv/install.sh | sh     # installs uv once; open a new terminal afterwards
+uv venv --allow-existing --python 3.12 notebooks/mujoco/.venv && uv pip install --python notebooks/mujoco/.venv/bin/python --require-hashes -r notebooks/mujoco/requirements.lock.txt
+source notebooks/mujoco/.venv/bin/activate          # again in every new terminal
+python doctor.py                                    # checks the setup; prints a fix: line per problem
+cd notebooks/mujoco/part1
+python solutions/so101_pick_place_solution.py --task box --sim-substeps 20
+```
+
+The last command opens the viewer (add `--headless-steps 2000` without a display),
+downloads the pinned robot model once on first use, closes by itself after the
+40-second task and ends with `Task complete: both cubes are in the receiving box (verified).`
+Esc, Q or Ctrl+C stop it early. Part 2 runs the same task on the GPU:
+`cd ../part2 && python solutions/so101_mjwarp_solution.py --task box --sim-substeps 20 --device cuda:0`
+(the first GPU run compiles kernels for a few minutes). Add `--robot rebot` for the
+second arm. Notebooks: `uv pip install jupyterlab && jupyter lab`.
+
+No environment variable is needed for the robot models. A valid cache from an
+earlier run is reused; anything else in `~/.cache/mujoco_menagerie` is left alone
+or moved aside, and a verified copy is downloaded into a folder named after the
+pinned commit. Offline machines: copy `~/.cache/mujoco_menagerie` and
+`~/.cache/mujoco_menagerie_rebot` from a machine where the lessons already ran.
+
+With conda instead of uv: `conda create -y -n sim2real python=3.12 git`,
+`conda activate sim2real`, then
+`pip install --require-hashes -r notebooks/mujoco/requirements.lock.txt` and `python doctor.py`.
+
 ## Local and hosted setup
 
 Use Python 3.12 with the module's unchanged hash lock. This update deliberately

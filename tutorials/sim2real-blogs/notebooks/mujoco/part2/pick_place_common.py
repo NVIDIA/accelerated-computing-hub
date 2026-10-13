@@ -158,9 +158,11 @@ def resolve_pick_place_scene(
 
     shutil.copyfile(robot_dir / spec.robot_xml, generated_dir / spec.robot_xml)
     assets_link = generated_dir / "assets"
-    if assets_link.is_symlink() and not assets_link.exists():
-        # Stale symlink whose target no longer exists on this machine
-        # (e.g. a moved cache); remove it so it can be recreated locally.
+    if assets_link.is_symlink() and (
+        not assets_link.exists() or assets_link.resolve() != (robot_dir / "assets").resolve()
+    ):
+        # Stale symlink (moved cache, or another pinned revision/cache folder);
+        # remove it so it is recreated for the robot folder in use.
         assets_link.unlink()
     if not assets_link.exists():
         try:
