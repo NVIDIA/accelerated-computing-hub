@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 #
 # Shared utilities for this series:
-# - Menagerie asset download (sparse clone of one robot folder)
+# - Menagerie asset download (verified sparse clone of one robot folder per pinned revision)
 # - macOS mjpython relaunch for mujoco.viewer
 
 from __future__ import annotations
@@ -13,6 +13,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 from pathlib import Path
 
 from robots import RobotSpec, get_robot
@@ -20,11 +22,22 @@ from robots import RobotSpec, get_robot
 _EXECUTABLE_PATH_RE = re.compile(r"@executable_path/(.+) \(offset \d+\)\Z")
 
 
+def _cache_base() -> Path:
+    env = os.environ.get("MUJOCO_MENAGERIE_CACHE", "").strip()
+    return Path(env).expanduser() if env else Path.home() / ".cache"
+
+
 def default_cache_dir(spec: RobotSpec | None = None) -> Path:
+    """Versioned automatic cache for *spec*: ``<base>/<cache_dirname>/<full ref>``.
+
+    ``<base>`` is ``$MUJOCO_MENAGERIE_CACHE`` when set, otherwise ``~/.cache``.
+    Each pinned revision gets its own folder, so an older cache (another
+    revision or another layout) never blocks a first run. The
+    accelerated-computing-hub copy of these lessons uses the same layout, so a
+    valid cache downloaded by that copy is reused as is.
+    """
     spec = spec or get_robot()
-    if "MUJOCO_MENAGERIE_CACHE" in os.environ:
-        return Path(os.environ["MUJOCO_MENAGERIE_CACHE"]) / spec.cache_dirname
-    return Path.home() / ".cache" / spec.cache_dirname
+    return _cache_base() / spec.cache_dirname / spec.menagerie_ref
 
 
 def _env_menagerie_root(spec: RobotSpec) -> Path | None:
@@ -34,87 +47,170 @@ def _env_menagerie_root(spec: RobotSpec) -> Path | None:
         if not env_root:
             continue
         root = Path(env_root).expanduser()
-        robot_path = root / spec.folder
-        if robot_path.exists():
+        if (root / spec.folder).is_dir():
             return root
         print(
-            f"Ignoring {env_name}={env_root!r} ({robot_path} not found). "
-            f"Unset it with: unset {env_name}",
+            f"Note: {env_name}={env_root} has no {spec.folder}/ folder; ignoring it and using "
+            f"the automatic download (nothing to fix; `unset {env_name}` hides this note).",
             file=sys.stderr,
         )
     return None
 
 
-def download_robot_sparse(spec: RobotSpec, cache_root: Path) -> Path:
-    """Sparse-clone only ``spec.folder`` into cache_root."""
+def _git(*args: str, cwd: Path | None = None, capture: bool = True) -> subprocess.CompletedProcess:
+    cmd = ["git", "--no-optional-locks"]
+    if cwd is not None:
+        cmd += ["-C", str(cwd)]
+    env = dict(os.environ, GIT_TERMINAL_PROMPT="0", LC_ALL="C")
+    return subprocess.run([*cmd, *args], capture_output=capture, text=True, check=False, env=env)
+
+
+def cache_problem(cache_root: Path, folder: str, expected_ref: str) -> str | None:
+    """Why *cache_root* is not a clean checkout of *expected_ref*, or ``None`` if it is.
+
+    Read-only: never changes the checkout. Only the selected robot subtree is
+    inspected; unrelated assets and untracked output files are ignored. Git
+    compares every tracked robot file against the pinned revision.
+    """
+    cache_root = Path(cache_root)
+    if not (cache_root / ".git").exists():
+        return "not a Git checkout"
+    if not (cache_root / folder).is_dir():
+        return f"{folder}/ is missing"
+    try:
+        head = _git("rev-parse", "--verify", "HEAD", cwd=cache_root)
+        if head.returncode:
+            return "cannot read the checkout revision"
+        current = head.stdout.strip()
+        if current != expected_ref:
+            return f"checkout is at {current[:12]}, not the pinned {expected_ref[:12]}"
+        status = _git(
+            "status", "--porcelain=v1", "--untracked-files=no", "--", folder, cwd=cache_root
+        )
+        if status.returncode:
+            return "cannot verify the robot files"
+        if status.stdout.strip():
+            return "tracked robot files are modified or missing"
+    except OSError as exc:
+        return f"cannot run Git ({exc})"
+    return None
+
+
+def validate_pinned_asset_cache(
+    cache_root: Path, folder: str, expected_ref: str, *, cache_env: str
+) -> None:
+    """Raise if *cache_root* is not a clean checkout of *expected_ref* (read-only check).
+
+    Explicit Menagerie path overrides intentionally bypass this check.
+    """
+    reason = cache_problem(cache_root, folder, expected_ref)
+    if reason is not None:
+        raise RuntimeError(
+            f"Unverified asset cache {Path(cache_root) / folder}: expected {expected_ref} "
+            f"({reason}). No cache files were changed. Set {cache_env} to a new empty "
+            "directory and retry."
+        )
+
+
+class AssetDownloadError(RuntimeError):
+    """A pinned asset could not be fetched; the message states the exact fix."""
+
+
+def _download_failure(spec: RobotSpec, target: Path, detail: str) -> AssetDownloadError:
+    return AssetDownloadError(
+        f"Could not download the {spec.display_name} model ({spec.folder} @ "
+        f"{spec.menagerie_ref[:12]}) from {spec.menagerie_url}: {detail}\n"
+        "Fix: make sure this machine can reach github.com (VPN, proxy or firewall), then rerun "
+        "the same command. The download happens once and is a sparse checkout of one robot folder.\n"
+        "Offline machine: run the same command once on a connected machine, then copy the folder "
+        f"{target} to the same path on this machine."
+    )
+
+
+def download_robot_sparse(spec: RobotSpec, cache_root: Path | None = None) -> Path:
+    """Return ``<cache_root>/<spec.folder>`` at the pinned revision, downloading if needed.
+
+    A valid existing checkout is reused without network access. Anything else
+    already at *cache_root* (another revision, a partial download, another
+    layout) is moved aside, never deleted. A new download goes into a temporary
+    sibling folder and is renamed into place only after verification, so an
+    interrupted run never leaves a half-written cache behind.
+    """
+    cache_root = Path(cache_root) if cache_root is not None else default_cache_dir(spec)
     robot_path = cache_root / spec.folder
-    if robot_path.exists():
+    if cache_problem(cache_root, spec.folder, spec.menagerie_ref) is None:
         return robot_path
 
-    cache_root.mkdir(parents=True, exist_ok=True)
-    print(f"Downloading {spec.folder} from {spec.menagerie_url} (ref {spec.menagerie_ref[:12]})...")
-    print(f"Cache: {cache_root}")
+    if shutil.which("git") is None:
+        raise _download_failure(
+            spec, cache_root,
+            "Git is not installed (Ubuntu: `sudo apt install git`; conda: `conda install git`).",
+        )
 
-    if (cache_root / ".git").is_dir():
-        subprocess.run(
-            ["git", "-C", str(cache_root), "sparse-checkout", "init", "--cone"],
-            check=True,
+    parent = cache_root.parent
+    parent.mkdir(parents=True, exist_ok=True)
+    tmp = Path(tempfile.mkdtemp(prefix=f".{cache_root.name[:12]}-download-", dir=parent))
+    print(
+        f"Downloading the {spec.display_name} model ({spec.folder} @ {spec.menagerie_ref[:12]}) "
+        f"from MuJoCo Menagerie, one time only, into {cache_root} ...",
+        flush=True,
+    )
+    try:
+        steps = (
+            (False, "init", "-q", str(tmp)),
+            (False, "-C", str(tmp), "remote", "add", "origin", spec.menagerie_url),
+            (False, "-C", str(tmp), "sparse-checkout", "set", "--cone", spec.folder),
+            # Network steps print Git's own progress (blobs arrive during checkout).
+            (True, "-C", str(tmp), "-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=60",
+             "fetch", "--depth", "1", "--filter=blob:none", "origin", spec.menagerie_ref),
+            (True, "-C", str(tmp), "-c", "advice.detachedHead=false", "checkout", "--detach",
+             "FETCH_HEAD"),
         )
-        subprocess.run(
-            ["git", "-C", str(cache_root), "sparse-checkout", "set", spec.folder],
-            check=True,
-        )
-        subprocess.run(
-            ["git", "-C", str(cache_root), "fetch", "--depth", "1", "origin", spec.menagerie_ref],
-            check=True,
-        )
-        subprocess.run(
-            ["git", "-C", str(cache_root), "checkout", "FETCH_HEAD"],
-            check=True,
-        )
-    else:
-        if any(cache_root.iterdir()):
-            raise RuntimeError(
-                f"Cannot download into non-empty {cache_root}. "
-                f"Remove it or set MUJOCO_MENAGERIE_CACHE to another folder."
-            )
-        subprocess.run(
-            [
-                "git",
-                "clone",
-                "--depth",
-                "1",
-                "--filter=blob:none",
-                "--sparse",
-                spec.menagerie_url,
-                str(cache_root),
-            ],
-            check=True,
-        )
-        subprocess.run(
-            ["git", "-C", str(cache_root), "sparse-checkout", "set", spec.folder],
-            check=True,
-        )
-        if spec.menagerie_ref not in ("main", "master", "HEAD"):
-            fetch = subprocess.run(
-                ["git", "-C", str(cache_root), "fetch", "--depth", "1", "origin", spec.menagerie_ref],
-                check=False,
-            )
-            subprocess.run(
-                [
-                    "git",
-                    "-C",
-                    str(cache_root),
-                    "checkout",
-                    "FETCH_HEAD" if fetch.returncode == 0 else spec.menagerie_ref,
-                ],
-                check=True,
-            )
+        for show, *args in steps:
+            result = _git(*args, capture=not show)
+            if result.returncode:
+                err = (result.stderr or "").strip().splitlines()
+                verb = next(a for a in args if a in ("init", "remote", "sparse-checkout", "fetch", "checkout"))
+                raise _download_failure(
+                    spec, cache_root,
+                    f"`git {verb}` failed" + (f": {err[-1]}" if err else " (see the Git message above)"),
+                )
+        reason = cache_problem(tmp, spec.folder, spec.menagerie_ref)
+        if reason is not None:
+            raise _download_failure(spec, cache_root, f"the downloaded checkout is invalid ({reason})")
 
-    if not robot_path.exists():
-        raise RuntimeError(f"Download finished but {robot_path} is missing.")
-    print(f"Ready: {robot_path}")
+        if cache_root.exists() or cache_root.is_symlink():
+            if cache_problem(cache_root, spec.folder, spec.menagerie_ref) is None:
+                return robot_path  # another process finished first
+            aside = cache_root.with_name(
+                f"{cache_root.name}.unverified-{time.strftime('%Y%m%d-%H%M%S')}"
+            )
+            cache_root.rename(aside)
+            print(f"Moved the previous, unverified cache aside to {aside}", file=sys.stderr)
+        tmp.rename(cache_root)
+    finally:
+        if tmp.exists():
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    print(f"Ready: {robot_path}", flush=True)
     return robot_path
+
+
+def _legacy_cache_roots(spec: RobotSpec) -> list[Path]:
+    """Older unversioned automatic layouts that may already hold the pinned checkout."""
+    roots: list[Path] = []
+    for root in (_cache_base() / spec.cache_dirname, Path.home() / ".cache" / spec.cache_dirname):
+        if root not in roots:
+            roots.append(root)
+    return roots
+
+
+def find_cached_robot(spec: RobotSpec) -> Path | None:
+    """The verified cached robot folder, or ``None`` if a download is still needed."""
+    for root in (default_cache_dir(spec), *_legacy_cache_roots(spec)):
+        if cache_problem(root, spec.folder, spec.menagerie_ref) is None:
+            return root / spec.folder
+    return None
 
 
 def resolve_menagerie_robot_path(
@@ -123,26 +219,31 @@ def resolve_menagerie_robot_path(
     *,
     explicit: bool = False,
 ) -> Path:
-    """Return the robot folder, auto-downloading only that folder if needed."""
+    """Return the robot folder, auto-downloading only that folder if needed.
+
+    Order: ``--menagerie-path`` or ``MUJOCO_MENAGERIE_PATH`` (only when the robot
+    folder exists there), a verified automatic cache (versioned layout, then the
+    older unversioned layout), then a fresh download into the versioned cache.
+    """
     spec = spec or get_robot()
     if menagerie_root is None:
         menagerie_root = _env_menagerie_root(spec)
 
     if menagerie_root is not None:
-        robot_path = menagerie_root / spec.folder
-        if robot_path.exists():
+        robot_path = Path(menagerie_root).expanduser() / spec.folder
+        if robot_path.is_dir():
             return robot_path
         if explicit:
             raise FileNotFoundError(
-                f"Expected {robot_path} but it does not exist. "
-                f"Clone the menagerie or omit --menagerie-path to auto-download."
+                f"--menagerie-path {menagerie_root} has no {spec.folder}/ folder. "
+                "Omit --menagerie-path to download the pinned model automatically."
             )
         print(
-            f"--menagerie-path {menagerie_root} has no {spec.folder}/; auto-downloading instead.",
+            f"Note: {menagerie_root} has no {spec.folder}/ folder; using the automatic download.",
             file=sys.stderr,
         )
 
-    return download_robot_sparse(spec, default_cache_dir(spec))
+    return find_cached_robot(spec) or download_robot_sparse(spec, default_cache_dir(spec))
 
 
 def resolve_scene_xml(
@@ -167,14 +268,20 @@ def standalone_viewer_command(xml_path: Path) -> list[str]:
     return [sys.executable, "-m", "mujoco.viewer", "--mjcf", str(xml_path)]
 
 
+def doctor_command() -> str:
+    """Command line for the repository's setup checker."""
+    for parent in Path(__file__).resolve().parents:
+        if (parent / "doctor.py").is_file():
+            return f"python {parent / 'doctor.py'}"
+    return "python doctor.py   # from the repository root"
+
+
 def print_asset_setup_help(script_name: str) -> None:
+    """Follow-up for asset errors: the error above already states the exact fix."""
     print(
-        "\nAuto-download (default — only the selected robot folder):\n"
-        "  unset MUJOCO_MENAGERIE_PATH   # if set to a placeholder path\n"
-        f"  python {script_name} --robot so101\n"
-        f"  python {script_name} --robot rebot\n"
-        "\nOr point to a real local clone that contains the robot folder:\n"
-        "  export MUJOCO_MENAGERIE_PATH=$HOME/mujoco_menagerie\n",
+        "\nRobot models download automatically on first use; no environment variable is needed.\n"
+        "To check the whole setup and print the fix for each problem, run:\n"
+        f"  {doctor_command()}\n",
         file=sys.stderr,
     )
 

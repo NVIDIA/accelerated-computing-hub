@@ -33,9 +33,9 @@
     "historical_document": 1,
     "immutable_evidence_or_reference_package": 434,
     "notebook_layout_bootstrap_and_metadata": 4,
-    "runtime": 36,
+    "runtime": 37,
     "dependency_definition": 2,
-    "test_path_or_hub_contract_adaptation": 14,
+    "test_path_or_hub_contract_adaptation": 16,
     "license": 4
   },
   "files": [
@@ -53,13 +53,13 @@
     {
       "source": "Article_2/README.md",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/README.md",
-      "source_sha256": "adc8b1011d2f4615c0f21aea5e15261742ec36fbf4c9bb19e9f0e054011eb3e3",
-      "destination_sha256": "9165155ec23158ccddac558d72d9ab2d67f1294904fc628b1fd8081330ff3cfc",
-      "destination_bytes": 17018,
+      "source_sha256": "f32cd948e6f91afc63dbaad2c1bfbc1296fdc669ebd88159380f598ed1b42f38",
+      "destination_sha256": "51e7b3d28d0086af26dd8799bc1acd3e548d9e7b8afe33f386bb53ba9a14a0ce",
+      "destination_bytes": 17152,
       "byte_identical": false,
       "scope": "guide_or_notice_adaptation",
-      "source_bytes": 15087,
-      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+      "source_bytes": 15150,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     },
     {
       "source": "Article_2/THIRD_PARTY_NOTICES.md",
@@ -985,13 +985,13 @@
     {
       "source": "Article_2/part1/pick_place_common.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/pick_place_common.py",
-      "source_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
-      "destination_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
-      "destination_bytes": 19333,
+      "source_sha256": "2ac4dfff85565ca9522c992841da1043a556317b9a26dcb11e9966a26ee514fd",
+      "destination_sha256": "2ac4dfff85565ca9522c992841da1043a556317b9a26dcb11e9966a26ee514fd",
+      "destination_bytes": 19414,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 19333,
-      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+      "source_bytes": 19414,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     },
     {
       "source": "Article_2/part1/robots.py",
@@ -1089,12 +1089,13 @@
     {
       "source": "Article_2/part1/utils.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part1/utils.py",
-      "source_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
-      "destination_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
-      "destination_bytes": 11369,
+      "source_sha256": "ca5580d2520dd08736ee91593ab136a6e19277c13113fc2f0732c9ac8c0ea2da",
+      "destination_sha256": "ca5580d2520dd08736ee91593ab136a6e19277c13113fc2f0732c9ac8c0ea2da",
+      "destination_bytes": 17170,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 11369
+      "source_bytes": 17170,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     },
     {
       "source": "Article_2/part1/viewer_loop.py",
@@ -1190,13 +1191,13 @@
     {
       "source": "Article_2/part2/pick_place_common.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/pick_place_common.py",
-      "source_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
-      "destination_sha256": "c10b8d9b0214d81b0b08c3308a3d2de7f738f988fe62a872029f8b55e8c6ea02",
-      "destination_bytes": 19333,
+      "source_sha256": "2ac4dfff85565ca9522c992841da1043a556317b9a26dcb11e9966a26ee514fd",
+      "destination_sha256": "2ac4dfff85565ca9522c992841da1043a556317b9a26dcb11e9966a26ee514fd",
+      "destination_bytes": 19414,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 19333,
-      "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+      "source_bytes": 19414,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     },
     {
       "source": "Article_2/part2/robots.py",
@@ -1324,12 +1325,13 @@
     {
       "source": "Article_2/part2/utils.py",
       "destination": "tutorials/sim2real-blogs/notebooks/mujoco/part2/utils.py",
-      "source_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
-      "destination_sha256": "119f21d7b26420d401a9ebb24a2c03f9732de5a3aec422fde125eb01dfcd2b73",
-      "destination_bytes": 11369,
+      "source_sha256": "ca5580d2520dd08736ee91593ab136a6e19277c13113fc2f0732c9ac8c0ea2da",
+      "destination_sha256": "ca5580d2520dd08736ee91593ab136a6e19277c13113fc2f0732c9ac8c0ea2da",
+      "destination_bytes": 17170,
       "byte_identical": true,
       "scope": "runtime",
-      "source_bytes": 11369
+      "source_bytes": 17170,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     },
     {
       "source": "Article_2/part2/viewer_loop.py",
@@ -5054,6 +5056,39 @@
       "scope": "test_path_or_hub_contract_adaptation",
       "source_bytes": 6560,
       "source_commit": "281489d2cf47cf709a5420f066bb61e2827cdd33"
+    },
+    {
+      "source": "doctor.py",
+      "destination": "tutorials/sim2real-blogs/doctor.py",
+      "source_sha256": "9e0522862f996e1f41a25bfa6b3ad62a1f7606b6c05181f9fbc9ab2ff0d0ef91",
+      "destination_sha256": "9e0522862f996e1f41a25bfa6b3ad62a1f7606b6c05181f9fbc9ab2ff0d0ef91",
+      "destination_bytes": 11078,
+      "byte_identical": true,
+      "scope": "runtime",
+      "source_bytes": 11078,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
+    },
+    {
+      "source": "tests/test_asset_cache.py",
+      "destination": "tutorials/sim2real-blogs/test/test_asset_cache.py",
+      "source_sha256": "38d6d7f98cd00ecbf8d3b150e5ece37e96d8c36182b97605c739f9c05f669120",
+      "destination_sha256": "45f39c0e0750e14bc46a747660b788f7d5105c00b6e39a6be5f03653247305a3",
+      "destination_bytes": 11329,
+      "byte_identical": false,
+      "scope": "test_path_or_hub_contract_adaptation",
+      "source_bytes": 11318,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
+    },
+    {
+      "source": "tests/test_doctor.py",
+      "destination": "tutorials/sim2real-blogs/test/test_doctor.py",
+      "source_sha256": "e6b140906060e2e5886129b912f85a31a1e04c74b883fad3572d1bb6b5b15e2c",
+      "destination_sha256": "81002d631f36a3c94372c060f041406210496a6f32a005605ceaa7d1fc1ac0c2",
+      "destination_bytes": 3173,
+      "byte_identical": false,
+      "scope": "test_path_or_hub_contract_adaptation",
+      "source_bytes": 3138,
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c"
     }
   ],
   "notebook_code_mapping": [
@@ -5251,6 +5286,18 @@
       "not_ported": [
         "README.md",
         "tests/test_tutorial_scaffolds.py"
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "source_commit": "70ed6dc0874001f09ec706dbde790583349c1f5c",
+      "summary": "First run never dead-ends: automatic Menagerie caches are versioned by the pinned commit (the Hub layout), verified by Git, downloaded atomically and moved aside instead of blocking when unverified; a missing MUJOCO_MENAGERIE_PATH is a one-line note; offline errors state the exact fix. New doctor.py setup checker. One local Quickstart in the Hub README; the lesson guide links to it. Entries carrying this source_commit come from this update.",
+      "files_updated": 5,
+      "files_added": 3,
+      "not_ported": [
+        "Article 3 / Newton files (not part of this Hub tutorial)",
+        "newton_blogs docs/ reorganisation (Hub evidence keeps its original paths)",
+        "root README.md Quickstart (adapted into tutorials/sim2real-blogs/README.md)"
       ]
     }
   ]
