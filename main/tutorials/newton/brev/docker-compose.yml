@@ -10,7 +10,7 @@ x-config:
     ulimits:
       memlock: -1
       stack: 67108864
-    shm_size: 1g
+    shm_size: 4g
     deploy:
       resources:
         reservations:
