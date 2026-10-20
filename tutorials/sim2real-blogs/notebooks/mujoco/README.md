@@ -46,7 +46,7 @@ First, run on CPU:
 python part1/solutions/so101_pick_place_solution.py --task box --sim-substeps 20
 ```
 
-Then, on a machine with an NVIDIA GPU:
+Then, on a machine with an NVIDIA GPU, run the same task below. **This one-world check can be slower than native MuJoCo on CPU even after warm-up.** MJWarp targets throughput across many parallel worlds; see the [GPU guide](part2/README.md#run-the-completed-demo) before interpreting its speed:
 
 ```bash
 python part2/solutions/so101_mjwarp_solution.py --task box --sim-substeps 20 --device cuda:0

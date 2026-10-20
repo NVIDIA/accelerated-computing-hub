@@ -41,7 +41,7 @@ after 40 simulated seconds. Success ends with
 Add `--headless-steps 2000` without a display, or `--robot rebot` for the second arm.
 Esc, Q or Ctrl+C stop the viewer early. macOS viewer execution has not been validated.
 
-Then, on a CUDA machine, run the same task on the GPU:
+Then, on a CUDA machine, run the same task on the GPU. **This one-world check can be slower than native MuJoCo on CPU even after warm-up.** See the [GPU guide](notebooks/mujoco/part2/README.md#run-the-completed-demo) for startup expectations and the separate batched measurements:
 
 ```bash
 python part2/solutions/so101_mjwarp_solution.py --task box --sim-substeps 20 --device cuda:0
