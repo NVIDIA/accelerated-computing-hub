@@ -6,18 +6,11 @@ The advanced coupled task picks and places all four objects with the gripper; th
 
 ## Setup
 
-Use **Python 3.12** in this tutorial’s own environment. The included MuJoCo baselines use this same pinned stack.
+Follow [Set up once](../../README.md#set-up-once) from the tutorial README. It creates this tutorial's Python 3.12 environment and installs `requirements.lock.txt`. The included MuJoCo baselines use that same environment; another Hub tutorial is not required.
 
-From `tutorials/newton`:
+To use Jupyter, follow [Learn with notebooks](../../README.md#learn-with-notebooks-optional) to register and select **Hub Newton (Python 3.12)**. Start Jupyter with `PXR_WORK_THREAD_LIMIT=1` already set. Run notebooks in `notebooks/newton/part3/` from top to bottom; their first code cell checks the interpreter and working directory.
 
-```bash
-uv venv --python 3.12 .venv
-uv pip install --python .venv/bin/python --require-hashes -r notebooks/newton/requirements.lock.txt
-source .venv/bin/activate
-PXR_WORK_THREAD_LIMIT=1 jupyter lab --notebook-dir notebooks
-```
-
-The optional hash lock fixes transitive packages as well as the physics stack. To resolve from the shorter direct requirements instead, replace the install command with `uv pip install --python .venv/bin/python -r notebooks/newton/requirements.txt`. The latter allows compatible notebook/tooling versions to vary. Select the Newton interpreter as the notebook kernel; the first cell prints it and its package versions.
+The hash lock fixes transitive packages as well as the physics stack. To resolve from the shorter direct requirements instead, use `uv pip install --python .venv/bin/python -r notebooks/newton/requirements.txt` from `tutorials/newton`. This allows compatible notebook/tooling versions to vary.
 
 The physics/import pins are **Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, newton-usd-schemas 0.5.0, usd-core 26.3 and NumPy 2.5.3**. First asset downloads and kernel compilation take longer than later runs.
 
@@ -27,9 +20,25 @@ For the supplied Python 3.12 binary stack on **Linux x86-64**, use **glibc 2.35 
 
 The lock is retained byte-for-byte from the validated companion. To refresh it deliberately, run `uv pip compile notebooks/newton/requirements.txt --python-version 3.12 --universal --generate-hashes --no-annotate -o notebooks/newton/requirements.lock.txt` from the tutorial directory and repeat the checks before adopting changed versions.
 
+## Which files do I run?
+
+Start with the [complete CPU or CUDA box demo](../../README.md#run-the-box-task). You can run it without opening a notebook. Within `notebooks/newton/part3/`, the files have these roles:
+
+| Purpose | Runnable reference | Exercise or supporting files |
+|---|---|---|
+| Two-cube box task | `box_newton_demo.py` | Complete `box_newton_exercise.py` after running the reference |
+| Earlier stacking lesson | `solutions/so101_newton_solution.py` | `so101_newton.py` and `newton_scene.py` contain TODOs |
+| Coupled cloth/cable lesson | `solutions/clean_the_table_solution.py` | `clean_the_table.py` and `clean_table_scene.py` contain TODOs |
+| Optional stacking/coupling checks | `final_check.py --solutions` with the flags below | Omit `--solutions` to check the completed exercises |
+| Throughput measurement | `migration_benchmark.py` via the [benchmark guide](BENCHMARK.md) | Optional notebook 05 provides the same workflow |
+| Per-step reference snippets | Read `solutions/step_*.py` and `solutions/clean_step_*.py` while editing | These are not programs to run in sequence |
+| Scene, assets and controller helpers | Imported by the examples | Files such as `robots.py`, `newton_assets.py` and `box_task.py` need no separate run |
+
+The Python files in `notebooks/mujoco/` are bundled comparison baselines used by the optional final checker. They share the Newton environment and do not require a separate setup or tutorial.
+
 ## Learning path
 
-Open the notebooks under `notebooks/newton/part3/` in order:
+The notebooks are an optional guided route through the same code. Open notebooks 01–04 under `notebooks/newton/part3/` in order, running each from top to bottom. Notebook 05 is the separate benchmark workflow:
 
 | Notebook | What you build or verify |
 |---|---|
@@ -37,9 +46,9 @@ Open the notebooks under `notebooks/newton/part3/` in order:
 | [02 — MuJoCo to Newton](part3/02__mujoco_to_newton.ipynb) | Pick and place both cubes in the box, with mapped joint targets and Newton state |
 | [03 — Clean the table](part3/03__clean_the_table.ipynb) | The bin, free cloth, rod, solver ownership and coupled loop for sequential gripper manipulation |
 | [04 — Final check](part3/04__final_check.ipynb) | Both CPU box tasks by default; CUDA and coupled checks opt-in |
-| [05 — Benchmark](part3/05__migration_benchmark.ipynb) | Preflight by default; opt into matched CPU/GPU box batches |
+| [05 — Benchmark (optional)](part3/05__migration_benchmark.ipynb) | Preflight by default; opt into matched CPU/GPU box batches |
 
-Explanations live in the notebooks; exercises live in external Python files. Complete the `TODO Step` markers in your editor and compare with `part3/solutions/`. **`REFERENCE = True`** selects reference scripts directly. Set it to `False` to check your completed exercises. No cell copies a solution over your work, and backup cells preserve existing backups.
+Explanations live in the notebooks; exercises live in external Python files. You do not need to run the scripts or snippet files before opening a notebook. Complete the `TODO Step` markers in your editor and compare with `part3/solutions/`. **`REFERENCE = True`** selects reference scripts directly. Set it to `False` to check your completed exercises. No cell copies a solution over your work, and backup cells preserve existing backups.
 
 An unfinished exercise must fail. Notebook 03 recognizes only the five documented `NotImplementedError` messages for Steps 0–4; missing dependencies, download problems and unrelated exceptions are not expected TODO outcomes. A reference run does not grade student files.
 
@@ -74,23 +83,31 @@ The cloth is a small, single-layer shirt silhouette with an initial fold; it is 
 
 The controller runs at 50 Hz with physics substeps, handling the red cube, blue cube, cable and shirt sequentially. SO-101's cloth release turns the opening wrist to let draped material fall free. Contact-capacity checks reject overflow before accepting a rollout. Host IK and diagnostics make this an instructional simulation, not a throughput benchmark.
 
-## Run reference or student implementations
+## Optional stacking and coupled examples
 
-With the Newton environment active, change to `notebooks/newton/part3`:
+The [box demo commands](../../README.md#run-the-box-task) are the starting point. Use the following commands for the earlier stacking exercise and the advanced cloth/cable task.
+
+With the Newton environment active and `PXR_WORK_THREAD_LIMIT=1` exported, start at `tutorials/newton` and change directories once:
+
+```bash
+cd notebooks/newton/part3
+```
+
+Run any of these examples independently:
 
 ```bash
 # The migrated rigid stack.
 python solutions/so101_newton_solution.py --robot so101 --device cpu --viewer null --num-frames 600 --test
 python solutions/so101_newton_solution.py --robot rebot --device cpu --viewer null --num-frames 600 --test
 
-# Request both CPU task checks and save their reports/recordings.
+# Check the bundled stacking baselines and the long coupled task on CPU.
 PXR_WORK_THREAD_LIMIT=1 python final_check.py --solutions --skip-gpu --robot both --include-clean-table
 
 # Inspect one gripper rollout on a local desktop.
 PXR_WORK_THREAD_LIMIT=1 python solutions/clean_the_table_solution.py --robot so101 --device cpu --viewer gl --test
 ```
 
-Remove `solutions/` and the `_solution` suffix to run completed student scripts. Omit `--solutions` from the final checker to select those scripts. A checked run stops at measured completion or fails when its `--num-frames` budget expires. The rigid-stack and box viewers stop at their frame budget; the box path checks physical completion. `--test` enables the stack assertion. Pausing does not advance physics, and cancellation never proves completion. The coupled-material viewer retains its separate behavior.
+For these stacking and coupled examples, remove `solutions/` and the `_solution` suffix to run completed student scripts. Omit `--solutions` from the final checker to select those scripts. The two-cube box exercise has its own entry point, `box_newton_exercise.py`; use the same options as `box_newton_demo.py` and a fresh report path after completing its substep. A checked run stops at measured completion or fails when its `--num-frames` budget expires. The rigid-stack and box viewers stop at their frame budget; the box path checks physical completion. `--test` enables the stack assertion. Pausing does not advance physics, and cancellation never proves completion. The coupled-material viewer retains its separate behavior.
 
 Select CUDA explicitly when testing a GPU:
 
@@ -115,6 +132,8 @@ The pure `validate_clean_table_report` gate requires `task="gripper_pick_place_i
 Accepted per-object grasp/release cycles must be sequential. The final gripper must clear the higher of the table and bin rim by at least 0.02 m. Finite state, measured material contacts and coupling feedback are also required. A final object center in the box, a phase label, or a zero process exit code is insufficient.
 
 ## Record and inspect states
+
+From `tutorials/newton/notebooks/newton/part3`, with the Newton environment active:
 
 ```bash
 PXR_WORK_THREAD_LIMIT=1 python solutions/clean_the_table_solution.py --robot so101 --device cpu --viewer null --test \
