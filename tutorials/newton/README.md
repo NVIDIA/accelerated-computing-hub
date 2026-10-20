@@ -6,32 +6,69 @@ This tutorial is self-contained. It includes the earlier MuJoCo/MJWarp **Python 
 
 ## Start here
 
-| Lesson | What you learn |
-|---|---|
-| [Newton fundamentals](notebooks/newton/part3/01__newton_fundamentals.ipynb) | Build, collide and step a scene; choose a solver; replicate worlds |
-| [MuJoCo to Newton](notebooks/newton/part3/02__mujoco_to_newton.ipynb) | Preserve the two-cube task while mapping joints, controls, states and contacts |
-| [Clean the table](notebooks/newton/part3/03__clean_the_table.ipynb) | Author the box, free cloth and rod; couple solvers; grasp, carry and release all four payloads |
-| [Final check](notebooks/newton/part3/04__final_check.ipynb) | Run both CPU box tasks; optionally check CUDA, stacking and solver coupling |
-| [CPU/GPU benchmark](notebooks/newton/part3/05__migration_benchmark.ipynb) | Inspect preflight, then compare matched batches from 1 to 2048 worlds |
+Choose one way to use the tutorial:
 
-The four teaching notebooks default to `REFERENCE = True`, selecting the complete external Python solutions. Set it to `False` after completing the `TODO Step` sections in the starter scripts. Reference runs never copy a solution over your exercise files, and backups preserve existing work. There are no separate solution notebooks: each notebook explicitly chooses the reference or student Python implementation.
+- **Run a complete example:** follow [Set up once](#set-up-once), then [Run the box task](#run-the-box-task). The demo runs directly from the terminal; notebooks are optional.
+- **Learn and edit the exercises:** follow [Learn with notebooks](#learn-with-notebooks-optional). Start with the complete references, then switch to your completed exercises.
+- **Measure performance:** use the separate [benchmark guide](notebooks/newton/BENCHMARK.md) or optional notebook 05.
 
-## Run locally
+## Set up once
 
-Use **Python 3.12**. From this directory:
+Use **Python 3.12**. Starting at the Hub repository root:
 
 ```bash
+cd tutorials/newton
 uv venv --python 3.12 .venv
 uv pip install --python .venv/bin/python --require-hashes -r notebooks/newton/requirements.lock.txt
 source .venv/bin/activate
-PXR_WORK_THREAD_LIMIT=1 jupyter lab --notebook-dir notebooks
+export PXR_WORK_THREAD_LIMIT=1
 ```
 
-Open the lessons inside `newton/part3/` and use that directory as the kernel's working directory. The first cell prints the actual interpreter and checks Newton 1.6.0. Notebook metadata follows the Hub's common template; its Python/T4 metadata is not the tutorial's dependency specification or a Colab validation claim.
+Keep this terminal in `tutorials/newton` for the commands below. Set `PXR_WORK_THREAD_LIMIT=1` before launching Python or Jupyter; restart existing kernels after changing it.
 
-The pinned stack uses Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, OpenUSD 26.3, NumPy 2.5.3 and SciPy 1.18.1. Linux x86-64 requires glibc 2.35 or newer for the included Open3D wheel. CPU execution also works on macOS ARM64; CUDA requires a supported NVIDIA GPU. Launch with `PXR_WORK_THREAD_LIMIT=1` **before** importing OpenUSD and restart existing kernels after changing it.
+The pinned stack uses Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, OpenUSD 26.3, NumPy 2.5.3 and SciPy 1.18.1. Linux x86-64 requires glibc 2.35 or newer for the included Open3D wheel. CPU execution also works on macOS ARM64; CUDA requires a supported NVIDIA GPU. See the [setup details](notebooks/newton/README.md#setup) for platform and cache notes.
 
-Notebooks 02 and 04 run the full 40-second box task on CPU for both robots; CUDA is opt-in. Notebook 05 defaults to `RUN_BENCHMARK = False` and runs preflight only. Notebook 03 is the separate, slower coupled-material lesson: historical CPU rollouts took approximately 26–29 minutes per robot on the recorded workstation. Long cells capture subprocess output until completion. See the [setup and task guide](notebooks/newton/README.md) for device selection, cache remedies, rendering and student/reference commands.
+## Run the box task
+
+Run the complete reference for either robot:
+
+```bash
+python notebooks/newton/part3/box_newton_demo.py --robot so101 --device cpu --viewer null --report .generated/box-so101-cpu.json
+python notebooks/newton/part3/box_newton_demo.py --robot rebot --device cpu --viewer null --report .generated/box-rebot-cpu.json
+```
+
+Each command picks up both cubes and places them in the receiving box over 40 simulated seconds, then checks physical completion. Use a fresh report filename for every run; existing reports and recordings are preserved. Add a window by changing `--viewer null` to `--viewer gl` and choosing a new report path.
+
+On a supported NVIDIA GPU, run the same reference with an explicit CUDA device:
+
+```bash
+python notebooks/newton/part3/box_newton_demo.py --robot so101 --device cuda:0 --viewer null --report .generated/box-so101-cuda0.json
+```
+
+`box_newton_demo.py` is complete and runnable. `box_newton_exercise.py` contains the matching unfinished substep exercise. The optional earlier stacking example uses `solutions/so101_newton_solution.py`; the advanced cloth-and-cable example uses `solutions/clean_the_table_solution.py`. See the [file guide](notebooks/newton/README.md#which-files-do-i-run) before editing or running other scripts.
+
+## Learn with notebooks (optional)
+
+With the environment active, register its kernel once and launch Jupyter:
+
+```bash
+python -m ipykernel install --user --name hub-newton --display-name "Hub Newton (Python 3.12)"
+jupyter lab --notebook-dir notebooks
+```
+
+Open `newton/part3/` and select **Hub Newton (Python 3.12)** manually. Run each notebook from its first code cell to the last. Opening it from that folder gives the teaching notebooks their required working directory. Notebook metadata uses the Hub's shared Python/T4 template; select the registered kernel to use this tutorial's dependencies.
+
+| Order | Notebook | What you do |
+|---|---|---|
+| 1 | [Newton fundamentals](notebooks/newton/part3/01__newton_fundamentals.ipynb) | Build, collide and step a scene; choose a solver; replicate worlds |
+| 2 | [MuJoCo to Newton](notebooks/newton/part3/02__mujoco_to_newton.ipynb) | Run the complete two-cube box task, then implement its substep exercise |
+| 3 | [Clean the table](notebooks/newton/part3/03__clean_the_table.ipynb) | Add cloth, cable and coupled solvers; allow tens of minutes for a full CPU rollout |
+| 4 | [Final check](notebooks/newton/part3/04__final_check.ipynb) | Check both CPU box tasks; enable the separate stacking and coupled checks when needed |
+| Optional | [CPU/GPU benchmark](notebooks/newton/part3/05__migration_benchmark.ipynb) | Run preflight; explicitly opt into measurements |
+
+The teaching notebooks default to `REFERENCE = True`. Notebook 01 is complete inline; later notebooks select the supplied Python references. After completing the external files marked `TODO Step` (or the box substep exercise), set `REFERENCE = False`, restart the kernel and rerun. There are no separate solution notebooks, and you do not need to run every Python file first.
+
+Notebooks 02 and 04 run the full box task on CPU for both robots; CUDA is opt-in. In notebook 04, `RUN_LEGACY_AND_COUPLED = False` leaves the stacking and cloth/cable checks disabled. Notebook 05 defaults to `RUN_BENCHMARK = False` and runs preflight only. Notebook 03 is the slower coupled-material lesson: historical CPU rollouts took approximately 26–29 minutes per robot on the recorded workstation. Long cells capture subprocess output until completion.
 
 ## Docker and Brev
 
