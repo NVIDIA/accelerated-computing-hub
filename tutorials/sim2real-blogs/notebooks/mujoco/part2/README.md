@@ -6,11 +6,13 @@ Complete the [Article 2 setup](../README.md#set-up-once) first. This demo requir
 
 ## Run the completed demo
 
+> **What to expect on the GPU:** This single-world task can run slower than native MuJoCo on CPU even after warm-up, because GPU launches and copies between CPU and GPU add overhead. MJWarp targets aggregate throughput across many parallel worlds. First-run kernel compilation adds a separate startup delay and can take several minutes. Use the [benchmark guide](../BENCHMARK.md) to measure batched performance on your hardware; this task run checks correctness.
+
 ```bash
 python part2/solutions/so101_mjwarp_solution.py --task box --sim-substeps 20 --device cuda:0
 ```
 
-This runs the same two-cube task as the CPU example, with physics on the GPU. The viewer closes after 40 simulated seconds. The first run compiles kernels and can take several minutes. Success ends with:
+This runs the same two-cube task as the CPU example, with physics on the GPU. The viewer closes after 40 simulated seconds. Success ends with:
 
 ```text
 Task complete: both cubes are in the receiving box (verified).
