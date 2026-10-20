@@ -3,39 +3,31 @@
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
-#  Part 1 — Simulating the SO-101 with MuJoCo on the CPU
+#  Part 1 — MuJoCo CPU exercise (intentionally incomplete)
 # ============================================================================
 #
-#  This is the reference implementation of the task: a manipulator
-#  picks up a red cube and stacks it on a blue cube using a real friction grasp.
+#  Complete TODO Steps 0–4 to run the two-cube box task on the CPU.
+#  Follow 02__pick_and_place.ipynb for the exercise instructions.
 #  Default robot is the SO-101; pass --robot rebot for the Seeed reBot DevArm.
-#  Everything runs on the CPU with stock MuJoCo, in double precision, in a
-#  single world. It is the ground truth that Part 2 (MJWarp) and Article 3 / Part 3
-#  (Newton) are compared against.
 #
-#  The three objects every MuJoCo program is built around:
-#      mujoco.MjModel  — the compiled, read-only model (geometry, inertia, ...)
-#      mujoco.MjData   — the mutable state (qpos, qvel, ctrl, time, contacts)
-#      mujoco.mj_step  — advance the state by one model.opt.timestep
+#  For a ready-to-run demo, use solutions/so101_pick_place_solution.py.
+#  The solutions/step_NN_*.py files are reference snippets to read as needed;
+#  they are not a sequence of programs to execute. Helper modules are imported
+#  automatically. See README.md for the CPU guide.
 #
-#  Per-frame loop in this script:
-#      controller.step()  -> joint targets (Cartesian waypoint + IK)
-#      data.ctrl[:] = targets
-#      mj_step x sim_substeps
-#      viewer.sync()
+#  Run from tutorials/sim2real-blogs/notebooks/mujoco with the environment active:
+#      python part1/solutions/so101_pick_place_solution.py --task box --sim-substeps 20
+#      python part1/solutions/so101_pick_place_solution.py --task box --sim-substeps 20 --headless-steps 2000
 #
-#  ---------------------------------------------------------------------------
-#  YOUR TASK
-#  ---------------------------------------------------------------------------
-#  Search this file for "TODO Step" and complete each one, following the
-#  instructions in 02_Notebook_Pick_and_Place.ipynb. If you get stuck, the
-#  snippet for each step is in solutions/step_NN_*.py and the finished file is
-#  solutions/so101_pick_place_solution.py.
+#  After completing the exercise:
+#      python part1/so101_pick_place.py --task box --sim-substeps 20 --headless-steps 2000
 #
-#  Run it:
-#      python   so101_pick_place.py                    # Linux / macOS / Windows
-#      python   so101_pick_place.py --headless-steps 600 --debug
-#      python   so101_pick_place.py --robot rebot --headless-steps 600
+#  The box episode lasts 40 simulated seconds. Pass --task stack to select the
+#  earlier stacking exercise; its optional TODO Step 5 prints stack diagnostics.
+#
+#  Core objects: MjModel holds the compiled model, MjData holds mutable state,
+#  and mujoco.mj_step advances physics by one model.opt.timestep.
+#
 
 from __future__ import annotations
 

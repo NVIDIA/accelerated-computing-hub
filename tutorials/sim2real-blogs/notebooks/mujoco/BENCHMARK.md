@@ -40,7 +40,63 @@ The companion also includes an [ALOHA pot-and-lid replay](reference-benchmark/RE
 
 ## Quick throughput check: `--benchmark` and `scaling_study.py`
 
-The Part 2 lesson also ships a physics-step microbenchmark (fixed controls, no IK, one CUDA graph). Its output now states what is measured, the units, a single-core CPU baseline, the aggregate real-time factor and the peak VRAM per batch. The [measured numbers and how they are expected to scale on RTX 5090 and RTX 3060](README.md#reading-the-benchmark-numbers) are in the Article 2 README. Use that microbenchmark to see how your GPU scales; use the box-task sweep on this page for CPU-vs-GPU conclusions.
+Run these commands from `tutorials/sim2real-blogs/notebooks/mujoco`, with the
+[tutorial environment](README.md#set-up-once) active:
+
+```bash
+python part2/solutions/so101_mjwarp_solution.py --benchmark --nworld 2048 --steps 200
+python part2/scaling_study.py --worlds 1 64 1024 2048 8192 --steps 100
+```
+
+These commands measure physics stepping with fixed controls in the earlier stacking
+scene, at a 2 ms timestep. They do not run the box task. Use the [full sweep](#run-the-full-sweep)
+for that measurement; do not combine `--benchmark` with `--task box` on the demo script.
+
+### Reading the benchmark numbers
+
+
+`--benchmark` and `scaling_study.py` print a header that states what is measured, the GPU (SM count, VRAM), the CPU, the physics timestep and a single-core classic-MuJoCo baseline, then one row per batch size and a short reading guide. All columns are aggregate over the batch:
+
+| Column | Meaning |
+| --- | --- |
+| `nworld` | independent copies of the scene advanced together by one `mjw.step` |
+| `ms/step` | wall-clock time of one batched step (latency of the whole batch) |
+| `world-steps/s` | `nworld × steps / seconds`: physics samples per second, the number that matters for RL and data generation |
+| `vs 1 world` | throughput relative to `nworld = 1` on the same GPU |
+| `vs CPU core` | throughput relative to **one** CPU core running classic `mujoco.mj_step` on the same scene |
+| `sim-s/s` | simulated seconds per wall-clock second over all worlds (aggregate real-time factor) |
+| `peak VRAM` | Warp memory-pool high-water mark for that batch, temporaries included |
+
+This is a physics-step microbenchmark: the arm holds its start pose with fixed controls, no IK, no viewer, one CUDA graph replayed `--steps` times after 10 warm-up steps. It shows how a GPU scales; it is not the full task. The [box-task study](BENCHMARK.md) measures the complete two-cube task against 32 CPU worker processes.
+
+**Measured** on this repository's workstation (one NVIDIA RTX PRO 6000 Blackwell Workstation Edition, 188 SMs, 96 GB; AMD Ryzen Threadripper PRO 9985WX), `python part2/scaling_study.py --robot <robot> --worlds 1 16 64 256 1024 2048 4096 8192 16384 32768 --steps 200`, 2 ms timestep, 13 October 2026:
+
+| nworld | SO-101 ms/step | SO-101 world-steps/s | SO-101 peak VRAM | reBot ms/step | reBot world-steps/s | reBot peak VRAM |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 1 | 0.373 | 2,678 | 10 MiB | 0.327 | 3,059 | 15 MiB |
+| 64 | 0.484 | 132,260 | 61 MiB | 0.388 | 164,986 | 303 MiB |
+| 1024 | 0.649 | 1,578,877 | 835 MiB | 0.514 | 1,990,906 | 4.6 GiB |
+| 2048 | 0.748 | 2,739,444 | 1.6 GiB | 0.609 | 3,364,472 | 9.2 GiB |
+| 4096 | 1.024 | 3,999,088 | 3.2 GiB | 0.867 | 4,725,259 | 18.3 GiB |
+| 8192 | 1.664 | 4,924,047 | 6.5 GiB | 1.498 | 5,468,899 | 36.6 GiB |
+| 16384 | 3.423 | 4,786,501 | 12.9 GiB | — | out of memory | — |
+| 32768 | 7.622 | 4,299,087 | 25.8 GiB | — | — | — |
+
+One CPU core ran 46,000–60,000 `mj_step`/s on these scenes (about 100× real time). How to read it:
+
+- Up to about 1,024–2,048 worlds, `ms/step` barely moves while `nworld` grows 1,000×: the GPU still has idle SMs, so throughput rises almost linearly. Past about 4,096–8,192 worlds `ms/step` grows in proportion to `nworld` and throughput plateaus (≈ 4–5 million world-steps/s here). The knee is the useful batch size for this GPU and scene. Run-to-run variation on the plateau is about ±10 %.
+- One world on the GPU (≈ 2,700 steps/s) is about 20× slower than one CPU core: MJWarp is for batches, not single-world latency.
+- `vs CPU core` is one core. For a fair comparison with a CPU farm, divide by the cores you would use; on the full task the GPU overtakes 32 CPU workers from about 1,024 worlds ([BENCHMARK.md](BENCHMARK.md#measured-on-the-workstation)).
+- VRAM caps `nworld`. The reBot scene needs about 4.6 MiB per world at the peak (contact and constraint buffers sized by `nconmax`/`njmax`, plus collision temporaries), so 16,384 reBot worlds did not fit in 96 GB; SO-101 needs about 0.8 MiB per world. An `out of memory` message ends the sweep cleanly; lower `nworld` or tighten `nconmax`/`njmax`.
+
+**Expected, not measured**, on other GPUs (plateau throughput scales roughly with SM count × clock and memory bandwidth; the batch limit with VRAM; small-batch latency is mostly kernel-launch and driver overhead and changes little):
+
+| GPU | SMs / bandwidth / VRAM | Expected plateau vs the RTX PRO 6000 numbers above | Expected largest batch (from the measured peak VRAM) |
+| --- | --- | --- | --- |
+| RTX 5090 | 170 / 1.8 TB/s / 32 GB | about 85–100 % (same Blackwell generation, slightly fewer SMs) | SO-101 ≈ 16,384–32,768 (32,768 needed 25.8 GiB here); reBot 4,096 (8,192 needs ~37 GiB and should run out of memory) |
+| RTX 3060 (12 GB) | 28 / 360 GB/s / 12 GB | about 10–20 %, with the knee at roughly 1,024–2,048 worlds | SO-101 8,192 (6.5 GiB); reBot 1,024–2,048 (2,048 needed 9.2 GiB) |
+
+Send measured results from those GPUs with `nvidia-smi` output; they replace these expectations.
 
 ## What the comparison measures
 
@@ -74,7 +130,7 @@ A failed or incomplete configuration has no accepted timing or speedup. The firs
 
 ## Run the full sweep
 
-Prepare the [Article 2 environment](README.md#reproduce-the-verified-environment), then run from `part2`:
+Prepare the [Article 2 environment](README.md#set-up-once), then run from `part2`:
 
 ```bash
 python migration_benchmark.py --task box --cpu-baseline pool --preset workstation --device cuda:0 --cpu-threads 32 --nconmax 64 --njmax 128 --timeout 7200 --preflight
@@ -110,7 +166,7 @@ The [ALOHA reference benchmark](reference-benchmark/README.md) compares native M
 
 ## Google Colab
 
-Open [the benchmark notebook on Colab](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/0a5cd94b208e79dd443a5cf6393cd29df0d43d56/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The Colab link pins the published notebook revision; `REF` pins its runtime source.
+Open [the benchmark notebook on Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The Colab link opens the notebook from the Hub main branch; `REF` pins its runtime source.
 
 Review preflight on the assigned CPU/GPU before enabling measurements. Hosted hardware and runtime limits vary; this launch recipe is not a validated Colab box-task result. Download the report archive before disconnection. The CPU baseline belongs to the runtime.
 
