@@ -3,46 +3,31 @@
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
-#  Part 2 — The same task on the GPU with MuJoCo Warp (MJWarp)
+#  Part 2 — MuJoCo Warp GPU exercise (intentionally incomplete)
 # ============================================================================
 #
-#  Identical scene, identical controller as Part 1. The ONLY thing that changes
-#  is the physics backend: `mujoco.mj_step` becomes `mujoco_warp.step`, which
-#  runs the MuJoCo pipeline on the GPU in float32 across a batch of worlds.
+#  Complete TODO Steps 0–6 to run the two-cube box task with MuJoCo Warp.
+#  Follow 03__mujoco_warp.ipynb for the exercise instructions.
+#  Default robot is the SO-101; pass --robot rebot for the Seeed reBot DevArm.
 #
-#  The Part 1 -> Part 2 migration, line for line:
+#  For a ready-to-run demo, use solutions/so101_mjwarp_solution.py.
+#  The solutions/step_NN_*.py files are reference snippets to read as needed;
+#  they are not a sequence of programs to execute. Helper modules are imported
+#  automatically. See README.md for the GPU guide.
 #
-#      MuJoCo CPU (Part 1)               MJWarp (Part 2)
-#      ----------------------------      ---------------------------------------
-#      model = load_pick_place_model()   mjm = load_pick_place_model()  (compile)
-#                                        m   = mjw.put_model(mjm)       (upload)
-#      data  = mujoco.MjData(model)      d   = mjw.make_data(mjm, nworld=...,
-#                                                            nconmax=, njmax=)
-#      data.ctrl[:] = targets            wp.copy(d.ctrl, wp.array(targets))
-#      mujoco.mj_step(model, data)       mjw.step(m, d)
-#      data.qpos                         d.qpos.numpy()                 (GPU->CPU)
+#  Run from tutorials/sim2real-blogs/notebooks/mujoco with the environment active
+#  and an NVIDIA GPU available:
+#      python part2/solutions/so101_mjwarp_solution.py --task box --device cuda:0 --sim-substeps 20
+#      python part2/solutions/so101_mjwarp_solution.py --task box --device cuda:0 --sim-substeps 20 --headless-steps 2000
 #
-#  Two modes live in this file:
+#  After completing the exercise:
+#      python part2/so101_mjwarp.py --task box --device cuda:0 --sim-substeps 20 --headless-steps 2000
 #
-#      parity mode (default, --nworld 1)
-#          Mirrors world 0 back into a CPU MjData so the MuJoCo viewer and the
-#          IK solve keep working exactly as in Part 1. Great for proving the
-#          migration is correct; useless for throughput.
+#  The one-world box demo mirrors state to the CPU for the controller and viewer.
+#  For throughput measurements, use ../BENCHMARK.md or the optional
+#  04__cpu_gpu_benchmark.ipynb. The separate --benchmark mode retains the earlier
+#  stacking scene; TODO Step 7 covers its CUDA graph capture.
 #
-#      throughput mode (--benchmark --nworld N)
-#          Keeps everything on device, captures `mjw.step` into a CUDA graph and
-#          measures steps/second. This is what MJWarp is actually for.
-#
-#  ---------------------------------------------------------------------------
-#  YOUR TASK
-#  ---------------------------------------------------------------------------
-#  Search this file for "TODO Step" and complete each one, following
-#  01_Notebook_MJWarp.ipynb. Per-step snippets are in solutions/step_NN_*.py and
-#  the finished file is solutions/so101_mjwarp_solution.py.
-#
-#  Run it:
-#      python so101_mjwarp.py --headless-steps 600        # needs a CUDA GPU
-#      python so101_mjwarp.py --benchmark --nworld 4096
 
 from __future__ import annotations
 
