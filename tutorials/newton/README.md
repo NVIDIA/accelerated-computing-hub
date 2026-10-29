@@ -6,15 +6,22 @@ This tutorial is self-contained. It includes the earlier MuJoCo/MJWarp **Python 
 
 ## Start here
 
-Choose one way to use the tutorial:
+Start with the complete two-cube example: **set up the environment below, run the box task, then open notebook 01 to learn the API**. The advanced cloth/cable lesson and performance sweep come later; neither is required for the first run.
 
-- **Run a complete example:** follow [Set up once](#set-up-once), then [Run the box task](#run-the-box-task). The demo runs directly from the terminal; notebooks are optional.
-- **Learn and edit the exercises:** follow [Learn with notebooks](#learn-with-notebooks-optional). Start with the complete references, then switch to your completed exercises.
-- **Measure performance:** use the separate [benchmark guide](notebooks/newton/BENCHMARK.md) or optional notebook 05.
+Here is the advanced task you can build toward. This recorded SO-101 sequence includes the cubes, cable and cloth from lesson 03:
+
+![Recorded SO-101 gripper sequence for the advanced cloth-and-cable lesson](notebooks/newton/assets/clean-table-so101.gif)
 
 ## Set up once
 
-Use **Python 3.12**. Starting at the Hub repository root:
+Use **Python 3.12**, [uv](https://docs.astral.sh/uv/getting-started/installation/) and Git. Clone the official repository once, then enter the tutorial:
+
+```bash
+git clone https://github.com/NVIDIA/accelerated-computing-hub.git
+cd accelerated-computing-hub
+```
+
+If you already have a checkout, start at its root. Create this tutorial's environment:
 
 ```bash
 cd tutorials/newton
@@ -30,14 +37,20 @@ The pinned stack uses Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, Open
 
 ## Run the box task
 
-Run the complete reference for either robot:
+Run the complete SO-101 reference first. On a local desktop, open its viewer:
+
+```bash
+python notebooks/newton/part3/box_newton_demo.py --robot so101 --device cpu --viewer gl --report .generated/box-so101-viewer.json
+```
+
+On a remote machine or without a display, use the same task headlessly. The second command selects the reBot arm:
 
 ```bash
 python notebooks/newton/part3/box_newton_demo.py --robot so101 --device cpu --viewer null --report .generated/box-so101-cpu.json
 python notebooks/newton/part3/box_newton_demo.py --robot rebot --device cpu --viewer null --report .generated/box-rebot-cpu.json
 ```
 
-Each command picks up both cubes and places them in the receiving box over 40 simulated seconds, then checks physical completion. Use a fresh report filename for every run; existing reports and recordings are preserved. Add a window by changing `--viewer null` to `--viewer gl` and choosing a new report path.
+Each command picks up both cubes and places them in the receiving box over 40 simulated seconds, then checks physical completion. A successful run prints `PASS` after both cubes are placed and all 40,000 integrations complete. Use a fresh report filename for every run; existing reports and recordings are preserved. The windowed command requires a working desktop/OpenGL display; the headless commands work without one.
 
 On a supported NVIDIA GPU, run the same reference with an explicit CUDA device:
 

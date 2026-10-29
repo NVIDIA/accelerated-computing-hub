@@ -1,10 +1,7 @@
-# Article 3 only — Newton 1.6.0, Python 3.12.
-# Create a separate environment; do not combine this with the root requirements
-# or change Article 2's MuJoCo 3.8 environment.
-# From the repository root:
-#   uv venv --python 3.12 Article_3/.venv
-#   uv pip install --python Article_3/.venv/bin/python -r Article_3/requirements.txt
-#   Article_3/.venv/bin/python -m unittest discover -s tests -p test_newton_migration.py -v
+# Newton tutorial — Python 3.12; use this tutorial's own environment.
+# From tutorials/newton, follow README.md's Set up once section.
+# For reproducible installs use requirements.lock.txt with --require-hashes.
+# This shorter file is for deliberately resolving a new dependency set.
 
 # Version-matched physics/import/viewer stack (CPU and optional NVIDIA CUDA):
 newton[examples]==1.6.0

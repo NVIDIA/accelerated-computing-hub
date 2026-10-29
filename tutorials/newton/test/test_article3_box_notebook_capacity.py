@@ -28,9 +28,9 @@ class NewtonBoxNotebookCapacityTests(unittest.TestCase):
                          for node in ast.parse(setup).body
                          if isinstance(node, ast.Assign)
                          and isinstance(node.targets[0], ast.Name)
-                         and node.targets[0].id in {'REPO_URL', 'REF'}}
-            self.assertEqual(constants['REPO_URL'], 'https://github.com/johnnynunez/accelerated-computing-hub.git')
-            self.assertRegex(constants['REF'], r'^[0-9a-f]{40}$')
+                         and node.targets[0].id == 'REPO_URL'}
+            self.assertEqual(constants['REPO_URL'], 'https://github.com/NVIDIA/accelerated-computing-hub.git')
+            self.assertIn('os.environ.get("HUB_SOURCE_REF", "main")', setup)
             control = next(s for s in sources if 'RUN_BENCHMARK = False' in s)
             for value in (primary, legacy):
                 changed = control.replace(f'{selector} = "{primary}"', f'{selector} = "{value}"')
