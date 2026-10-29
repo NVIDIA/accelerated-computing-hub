@@ -7,13 +7,10 @@
 #   ignore_names=["floor"]        skip the MJCF ground; Newton adds its own
 #                                 plane in Step 5, and two overlapping ground
 #                                 planes produce duplicate contacts
-#   collapse_fixed_joints=True    merge bodies joined by fixed welds into one
-#                                 rigid body. Fewer bodies means a smaller
-#                                 articulation and a faster solve, with no
-#                                 change in physical behaviour.
+#   collapse_fixed_joints=False   preserve fixed links and parent contact exclusions
 
 builder.add_mjcf(
     str(robot_xml),
     ignore_names=["floor"],
-    collapse_fixed_joints=True,
+    collapse_fixed_joints=False,
 )

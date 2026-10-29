@@ -5,7 +5,7 @@
 # the surrounding scaffold selects the backend/contact path before this call.
 #
 #   use_mujoco_cpu   True runs native MuJoCo-C, which ignores Newton Contacts
-#                    in 1.6.0. False runs MuJoCo Warp (CPU or CUDA).
+#                    in 1.7.0. False runs MuJoCo Warp (CPU or CUDA).
 # This tutorial selects native MuJoCo contacts on CPU. On CUDA, either robot
 # may use Newton contacts (default) or opt in to --use-mujoco-contacts.
 #   njmax / nconmax  constraint/contact memory budgets per world; Newton's

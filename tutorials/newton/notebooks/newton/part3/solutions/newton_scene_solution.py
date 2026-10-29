@@ -57,10 +57,10 @@ def build_newton_builder(spec: RobotSpec | None = None, *, task_name: str = "sta
         raise ValueError(f"Unknown task {task_name!r}")
     robot_xml = scene.parent / spec.robot_xml
 
-    # Step 1: explicit Newton 1.5 coordinate layout + solver attributes.
+    # Step 1: explicit Newton coordinate layout + solver attributes.
     newton.use_coord_layout_targets = True
     builder = newton.ModelBuilder()
-    # Match the MJCF's zero detection gap, not Newton 1.5's 0.1 m fallback.
+    # Match the MJCF's zero detection gap, not Newton's 0.1 m fallback.
     # The latter changes native MuJoCo contact generation at gripper scale.
     builder.default_shape_cfg.gap = 0.0
     SolverMuJoCo.register_custom_attributes(builder)
@@ -69,9 +69,10 @@ def build_newton_builder(spec: RobotSpec | None = None, *, task_name: str = "sta
     builder.add_mjcf(
         str(scene if task_name == "box" else robot_xml),
         ignore_names=["floor"],
-        # Keep authored static robot bodies in the box benchmark so MuJoCo's
-        # parent/body contact exclusions survive conversion into a template.
-        collapse_fixed_joints=task_name != "box",
+        # Keep authored fixed bodies so MuJoCo's parent/body contact exclusions
+        # survive import. Collapsing reBot's base into the world can create
+        # self-contact that prevents its first arm joint from turning.
+        collapse_fixed_joints=False,
     )
 
     # Step 3: seed only named robot joints, in the MJCF actuator order.
@@ -98,7 +99,7 @@ def build_newton_builder(spec: RobotSpec | None = None, *, task_name: str = "sta
                 builder.joint_target_kd[dof] = float(-robot_mj.actuator_biasprm[actuator, 2])
             continue
         builder.joint_effort_limit[dof] = spec.arm_effort_limit
-        # Newton 1.5 also preserves the MJCF actuator's own force range.
+        # Newton also preserves the MJCF actuator's own force range.
         # Raising only joint_effort_limit leaves SO-101 capped at 2.94 Nm.
         # Mirror Article 2's arm-only boost; leave both robots' grippers and
         # reBot's heterogeneous actuator limits exactly as imported.

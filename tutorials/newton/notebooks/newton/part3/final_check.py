@@ -249,7 +249,7 @@ def validate_clean_table_report(
     if type(soft_contacts) is not int or soft_contacts <= 0:
         return False, "clean-table needs observed soft contacts"
     overflow = report.get("mujoco_warp_overflow_flags")
-    # MuJoCo Warp 3.12: ITERATIONS=512, LS_ITERATIONS=1024 are convergence
+    # MuJoCo Warp: ITERATIONS=512, LS_ITERATIONS=1024 are convergence
     # diagnostics. Every other bit must fail, including unknown future flags.
     if type(overflow) is not int or overflow < 0 or overflow & ~(512 | 1024):
         return False, "clean-table report contains missing/invalid MuJoCo Warp capacity flags"

@@ -67,12 +67,36 @@ class CleanTableSceneTests(unittest.TestCase):
         self.assertEqual(check_mujoco_capacity(SimpleNamespace()), 0)
         convergence = int(mjw.OverflowType.ITERATIONS | mjw.OverflowType.LS_ITERATIONS)
         flags = wp.array([0, convergence], dtype=wp.int32, device="cpu")
-        solver = SimpleNamespace(mjw_data=SimpleNamespace(overflow=flags))
+        solver = SimpleNamespace(mjw_data=SimpleNamespace(
+            overflow=flags, nacon=wp.zeros(1, dtype=wp.int32, device="cpu"),
+            ncollision=wp.zeros(1, dtype=wp.int32, device="cpu"),
+            nefc=wp.zeros(2, dtype=wp.int32, device="cpu"), naconmax=8, njmax=16))
         self.assertEqual(check_mujoco_capacity(solver), convergence)
         for overflow in (mjw.OverflowType.NEFC, mjw.OverflowType.NARROWPHASE):
             flags.assign(np.asarray([int(overflow), convergence], dtype=np.int32))
             with self.subTest(overflow=overflow), self.assertRaisesRegex(ValueError, "capacity overflow"):
                 check_mujoco_capacity(solver)
+
+    def test_raw_capacity_overflow_is_rejected_before_sticky_flags_are_set(self):
+        from clean_table_task import check_mujoco_capacity
+
+        class Array:
+            def __init__(self, values): self.values = np.asarray(values)
+            def numpy(self): return self.values
+
+        data = SimpleNamespace(overflow=Array([0]), nacon=Array([8]),
+                               ncollision=Array([8]), nefc=Array([16]),
+                               naconmax=8, njmax=16)
+        solver = SimpleNamespace(mjw_data=data)
+        self.assertEqual(check_mujoco_capacity(solver), 0)
+        for field, limit in (("nacon", 8), ("ncollision", 8), ("nefc", 16)):
+            original = getattr(data, field)
+            for invalid in (-1, limit + 1):
+                with self.subTest(field=field, value=invalid):
+                    setattr(data, field, Array([invalid]))
+                    with self.assertRaisesRegex(ValueError, "capacity overflow"):
+                        check_mujoco_capacity(solver)
+            setattr(data, field, original)
 
     def test_checked_runner_stops_on_the_goal_and_fails_at_the_frame_budget(self):
         from newton.viewer import ViewerNull

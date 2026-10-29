@@ -35,9 +35,10 @@ Run the commands below from `tutorials/newton` with `.venv` active.
 Set `PXR_WORK_THREAD_LIMIT=1` before launching Python or Jupyter to avoid an
 OpenUSD parser issue; restart any kernels that are already running.
 
-This installs Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0 and OpenUSD
+This installs Newton 1.7.0, Warp 1.18.0, MuJoCo/MuJoCo Warp 3.15.0 and OpenUSD
 26.3. Linux x86-64 needs glibc 2.35 or newer. CPU examples also run on macOS
-ARM64; CUDA requires an NVIDIA GPU.
+ARM64. Warp 1.18 requires an NVIDIA Turing or newer GPU (compute capability
+7.5+) and an R580 or newer driver for CUDA.
 
 ## Run the box task
 
@@ -145,7 +146,7 @@ walks through larger batches. For earlier measurements, see the
 
 Notebook 03 adds cloth and a cable. `SolverMuJoCo` handles the robot and cubes,
 `SolverVBD` handles the cloth and cable, and `SolverCoupledProxy` passes contact
-forces between them. VBD and coupling are experimental in Newton 1.6.
+forces between them. VBD and coupling are experimental in Newton 1.7.
 
 Run SO-101 without a viewer and save the motion:
 

@@ -1,4 +1,4 @@
-"""Real Newton 1.6.0 regression tests; use the dedicated Article 3 environment.
+"""Real Newton 1.7.0 regression tests; use the dedicated Article 3 environment.
 
     newton/.venv/bin/python -m unittest discover -s tests -p test_newton_migration.py -v
 
@@ -23,8 +23,8 @@ class NewtonMigrationTests(unittest.TestCase):
         path = ROOT / 'newton' / 'requirements.txt'
         self.assertTrue(path.is_file(), 'Article 3 needs its own requirements, not an Article 2 downgrade')
         requirements = {line.strip() for line in path.read_text().splitlines() if not line.startswith('#')}
-        for package, version in (('newton[examples]', '1.6.0'), ('warp-lang', '1.17.0'),
-                                 ('mujoco', '3.12.0'), ('mujoco-warp', '3.12.0'),
+        for package, version in (('newton[examples]', '1.7.0'), ('warp-lang', '1.18.0'),
+                                 ('mujoco', '3.15.0'), ('mujoco-warp', '3.15.0'),
                                  ('newton-usd-schemas', '0.5.0'), ('usd-core', '26.3')):
             self.assertIn(f'{package}=={version}', requirements)
             self.assertEqual(importlib.metadata.version(package.split('[')[0]), version)

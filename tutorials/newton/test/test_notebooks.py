@@ -156,7 +156,7 @@ class AdvancedNotebookTests(unittest.TestCase):
                             np.savez(record, phase=np.asarray(["carry"] * 4),
                                      active_object=np.asarray(objects))
                             payload = make_gripper_report()
-                            payload.update(newton="1.6.0", robot_asset_format="USD",
+                            payload.update(newton="1.7.0", robot_asset_format="USD",
                                            record_sha256=hashlib.sha256(record.read_bytes()).hexdigest())
                             if fault == "grasp":
                                 payload["objects"]["shirt"]["grasped"] = False

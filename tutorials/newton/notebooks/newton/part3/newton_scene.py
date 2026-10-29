@@ -64,7 +64,7 @@ def build_newton_model(spec: RobotSpec | None = None):
     scene = task.resolve_pick_place_scene(spec=spec)
     robot_xml = scene.parent / spec.robot_xml
 
-    # TODO Step 1: select the Newton 1.5 coordinate target layout, create a
+    # TODO Step 1: select the Newton coordinate target layout, create a
     # ModelBuilder, set the detection gap and register custom attributes.
     # SolverMuJoCo.register_custom_attributes(builder) MUST be called before
     # any asset is added: it teaches the builder about the MJWarp-specific
@@ -73,15 +73,15 @@ def build_newton_model(spec: RobotSpec | None = None):
     #   builder = newton.ModelBuilder()
     #   builder.default_shape_cfg.gap = 0.0
     #   SolverMuJoCo.register_custom_attributes(builder)
-    # gap=0 matches the MJCF; Newton 1.5 otherwise falls back to a 0.1 m gap,
+    # gap=0 matches the MJCF; Newton otherwise falls back to a 0.1 m gap,
     # which changes native MuJoCo contact generation at gripper scale.
     builder = None
 
     # TODO Step 2: import the robot from the same MJCF used in Article 2.
     # Call builder.add_mjcf() with the path to robot_xml. Pass
     # ignore_names=["floor"] (Newton adds its own ground plane below) and
-    # collapse_fixed_joints=True (merges welded bodies, which keeps the
-    # articulation smaller and the solver faster).
+    # collapse_fixed_joints=False to preserve the robot base and its authored
+    # parent/body collision exclusions.
 
     # TODO Step 3: configure the joints as position-controlled actuators.
     # Compile robot_xml with mujoco.MjModel.from_xml_path() and use the
@@ -94,7 +94,7 @@ def build_newton_model(spec: RobotSpec | None = None):
     #   joint_effort_limit -> spec.arm_effort_limit (skip gripper_ctrl_indices)
     # If spec.arm_force_limit is not None, also update the imported arm-only
     # builder.custom_attributes["mujoco:actuator_forcerange"].values[actuator].
-    # Newton 1.5 preserves this independent force ceiling: changing only the
+    # Newton preserves this independent force ceiling: changing only the
     # joint limit does NOT boost SO-101's actuators. Never boost the gripper.
     # reBot's actuator force ranges remain unchanged (arm_force_limit=None).
 

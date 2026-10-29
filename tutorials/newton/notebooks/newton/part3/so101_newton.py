@@ -93,7 +93,7 @@ class Example:
         self.state_1 = None
         self.control = None
 
-        # Native MuJoCo-C does NOT consume Newton Contacts in 1.6.0. Select
+        # Native MuJoCo-C does NOT consume Newton Contacts in 1.7.0. Select
         # its own collision detection explicitly on CPU, for either robot.
         # CUDA uses MuJoCo Warp and keeps Newton contacts as the default;
         # --use-mujoco-contacts opts into MuJoCo detection on that path.
