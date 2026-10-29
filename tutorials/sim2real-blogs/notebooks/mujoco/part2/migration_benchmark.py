@@ -153,11 +153,12 @@ def hardware_metadata() -> dict:
 def source_identity() -> dict:
     """Hash the actual code used, including uncommitted benchmark changes."""
     selected = list(HERE.glob("*.py")) + list((HERE / "solutions").glob("*.py"))
+    selected += list((HERE.parent / "sim2real_shared").glob("*.py"))
     selected += [HERE.parent / "requirements.lock.txt"]
     hashes = {str(path.relative_to(HERE.parent)): hashlib.sha256(path.read_bytes()).hexdigest()
               for path in sorted(selected) if path.is_file()}
     commit = command_output(["git", "-C", str(HERE), "rev-parse", "HEAD"])
-    status = command_output(["git", "-C", str(HERE), "status", "--porcelain", "--", ".", "../requirements.lock.txt"])
+    status = command_output(["git", "-C", str(HERE), "status", "--porcelain", "--", ".", "../sim2real_shared", "../requirements.lock.txt"])
     return {"git_commit": commit, "dirty": bool(status) if status is not None else None, "file_sha256": hashes,
             "aggregate_sha256": hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()}
 

@@ -268,3 +268,12 @@ def test_shared_validation_memory_is_in_preflight_for_both_devices():
     report = benchmark.memory_preflight(args, {})
     assert report["cases"][0]["validation_shared_history_mib"] == 0
     assert report["cases"][1]["validation_shared_history_mib"] == 16*2000*61*4/1024**2
+
+
+def test_source_identity_includes_shared_task_implementation():
+    import hashlib
+    identity = benchmark.source_identity()
+    for name in ("box_task.py", "pick_place_common.py"):
+        path = benchmark.HERE.parent / "sim2real_shared" / name
+        key = str(path.relative_to(benchmark.HERE.parent))
+        assert identity["file_sha256"][key] == hashlib.sha256(path.read_bytes()).hexdigest()

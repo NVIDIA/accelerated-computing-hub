@@ -77,7 +77,7 @@ brev/dev-test.bash sim2real-blogs
 
 A container build, Brev deployment or Colab run is separate validation; imported
 workstation measurements do not establish those results. The Colab links open the notebooks from the Hub main branch; setup downloads the
-separately pinned runtime source. Setup prints its resolved Git SHA,
+runtime source from NVIDIA’s official Hub repository. `main` is resolved once to a full commit; set `HUB_SOURCE_REF` to a full commit to reproduce a run. Setup prints that Git SHA,
 refuses to overwrite a checkout at another revision, and skips LFS downloads for
 teaching code. Teaching cells need a Python 3.12 kernel; the benchmark notebook
 uses an isolated Python 3.12 environment for hosted subprocesses.

@@ -24,7 +24,7 @@ class Tests(unittest.TestCase):
     def exercise(self, robot, filename, ls, iterations):
         for part in ('part1', 'part2'):
             model = SimpleNamespace(nu=0, opt=SimpleNamespace(ls_iterations=ls, iterations=iterations, tolerance=1e-8))
-            fn = load_function(HERE/'notebooks'/'mujoco'/part/'pick_place_common.py', model)
+            fn = load_function(HERE/'notebooks'/'mujoco'/'sim2real_shared'/'pick_place_common.py', model)
             result = fn(Path('/no-access-needed')/filename, SimpleNamespace(key=robot, arm_force_limit=None))
             self.assertIs(result, model)
             self.assertEqual(model.opt.iterations, iterations)

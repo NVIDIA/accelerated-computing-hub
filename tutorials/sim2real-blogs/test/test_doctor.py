@@ -34,9 +34,12 @@ class DoctorTests(unittest.TestCase):
         self.assertIn("uv venv --allow-existing --python 3.12 notebooks/mujoco/.venv", cmd)
         self.assertIn("--require-hashes -r notebooks/mujoco/requirements.lock.txt", cmd)
         readme = (ROOT / "README.md").read_text()
-        self.assertIn("uv venv --allow-existing --python 3.12 notebooks/mujoco/.venv && uv pip install --python "
-                      "notebooks/mujoco/.venv/bin/python --require-hashes -r notebooks/mujoco/requirements.lock.txt", readme)
-        self.assertIn("python doctor.py", readme)
+        # The quickstart changes into the lesson root; doctor prints the same
+        # environment and lock relative to the tutorial root.
+        self.assertIn("cd accelerated-computing-hub/tutorials/sim2real-blogs/notebooks/mujoco", readme)
+        self.assertIn("uv venv --allow-existing --python 3.12 .venv", readme)
+        self.assertIn("uv pip install --python .venv/bin/python --require-hashes -r requirements.lock.txt", readme)
+        self.assertIn("python ../../doctor.py", readme)
 
     def test_missing_packages_fail_with_the_install_command(self):
         with mock.patch.object(doctor, "installed", return_value=None), \

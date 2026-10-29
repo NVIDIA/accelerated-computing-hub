@@ -89,14 +89,10 @@ One CPU core ran 46,000–60,000 `mj_step`/s on these scenes (about 100× real t
 - `vs CPU core` is one core. For a fair comparison with a CPU farm, divide by the cores you would use; on the full task the GPU overtakes 32 CPU workers from about 1,024 worlds ([BENCHMARK.md](BENCHMARK.md#measured-on-the-workstation)).
 - VRAM caps `nworld`. The reBot scene needs about 4.6 MiB per world at the peak (contact and constraint buffers sized by `nconmax`/`njmax`, plus collision temporaries), so 16,384 reBot worlds did not fit in 96 GB; SO-101 needs about 0.8 MiB per world. An `out of memory` message ends the sweep cleanly; lower `nworld` or tighten `nconmax`/`njmax`.
 
-**Expected, not measured**, on other GPUs (plateau throughput scales roughly with SM count × clock and memory bandwidth; the batch limit with VRAM; small-batch latency is mostly kernel-launch and driver overhead and changes little):
-
-| GPU | SMs / bandwidth / VRAM | Expected plateau vs the RTX PRO 6000 numbers above | Expected largest batch (from the measured peak VRAM) |
-| --- | --- | --- | --- |
-| RTX 5090 | 170 / 1.8 TB/s / 32 GB | about 85–100 % (same Blackwell generation, slightly fewer SMs) | SO-101 ≈ 16,384–32,768 (32,768 needed 25.8 GiB here); reBot 4,096 (8,192 needs ~37 GiB and should run out of memory) |
-| RTX 3060 (12 GB) | 28 / 360 GB/s / 12 GB | about 10–20 %, with the knee at roughly 1,024–2,048 worlds | SO-101 8,192 (6.5 GiB); reBot 1,024–2,048 (2,048 needed 9.2 GiB) |
-
-Send measured results from those GPUs with `nvidia-smi` output; they replace these expectations.
+RTX 5090 and RTX 3060 performance has not been measured here. Run the same
+benchmark on the target GPU and retain its hardware, capacity and task-validation
+reports before making throughput or memory-capacity claims. SM count and memory
+bandwidth alone do not establish performance for this workload.
 
 ## What the comparison measures
 
@@ -166,7 +162,7 @@ The [ALOHA reference benchmark](reference-benchmark/README.md) compares native M
 
 ## Google Colab
 
-Open [the benchmark notebook on Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The Colab link opens the notebook from the Hub main branch; `REF` pins its runtime source.
+Open [the benchmark notebook on Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/sim2real-blogs/notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash-locked dependencies into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source; retain the resolved full commit printed by setup with any new results. A changed revision requires a fresh checkout directory. The Colab link opens the notebook from the Hub main branch; `REF` selects the upstream source; setup resolves it to one full commit for the helper and runtime. The default is `main`; `HUB_SOURCE_REF` can select a full commit for reproduction.
 
 Review preflight on the assigned CPU/GPU before enabling measurements. Hosted hardware and runtime limits vary; this launch recipe is not a validated Colab box-task result. Download the report archive before disconnection. The CPU baseline belongs to the runtime.
 
@@ -175,14 +171,14 @@ Review preflight on the assigned CPU/GPU before enabling measurements. Hosted ha
 An existing Brev GPU VM can use the same repository and lock:
 
 ```bash
-GIT_LFS_SKIP_SMUDGE=1 git clone --filter=blob:none https://github.com/johnnynunez/accelerated-computing-hub.git
+GIT_LFS_SKIP_SMUDGE=1 git clone --filter=blob:none https://github.com/NVIDIA/accelerated-computing-hub.git
 cd accelerated-computing-hub
-git checkout --detach cf96302fd7200fac5941aacd9d92b1c2c7b0f386
+git checkout --detach origin/main
 git rev-parse HEAD  # retain the resolved source revision
+cd tutorials/sim2real-blogs/notebooks/mujoco
 uv venv --python 3.12 .venv
-uv pip sync --python .venv/bin/python --require-hashes \
-  tutorials/sim2real-blogs/notebooks/mujoco/requirements.lock.txt
-.venv/bin/python tutorials/sim2real-blogs/notebooks/mujoco/part2/migration_benchmark.py \
+uv pip install --python .venv/bin/python --require-hashes -r requirements.lock.txt
+.venv/bin/python part2/migration_benchmark.py \
   --task box --preset workstation --nconmax 64 --njmax 128 --timeout 7200 --preflight
 ```
 
