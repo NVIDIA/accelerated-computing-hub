@@ -36,7 +36,9 @@ follow its printed `fix:` command. In each new terminal, return to this director
 and run `source .venv/bin/activate` again.
 
 The lock installs MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3 and Warp 1.15.0 with Python 3.12.
-These are the versions used by this Hub tutorial and its retained measurements.
+These physics versions match the retained measurements. The active lock now uses
+[Pillow 13.0.0](https://pillow.readthedocs.io/en/stable/releasenotes/13.0.0.html) for its security fixes; archived benchmark environments and hashes
+remain unchanged and do not claim a rerun with this image-library update.
 
 ## Run a completed example
 

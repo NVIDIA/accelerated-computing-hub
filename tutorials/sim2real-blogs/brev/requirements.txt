@@ -3,7 +3,7 @@
 # MuJoCo Warp 3.8.0.3, Warp 1.15.0), then constrains these additions to that lock.
 scipy
 ipympl
-Pillow
+Pillow>=13.0.0
 jupyter-dark-detect==0.1.0
 jupyter
 jupyter-server-proxy

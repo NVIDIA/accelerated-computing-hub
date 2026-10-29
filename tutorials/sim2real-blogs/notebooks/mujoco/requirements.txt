@@ -8,3 +8,6 @@ matplotlib
 nbformat
 nbclient
 ipykernel
+
+# Security floor for the plotting/image dependency.
+Pillow>=13.0.0
