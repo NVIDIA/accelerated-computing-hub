@@ -13,7 +13,7 @@
 #  For a ready-to-run demo, use solutions/so101_mjwarp_solution.py.
 #  The solutions/step_NN_*.py files are reference snippets to read as needed;
 #  they are not a sequence of programs to execute. Helper modules are imported
-#  automatically. See README.md for the GPU guide.
+#  automatically. See ../../../README.md for setup and GPU commands.
 #
 #  Run from tutorials/sim2real-blogs/notebooks/mujoco with the environment active
 #  and an NVIDIA GPU available:
@@ -24,7 +24,7 @@
 #      python part2/so101_mjwarp.py --task box --device cuda:0 --sim-substeps 20 --headless-steps 2000
 #
 #  The one-world box demo mirrors state to the CPU for the controller and viewer.
-#  For throughput measurements, use ../BENCHMARK.md or the optional
+#  For throughput measurements, see ../../../README.md or the optional
 #  04__cpu_gpu_benchmark.ipynb. The separate --benchmark mode retains the earlier
 #  stacking scene; TODO Step 7 covers its CUDA graph capture.
 #

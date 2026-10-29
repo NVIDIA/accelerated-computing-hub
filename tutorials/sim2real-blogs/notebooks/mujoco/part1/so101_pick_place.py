@@ -13,7 +13,7 @@
 #  For a ready-to-run demo, use solutions/so101_pick_place_solution.py.
 #  The solutions/step_NN_*.py files are reference snippets to read as needed;
 #  they are not a sequence of programs to execute. Helper modules are imported
-#  automatically. See README.md for the CPU guide.
+#  automatically. See ../../../README.md for setup and CPU commands.
 #
 #  Run from tutorials/sim2real-blogs/notebooks/mujoco with the environment active:
 #      python part1/solutions/so101_pick_place_solution.py --task box --sim-substeps 20

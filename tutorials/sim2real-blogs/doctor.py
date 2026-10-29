@@ -270,7 +270,7 @@ def main() -> int:
     if r.failures:
         print(f"{r.failures} problem(s) to fix (see 'fix:' lines above), {r.warnings} warning(s).")
         return 1
-    print(f"Ready: no blocking problems ({r.warnings} warning(s)). Next: see the Quickstart in README.md.")
+    print(f"Ready: no blocking problems ({r.warnings} warning(s)). Next: see tutorials/sim2real-blogs/README.md.")
     return 0
 
 
