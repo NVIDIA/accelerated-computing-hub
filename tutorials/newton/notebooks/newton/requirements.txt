@@ -20,4 +20,5 @@ ipykernel>=6.29,<8
 ipywidgets>=8.1,<9
 jupyterlab>=4.4,<5
 matplotlib>=3.10,<4
+pillow>=13.0.0  # Image export; keep the security floor when resolving a new lock.
 pytest>=8.3,<10
