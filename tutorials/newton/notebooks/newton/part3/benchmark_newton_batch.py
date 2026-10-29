@@ -3,7 +3,7 @@
 """Full-task Newton CPU process-pool versus Newton CUDA world batching.
 
 Both paths call Newton's SolverMuJoCo.step with Newton State and Control.
-Newton 1.6 native CPU advances one template world, so independent CPU worlds
+The native CPU backend advances one template world, so independent CPU worlds
 run on persistent worker processes. CUDA uses ModelBuilder.replicate and one
 batched solver. Precomputed targets exclude online IK from both timers.
 """

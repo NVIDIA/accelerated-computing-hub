@@ -1,4 +1,4 @@
-"""Official Newton 1.6.0 robot USDs, pinned independently of upstream main."""
+"""Official robot USDs, pinned independently of upstream main."""
 from newton.usd import SchemaResolverMjc, SchemaResolverNewton
 from newton.utils import download_asset
 
@@ -15,10 +15,9 @@ def add_robot_usd(builder, robot: str, *, xform=None) -> dict:
     """Append an official fixed-base robot, returning Newton's raw import maps.
 
     Register ``SolverMuJoCo.register_custom_attributes(builder)`` before adding
-    anything to the builder. MuJoCo's USD resolver is required in Newton 1.6.0
-    for authored passive damping; registering custom attributes alone is not
-    enough. Authored actuators, mimic/equality constraints and collision filters
-    are retained. The cache must match the pinned Git revision with unchanged
+    anything to the builder. MuJoCo's USD resolver preserves authored passive
+    damping; registering custom attributes alone is not enough. Authored actuators,
+    mimic/equality constraints and collision filters are retained. The cache must match the pinned Git revision with unchanged
     tracked robot files. No downloaded asset is edited and import errors propagate.
     With usd-core 26.3, start Python with ``PXR_WORK_THREAD_LIMIT=1`` to avoid
     native parallel-parser crashes observed on macOS and Linux. This helper
@@ -34,7 +33,7 @@ def add_robot_usd(builder, robot: str, *, xform=None) -> dict:
         folder, entry = _ROBOT_USDS[robot]
     except KeyError:
         raise ValueError(f"Unknown robot {robot!r}; expected one of {tuple(_ROBOT_USDS)}") from None
-    # A bare 1.6.0 builder already has mujoco equality attributes, so the
+    # A bare Newton builder already has mujoco equality attributes, so the
     # resolver's generic namespace check alone does not establish registration.
     if "mujoco:actuator_trnid" not in builder.custom_attributes:
         raise RuntimeError("Call SolverMuJoCo.register_custom_attributes(builder) before adding the robot USD")
@@ -58,7 +57,8 @@ def add_robot_usd(builder, robot: str, *, xform=None) -> dict:
         str(source),
         xform=xform,
         floating=False,
-        collapse_fixed_joints=True,
+        # Preserve fixed links and their parent/body collision exclusions.
+        collapse_fixed_joints=False,
         enable_self_collisions=True,
         convert_mjc_equality_constraints=True,
         schema_resolvers=[SchemaResolverMjc(), SchemaResolverNewton()],

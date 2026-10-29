@@ -25,12 +25,20 @@ MIN_TOOL_CLEARANCE_M = 0.02
 
 
 def check_mujoco_capacity(solver) -> int:
-    """Reject sticky CUDA buffer overflows; retain convergence flags in reports."""
+    """Check raw CUDA counts and sticky overflows; retain convergence flags."""
     if not hasattr(solver, "mjw_data"):
         return 0  # Native MuJoCo-C has no fixed Warp constraint buffers.
     import mujoco_warp as mjw
 
-    flags = int(np.bitwise_or.reduce(solver.mjw_data.overflow.numpy(), initial=0))
+    data = solver.mjw_data
+    # A standalone forward pass can exceed a raw count before step() updates
+    # its sticky flags. Check both before reading the fixed contact buffers.
+    for label, values, limit in (("contact", data.nacon.numpy(), data.naconmax),
+                                 ("broadphase", data.ncollision.numpy(), data.naconmax),
+                                 ("constraint", data.nefc.numpy(), data.njmax)):
+        if np.any(values < 0) or np.any(values > limit):
+            raise ValueError(f"MuJoCo Warp {label} capacity overflow: {values.tolist()} outside [0, {limit}]")
+    flags = int(np.bitwise_or.reduce(data.overflow.numpy(), initial=0))
     convergence = int(mjw.OverflowType.ITERATIONS | mjw.OverflowType.LS_ITERATIONS)
     if flags & ~convergence:
         raise ValueError(f"MuJoCo Warp capacity overflow (flags={flags}); increase the solver buffers")

@@ -269,10 +269,12 @@ class Example:
         gripper = self.grip_start + alpha * (self.grip_goal - self.grip_start)
         release_roll = None
         if self.release_roll_start is not None and self.phase in ('open', 'retreat', 'settle', 'final_settle'):
-            # Turning the fully opening hand lets gravity unwrap a free patch
-            # draped over the fixed finger. This commands only the robot joint.
+            # A quarter-turn tips the fixed finger so gravity can unwrap the
+            # free cloth. A half-turn can leave it resting on that finger.
+            # This commands only the robot joint, never the payload.
             blend = alpha if self.phase == 'open' else 1.
-            release_roll = (1. - blend) * self.release_roll_start + blend * self.scene.spec.wrist_lock_value
+            release_target = self.scene.spec.wrist_lock_value - np.pi / 2.
+            release_roll = (1. - blend) * self.release_roll_start + blend * release_target
         self.ctrl = self.ik.solve(target, gripper, material=self.material, release_roll=release_roll)
         if self.ik.last_position_error > 0.01:
             self.failure = f'{self.active_object}: IK target outside reachable workspace (residual {self.ik.last_position_error:.4f} m)'

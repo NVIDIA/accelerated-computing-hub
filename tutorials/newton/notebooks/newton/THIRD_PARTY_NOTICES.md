@@ -71,8 +71,8 @@ standard `scene.xml` files shipped with MuJoCo Menagerie (Apache-2.0).
 ## Newton and generated figures
 
 Newton is an Apache-2.0 dependency, pinned to
-[v1.6.0](https://github.com/newton-physics/newton/tree/v1.6.0), source commit
-`c2ca70bec5998062b0b2d35869865cbe3a49feee`. The tutorial cites
+[v1.7.0](https://github.com/newton-physics/newton/tree/v1.7.0), source commit
+`7e75abe28b8d69522bc0b34837aaed2c303dff5a`. The tutorial cites
 its public docs and examples, including the experimental MuJoCo–VBD Proxy
 coupling API. Upstream source and its license remain in the installed package.
 The cited Newton documentation files carry CC-BY-4.0 and their own 2025 or 2026

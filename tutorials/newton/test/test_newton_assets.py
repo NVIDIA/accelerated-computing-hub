@@ -33,9 +33,11 @@ class NewtonAssetsTests(unittest.TestCase):
         SolverMuJoCo.register_custom_attributes(builder)
         result = add_robot_usd(builder, "so101")
         expected = ["shoulder_pan", "shoulder_lift", "elbow_flex", "wrist_flex", "wrist_roll", "gripper"]
-        self.assertEqual([label.rsplit("/", 1)[-1] for label in builder.joint_label], expected)
-        self.assertEqual(builder.body_count, 6)
-        self.assertEqual(set(result["path_joint_map"].values()), set(range(6)))
+        moving_joints = [i for i, kind in enumerate(builder.joint_type) if kind != newton.JointType.FIXED]
+        self.assertEqual([builder.joint_label[i].rsplit("/", 1)[-1] for i in moving_joints], expected)
+        self.assertEqual(builder.body_count, 8)  # Preserve the base and camera mount.
+        self.assertTrue(builder.body_label[0].endswith("/base"))
+        self.assertEqual(set(result["path_joint_map"].values()), set(range(1, 8)))
         np.testing.assert_allclose(builder.joint_damping, [0.6] * 6)
 
     def test_rebot_preserves_mimic_in_native_cpu_steps(self):
@@ -45,12 +47,15 @@ class NewtonAssetsTests(unittest.TestCase):
         SolverMuJoCo.register_custom_attributes(builder)
         result = add_robot_usd(builder, "rebot")
         expected = ["joint1", "joint2", "joint3", "joint4", "joint5", "joint6", "joint_left", "joint_right"]
-        self.assertEqual([label.rsplit("/", 1)[-1] for label in builder.joint_label], expected)
-        self.assertEqual(builder.body_count, 8)
-        self.assertEqual(set(result["path_joint_map"].values()), set(range(8)))
+        moving_joints = [i for i, kind in enumerate(builder.joint_type) if kind != newton.JointType.FIXED]
+        self.assertEqual([builder.joint_label[i].rsplit("/", 1)[-1] for i in moving_joints], expected)
+        self.assertEqual(builder.body_count, 10)  # Preserve base_link and gripper_end.
+        self.assertTrue(builder.body_label[0].endswith("/base_link"))
+        self.assertEqual(set(result["path_joint_map"].values()), set(range(1, 10)))
+        finger_joints = moving_joints[-2:]
         np.testing.assert_allclose(builder.joint_damping, [5, 5, 5, 2, 2, 2, 1, 1])
-        self.assertEqual(builder.constraint_mimic_joint0, [6])
-        self.assertEqual(builder.constraint_mimic_joint1, [7])
+        self.assertEqual(builder.constraint_mimic_joint0, [finger_joints[0]])
+        self.assertEqual(builder.constraint_mimic_joint1, [finger_joints[1]])
         self.assertEqual(builder.constraint_mimic_coef0, [0.0])
         self.assertEqual(builder.constraint_mimic_coef1, [1.0])
         model = builder.finalize(device="cpu")
@@ -64,7 +69,8 @@ class NewtonAssetsTests(unittest.TestCase):
         newton.eval_fk(model, model.joint_q, model.joint_qd, state)
         control = model.control()
         targets = control.joint_target_q.numpy().copy()
-        target_indices = model.joint_target_q_start.numpy()[[6, 7]]
+        target_indices = model.joint_target_q_start.numpy()[finger_joints]
+        finger_q = model.joint_q_start.numpy()[finger_joints]
         targets[target_indices] = 0.01
         control.joint_target_q.assign(targets)
         for _ in range(12):
@@ -73,8 +79,8 @@ class NewtonAssetsTests(unittest.TestCase):
             state, next_state = next_state, state
             for field in (state.body_q, state.body_qd, state.joint_q, state.joint_qd):
                 self.assertTrue(np.isfinite(field.numpy()).all())
-            self.assertLess(abs(float(state.joint_q.numpy()[6] - state.joint_q.numpy()[7])), 5e-4)
-        self.assertGreater(float(state.joint_q.numpy()[6]), 1e-5)
+            self.assertLess(abs(float(state.joint_q.numpy()[finger_q[0]] - state.joint_q.numpy()[finger_q[1]])), 5e-4)
+        self.assertGreater(float(state.joint_q.numpy()[finger_q[0]]), 1e-5)
         self.assertTrue(all(w.number == 0 for w in solver.mj_data.warning))
 
     def test_download_uses_each_official_entry_at_the_literal_pin(self):
@@ -97,7 +103,8 @@ class NewtonAssetsTests(unittest.TestCase):
                 self.assertFalse(any(j == newton.JointType.FREE for j in builder.joint_type))
                 # This field counts Newton external actuators, not MuJoCo USD actuators.
                 self.assertEqual(result["actuator_count"], 0)
-                self.assertEqual(len(builder.custom_attributes["mujoco:actuator_label"].values), builder.joint_count)
+                self.assertEqual(len(builder.custom_attributes["mujoco:actuator_label"].values),
+                                 sum(kind != newton.JointType.FIXED for kind in builder.joint_type))
 
     def test_missing_registration_fails_before_download_or_mutation(self):
         from newton_assets import add_robot_usd
@@ -244,8 +251,11 @@ class NewtonAssetsTests(unittest.TestCase):
         SolverMuJoCo.register_custom_attributes(builder)
         result = add_robot_usd(builder, "rebot")
         body_map = {path.rsplit("/", 1)[-1]: index for path, index in result["path_body_map"].items()}
-        self.assertEqual(body_map["base_link"], -1)
-        self.assertEqual(body_map["gripper_end"], body_map["link6"])
+        self.assertGreaterEqual(body_map["base_link"], 0)
+        self.assertNotEqual(body_map["gripper_end"], body_map["link6"])
+        for name in ("base_link", "gripper_end"):
+            joint = builder.joint_child.index(body_map[name])
+            self.assertEqual(builder.joint_type[joint], newton.JointType.FIXED)
         filters = set(builder.shape_collision_filter_pairs)
         colliders = lambda body: [i for i, b in enumerate(builder.shape_body) if b == body
                                   and builder.shape_flags[i] & int(newton.ShapeFlags.COLLIDE_SHAPES)]
@@ -266,7 +276,7 @@ class NewtonAssetsTests(unittest.TestCase):
         first_id, second_id = sorted(mj_bodies)
         self.assertIn((first_id << 16) + second_id, solver.mj_model.exclude_signature)
 
-    def test_xform_moves_bodies_and_collapsed_base_shapes(self):
+    def test_xform_moves_bodies_and_preserved_fixed_base_shapes(self):
         from newton_assets import add_robot_usd
 
         pose = wp.transform((0.1, -0.2, 0.3), wp.quat_from_axis_angle(wp.vec3(0.0, 0.0, 1.0), 0.4))
@@ -279,8 +289,8 @@ class NewtonAssetsTests(unittest.TestCase):
                     result = add_robot_usd(builder, robot, xform=xform)
                     if robot == "so101":
                         body_map = {p.rsplit("/", 1)[-1]: i for p, i in result["path_body_map"].items()}
-                        self.assertEqual(body_map["base"], -1)
-                        self.assertEqual(body_map["camera_mount"], body_map["gripper"])
+                        self.assertGreaterEqual(body_map["base"], 0)
+                        self.assertNotEqual(body_map["camera_mount"], body_map["gripper"])
                     model = builder.finalize(device="cpu")
                     state = model.state()
                     newton.eval_fk(model, model.joint_q, model.joint_qd, state)
@@ -291,12 +301,23 @@ class NewtonAssetsTests(unittest.TestCase):
                     np.testing.assert_allclose(moved[:3], wp.transform_get_translation(transformed), atol=2e-6)
                     np.testing.assert_allclose(wp.quat_to_matrix(wp.quat(*moved[3:])),
                                                wp.quat_to_matrix(wp.transform_get_rotation(transformed)), atol=2e-6)
-                static = np.flatnonzero(models[0].shape_body.numpy() == -1)
-                self.assertGreater(len(static), 0)
-                for shape in static:
-                    transformed = pose * wp.transform(*models[0].shape_transform.numpy()[shape])
-                    np.testing.assert_allclose(models[1].shape_transform.numpy()[shape, :3],
+                # Base geometry now belongs to its preserved fixed body. Verify
+                # the composed world pose, rather than assuming body=-1.
+                base_name = "base" if robot == "so101" else "base_link"
+                base = next(i for i, label in enumerate(models[0].body_label)
+                            if label.endswith("/" + base_name))
+                shapes = np.flatnonzero(models[0].shape_body.numpy() == base)
+                self.assertGreater(len(shapes), 0)
+                for shape in shapes:
+                    original = (wp.transform(*states[0].body_q.numpy()[base])
+                                * wp.transform(*models[0].shape_transform.numpy()[shape]))
+                    moved = (wp.transform(*states[1].body_q.numpy()[base])
+                             * wp.transform(*models[1].shape_transform.numpy()[shape]))
+                    transformed = pose * original
+                    np.testing.assert_allclose(wp.transform_get_translation(moved),
                                                wp.transform_get_translation(transformed), atol=2e-6)
+                    np.testing.assert_allclose(wp.quat_to_matrix(wp.transform_get_rotation(moved)),
+                                               wp.quat_to_matrix(wp.transform_get_rotation(transformed)), atol=2e-6)
 
 
 if __name__ == "__main__":

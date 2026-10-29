@@ -11,7 +11,7 @@
 
 newton.use_coord_layout_targets = True
 builder = newton.ModelBuilder()
-# Preserve the MJCF's zero detection gap. Newton 1.5's fallback is 0.1 m,
+# Preserve the MJCF's zero detection gap. Newton's fallback is 0.1 m,
 # which changes native MuJoCo contact generation at gripper scale.
 builder.default_shape_cfg.gap = 0.0
 SolverMuJoCo.register_custom_attributes(builder)

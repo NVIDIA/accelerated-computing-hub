@@ -28,7 +28,7 @@ for actuator, joint in enumerate(joints):
     if actuator in gripper:
         continue
     builder.joint_effort_limit[dof] = spec.arm_effort_limit
-    # Newton 1.5 preserves the actuator's independent force range as well.
+    # Newton preserves the actuator's independent force range as well.
     # Mirror Part 1's arm-only boost; leave reBot and both grippers unchanged.
     if spec.arm_force_limit is not None:
         builder.custom_attributes["mujoco:actuator_forcerange"].values[actuator] = wp.vec2(
