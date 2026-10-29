@@ -18,7 +18,7 @@ For the supplied Python 3.12 binary stack on **Linux x86-64**, use **glibc 2.35 
 
 **OpenUSD startup:** with usd-core 26.3, launch Python/Jupyter with `PXR_WORK_THREAD_LIMIT=1` and restart any existing kernel. The helper checks the actual Work concurrency limit before importing a robot USD. This version-specific workaround follows native parser failures on macOS and Linux; setting it after `pxr` loads is too late. On PowerShell, set `$env:PXR_WORK_THREAD_LIMIT="1"` before launching, and use `.venv\Scripts\Activate.ps1` to activate. Windows has not been validated.
 
-The lock is retained byte-for-byte from the validated companion. To refresh it deliberately, run `uv pip compile notebooks/newton/requirements.txt --python-version 3.12 --universal --generate-hashes --no-annotate -o notebooks/newton/requirements.lock.txt` from the tutorial directory and repeat the checks before adopting changed versions.
+The current lock includes **Pillow 13.0.0** for image export, updated on 29 October 2026. The physics stack and all other locked versions are unchanged. Archived measurements, source bundles and their lock hashes retain the original environment; they are not new measurements with this image-library update. To refresh the live lock deliberately, run `uv pip compile notebooks/newton/requirements.txt --python-version 3.12 --universal --generate-hashes --no-annotate -o notebooks/newton/requirements.lock.txt` from the tutorial directory and repeat the checks before adopting changed versions.
 
 ## Which files do I run?
 

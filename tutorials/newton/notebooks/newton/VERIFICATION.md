@@ -1,3 +1,9 @@
+# Current environment update — 29 October 2026
+
+The live `requirements.lock.txt` now selects Pillow 13.0.0, and `requirements.txt` requires at least that version. All other locked package versions remain unchanged. Local setup, the Docker recipe and the hosted benchmark helper consume this same lock. Archived source bundles, environment hashes and measurements below describe their original runs and remain unchanged; the Pillow update does not recertify their physics or performance results.
+
+The hash-checked install and dependency consistency check passed on macOS ARM64 with Python 3.12.14. Rendering tests and actual notebook 01/05 executions passed (8 tests, 8 subtests); the renderer also exported and decoded a PNG and six-frame GIF using a synthetic recording fixture. Those image fixtures test export compatibility, not physical task success. CUDA, GUI rendering and Docker execution were not repeated for this package update.
+
 # Current box-task import and validation scope
 
 This revision imports the current two-cube box tutorials, benchmark runners and evidence from source commit `f9a4240dc56492a494f4903fb8ff0b62a7be8629`. [The current relocation map](current-relocation-manifest.json) records each source/destination hash and permitted path or notebook-presentation changes. `relocation-manifest.json` and `original-validation.json` below remain unchanged historical records of the earlier Hub import.
