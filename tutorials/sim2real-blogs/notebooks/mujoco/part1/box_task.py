@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 """Compatibility import for the shared CPU/GPU task implementation."""
 import sys

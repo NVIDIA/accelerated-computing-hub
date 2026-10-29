@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 """The optional benchmark notebook must keep Run All diagnostic by default."""
 
