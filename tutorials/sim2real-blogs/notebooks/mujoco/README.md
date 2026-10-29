@@ -64,7 +64,7 @@ Add `--headless-steps 2000` to run without a window, or `--robot rebot` to use t
 | `part1/so101_pick_place.py`, `part2/so101_mjwarp.py` | Exercises containing `TODO Step` markers | Complete the missing code before running them |
 | `solutions/step_NN_*.py` in either part | Answer snippets for individual exercise steps | Read them as needed; they are not a sequence of programs to execute |
 | `*.ipynb` | Guided lessons | Follow the optional order below |
-| Other Python modules, such as `robots.py`, `utils.py` and `box_task.py` | Helpers used by the examples | The examples import them automatically |
+| Other Python modules, such as `robots.py`, `utils.py` and `box_task.py` | Helpers used by the examples | The examples import them automatically; CPU/GPU task implementations live in `sim2real_shared/` |
 | `part2/scaling_study.py`, `part2/migration_benchmark.py` | Optional performance measurements | Follow the [benchmark guide](BENCHMARK.md) |
 
 You do not need to run every file in a folder.

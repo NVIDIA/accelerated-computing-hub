@@ -67,9 +67,10 @@ class BoxTeachingNotebookRoutes(unittest.TestCase):
                          for node in ast.parse(setup).body
                          if isinstance(node, ast.Assign)
                          and isinstance(node.targets[0], ast.Name)
-                         and node.targets[0].id in {'REPO_URL', 'REF'}}
-            self.assertEqual(constants['REPO_URL'], 'https://github.com/johnnynunez/accelerated-computing-hub.git')
-            self.assertTrue(constants['REF'], 'Hosted source ref must be explicit')
+                         and node.targets[0].id == 'REPO_URL'}
+            self.assertEqual(constants['REPO_URL'], 'https://github.com/NVIDIA/accelerated-computing-hub.git')
+            self.assertIn('HUB_SOURCE_REF', setup)
+            self.assertIn('source_commit', setup)
             control = next(s for s in sources if 'RUN_BENCHMARK = False' in s)
             for value in (primary, legacy):
                 changed = control.replace(f'{selector} = "{primary}"', f'{selector} = "{value}"')

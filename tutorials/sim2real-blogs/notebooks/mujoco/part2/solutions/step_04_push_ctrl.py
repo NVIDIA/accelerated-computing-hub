@@ -6,7 +6,7 @@
 # On the GPU there is no shared view, so the command has to be copied across
 # the PCIe bus. Note the [None, :] again: d.ctrl has shape (nworld, nu).
 #
-# Doing this every substep is exactly the host<->device traffic that kills
+# Upload once per control frame, before the physics substeps. Host/device traffic limits
 # throughput. It is acceptable here only because parity mode runs one world
 # and needs the CPU in the loop for IK. Throughput mode (Step 7) keeps
 # everything resident on device instead.

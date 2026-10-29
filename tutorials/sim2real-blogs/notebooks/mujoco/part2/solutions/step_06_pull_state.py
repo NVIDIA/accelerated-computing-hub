@@ -1,4 +1,5 @@
-# Step 6 — mirror world 0 back to the host.
+# Step 6 — mirror world 0 after all substeps in the control frame.
+# For the box task use the supplied get_data_into call, which includes contacts.
 #
 # .numpy() copies a Warp array from device memory into a NumPy array, and the
 # [0] index selects world 0 out of the (nworld, nq) batch.
@@ -13,3 +14,4 @@
 
 mjd.qpos[:] = d.qpos.numpy()[0]
 mjd.qvel[:] = d.qvel.numpy()[0]
+mujoco.mj_forward(mjm, mjd)

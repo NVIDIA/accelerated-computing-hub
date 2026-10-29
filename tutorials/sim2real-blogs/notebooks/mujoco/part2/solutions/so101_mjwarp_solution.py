@@ -117,7 +117,7 @@ def run_demo(
 
     print(f"Loaded: {xml_path}")
     print(f"Part 2 — MJWarp | {spec.display_name} | nworld=1 | IK on CPU, mjw.step on GPU | dt={sim_dt:.5f}s")
-    print("Parity check: the SAME task as Part 1 with physics on the GPU (one world, state copied back every substep).")
+    print("Parity check: the SAME task as Part 1 with physics on the GPU (one world, state copied back once per control frame).")
     print("This run checks correctness, not speed. For throughput: --benchmark --nworld 2048, or scaling_study.py.")
 
     frame_idx = 0
@@ -131,28 +131,27 @@ def run_demo(
             ctrl = controller.step(mjm, mjd, frame_dt)
         if box_task:
             ctrl = np.asarray(ctrl, dtype=np.float32)
+        mjd.ctrl[: mjm.nu] = ctrl
+        # Step 4: upload once; controls stay fixed through this control frame.
+        wp.copy(d.ctrl, wp.array(mjd.ctrl[None, :], dtype=wp.float32, device=device))
         for _ in range(sim_substeps):
-            mjd.ctrl[: mjm.nu] = ctrl
-
-            # Step 4: host -> device.
-            wp.copy(d.ctrl, wp.array(mjd.ctrl[None, :], dtype=wp.float32, device=device))
-
-            # Step 5: the one line that defines Part 2.
+            # Step 5: advance all physics substeps before reading host state.
             mjw.step(m, d)
             if box_task:
                 assert_mjwarp_capacity(d)
 
-            # Step 6: device -> host, mirroring world 0.
-            mjd.qpos[:] = d.qpos.numpy()[0]
-            mjd.qvel[:] = d.qvel.numpy()[0]
-
         frame_idx += 1
+        # Step 6: transfer state only after the final substep.
         if box_task:
-            # Pull actual GPU-solved contacts and forces, not CPU recomputed ones.
+            # Include actual GPU-solved contacts and forces for task validation.
             mjw.forward(m, d)
             assert_mjwarp_capacity(d)
             mjw.get_data_into(mjd, mjm, d, world_id=0)
             box_task.observe(mjm, mjd, frame=frame_idx, time=frame_idx / fps, phase=commanded_phase)
+        else:
+            mjd.qpos[:] = d.qpos.numpy()[0]
+            mjd.qvel[:] = d.qvel.numpy()[0]
+            mujoco.mj_forward(mjm, mjd)
 
     def report_completion() -> bool:
         if box_task:

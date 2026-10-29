@@ -1,8 +1,10 @@
 # Validation scope
 
-This update relocates the reviewed Article 2 source into the Hub tutorial. Its
-physics scripts and dependency lock are unchanged; notebooks add Hub checkout
-setup, use the Hub naming convention, and retain their reference/task defaults.
+The original import relocated the reviewed Article 2 source into the Hub tutorial.
+The October 29 revision shares the CPU/GPU task implementation, moves source setup
+into a helper, and transfers GPU controls and state once per control frame.
+The dependency lock and task acceptance rules are unchanged. Archived measurements
+refer to their recorded source versions; they are not measurements of this revision.
 The [migration manifest](notebooks/mujoco/MIGRATION_MANIFEST.json) maps every
 imported file and records each adaptation.
 
@@ -47,3 +49,20 @@ integration check uses `RUN_ARTICLE2_VIEWER_CPU_TESTS=1` and is not a GUI test.
 `test/test_article2_viewer_x11.py` is a real-window GUI test: it runs the lesson scripts under an X server (Xvfb is enough) and sends real key presses, a window-manager close and Ctrl+C. It needs `DISPLAY` and `xdotool` and skips cleanly without them, so the container suite skips it. `test/test_article2_ctrl_c.py` checks the Ctrl+C exit contract with real signals and needs no display.
 
 The [fresh Hub container validation](hub-validation/2026-10-10/README.md) built the updated image and passed **151 tests with one optional viewer-integration skip**, including both robots on CPU/GPU and the real-kernel benchmark preflight. Its initial collection failure and corrected test-only rerun are preserved. Compose lifecycle, live Brev/Colab, lower-end GPU and macOS GUI validation remain unverified.
+
+## October 29 review corrections
+
+Validated locally on macOS ARM64 with Python 3.12 and the Article 2 hash lock:
+
+- Full tutorial suite: 169 passed, 17 skipped, 49 subtests passed. The final
+  source-fingerprint change also passed all 41 migration-report tests.
+- Executed notebooks 01, 02 and 04 in real local kernels. Both robots completed
+  the full 40-second CPU box task; notebook 04 performed preflight only.
+- GPU control-frame regression checks verify one control upload, 20 physics
+  substeps, then one state/evidence download; capacity checks remain per substep.
+- All four notebooks pass the Hub canonical-format check; `git diff --check` passes.
+
+CUDA execution, GPU timings, the interactive viewer, Docker, Brev and Colab were
+not rerun for this revision. Historical benchmark rows are unchanged. The hosted
+bootstrap defaults to NVIDIA's `main` and will use these changes after merge;
+reviewers can select the PR ref with `HUB_SOURCE_REF` before running setup.
