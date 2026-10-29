@@ -180,5 +180,5 @@ Robot models download on first use. If you edited a cached model, choose a new
 `NEWTON_CACHE_PATH` for USD or `MUJOCO_MENAGERIE_CACHE` for MJCF to download a
 clean copy. Use `--menagerie-path` to load your own MJCF model.
 
-The tutorial code, including its MuJoCo/MJWarp baselines, retains its MIT
-attribution to Johnny Nuñez Cano.
+The tutorial code, including its MuJoCo/MJWarp baselines, is licensed under MIT.
+Copyright (c) 2026 NVIDIA Corporation.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
@@ -14,7 +14,7 @@
 #  (Newton) are compared against.
 #
 #  The three objects every MuJoCo program is built around:
-#      mujoco.MjModel  — the compiled, read-only model (geometry, inertia, ...)
+#      mujoco.MjModel  — the compiled model (some parameters remain mutable)
 #      mujoco.MjData   — the mutable state (qpos, qvel, ctrl, time, contacts)
 #      mujoco.mj_step  — advance the state by one model.opt.timestep
 #

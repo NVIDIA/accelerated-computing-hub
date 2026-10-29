@@ -93,4 +93,4 @@ Their robot assets retain the SO-101 Apache-2.0 and reBot MIT notices above.
 
 ## Companion code attribution
 
-The companion code retains its existing MIT notices, copyright (c) 2026 Johnny Nuñez Cano. The full notice is retained in [Blog-companion-MIT.txt](../LICENSES/Blog-companion-MIT.txt). The frozen MuJoCo/MJWarp baselines under `../mujoco/` are included solely to make the migration checks self-contained.
+The companion code is licensed under MIT, copyright (c) 2026 NVIDIA Corporation. The full notice is retained in [Blog-companion-MIT.txt](../LICENSES/Blog-companion-MIT.txt). The frozen MuJoCo/MJWarp baselines under `../mujoco/` are included solely to make the migration checks self-contained.

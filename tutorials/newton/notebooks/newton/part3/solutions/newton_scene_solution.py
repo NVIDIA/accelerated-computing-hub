@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
@@ -112,6 +112,13 @@ def build_newton_builder(spec: RobotSpec | None = None, *, task_name: str = "sta
         # The benchmark migrates the complete canonical MJCF scene, including
         # table, free payloads, box geometry and their authored contact masks.
         # The tutorial's programmatic stacking scene continues below.
+        # Imported collision-only props need a visible shape when the robot
+        # also has separate visual meshes. This flag does not affect physics.
+        visible = int(newton.ShapeFlags.VISIBLE)
+        for shape, label in enumerate(builder.shape_label):
+            name = label.rsplit("/", 1)[-1]
+            if name in ("table", "red_cube", "blue_cube") or name.startswith("receiving_box_"):
+                builder.shape_flags[shape] |= visible
         builder.add_ground_plane()
         return builder
 

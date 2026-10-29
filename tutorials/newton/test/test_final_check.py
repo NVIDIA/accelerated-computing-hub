@@ -79,6 +79,10 @@ class StackGateTests(unittest.TestCase):
             ("xy_err=0.001 dz=inf", False),
             ("xy_err=bad dz=0.044", False),
             ("xy_err=0.001 dz=0.044\nxy_err=0.1 dz=0", False),
+            ("stack check: xy_err=0.004 m  dz=0.044 m\nTask complete: red cube stacked on blue "
+             "(verified: xy_err=0.004 m (<= 0.015), dz=0.044 m (in [0.035, 0.055])).", True),
+            ("stack check: xy_err=0.004 m  dz=0.044 m\nTask FAILED: red cube is not stacked on blue "
+             "(xy_err=0.040 m (<= 0.015), dz=0.044 m (in [0.035, 0.055]); failed: xy_err 0.040 m > 0.015).", False),
             ("No metric", False),
         ]:
             with self.subTest(report=report):

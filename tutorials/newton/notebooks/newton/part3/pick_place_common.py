@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
@@ -158,9 +158,11 @@ def resolve_pick_place_scene(
 
     shutil.copyfile(robot_dir / spec.robot_xml, generated_dir / spec.robot_xml)
     assets_link = generated_dir / "assets"
-    if assets_link.is_symlink() and not assets_link.exists():
-        # Stale symlink whose target no longer exists on this machine
-        # (e.g. a moved cache); remove it so it can be recreated locally.
+    if assets_link.is_symlink() and (
+        not assets_link.exists() or assets_link.resolve() != (robot_dir / "assets").resolve()
+    ):
+        # The generated XML and its meshes must come from the same robot copy.
+        # Retarget only the generated link; leave both asset caches untouched.
         assets_link.unlink()
     if not assets_link.exists():
         try:
