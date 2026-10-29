@@ -1,12 +1,8 @@
 # MuJoCo CPU → MJWarp GPU
 
-Run a robot task on CPU, move the same task to one CUDA GPU, then measure how
-batching changes throughput. SO-101 grasps two cubes, places them in a box and
-withdraws its gripper. The optional `--robot rebot` profile uses a second arm.
-
-Start with the completed scripts in `solutions/`. The matching scripts outside
-that directory are exercises; `step_NN_*.py` files contain individual answers.
-Shared scene, controller and task helpers live in `sim2real_shared/`.
+Make SO-101 pick up two cubes and place them in a box. Run it on CPU first,
+then on GPU, and compare how quickly each handles many copies of the scene.
+Use `--robot rebot` to try the same task with Seeed's reBot arm.
 
 ## Setup
 
@@ -22,42 +18,42 @@ source .venv/bin/activate
 python ../../doctor.py
 ```
 
-Keep `notebooks/mujoco` as your working directory for the commands below.
-In a new terminal, return there and activate `.venv` again. The doctor should end
-with `Ready: no blocking problems`; otherwise follow its printed fix.
-The lock provides MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3, Warp 1.15.0 and Pillow 13.0.0.
-Robot models download automatically at pinned revisions on first use.
+Run the commands below from `notebooks/mujoco` with `.venv` active.
+Continue when the setup check prints `Ready: no blocking problems`.
+This installs MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3, Warp 1.15.0 and Pillow 13.0.0.
+The robot models download on first use.
 
 ## Run the task
 
-First run the CPU solution:
+Run on CPU:
 
 ```bash
 python part1/solutions/so101_pick_place_solution.py --task box --sim-substeps 20
 ```
 
-Then run the same task on one GPU:
+Then run on GPU:
 
 ```bash
 python part2/solutions/so101_mjwarp_solution.py --task box --sim-substeps 20 --device cuda:0
 ```
 
-Each command opens a viewer and runs 40 simulated seconds. A successful run prints
+Each command opens a viewer. After 40 simulated seconds, both cubes should be
+in the box and the gripper clear. The program checks this and prints
 `Task complete: both cubes are in the receiving box (verified).`
-Add `--headless-steps 2000` without a display, `--robot rebot` for the other arm,
-or `--report .generated/box.json` to save the task result. Space pauses the viewer;
-Esc, Q, window close or Ctrl+C stops it early. A cancelled run is incomplete.
 
-The first GPU run compiles kernels. One GPU world can remain slower than CPU
-after warm-up: this run checks the task, while batching measures GPU throughput.
-Use `--device cuda:1` to select a second visible GPU; each run uses one device.
+Without a display, add `--headless-steps 2000`. To save the result, add
+`--report .generated/box.json`. Space pauses the viewer; Esc, Q, window close
+or Ctrl+C cancels the run.
 
-The earlier stacking exercise is available with `--task stack` and
-`--headless-steps 600`. It has a different task and duration from the box example.
+The first GPU run takes longer while kernels compile. A single scene can also
+run slower on GPU after that; the performance section below shows how to try
+larger batches. Use `--device cuda:1` to select a second GPU.
+
+For the shorter cube-stacking exercise, use `--task stack --headless-steps 600`.
 
 ## Notebooks
 
-For guided lessons, install Jupyter in the active environment and register it:
+To work through the code step by step, install and open Jupyter:
 
 ```bash
 uv pip install --python .venv/bin/python -c requirements.lock.txt jupyterlab
@@ -74,24 +70,23 @@ Select **Sim2Real (MuJoCo 3.8)** as the kernel and run the notebooks in order:
 | 3 | [MJWarp](notebooks/mujoco/part2/03__mujoco_warp.ipynb) | Move the task to CUDA. |
 | 4, optional | [CPU/GPU benchmark](notebooks/mujoco/part2/04__cpu_gpu_benchmark.ipynb) | Compare complete workloads at different batch sizes. |
 
-Notebooks 2 and 3 start with `REFERENCE = True` and run the completed solution
-for both robots. Fill the `TODO Step` markers in `part1/so101_pick_place.py` or
-`part2/so101_mjwarp.py`, then select `REFERENCE = False` to run your exercise.
-The notebooks leave your exercise files intact.
+Notebooks 2 and 3 run the completed solutions with `REFERENCE = True`.
+To try the exercises, fill the `TODO Step` markers in `part1/so101_pick_place.py`
+or `part2/so101_mjwarp.py`, then set `REFERENCE = False`.
 
 ## Measure performance
 
-For a quick check of batched physics with fixed controls:
+First measure physics stepping at several batch sizes:
 
 ```bash
 python part2/scaling_study.py --worlds 1 64 1024 2048 --steps 200 --device cuda:0
 ```
 
-Read `world-steps/s` as aggregate throughput and `ms/step` as the time to advance
-the whole batch. Its CPU baseline uses one core. This measurement holds the
-robot at its initial controls; it does not complete the pick-and-place task.
+`world-steps/s` counts simulation steps across all worlds; `ms/step` is the
+time to advance the whole batch. The CPU baseline uses one core. Controls stay
+fixed during this test, so it measures physics speed rather than completed tasks.
 
-For the complete box task, run preflight before the optional full sweep:
+To time the complete box task, check the configuration and then run the sweep:
 
 ```bash
 python part2/migration_benchmark.py --task box --preset workstation --device cuda:0 --cpu-threads 32 --nconmax 64 --njmax 128 --preflight
@@ -101,28 +96,24 @@ python part2/migration_benchmark.py --task box --cpu-baseline pool --robot so101
   --timeout 7200 --max-trajectory-mib 8192 --output-dir .generated/box-so101
 ```
 
-Choose a smaller `--worlds` list and CPU worker count for a first run. Repeat with
-`--robot rebot` and a new output directory to measure the other arm. The benchmark
-notebook exposes the same options and defaults to preflight without measurements.
+Start with fewer `--worlds` and CPU workers if needed. Use `--robot rebot` and
+a new output directory for the other arm. In the benchmark notebook, set
+`RUN_BENCHMARK = True` when ready to measure.
 
-Both backends replay the same controls for 2,000 frames at 50 Hz, with 20 physics
-substeps per frame. Each world must physically grasp, lift, carry, release and
-settle both cubes inside the box, then withdraw the gripper. Incomplete tasks,
-non-finite state and capacity overflow invalidate a configuration.
+CPU and GPU replay the same controls for 40 simulated seconds. Both cubes must
+be grasped, carried, released and settled in the box before the gripper withdraws.
+A failed task or simulation error excludes that configuration from the timings.
 
-Reports separate simulation, output collection and validation time from setup,
-compilation and warm-up. Compare equal world counts and complete task results;
-failed configurations have no accepted timing. Preserve the commit, package lock,
-hardware, CPU worker count and individual repetitions with any reported result.
-At 2,048 worlds, observation history alone uses about 953 MiB; solver and host
-copies need additional memory. Each invocation uses one GPU.
+Compare CPU and GPU at the same world count. The report lists simulation,
+output transfer and task-check time separately from setup and warm-up.
+At 2,048 worlds, observation history alone uses about 953 MiB, plus memory for
+the solver and host copies. Each run uses one GPU.
 
 ## Hosted environments
 
-Colab setup in each notebook uses NVIDIA's official Hub repository. It resolves
-`main` once and prints the full commit; set `HUB_SOURCE_REF` to a full commit to
-reproduce a run. GPU notebooks require a CUDA runtime. Hosted hardware varies,
-so run preflight before enabling a benchmark and download reports before exit.
+On Colab, select a GPU runtime for the MJWarp lessons and run the notebook from
+the first cell. Check the assigned hardware before starting a benchmark and
+download your results before closing the session.
 
 For the Hub's Brev container, run from the **repository root**:
 
@@ -131,8 +122,8 @@ brev/dev-build.bash sim2real-blogs
 brev/dev-test.bash sim2real-blogs
 ```
 
-The container installs the same Python 3.12 lock. For local regression checks,
-run `python -m pytest ../../test` from the activated `notebooks/mujoco` environment.
+To run the tests locally, use `python -m pytest ../../test` from
+`notebooks/mujoco` with `.venv` active.
 
 ## License
 
