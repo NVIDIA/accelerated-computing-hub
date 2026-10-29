@@ -33,7 +33,7 @@ export PXR_WORK_THREAD_LIMIT=1
 
 Keep this terminal in `tutorials/newton` for the commands below. Set `PXR_WORK_THREAD_LIMIT=1` before launching Python or Jupyter; restart existing kernels after changing it.
 
-The pinned stack uses Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, OpenUSD 26.3, NumPy 2.5.3 and SciPy 1.18.1. Linux x86-64 requires glibc 2.35 or newer for the included Open3D wheel. CPU execution also works on macOS ARM64; CUDA requires a supported NVIDIA GPU. See the [setup details](notebooks/newton/README.md#setup) for platform and cache notes.
+The pinned stack uses Newton 1.6.0, Warp 1.17.0, MuJoCo/MuJoCo Warp 3.12.0, OpenUSD 26.3, NumPy 2.5.3 and SciPy 1.18.1. Linux x86-64 requires glibc 2.35 or newer for the included Open3D wheel. CPU execution also works on macOS ARM64; CUDA requires a supported NVIDIA GPU.
 
 ## Run the box task
 
@@ -58,7 +58,7 @@ On a supported NVIDIA GPU, run the same reference with an explicit CUDA device:
 python notebooks/newton/part3/box_newton_demo.py --robot so101 --device cuda:0 --viewer null --report .generated/box-so101-cuda0.json
 ```
 
-`box_newton_demo.py` is complete and runnable. `box_newton_exercise.py` contains the matching unfinished substep exercise. The optional earlier stacking example uses `solutions/so101_newton_solution.py`; the advanced cloth-and-cable example uses `solutions/clean_the_table_solution.py`. See the [file guide](notebooks/newton/README.md#which-files-do-i-run) before editing or running other scripts.
+`box_newton_demo.py` is complete and runnable. `box_newton_exercise.py` contains the matching unfinished substep exercise. The optional earlier stacking example uses `solutions/so101_newton_solution.py`; the advanced cloth-and-cable example uses `solutions/clean_the_table_solution.py`.
 
 ## Learn with notebooks (optional)
 
@@ -81,7 +81,7 @@ Open `newton/part3/` and select **Hub Newton (Python 3.12)** manually. Run each 
 
 The teaching notebooks default to `REFERENCE = True`. Notebook 01 is complete inline; later notebooks select the supplied Python references. After completing the external files marked `TODO Step` (or the box substep exercise), set `REFERENCE = False`, restart the kernel and rerun. There are no separate solution notebooks, and you do not need to run every Python file first.
 
-Notebooks 02 and 04 run the full box task on CPU for both robots; CUDA is opt-in. In notebook 04, `RUN_LEGACY_AND_COUPLED = False` leaves the stacking and cloth/cable checks disabled. Notebook 05 defaults to `RUN_BENCHMARK = False` and runs preflight only. Notebook 03 is the slower coupled-material lesson: historical CPU rollouts took approximately 26–29 minutes per robot on the recorded workstation. Long cells capture subprocess output until completion.
+Notebooks 02 and 04 run the full box task on CPU for both robots; CUDA is opt-in. In notebook 04, `RUN_LEGACY_AND_COUPLED = False` leaves the stacking and cloth/cable checks disabled. Notebook 05 defaults to `RUN_BENCHMARK = False` and runs preflight only. Notebook 03 is the slower coupled-material lesson: full CPU rollouts can take tens of minutes per robot. Long cells capture subprocess output until completion.
 
 ## Docker and Brev
 
@@ -97,25 +97,43 @@ brev/dev-test.bash newton
 
 The default test entrypoint runs the regression suite and notebooks 01, 02, 04 and the preflight-only 05. To include the long coupled notebook 03, set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1` before starting Compose, or run `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1 bash brev/test.bash` inside this tutorial's environment. `brev/test.bash 01` through `05` select individual notebooks; `03` explicitly opts into the coupled task; standard pytest paths and flags are also accepted.
 
-The updated image passed 274 regression tests across the initial suite and corrected stale-test rerun, three actual notebook checks, and complete CUDA box tasks for both robots. The [validation record](hub-validation/2026-10-10/README.md) retains the original failure and both snapshots. A live Brev deployment and Colab have not been validated. The original full physics validation and the relocation/container checks are distinguished in [VERIFICATION.md](notebooks/newton/VERIFICATION.md).
+## Compare CPU and GPU performance
 
-## Matched CPU/GPU comparison
+The [benchmark notebook](notebooks/newton/part3/05__migration_benchmark.ipynb) explains the timing boundaries, physical checks and full sweep. It runs the same two-cube task through Newton on persistent CPU workers and one replicated CUDA model. Run preflight before collecting measurements:
 
-The [benchmark guide](notebooks/newton/BENCHMARK.md) compares Newton `SolverMuJoCo` on native CPU and one CUDA device for the same two-cube box task. Each environment completes 2,000 frames at 50 Hz with 20 one-millisecond substeps: 40,000 integrations. Both robots use the same counts: 1, 16, 32, 64, 128, 256, 512, 1024 and 2048. The CPU uses up to 32 worker processes, capped by world count.
+```bash
+python notebooks/newton/part3/migration_benchmark.py --scope newton-batch --preset developer --device cuda:0 --cpu-threads 32 --nconmax 64 --njmax 128 --timeout 7200 --preflight
+```
 
-The retained workstation study accepted **35 of 36 configurations**; reBot GPU at 1024 worlds remains excluded with its original failed settling evidence. No accepted timing or speedup is reported for that configuration. This is a community measurement on documented hardware, not an official product benchmark. The [raw result package](notebooks/newton/benchmark-results/2026-10-09-validated-box-gpu0/README.md), [notebook evidence](notebooks/newton/notebook-validation/2026-10-10/README.md) and [viewer scope](notebooks/newton/VIEWER_VALIDATION.md) retain their separate provenance. ALOHA replay is a [separate reference workload](notebooks/newton/reference-benchmark/README.md).
+For a small exploratory comparison, use a fresh output directory:
 
-The [current relocation map](notebooks/newton/current-relocation-manifest.json) binds imported files to their source bytes. The original relocation map remains historical. Archived source, logs, result JSON, compressed notebooks and archive manifests are preserved unchanged; their original paths describe the recorded run.
+```bash
+python notebooks/newton/part3/migration_benchmark.py --scope newton-batch --robot so101 --worlds 1 16 --device cuda:0 --cpu-threads 32 --nconmax 64 --njmax 128 --repeats 5 --warmups 1 --timeout 7200 --output-dir .generated/benchmark-so101
+```
 
-## Recorded results
+Each world completes 40 simulated seconds and all 40,000 integrations. Every warm-up and measured episode must pass before a timing is accepted. Reports separate simulation, output collection and validation; retain failed cases and compare matching successful configurations. A small world list is an exploratory subset. `--cpu-only` runs the CPU baseline without measuring GPU performance. Each invocation uses one GPU.
 
-These figures replay saved simulation states, using the official robot meshes. They show each payload carried by the gripper; final acceptance also checks release, containment, detached settling and jaw clearance.
+Record the source commit, hardware and environment with your results. The [9 October 2026 study](https://github.com/NVIDIA/accelerated-computing-hub/blob/5b97e56a1fd832e1b2428479d440eccb4b8f8403/tutorials/newton/notebooks/newton/benchmark-results/2026-10-09-validated-box-gpu0/README.md) remains available at its historical revision for comparison.
 
-![SO-101 carrying both cubes, cable and cloth during a recorded sequence](notebooks/newton/assets/clean-table-so101.png)
+## Add cloth and a cable
 
-![reBot carrying both cubes, cable and cloth during a recorded sequence](notebooks/newton/assets/clean-table-rebot.png)
+After notebook 02, follow notebook 03 to manipulate four objects sequentially. `SolverMuJoCo` owns the robot and cubes, `SolverVBD` owns the cloth and cable, and `SolverCoupledProxy` exchanges contact reactions at their interfaces. VBD and coupling are experimental in Newton 1.6.
 
-The [assets directory](notebooks/newton/assets/) contains both GIFs and the matching JSON/NPZ pairs. The result manifest binds the recordings and exported images to the original validated source. VBD and solver coupling remain experimental in Newton 1.6; this scripted setup is a learning exercise rather than a general cleanup policy or throughput benchmark.
+Run the completed SO-101 sequence headlessly and save its states:
+
+```bash
+python notebooks/newton/part3/solutions/clean_the_table_solution.py --robot so101 --device cpu --viewer null --test --report .generated/clean-so101.json --record .generated/clean-so101.npz
+```
+
+Use `--viewer gl` for a local viewer or `--device cuda:0` for CUDA. The checks require each object to be gripped, lifted, carried, released and settled inside the box, with the gripper clear at the end. The cloth is a single-layer shirt silhouette and the cable is a rod approximation; this scripted lesson is not a general cleanup policy.
+
+Render a passing recording without advancing physics:
+
+```bash
+python notebooks/newton/tools/render_clean_table.py --report .generated/clean-so101.json --record .generated/clean-so101.npz --output-dir .generated/clean-so101-figures --gif
+```
+
+The renderer checks that the report and recording match. Add `--renderer gl` to use the official robot meshes instead of the default collision geometry.
 
 ## Further reading and attribution
 
@@ -126,4 +144,4 @@ The [assets directory](notebooks/newton/assets/) contains both GIFs and the matc
 - [Newton documentation](https://newton-physics.github.io/newton/stable/) and [solver coupling](https://newton-physics.github.io/newton/stable/concepts/coupling.html)
 - [Third-party notices](notebooks/newton/THIRD_PARTY_NOTICES.md) and [retained licenses](notebooks/LICENSES/)
 
-Interactive robot models download on first use from pinned upstream revisions. Immutable evidence archives also retain the exact historical source/model assets used to produce their records; see the package notices. The relocated companion code retains its MIT attribution to Johnny Nuñez Cano, including the frozen MuJoCo/MJWarp baselines.
+Robot models download from pinned upstream revisions. Automatic caches require unchanged tracked robot files; use a fresh `NEWTON_CACHE_PATH` for USD assets or `MUJOCO_MENAGERIE_CACHE` for MJCF assets if a cache has been modified. Use `--menagerie-path` only when intentionally selecting a different MJCF model. The companion code retains its MIT attribution to Johnny Nuñez Cano, including the MuJoCo/MJWarp comparison baselines.

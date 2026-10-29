@@ -90,10 +90,7 @@ states without advancing physics; downloaded mesh files are not redistributed.
 The tutorial's `clean-table-so101.png` and `clean-table-rebot.png`, and the
 accompanying GIFs, replay verified gripper pickups of both cubes, cloth and cable.
 Their robot assets retain the SO-101 Apache-2.0 and reBot MIT notices above.
-Each figure is backed by its matching simulation report and trajectory in
-`assets/`; `clean-table-results.json` records their hashes and independent
-trajectory audits. See [the verification record](VERIFICATION.md) for scope.
 
 ## Companion code attribution
 
-The relocated companion code retains its existing MIT notices, copyright (c) 2026 Johnny Nuñez Cano. The full notice is retained in [Blog-companion-MIT.txt](../LICENSES/Blog-companion-MIT.txt). The frozen MuJoCo/MJWarp baselines under `../mujoco/` are included solely to make the migration checks self-contained.
+The companion code retains its existing MIT notices, copyright (c) 2026 Johnny Nuñez Cano. The full notice is retained in [Blog-companion-MIT.txt](../LICENSES/Blog-companion-MIT.txt). The frozen MuJoCo/MJWarp baselines under `../mujoco/` are included solely to make the migration checks self-contained.
