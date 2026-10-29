@@ -3,9 +3,8 @@
 The scripts in `part1/` and `part2/` download robot models from
 [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie) on
 first use (a sparse git clone of just that robot's folder, checked out at a
-pinned commit). Normal runs cache the models locally. Retained diagnostic archives also preserve
-the exact model assets used in their checks; every robot folder carries its
-own upstream `LICENSE` file, which the download and archives preserve. A copy of the Apache License 2.0 is included at
+pinned commit). Models are cached locally with their upstream `LICENSE` files.
+A copy of the Apache License 2.0 is included at
 [`LICENSES/Apache-2.0.txt`](LICENSES/Apache-2.0.txt).
 
 ## SO-101 (`robotstudio_so101`)

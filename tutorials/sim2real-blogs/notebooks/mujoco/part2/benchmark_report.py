@@ -111,32 +111,12 @@ def print_row(row: Row, *, baseline_ws: float | None, cpu_steps_per_s: float, ti
 
 def print_reading_guide(rows: list[Row], *, device, total_memory: int | None = None) -> None:
     print(RULE)
-    print("How to read this:")
-    print("  * Throughput (world-steps/s) is what matters for reinforcement learning and synthetic data:")
-    print("    it is how many physics samples per second the simulator can feed a learner.")
-    print("  * ms/step grows much more slowly than nworld while the GPU still has idle SMs, so throughput")
-    print("    rises almost linearly. Once the SMs and memory bandwidth are saturated, ms/step grows in")
-    print("    proportion to nworld and throughput plateaus: that knee is this GPU's useful batch size.")
-    print("  * One world on a GPU is usually SLOWER than one CPU core (kernel launch latency, float32 batch")
-    print("    machinery); MJWarp pays off only with many worlds.")
-    print("  * 'vs CPU core' compares with ONE core. A CPU farm runs one world per core, so divide by the cores")
-    print("    you would use (e.g. 32) for a fair farm comparison; BENCHMARK.md measures exactly that on the")
-    print("    full task, where the GPU overtakes 32 CPU workers from about 1,024 worlds.")
-    if rows and all(r.mem_bytes for r in rows) and total_memory:
-        big = max(rows, key=lambda r: r.nworld)
-        per_world = big.mem_bytes / big.nworld
-        print(f"  * Memory: about {per_world / 2**20:,.2f} MiB per world at the peak (contact/constraint buffers sized by")
-        print("    nconmax/njmax, plus collision temporaries). VRAM is the hard cap on nworld. Rough, conservative")
-        fits = ", ".join(f"{label} ~{0.6 * gib * 2**30 / per_world:,.0f}"
-                         for label, gib in (("12 GB card", 12), ("32 GB card", 32),
-                                            (f"this {total_memory / 2**30:.0f} GiB GPU", total_memory / 2**30)))
-        print(f"    largest batch: {fits} worlds. 'out of memory' means: lower nworld or nconmax/njmax.")
-    print("  * Other hardware: plateau throughput scales roughly with SM count x clock and memory bandwidth;")
-    print("    the largest nworld is capped by VRAM; the CPU baseline depends on single-core speed.")
-    print("    A smaller GPU (e.g. RTX 3060, 28 SMs, 12 GB) reaches its plateau at fewer worlds and lower")
-    print("    throughput; a larger one (e.g. RTX 5090, 170 SMs, 32 GB) keeps scaling to larger batches.")
-    print("  * This is a physics-step microbenchmark with fixed controls. The full two-cube task, with")
-    print("    validation and matched CPU worker processes, is measured by migration_benchmark.py (see BENCHMARK.md).")
+    print("world-steps/s is aggregate physics throughput; ms/step is latency for the whole batch.")
+    print("Compare the measured rows to find where throughput stops increasing on this GPU.")
+    print("'vs CPU core' uses one CPU core; it does not measure a multi-core CPU workload.")
+    print("This run holds controls fixed. Use migration_benchmark.py for the complete box task")
+    print("with CPU workers and task checks. See tutorials/sim2real-blogs/README.md for commands.")
+    print("For out-of-memory errors, lower nworld. Recheck task correctness after changing capacities.")
     print(RULE)
 
 
