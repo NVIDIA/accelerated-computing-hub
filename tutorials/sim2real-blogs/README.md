@@ -64,7 +64,7 @@ from the same `notebooks/mujoco` directory.
 
 ## Local and hosted setup
 
-Use Python 3.12 with the module's unchanged hash lock. This tutorial uses the measured MuJoCo 3.8.0 / MuJoCo Warp 3.8.0.3 / Warp 1.15.0 line.
+Use Python 3.12 with the module's hash lock. This tutorial uses the measured MuJoCo 3.8.0 / MuJoCo Warp 3.8.0.3 / Warp 1.15.0 line.
 
 The existing Brev Docker Compose services and shared Hub entrypoint are retained.
 The image installs the same physics lock before adding notebook/UI tools under

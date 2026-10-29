@@ -3,7 +3,8 @@
 The original import relocated the reviewed Article 2 source into the Hub tutorial.
 The October 29 revision shares the CPU/GPU task implementation, moves source setup
 into a helper, and transfers GPU controls and state once per control frame.
-The dependency lock and task acceptance rules are unchanged. Archived measurements
+Physics package pins and task acceptance rules are unchanged. The active lock
+includes the Pillow 13.0.0 security update. Archived measurements
 refer to their recorded source versions; they are not measurements of this revision.
 The [migration manifest](notebooks/mujoco/MIGRATION_MANIFEST.json) maps every
 imported file and records each adaptation.
@@ -66,3 +67,17 @@ CUDA execution, GPU timings, the interactive viewer, Docker, Brev and Colab were
 not rerun for this revision. Historical benchmark rows are unchanged. The hosted
 bootstrap defaults to NVIDIA's `main` and will use these changes after merge;
 reviewers can select the PR ref with `HUB_SOURCE_REF` before running setup.
+
+### Pillow security update
+
+The active Article 2 inputs require Pillow >=13.0.0 and the regenerated Python
+3.12 universal lock pins 13.0.0, the current release on October 29. All other
+package versions and artifact hashes remain unchanged. All 83 Pillow artifact
+hashes match the PyPI release metadata. Historical result archives retain their
+original environment records.
+
+The updated lock installed successfully with `--require-hashes`; `uv pip check`
+reported compatible dependencies. Notebook 01 executed in a real local kernel
+and produced a decoded PNG (636 × 503). A Matplotlib `PillowWriter` animation
+saved and decoded all three GIF frames. These checks validate the image-library
+update; they are not new CUDA, Docker, Brev or Colab measurements.
