@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 """Source checkout and isolated Python setup for the optional benchmark notebook."""
 from __future__ import annotations

@@ -65,6 +65,21 @@ spec = get_robot({robot!r})
                     assert np.isfinite(model.body_q.numpy()).all()
                 """)
 
+    def test_box_props_remain_visible_with_robot_visual_meshes(self):
+        for robot in ("so101", "rebot"):
+            with self.subTest(robot=robot):
+                self.run_probe(robot, """
+                    from newton_scene_solution import build_newton_builder
+                    model = build_newton_builder(spec, task_name="box").finalize(device="cpu")
+                    flags = model.shape_flags.numpy()
+                    props = {label.rsplit("/", 1)[-1]: i for i, label in enumerate(model.shape_label)
+                             if label.rsplit("/", 1)[-1] in ("table", "red_cube", "blue_cube")
+                             or label.rsplit("/", 1)[-1].startswith("receiving_box_")}
+                    assert {"table", "red_cube", "blue_cube"} <= props.keys()
+                    assert any(name.startswith("receiving_box_") for name in props)
+                    assert all(flags[i] & int(newton.ShapeFlags.VISIBLE) for i in props.values())
+                """)
+
     def test_cpu_frame_uses_native_contacts_and_reference_timestep(self):
         for robot in ("so101", "rebot"):
             with self.subTest(robot=robot):

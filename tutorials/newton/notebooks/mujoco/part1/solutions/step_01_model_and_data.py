@@ -1,7 +1,8 @@
 # Step 1 — compile the model and allocate its mutable state.
 #
-# MjModel is read-only and shared: geometry, inertia, joint structure, actuator
-# limits. MjData is the per-simulation state: qpos, qvel, ctrl, contacts, time.
+# MjModel stores geometry, inertia, joints and actuator settings. Parameters
+# such as actuator limits can be changed. MjData holds qpos, qvel, ctrl, contacts
+# and time for one simulation.
 #
 # We call load_pick_place_model() instead of mujoco.MjModel.from_xml_path() so
 # that every part of the series simulates the identical model (it raises the

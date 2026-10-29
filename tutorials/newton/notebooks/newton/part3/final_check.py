@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 """Final checks for Article 2 and Newton: task outcomes, not just exit codes.
 
@@ -39,7 +39,8 @@ CODE_ROOT = PART3_DIR.parent.parent
 MAX_XY_ERROR_M = 0.015
 MIN_DZ_M = 0.035
 MAX_DZ_M = 0.055
-STACK_RE = re.compile(r"\bxy_err=(\S+)\s+(?:m\s+)?dz=(\S+)")
+# Completion lines can put the acceptance threshold between the two metrics.
+STACK_RE = re.compile(r"\bxy_err=(\S+)\s+(?:m\s+)?(?:\([^)]*\),?\s*)?dz=(\S+)")
 CLEAN_TABLE_PREFIX = "CLEAN_TABLE_RESULT "
 CLEAN_TABLE_OBJECTS = frozenset(("red_cube", "blue_cube", "shirt", "cable"))
 CLEAN_TABLE_TASK = "gripper_pick_place_into_bin"

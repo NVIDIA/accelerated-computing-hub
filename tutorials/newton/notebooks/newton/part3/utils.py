@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 #
 # Shared utilities for this series:
@@ -157,7 +157,14 @@ def resolve_menagerie_robot_path(
             file=sys.stderr,
         )
 
-    return download_robot_sparse(spec, default_cache_dir(spec))
+    cache_root = default_cache_dir(spec)
+    versioned = cache_root / spec.menagerie_ref
+    if versioned.exists():
+        validate_pinned_asset_cache(
+            versioned, spec.folder, spec.menagerie_ref, cache_env="MUJOCO_MENAGERIE_CACHE"
+        )
+        return versioned / spec.folder
+    return download_robot_sparse(spec, cache_root)
 
 
 def resolve_scene_xml(

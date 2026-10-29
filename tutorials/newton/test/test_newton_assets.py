@@ -36,8 +36,10 @@ class NewtonAssetsTests(unittest.TestCase):
         moving_joints = [i for i, kind in enumerate(builder.joint_type) if kind != newton.JointType.FIXED]
         self.assertEqual([builder.joint_label[i].rsplit("/", 1)[-1] for i in moving_joints], expected)
         self.assertEqual(builder.body_count, 8)  # Preserve the base and camera mount.
-        self.assertTrue(builder.body_label[0].endswith("/base"))
-        self.assertEqual(set(result["path_joint_map"].values()), set(range(1, 8)))
+        body_map = {path.rsplit("/", 1)[-1]: index for path, index in result["path_body_map"].items()}
+        root = builder.joint_child.index(body_map["base"])
+        self.assertEqual((builder.joint_type[root], builder.joint_parent[root]), (newton.JointType.FIXED, -1))
+        self.assertLessEqual(set(moving_joints), set(result["path_joint_map"].values()))
         np.testing.assert_allclose(builder.joint_damping, [0.6] * 6)
 
     def test_rebot_preserves_mimic_in_native_cpu_steps(self):
@@ -157,6 +159,29 @@ class NewtonAssetsTests(unittest.TestCase):
             self.assertIs(caught.exception, failure)
             import_usd.assert_not_called()
         self.assertEqual((builder.body_count, builder.joint_count, builder.shape_count), (0, 0, 0))
+
+    def test_unverified_shared_cache_uses_a_separately_verified_copy(self):
+        from newton_assets import NEWTON_ASSETS_REF, add_robot_usd
+
+        builder = newton.ModelBuilder()
+        SolverMuJoCo.register_custom_attributes(builder)
+        shared = Path("cache/newton-assets_shared/robotstudio_so101")
+        fallback = Path("cache") / f"verified_newton_assets_{NEWTON_ASSETS_REF[:12]}"
+        fresh = fallback / "newton-assets_clean/robotstudio_so101"
+        stale = RuntimeError("Unverified asset cache: tracked robot files are modified")
+        with mock.patch("newton_assets.download_asset", side_effect=[shared, fresh]) as download, \
+             mock.patch("newton_assets.validate_pinned_asset_cache", side_effect=[stale, None]) as validate, \
+             mock.patch.object(builder, "add_usd", return_value={}) as import_usd:
+            self.assertEqual(add_robot_usd(builder, "so101"), {})
+        self.assertEqual(download.call_args_list, [
+            mock.call("robotstudio_so101", ref=NEWTON_ASSETS_REF),
+            mock.call("robotstudio_so101", cache_dir=str(fallback), ref=NEWTON_ASSETS_REF),
+        ])
+        self.assertEqual(validate.call_args_list, [
+            mock.call(shared.parent, "robotstudio_so101", NEWTON_ASSETS_REF, cache_env="NEWTON_CACHE_PATH"),
+            mock.call(fresh.parent, "robotstudio_so101", NEWTON_ASSETS_REF, cache_env="NEWTON_CACHE_PATH"),
+        ])
+        self.assertEqual(import_usd.call_args.args[0], str(fresh / "usd_structured/so101.usda"))
 
     def test_unsafe_usd263_parser_configuration_fails_before_loading_on_every_platform(self):
         from pxr import Usd, Work

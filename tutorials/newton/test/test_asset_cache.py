@@ -2,6 +2,7 @@
 from dataclasses import replace
 from pathlib import Path
 import subprocess
+import shutil
 import sys
 import tempfile
 import unittest
@@ -110,6 +111,71 @@ class AssetCacheTests(unittest.TestCase):
                     self.assertEqual(resolve_menagerie_robot_path(self.spec), root / self.folder)
             download.assert_not_called()
 
+    def test_verified_versioned_cache_is_reused_without_download_or_changes(self):
+        cache = self.root.parent / "cache"
+        versioned = cache / self.pin
+        shutil.copytree(self.root, versioned)
+        (cache / "notes.txt").write_text("keep this file")
+        before = {str(p.relative_to(cache)): p.read_bytes()
+                  for p in cache.rglob("*") if p.is_file()}
+        with mock.patch("utils.default_cache_dir", return_value=cache), \
+             mock.patch.dict("os.environ", {}, clear=True), \
+             mock.patch("utils.download_robot_sparse") as download:
+            result = resolve_menagerie_robot_path(self.spec)
+        self.assertEqual(result, versioned / self.folder)
+        download.assert_not_called()
+        self.assertEqual(before, {str(p.relative_to(cache)): p.read_bytes()
+                                  for p in cache.rglob("*") if p.is_file()})
+
+    def test_verified_versioned_cache_is_preferred_to_modified_legacy_cache(self):
+        cache = self.root.parent / "cache"
+        shutil.copytree(self.root, cache)
+        versioned = cache / self.pin
+        shutil.copytree(self.root, versioned)
+        (cache / self.folder / "so101.xml").write_text("legacy user edit")
+        before = {str(p.relative_to(cache)): p.read_bytes()
+                  for p in cache.rglob("*") if p.is_file()}
+        with mock.patch("utils.default_cache_dir", return_value=cache), \
+             mock.patch.dict("os.environ", {}, clear=True), \
+             mock.patch("utils.download_robot_sparse") as download:
+            result = resolve_menagerie_robot_path(self.spec)
+        self.assertEqual(result, versioned / self.folder)
+        download.assert_not_called()
+        self.assertEqual(before, {str(p.relative_to(cache)): p.read_bytes()
+                                  for p in cache.rglob("*") if p.is_file()})
+
+    def test_modified_versioned_cache_is_rejected_without_download_or_changes(self):
+        cache = self.root.parent / "cache"
+        versioned = cache / self.pin
+        shutil.copytree(self.root, versioned)
+        (versioned / self.folder / "so101.xml").write_text("user edit")
+        before = {str(p.relative_to(cache)): p.read_bytes()
+                  for p in cache.rglob("*") if p.is_file()}
+        with mock.patch("utils.default_cache_dir", return_value=cache), \
+             mock.patch.dict("os.environ", {}, clear=True), \
+             mock.patch("utils.download_robot_sparse") as download:
+            with self.assertRaisesRegex(RuntimeError, "tracked robot files are modified"):
+                resolve_menagerie_robot_path(self.spec)
+        download.assert_not_called()
+        self.assertEqual(before, {str(p.relative_to(cache)): p.read_bytes()
+                                  for p in cache.rglob("*") if p.is_file()})
+
+    def test_versioned_directory_name_does_not_replace_pin_verification(self):
+        cache = self.root.parent / "cache"
+        wrong = replace(self.spec, menagerie_ref="0" * 40)
+        versioned = cache / wrong.menagerie_ref
+        shutil.copytree(self.root, versioned)
+        before = {str(p.relative_to(cache)): p.read_bytes()
+                  for p in cache.rglob("*") if p.is_file()}
+        with mock.patch("utils.default_cache_dir", return_value=cache), \
+             mock.patch.dict("os.environ", {}, clear=True), \
+             mock.patch("utils.download_robot_sparse") as download:
+            with self.assertRaisesRegex(RuntimeError, "checkout revision does not match"):
+                resolve_menagerie_robot_path(wrong)
+        download.assert_not_called()
+        self.assertEqual(before, {str(p.relative_to(cache)): p.read_bytes()
+                                  for p in cache.rglob("*") if p.is_file()})
+
     def test_fresh_sparse_download_checks_out_requested_pin(self):
         # Local origin avoids the network and includes a newer, different revision.
         self.xml.write_text("<mujoco model='newer revision'/>\n")
@@ -120,6 +186,25 @@ class AssetCacheTests(unittest.TestCase):
         path = download_robot_sparse(spec, cache)
         self.assertEqual((path / "so101.xml").read_text(), "<mujoco/>\n")
         validate_pinned_asset_cache(cache, self.folder, self.pin, cache_env="MUJOCO_MENAGERIE_CACHE")
+
+
+    def test_generated_mesh_link_follows_the_selected_robot_cache(self):
+        import pick_place_common as task
+
+        old, fresh = self.root.parent / "old", self.root.parent / "fresh"
+        for directory, content in ((old, "old mesh"), (fresh, "fresh mesh")):
+            (directory / "assets").mkdir(parents=True)
+            (directory / "assets" / "mesh.stl").write_text(content)
+            (directory / self.spec.robot_xml).write_text("<mujoco/>\n")
+        scratch_module = self.root.parent / "tutorial" / "pick_place_common.py"
+        with mock.patch.object(task, "__file__", str(scratch_module)), \
+             mock.patch.object(task, "resolve_menagerie_robot_path", side_effect=[old, fresh]):
+            scene = task.resolve_pick_place_scene(spec=self.spec)
+            self.assertEqual((scene.parent / "assets" / "mesh.stl").read_text(), "old mesh")
+            scene = task.resolve_pick_place_scene(spec=self.spec)
+        self.assertEqual((scene.parent / "assets").resolve(), (fresh / "assets").resolve())
+        self.assertEqual((scene.parent / "assets" / "mesh.stl").read_text(), "fresh mesh")
+        self.assertEqual((old / "assets" / "mesh.stl").read_text(), "old mesh")
 
 
 if __name__ == "__main__":
