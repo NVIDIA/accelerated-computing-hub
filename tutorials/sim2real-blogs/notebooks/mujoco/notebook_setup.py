@@ -1,7 +1,9 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 """Source checkout and locked environment setup for the Article 2 notebooks."""
 from pathlib import Path
+import hashlib
+import importlib.util
 import os
 import subprocess
 import sys
@@ -47,6 +49,64 @@ def prepare_lesson(repo_root: Path, part: str, *, hosted: bool = False) -> Path:
         os.environ.setdefault("MUJOCO_GL", "egl")
         subprocess.run([sys.executable, "-m", "pip", "install", "--require-hashes", "-r", str(tutorial / "requirements.lock.txt")], check=True)
     os.chdir(lesson)
-    if str(lesson) not in sys.path:
-        sys.path.insert(0, str(lesson))
+    for directory in (tutorial, lesson):
+        if str(directory) not in sys.path:
+            sys.path.insert(0, str(directory))
     return lesson
+
+
+def open_notebook(part: str, *, source_commit: str | None = None, benchmark: bool = False) -> dict:
+    """Prepare a local checkout or the exact commit that supplied this helper."""
+    try:
+        hosted = importlib.util.find_spec("google.colab") is not None
+    except ModuleNotFoundError:
+        hosted = False
+    if source_commit is not None:
+        repo_root = source_checkout(Path("/content/ach-mujoco-source"), source_commit)
+    else:
+        repo_root = Path(__file__).resolve().parents[4]
+        if hosted and "HUB_SOURCE_REF" in os.environ:
+            # Re-running a Colab cell now finds this helper in the checkout.
+            # Still honor an explicitly changed ref, preserving existing files.
+            ref = os.environ["HUB_SOURCE_REF"]
+            refs = [ref] if len(ref) == 40 else subprocess.check_output(
+                ["git", "ls-remote", REPO_URL, ref], text=True).splitlines()
+            if len(refs) != 1:
+                raise RuntimeError("HUB_SOURCE_REF must resolve to one upstream commit.")
+            source_checkout(repo_root, refs[0].split()[0])
+    tutorial = repo_root / TUTORIAL_RELATIVE
+    revision = subprocess.run(["git", "-C", str(repo_root), "rev-parse", "HEAD"], capture_output=True, text=True)
+    print("Source:", revision.stdout.strip() if revision.returncode == 0 else "Image snapshot; retain source fingerprints.")
+    if not benchmark:
+        lesson = prepare_lesson(repo_root, part, hosted=hosted)
+        print("Lesson directory:", lesson)
+        return {"IN_COLAB": hosted, "tutorial_dir": tutorial, "lesson_dir": lesson}
+    script = tutorial / part / "migration_benchmark.py"
+    if not script.is_file():
+        raise RuntimeError("This source revision does not contain migration_benchmark.py.")
+    python = benchmark_python(tutorial, hosted=hosted)
+    env = dict(os.environ)
+    subprocess.run([str(python), "-c", "import sys; print(sys.executable); print(sys.version); "
+                    "assert sys.version_info[:2] == (3, 12), 'Use the pinned Python 3.12 environment.'"],
+                   check=True, env=env)
+    print("Requirements lock SHA-256:", hashlib.sha256((tutorial / "requirements.lock.txt").read_bytes()).hexdigest())
+    return {"IN_COLAB": hosted, "REPO_ROOT": repo_root, "TUTORIAL_DIR": tutorial,
+            "PART2": tutorial / part, "SCRIPT": script, "BENCHMARK_PYTHON": python, "BENCHMARK_ENV": env}
+
+
+def benchmark_python(tutorial: Path, *, hosted: bool) -> Path:
+    """Use the selected local kernel or an isolated hash-locked Colab runtime."""
+    if not hosted:
+        return Path(sys.executable)
+    runtime = Path("/content/mjwarp-benchmark-runtime")
+    tools_env, environment = runtime / "tools", runtime / "python312"
+    uv = tools_env / "bin/uv"
+    if not uv.is_file():
+        subprocess.run([sys.executable, "-m", "venv", str(tools_env)], check=True)
+        subprocess.run([str(tools_env / "bin/python"), "-m", "pip", "install", "uv==0.12.5"], check=True)
+    python = environment / "bin/python"
+    if not python.is_file():
+        subprocess.run([str(uv), "venv", "--python", "3.12", str(environment)], check=True)
+    subprocess.run([str(uv), "pip", "sync", "--python", str(python), "--require-hashes",
+                    str(tutorial / "requirements.lock.txt")], check=True)
+    return python

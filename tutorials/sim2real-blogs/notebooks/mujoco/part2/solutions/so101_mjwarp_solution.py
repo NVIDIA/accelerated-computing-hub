@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: Copyright (c) 2026 Johnny Nuñez Cano
+# SPDX-FileCopyrightText: Copyright (c) 2026 NVIDIA Corporation
 # SPDX-License-Identifier: MIT
 #
 # ============================================================================
@@ -56,6 +56,7 @@ from benchmark_report import (  # noqa: E402
     print_row,
 )
 from box_task import BoxTask, assert_mjwarp_capacity
+from sim2real_shared.motion import MotionRecorder
 
 SCRIPT_NAME = Path(__file__).name
 
@@ -71,6 +72,7 @@ def run_demo(
     headless_steps: int = 0,
     box_task: BoxTask | None = None,
     report_path: Path | None = None,
+    record_path: Path | None = None,
 ) -> int:
     """Parity mode: one world on the GPU, mirrored back for the viewer.
 
@@ -186,9 +188,16 @@ def run_demo(
 
 
     if headless_steps > 0:
+        recorder = (MotionRecorder(record_path, mjd, fps=fps, xml_path=xml_path,
+                                   robot=spec.key, backend="mujoco_warp") if record_path else None)
         for _ in range(headless_steps):
             simulate_frame()
-        return 0 if report_completion() else EXIT_TASK_FAILED
+            if recorder:
+                recorder.capture(mjd, frame_idx)
+        passed = report_completion()
+        if recorder:
+            recorder.save(success=passed)
+        return 0 if passed else EXIT_TASK_FAILED
 
     # The interactive lesson has the same finite horizon as the headless example.
     # Rendering, pause and cancellation do not advance the controller clock.
@@ -280,6 +289,7 @@ def main() -> int:
     add_robot_arg(parser)
     parser.add_argument("--task", choices=("stack", "box"), default="stack", help="Stack red on blue, or place both cubes in a receiving box.")
     parser.add_argument("--report", type=Path, default=None, help="Save measured --task box results as JSON.")
+    parser.add_argument("--record", type=Path, help="Save sampled poses from a headless box episode for inline replay.")
     parser.add_argument("--device", default=None, help="Warp device, for example cuda:0 or cuda:1.")
     parser.add_argument("--menagerie-path", type=Path, default=None)
     parser.add_argument("--fps", type=int, default=50)
@@ -299,6 +309,8 @@ def main() -> int:
         quiet_warp()  # keep the benchmark table readable
     if args.device is not None:
         wp.set_device(args.device)
+    if args.record and (args.task != "box" or args.headless_steps <= 0):
+        parser.error("--record requires --task box and --headless-steps")
     spec = get_robot(args.robot)
     box_task = BoxTask(spec, fps=args.fps) if args.task == "box" else None
     if box_task:
@@ -341,6 +353,7 @@ def main() -> int:
         headless_steps=args.headless_steps,
         box_task=box_task,
         report_path=args.report,
+        record_path=args.record,
     )
 
 
