@@ -32,7 +32,7 @@ def cuda_device() -> str | None:
     device = os.environ.get("ARTICLE2_X11_DEVICE", "cuda:0")
     try:
         import warp as wp
-        wp.config.quiet = True
+        wp.config.log_level = wp.LOG_WARNING
         wp.init()
         return device if wp.is_cuda_available() and wp.get_device(device).is_cuda else None
     except Exception:  # noqa: BLE001

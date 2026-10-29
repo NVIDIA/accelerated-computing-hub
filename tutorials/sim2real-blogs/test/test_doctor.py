@@ -28,8 +28,8 @@ def run(argv, env=None):
 class DoctorTests(unittest.TestCase):
     def test_lock_pins_and_install_command_match_the_quickstart(self):
         pins = doctor.pinned_versions("2")
-        self.assertEqual(pins["mujoco"], "3.8.0")
-        self.assertEqual(pins["warp-lang"], "1.15.0")
+        self.assertEqual(pins["mujoco"], "3.17.0")
+        self.assertEqual(pins["warp-lang"], "1.18.0")
         cmd = doctor.install_command("2")
         self.assertIn("uv venv --allow-existing --python 3.12 notebooks/mujoco/.venv", cmd)
         self.assertIn("--require-hashes -r notebooks/mujoco/requirements.lock.txt", cmd)

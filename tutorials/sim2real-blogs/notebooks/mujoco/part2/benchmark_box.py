@@ -37,7 +37,7 @@ _LEGACY = None
 
 
 def _legacy():
-    """Reuse the audited 3.8 capacity guards under an article-specific name."""
+    """Reuse the capacity guards shared with the stacking benchmark."""
     global _LEGACY
     if _LEGACY is None:
         name = "_article2_legacy_benchmark"

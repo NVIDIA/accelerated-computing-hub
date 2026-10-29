@@ -123,10 +123,7 @@ def print_reading_guide(rows: list[Row], *, device, total_memory: int | None = N
 def quiet_warp() -> None:
     """Hide Warp's per-module load lines so the table stays readable."""
     import warp as wp
-    if hasattr(wp, "LOG_WARNING") and hasattr(wp.config, "log_level"):
-        wp.config.log_level = wp.LOG_WARNING
-    else:
-        wp.config.quiet = True
+    wp.config.log_level = wp.LOG_WARNING
 
 
 def mempool_peak(device) -> int | None:

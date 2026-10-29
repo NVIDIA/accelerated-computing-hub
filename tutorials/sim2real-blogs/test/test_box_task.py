@@ -165,14 +165,22 @@ class Array:
 
 
 class BoxCapacityTests(unittest.TestCase):
-    def state(self, contacts=8, constraints=(16,)):
-        return SimpleNamespace(nacon=Array([contacts]), nefc=Array(constraints), naconmax=8, njmax=16)
+    def state(self, contacts=8, constraints=(16,), collisions=8):
+        return SimpleNamespace(nacon=Array([contacts]), nefc=Array(constraints),
+                               ncollision=Array([collisions]), naconmax=8, njmax=16)
 
     def test_exact_capacity_is_valid_and_raw_overshoots_are_rejected(self):
         self.assertEqual(assert_mjwarp_capacity(self.state())["contact_count"], 8)
-        for state in (self.state(contacts=9), self.state(constraints=(17,)), self.state(constraints=(16, 17))):
+        for state in (self.state(contacts=9), self.state(constraints=(17,)),
+                      self.state(constraints=(16, 17)), self.state(collisions=9)):
             with self.subTest(state=state), self.assertRaisesRegex(ValueError, "capacity overflow"):
                 assert_mjwarp_capacity(state)
+
+    def test_forward_broadphase_overflow_is_rejected_before_sticky_bits_are_set(self):
+        state = self.state(contacts=1, constraints=(4,), collisions=9)
+        state.overflow = Array([0])
+        with self.assertRaisesRegex(ValueError, "broadphase capacity overflow"):
+            assert_mjwarp_capacity(state)
 
     def test_newer_sticky_capacity_flags_cannot_hide_behind_zero_counts(self):
         fake_mjw = SimpleNamespace(OverflowType=SimpleNamespace(ITERATIONS=512, LS_ITERATIONS=1024))

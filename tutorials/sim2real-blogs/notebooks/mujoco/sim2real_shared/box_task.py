@@ -150,13 +150,18 @@ def native_contacts(model, data):
 
 
 def assert_mjwarp_capacity(data):
-    """Check raw device counts before MuJoCo Warp 3.8 can truncate a pull.
+    """Check raw device counts and sticky flags before downloading contacts.
 
     Call after every physics substep (and a subsequent forward pass), before
     ``get_data_into``. Counts at capacity are valid; counts above it are not.
     """
     contacts = int(data.nacon.numpy()[0])
+    collisions = int(data.ncollision.numpy()[0])
     constraints = np.asarray(data.nefc.numpy())
+    # MuJoCo Warp records some sticky bits when advancing time, not in a
+    # standalone forward pass. Check its raw broadphase count before a pull.
+    if collisions < 0 or collisions > data.naconmax:
+        raise ValueError(f"MuJoCo Warp broadphase capacity overflow: {collisions} > {data.naconmax}")
     if contacts < 0 or contacts > data.naconmax:
         raise ValueError(f"MuJoCo Warp contact capacity overflow: {contacts} > {data.naconmax}")
     if np.any(constraints < 0) or np.any(constraints > data.njmax):
@@ -170,7 +175,8 @@ def assert_mjwarp_capacity(data):
         iteration_flags = int(mjw.OverflowType.ITERATIONS | mjw.OverflowType.LS_ITERATIONS)
         if flags & ~iteration_flags:
             raise ValueError(f"MuJoCo Warp capacity overflow: {flags}")
-    return dict(contact_count=contacts, max_constraints=int(constraints.max(initial=0)), overflow_flags=flags)
+    return dict(contact_count=contacts, broadphase_pairs=collisions,
+                max_constraints=int(constraints.max(initial=0)), overflow_flags=flags)
 
 
 def cube_points(model, data, name):

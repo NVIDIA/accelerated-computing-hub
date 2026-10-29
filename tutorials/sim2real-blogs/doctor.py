@@ -136,8 +136,8 @@ def check_packages(r: Report, article: str) -> bool:
         r.warn("Versions differ from the tested lock: " + "; ".join(mismatched),
                install_command(article))
     if article == "2" and installed("newton"):
-        r.warn("Newton is installed in the Article 2 environment; the two articles pin different "
-               "MuJoCo/Warp versions.", f"use a separate environment per article:\n{install_command('2')}")
+        r.warn("Newton is installed in the Article 2 environment; each article has its own "
+               "dependency lock.", f"use a separate environment per article:\n{install_command('2')}")
     return True
 
 
@@ -166,7 +166,7 @@ def check_gpu(r: Report, article: str) -> None:
     r.ok(f"NVIDIA driver: {len(gpus)} GPU(s): " + "; ".join(g.split(" (UUID")[0] for g in gpus))
     if installed("warp-lang") is None:
         return
-    code = ("import warp as wp; wp.config.quiet = True; wp.init(); "
+    code = ("import warp as wp; wp.config.log_level = wp.LOG_WARNING; wp.init(); "
             "print(wp.get_cuda_device_count())")
     try:
         out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=120)
@@ -177,7 +177,7 @@ def check_gpu(r: Report, article: str) -> None:
         r.ok(f"Warp sees {count} CUDA device(s): use --device cuda:0")
     else:
         r.warn("Warp cannot use the GPU (CUDA driver too old or not visible to this Python).",
-               "update the NVIDIA driver (Warp needs CUDA 12 drivers), then rerun this check")
+               "the locked Warp 1.18 wheel needs an R580+ driver and a Turing (sm_75)+ GPU; then rerun this check")
 
 
 def check_display(r: Report) -> None:

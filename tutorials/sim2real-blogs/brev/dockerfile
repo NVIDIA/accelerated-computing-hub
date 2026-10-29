@@ -46,8 +46,8 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Retain the measured Blog 2 physics pins with current image-library security fixes.
-# The previous Hub image used MuJoCo 3.12 / Warp 1.17; those are not these results.
+# Use the same MuJoCo 3.17 / Warp 1.18 environment as the local notebooks.
+# Historical benchmark snapshots retain their original dependency versions.
 COPY tutorials/${ACH_TUTORIAL}/notebooks/mujoco/requirements.lock.txt /opt/physics.lock.txt
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 

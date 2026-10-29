@@ -7,7 +7,8 @@ Use `--robot rebot` to try the same task with Seeed's reBot arm.
 ## Setup
 
 You need Git and [uv](https://docs.astral.sh/uv/getting-started/installation/).
-CPU examples work on Linux and macOS. GPU examples need an NVIDIA CUDA GPU.
+CPU examples work on Linux and macOS on Apple Silicon. The locked Warp 1.18 wheel needs an
+NVIDIA Turing (`sm_75`) or newer GPU and an R580 or newer driver for CUDA.
 
 ```bash
 git clone https://github.com/NVIDIA/accelerated-computing-hub.git
@@ -20,7 +21,7 @@ python ../../doctor.py
 
 Run the commands below from `notebooks/mujoco` with `.venv` active.
 Continue when the setup check prints `Ready: no blocking problems`.
-This installs MuJoCo 3.8.0, MuJoCo Warp 3.8.0.3, Warp 1.15.0 and Pillow 13.0.0.
+This installs MuJoCo 3.17.0, MuJoCo Warp 3.17.0, Warp 1.18.0 and Pillow 13.0.0.
 The robot models download on first use.
 
 ## Run the task
@@ -57,11 +58,11 @@ To work through the code step by step, install and open Jupyter:
 
 ```bash
 uv pip install --python .venv/bin/python -c requirements.lock.txt jupyterlab
-python -m ipykernel install --user --name hub-sim2real --display-name "Sim2Real (MuJoCo 3.8)"
+python -m ipykernel install --user --name hub-sim2real --display-name "Sim2Real (MuJoCo 3.17)"
 jupyter lab
 ```
 
-Select **Sim2Real (MuJoCo 3.8)** as the kernel and run the notebooks in order:
+Select **Sim2Real (MuJoCo 3.17)** as the kernel and run the notebooks in order:
 
 | Order | Notebook | Purpose |
 |---|---|---|

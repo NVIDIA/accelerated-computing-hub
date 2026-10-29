@@ -49,6 +49,7 @@ from pick_place_common import (
     resolve_pick_place_scene,
 )
 from robots import add_robot_arg, get_robot
+from box_task import assert_mjwarp_capacity
 
 DEFAULT_WORLDS = (1, 16, 64, 256, 1024, 4096)
 
@@ -86,6 +87,9 @@ def measure(mjm, mjd, nworld: int, *, nconmax: int, njmax: int, steps: int) -> R
         advance()
     wp.synchronize()
     elapsed = time.perf_counter() - t0
+    # Sticky flags retain any capacity failure during warm-up or graph replay.
+    # Check outside the timed region before publishing throughput.
+    assert_mjwarp_capacity(d)
 
     return Row(nworld=nworld, steps=steps, seconds=elapsed, mem_bytes=mempool_peak(device))
 

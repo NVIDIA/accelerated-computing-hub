@@ -1,6 +1,6 @@
 # Notebook/UI and test tools only. The Dockerfile first installs the unchanged
-# notebooks/mujoco/requirements.lock.txt with --require-hashes (MuJoCo 3.8.0,
-# MuJoCo Warp 3.8.0.3, Warp 1.15.0), then constrains these additions to that lock.
+# notebooks/mujoco/requirements.lock.txt with --require-hashes (MuJoCo 3.17.0,
+# MuJoCo Warp 3.17.0, Warp 1.18.0), then constrains these additions to that lock.
 scipy
 ipympl
 Pillow>=13.0.0
