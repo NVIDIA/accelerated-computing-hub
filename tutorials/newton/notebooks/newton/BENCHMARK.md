@@ -8,7 +8,7 @@ The [earlier October 9 box study](benchmark-results/2026-10-09-box-sweep-rtx-pro
 
 The [earlier October 8 workstation study](benchmark-results/2026-10-08-blogs-rtx-pro-6000/README.md) remains historical stacking data, with different replay and single-world workflow measurements.
 
-Article 3 keeps its Python 3.12 hash lock, including **Newton 1.6.0, Warp 1.17.0 and MuJoCo/MuJoCo Warp 3.12.0**. Article 2 uses the same box-task duration, observation format and acceptance rules with its own pinned native MuJoCo/MuJoCo Warp stack.
+This tutorial keeps its Python 3.12 hash lock, including **Newton 1.6.0, Warp 1.17.0 and MuJoCo/MuJoCo Warp 3.12.0**. Article 2 uses the same box-task duration, observation format and acceptance rules with its own pinned native MuJoCo/MuJoCo Warp stack.
 
 ## Measured on the workstation
 
@@ -83,7 +83,7 @@ Capacity overflow and invalid time/state observations fail the configuration. So
 
 ## Run on your machine
 
-Prepare the [Article 3 environment](README.md#setup), then run from `tutorials/newton/notebooks/newton/part3`:
+Prepare the [Newton environment](README.md#setup), then run from `tutorials/newton/notebooks/newton/part3`:
 
 ```bash
 python migration_benchmark.py --scope newton-batch --preset workstation --device cuda:0 --cpu-threads 32 --nconmax 64 --njmax 128 --timeout 7200 --preflight
@@ -115,7 +115,7 @@ The [ALOHA reference benchmark](reference-benchmark/README.md) compares native M
 
 ## Google Colab
 
-Open [the benchmark notebook on Colab](https://colab.research.google.com/github/johnnynunez/accelerated-computing-hub/blob/2d100e859b174ab67834d09c0f705d09a5b0d516/tutorials/newton/notebooks/newton/part3/05__migration_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash lock into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source revision; retain the printed resolved commit with any new results. The public fork branch hosts this update before merge. The notebook records the fetched source revision; Colab and lower-end GPUs remain unvalidated.
+Open [the benchmark notebook on Colab](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/newton/notebooks/newton/part3/05__migration_benchmark.ipynb) and select a GPU runtime. The setup checks out `REPO_URL` at `REF`, installs uv 0.12.5 into a tools environment, and syncs the hash lock into a separate Python 3.12 environment. Benchmark subprocesses use that interpreter; the hosted kernel remains separate. `REF` selects the public Hub source revision; retain the printed resolved commit with any new results. The notebook records the fetched source revision; Colab and lower-end GPUs remain unvalidated.
 
 Review preflight on the assigned CPU/GPU before enabling measurements. Hosted hardware and runtime limits vary; this launch recipe is not a validated Colab box-task result. Download the report archive before disconnection. The CPU baseline belongs to the runtime.
 
@@ -124,7 +124,7 @@ Review preflight on the assigned CPU/GPU before enabling measurements. Hosted ha
 An existing Brev GPU VM can use the same repository and lock:
 
 ```bash
-git clone --branch feature/blog3-validated-box-benchmark https://github.com/johnnynunez/accelerated-computing-hub.git
+git clone https://github.com/NVIDIA/accelerated-computing-hub.git
 cd accelerated-computing-hub/tutorials/newton
 git rev-parse HEAD  # Retain this resolved Hub revision with your results.
 uv venv --python 3.12 .venv
