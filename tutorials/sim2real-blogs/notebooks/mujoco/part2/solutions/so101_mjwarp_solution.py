@@ -261,6 +261,9 @@ def benchmark(
         advance()
     wp.synchronize()
     elapsed = time.perf_counter() - t0
+    # Sticky flags retain any capacity failure during warm-up or graph replay.
+    # Check outside the timed region before publishing throughput.
+    assert_mjwarp_capacity(d)
 
     row = Row(nworld=nworld, steps=steps, seconds=elapsed, mem_bytes=mempool_peak(device))
     print_header(title=f"MJWarp throughput (Part 2 --benchmark): {nworld} worlds, "
