@@ -41,8 +41,10 @@ static double max_bandwidth() {
   cudaDeviceProp prop;
   cudaGetDeviceProperties(&prop, 0);
 
+  int mem_clock_khz = 0;
+  cudaDeviceGetAttribute(&mem_clock_khz, cudaDevAttrMemoryClockRate, 0);
   const std::size_t mem_freq =
-      static_cast<std::size_t>(prop.memoryClockRate) * 1000; // kHz -> Hz
+      static_cast<std::size_t>(mem_clock_khz) * 1000; // kHz -> Hz
   const int bus_width = prop.memoryBusWidth;
   const std::size_t bytes_per_second = 2 * mem_freq * bus_width / CHAR_BIT;
   return static_cast<double>(bytes_per_second) / 1024 / 1024 /
