@@ -81,8 +81,10 @@ static double max_bandwidth() {
   cudaDeviceProp prop;
   cudaGetDeviceProperties(&prop, 0);
 
+  int mem_clock_khz = 0;
+  cudaDeviceGetAttribute(&mem_clock_khz, cudaDevAttrMemoryClockRate, 0);
   const std::size_t mem_freq =
-      static_cast<std::size_t>(prop.memoryClockRate) * 1000; // kHz -> Hz
+      static_cast<std::size_t>(mem_clock_khz) * 1000; // kHz -> Hz
   const int bus_width = prop.memoryBusWidth;
   const std::size_t bytes_per_second = 2 * mem_freq * bus_width / CHAR_BIT;
   return static_cast<double>(bytes_per_second) / 1024 / 1024 /
@@ -102,7 +104,7 @@ void store(int step, int height, int width, ContainerT &data)
   file.write(reinterpret_cast<const char *>(thrust::raw_pointer_cast(data.data())), height * width * sizeof(float));
 }
 
-__host__ __device__ float compute(int cell_id, cuda::std::mdspan<const float, cuda::std::dextents<int, 2>> temp) {
+__host__ __device__ float compute(int cell_id, cuda::std::mdspan<const float, cuda::std::dims<2>> temp) {
   int height = temp.extent(0);
   int width = temp.extent(1);
 
