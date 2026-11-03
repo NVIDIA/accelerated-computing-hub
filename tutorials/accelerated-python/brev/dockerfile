@@ -1,6 +1,5 @@
 # Stage 1: LLVM builder
-ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
-FROM ${CUDA_BASE_IMAGE} AS llvm-builder
+FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04 AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
 ARG LLVM_TAG=isc2026
 ARG LLVM_COMMIT=4ff26eab5ce99a62e385fdd81f3a761daeec6013
@@ -36,7 +35,7 @@ RUN case "$(dpkg --print-architecture)" in \
  && rm -rf /src/llvm /src/llvm-build
 
 # Stage 2: Tutorial image
-FROM ${CUDA_BASE_IMAGE}
+FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
 
 # Match the development packages and exported build environment from NVIDIA's
 # CUDA 13.2.1 devel image. Starting from the runtime image lets us install and

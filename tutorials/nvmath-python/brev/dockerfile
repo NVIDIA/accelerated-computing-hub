@@ -1,29 +1,53 @@
-FROM ghcr.io/nvidia/mirrors/pytorch-2.12.1-cuda13.2-cudnn9-runtime
+FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
 
 ENV ACH_TUTORIAL=nvmath-python \
-    PIP_BREAK_SYSTEM_PACKAGES=1 \
+    PYTHON_VERSION=3.12 \
+    PIP_ROOT_USER_ACTION=ignore \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache
 
-# Copy only requirements.txt first for better Docker layer caching.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
-
-RUN set -ex \
- && `# Install Python packages` \
-     && pip install --no-cache-dir -r /opt/requirements.txt \
-     && rm -f /opt/requirements.txt \
- && `# Install system packages` \
-     && apt-get update -y \
-     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git-lfs gosu socat sudo \
-     && apt-get clean -y \
-     && rm -rf /var/lib/apt/lists/*
-
-# Disable unnecessary default Jupyter extensions.
-RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
- && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
+# Install system packages
+RUN apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    git \
+    git-lfs \
+    ca-certificates \
+    curl \
+    gnupg \
+    gosu \
+    socat \
+    sudo \
+ && apt-get clean -y \
+ && rm -rf /var/lib/apt/lists/*
 
 # Enable passwordless sudo for all users and pass through environment and path
 RUN echo 'ALL ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
  && sed -i -e 's/^Defaults\s*env_reset/Defaults !env_reset/' -e 's/^Defaults\s*secure_path=/#&/' /etc/sudoers
+
+# Install Python
+RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA6932366A755776 | gpg --dearmor -o /usr/share/keyrings/deadsnakes.gpg \
+ && echo "deb [signed-by=/usr/share/keyrings/deadsnakes.gpg] http://ppa.launchpad.net/deadsnakes/ppa/ubuntu jammy main" > /etc/apt/sources.list.d/deadsnakes-ppa.list \
+ && apt-get update -y \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    python${PYTHON_VERSION} \
+    python${PYTHON_VERSION}-dev \
+ && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
+ && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
+ && ln -sf /usr/bin/python3 /usr/bin/python \
+ && ln -s /usr/local/bin/pip /usr/bin/pip \
+ && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+ && rm -f /opt/requirements.txt
+
+# Disable unnecessary default Jupyter extensions.
+RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+ && python -m jupyter labextension disable "@jupyterlab/console-extension:tracker"
 
 COPY --chmod=0777 . /accelerated-computing-hub
 

@@ -52,6 +52,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Check CUDA base images
+        run: |
+          set -euo pipefail
+
+          # Dependabot must watch exactly the tutorials CI builds.
+          watched=$(grep -oP '^\s*- /tutorials/\K[^/]+(?=/brev$)' .github/dependabot.yml | sort)
+          listed=$(printf '%s\n' ${CI_TUTORIALS} | sort)
+          if [ "${watched}" != "${listed}" ]; then
+            echo "::error::.github/dependabot.yml directories do not match CI_TUTORIALS" >&2
+            diff <(echo "${listed}") <(echo "${watched}") >&2 || true
+            exit 1
+          fi
+
+          # Every tutorial must build from the same CUDA version.
+          for tutorial in ${CI_TUTORIALS}; do
+            grep -oP '^FROM nvcr\.io/nvidia/cuda:\K[0-9.]+' "tutorials/${tutorial}/brev/dockerfile" \
+              | sed "s|^|${tutorial} |"
+          done | sort -u > cuda-versions.txt
+          cat cuda-versions.txt
+          if [ "$(cut -d' ' -f2 cuda-versions.txt | sort -u | wc -l)" -ne 1 ]; then
+            echo "::error::Tutorials use different CUDA base image versions" >&2
+            exit 1
+          fi
+          for tutorial in ${CI_TUTORIALS}; do
+            if ! grep -q "^${tutorial} " cuda-versions.txt; then
+              echo "::error::tutorials/${tutorial}/brev/dockerfile does not build FROM nvcr.io/nvidia/cuda" >&2
+              exit 1
+            fi
+          done
+
       - name: Find tutorial directories
         id: find-tutorials
         run: |
