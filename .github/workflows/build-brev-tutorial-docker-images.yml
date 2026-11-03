@@ -22,6 +22,13 @@ on:
 env:
   GIT_BRANCH_NAME: ${{ github.ref_name }}
   GIT_SHA: ${{ github.sha }}
+  # Tutorials that CI builds, tests, and publishes. Add a tutorial here to opt
+  # it in; tutorials not listed are left alone.
+  CI_TUTORIALS: >-
+    accelerated-python
+    cuda-cpp
+    nvmath-python
+    warp
 
 # Prevent an older run from replacing a newer run's branch-latest tag.
 concurrency:
@@ -50,7 +57,13 @@ jobs:
         run: |
           set -euo pipefail
 
-          tutorials=$(brev/discover-tutorials.bash | \
+          for tutorial in ${CI_TUTORIALS}; do
+            if [ ! -f "tutorials/${tutorial}/brev/docker-compose.yml" ]; then
+              echo "CI_TUTORIALS: tutorials/${tutorial}/brev/docker-compose.yml not found" >&2
+              exit 1
+            fi
+          done
+          tutorials=$(printf 'tutorials/%s\n' ${CI_TUTORIALS} | \
             jq -R -s -c 'split("\n") | map(select(length > 0))')
           build_entries=$(
             while IFS= read -r tutorial; do
