@@ -4,7 +4,7 @@ version: 2
 updates:
   - package-ecosystem: docker
     # Keep this list in sync with CI_TUTORIALS in
-    # .github/workflows/build-brev-tutorial-docker-images.yml.
+    # .github/workflows/tutorials.yml.
     directories:
       - /tutorials/accelerated-python/docker
       - /tutorials/cuda-cpp/docker

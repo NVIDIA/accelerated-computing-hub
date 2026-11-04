@@ -1,4 +1,14 @@
-name: Build and Push Brev Tutorial Docker Images
+name: Tutorials
+
+# Build each tutorial image, test it on a GPU, and only then publish its tags.
+#
+#   discover ─ build (per tutorial and architecture) ─ test-and-publish (per tutorial) ─ deployment-files
+#
+# Images are pushed to GHCR under a run-specific staging tag so the GPU runner
+# can pull them. The tags people use are added only after the tests pass:
+#
+#   main:           latest, main-latest, main-git-<sha>
+#   other branches: <branch>-latest, <branch>-git-<sha>  (e.g. pull-request-123-latest)
 
 on:
   push:
@@ -36,16 +46,13 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  discover-tutorials:
+  discover:
     runs-on: linux-amd64-cpu4
     permissions:
       contents: read
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}
     outputs:
       build-matrix: ${{ steps.find-tutorials.outputs.build-matrix }}
-      publish-matrix: ${{ steps.find-tutorials.outputs.publish-matrix }}
+      tutorial-matrix: ${{ steps.find-tutorials.outputs.tutorial-matrix }}
       docker-tag-branch: ${{ steps.find-tutorials.outputs.docker-tag-branch }}
       git-short-sha: ${{ steps.find-tutorials.outputs.git-short-sha }}
     steps:
@@ -82,32 +89,29 @@ jobs:
             fi
           done
 
-      - name: Find tutorial directories
+      - name: Find tutorials
         id: find-tutorials
         run: |
           set -euo pipefail
 
-          for tutorial in ${CI_TUTORIALS}; do
-            if [ ! -f "tutorials/${tutorial}/docker/docker-compose.yml" ]; then
-              echo "CI_TUTORIALS: tutorials/${tutorial}/docker/docker-compose.yml not found" >&2
-              exit 1
-            fi
-          done
-          tutorials=$(printf 'tutorials/%s\n' ${CI_TUTORIALS} | \
-            jq -R -s -c 'split("\n") | map(select(length > 0))')
           build_entries=$(
-            while IFS= read -r tutorial; do
+            for tutorial_name in ${CI_TUTORIALS}; do
+              tutorial="tutorials/${tutorial_name}"
+              if [ ! -f "${tutorial}/docker/docker-compose.yml" ]; then
+                echo "CI_TUTORIALS: ${tutorial}/docker/docker-compose.yml not found" >&2
+                exit 1
+              fi
               compose_config=$(docker compose \
                 -f "${tutorial}/docker/docker-compose.yml" \
                 config --format json)
-              tutorial_name=$(basename "${tutorial}")
               image_name=$(jq -r '."x-config".image | sub(":[^/:]+$"; "")' \
                 <<< "${compose_config}")
               architectures=$(jq -c '."x-config".architectures // ["amd64"]' <<< "${compose_config}")
               large=$(jq -r '."x-config".large // false' <<< "${compose_config}")
-              if ! jq -e 'type == "array" and length > 0 and length == (unique | length) and all(.[]; . == "amd64" or . == "arm64")' \
+              # Tests run on an amd64 GPU runner, so every tutorial needs amd64.
+              if ! jq -e 'type == "array" and length > 0 and length == (unique | length) and all(.[]; . == "amd64" or . == "arm64") and index("amd64") != null' \
                 <<< "${architectures}" > /dev/null; then
-                echo "${tutorial}: architectures must contain unique amd64/arm64 values" >&2
+                echo "${tutorial}: architectures must be unique amd64/arm64 values and include amd64" >&2
                 exit 1
               fi
 
@@ -132,10 +136,10 @@ jobs:
                     image_name: $image_name, architecture: $architecture,
                     runner: $runner}'
               done < <(jq -r '.[]' <<< "${architectures}")
-            done < <(jq -r '.[]' <<< "${tutorials}")
+            done
           )
           build_matrix=$(jq -sc '{include: .}' <<< "${build_entries}")
-          publish_matrix=$(jq -sc '
+          tutorial_matrix=$(jq -sc '
             {include: (sort_by(.tutorial) | group_by(.tutorial) | map({
               tutorial: .[0].tutorial,
               tutorial_name: .[0].tutorial_name,
@@ -144,34 +148,29 @@ jobs:
             }))}' <<< "${build_entries}")
           docker_tag_branch=${GIT_BRANCH_NAME//[^a-zA-Z0-9._-]/-}
           docker_tag_branch=${docker_tag_branch,,}
-          git_short_sha=${GIT_SHA::7}
 
           {
             echo "build-matrix=${build_matrix}"
-            echo "publish-matrix=${publish_matrix}"
+            echo "tutorial-matrix=${tutorial_matrix}"
             echo "docker-tag-branch=${docker_tag_branch}"
-            echo "git-short-sha=${git_short_sha}"
+            echo "git-short-sha=${GIT_SHA::7}"
           } >> "${GITHUB_OUTPUT}"
-          echo "Found tutorials: ${tutorials}"
           echo "Build matrix: ${build_matrix}"
+          echo "Tutorial matrix: ${tutorial_matrix}"
 
-  build-and-push:
-    needs: discover-tutorials
+  build:
+    needs: discover
     runs-on: ${{ matrix.runner }}
     env:
-      DOCKER_TAG_BRANCH: ${{ needs.discover-tutorials.outputs.docker-tag-branch }}
-      GIT_SHORT_SHA: ${{ needs.discover-tutorials.outputs.git-short-sha }}
+      DOCKER_TAG_BRANCH: ${{ needs.discover.outputs.docker-tag-branch }}
       TUTORIAL_DIR: ${{ matrix.tutorial }}
       IMAGE_NAME: ${{ matrix.image_name }}
       ARCHITECTURE: ${{ matrix.architecture }}
-    defaults:
-      run:
-        working-directory: ${{ github.workspace }}
     permissions:
       contents: read
       packages: write
     strategy:
-      matrix: ${{ fromJson(needs.discover-tutorials.outputs.build-matrix) }}
+      matrix: ${{ fromJson(needs.discover.outputs.build-matrix) }}
       fail-fast: false
 
     steps:
@@ -238,11 +237,12 @@ jobs:
           docker buildx prune --all --force
           docker system prune --all --force
 
-      - name: Build and push Docker image (with retry)
+      - name: Build and push staging image (with retry)
         uses: nick-fields/retry@v3
         env:
           DOCKER_BUILDKIT: 1
           BUILDKIT_PROGRESS: plain
+          PURGE: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.purge_cache) }}
         with:
           timeout_minutes: 60
           max_attempts: 3
@@ -250,20 +250,9 @@ jobs:
           command: |
             cd "${TUTORIAL_DIR}/docker"
 
-            # Show buildx version and check for cache images
-            docker buildx version
-            echo "Checking for existing cache images..."
-            docker manifest inspect \
-              "${IMAGE_NAME}:buildcache-${DOCKER_TAG_BRANCH}-${ARCHITECTURE}" \
-              > /dev/null 2>&1 && echo "Branch cache exists" || \
-              echo "Branch cache not found"
-            docker manifest inspect "${IMAGE_NAME}:buildcache-main-${ARCHITECTURE}" \
-              > /dev/null 2>&1 && echo "Main cache exists" || \
-              echo "Main cache not found"
-
             # Nightly scheduled builds and manual purge builds skip cache-from to rebuild from scratch.
             CACHE_FROM_FLAGS=()
-            if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event_name == 'workflow_dispatch' && inputs.purge_cache }}" = "true" ]; then
+            if [ "${PURGE}" = "true" ]; then
               echo "Purge build: skipping cache-from to rebuild from scratch."
             else
               CACHE_FROM_FLAGS=(
@@ -278,6 +267,9 @@ jobs:
               fi
             fi
 
+            # The staging tag is specific to this run, so a later job can never
+            # pick up an image from an earlier run, while re-running failed jobs
+            # in this run can reuse architectures that already built.
             docker buildx bake \
               --progress=plain \
               --allow=fs.read=/home/runner \
@@ -292,74 +284,38 @@ jobs:
       - name: Check disk space after build
         if: always()
         run: |
-          echo "Disk space after build:"
           df -h /
-          echo ""
-          echo "Disk usage by directory:"
           du -sh /var/lib/docker/* 2>/dev/null || true
           du -sh /var/lib/buildkit/* 2>/dev/null || true
 
-  publish-and-test:
+  test-and-publish:
     needs:
-      - discover-tutorials
-      - build-and-push
-    # Publish tutorials whose platform images succeeded even if an unrelated
-    # tutorial in the build matrix failed. Missing source tags fail only that
-    # tutorial's publish matrix entry.
-    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' }}
-    runs-on: linux-amd64-cpu4
-    timeout-minutes: 30
+      - discover
+      - build
+    # Test and publish each tutorial whose images built, even if another
+    # tutorial failed. A missing staging image fails only that tutorial.
+    if: ${{ !cancelled() && needs.discover.result == 'success' }}
+    name: test-and-publish (${{ matrix.tutorial_name }})
+    runs-on: linux-amd64-gpu-l4-latest-1
+    timeout-minutes: 120
     env:
-      DOCKER_TAG_BRANCH: ${{ needs.discover-tutorials.outputs.docker-tag-branch }}
-      GIT_SHORT_SHA: ${{ needs.discover-tutorials.outputs.git-short-sha }}
+      BUILDKIT_PROGRESS: plain
+      DOCKER_CLI_HINTS: false
+      DOCKER_TAG_BRANCH: ${{ needs.discover.outputs.docker-tag-branch }}
+      GIT_SHORT_SHA: ${{ needs.discover.outputs.git-short-sha }}
       TUTORIAL_NAME: ${{ matrix.tutorial_name }}
       IMAGE_NAME: ${{ matrix.image_name }}
       ARCHITECTURES: ${{ matrix.architectures }}
     permissions:
-      actions: write
       contents: read
       packages: write
-      statuses: write
     strategy:
-      matrix: ${{ fromJson(needs.discover-tutorials.outputs.publish-matrix) }}
+      matrix: ${{ fromJson(needs.discover.outputs.tutorial-matrix) }}
       fail-fast: false
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Generate Docker Compose files
-        run: |
-          python3 brev/generate-tagged-docker-composes.py \
-            --image-tag "${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}" \
-            --output-dir "artifacts/commit-specific" \
-            --tutorial "${TUTORIAL_NAME}" \
-            --type all
-
-          python3 brev/generate-tagged-docker-composes.py \
-            --image-tag "${DOCKER_TAG_BRANCH}-latest" \
-            --output-dir "artifacts/branch-latest" \
-            --tutorial "${TUTORIAL_NAME}" \
-            --type all
-
-      - name: Generate CSCS EDF
-        run: |
-          brev/generate-cscs-edf.bash \
-            --output "artifacts/branch-latest/${TUTORIAL_NAME}/docker/cscs.toml" \
-            "artifacts/branch-latest/${TUTORIAL_NAME}/docker/docker-compose.yml"
-
-      - name: Upload commit-specific Docker Compose artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-compose-${{ env.TUTORIAL_NAME }}-${{ env.DOCKER_TAG_BRANCH }}-git-${{ env.GIT_SHORT_SHA }}
-          path: artifacts/commit-specific/${{ env.TUTORIAL_NAME }}/
-          retention-days: 30
-          overwrite: true
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          buildkitd-config: /etc/buildkit/buildkitd.toml
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -368,7 +324,51 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish and verify image manifest
+      - name: Stop DCGM to allow NCU profiling
+        run: |
+          # DCGM (Data Center GPU Manager) locks the GPU and prevents NCU from
+          # profiling. Stop it before running the container tests.
+          docker rm -f dcgm-exporter 2>/dev/null || true
+          for service in dcgm-exporter nvidia-dcgm dcgm nv-hostengine; do
+            sudo systemctl stop "${service}" 2>/dev/null || true
+          done
+          sudo pkill -9 nv-hostengine || true
+          sudo pkill -9 dcgm || true
+
+          # Relax profiling permissions (perf_event_paranoid=4 is very restrictive).
+          sudo sysctl -w kernel.perf_event_paranoid=2 || true
+          sudo sysctl -w kernel.kptr_restrict=0 || true
+
+          nvidia-smi
+
+      - name: Generate Docker Compose file for the staging image
+        run: |
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "staging-${GITHUB_RUN_ID}-amd64" \
+            --output-dir artifacts/staging \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type base
+
+      - name: Pull staging image
+        run: |
+          COMPOSE_FILE="artifacts/staging/${TUTORIAL_NAME}/docker/docker-compose.yml"
+          mapfile -t IMAGES < <(docker compose -f "${COMPOSE_FILE}" config --images | sort -u)
+          if [ "${#IMAGES[@]}" -eq 0 ]; then
+            echo "No service images found in ${COMPOSE_FILE}" >&2
+            exit 1
+          fi
+          for IMAGE in "${IMAGES[@]}"; do
+            docker pull "${IMAGE}"
+          done
+
+      - name: Test
+        run: |
+          ./brev/test-docker-compose.bash "artifacts/staging/${TUTORIAL_NAME}/docker/docker-compose.yml"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Publish image tags
         run: |
           set -euo pipefail
 
@@ -387,34 +387,48 @@ jobs:
             fi
           }
 
-          COMMIT_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
-          LATEST_IMAGE="${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
+          TAGS=(
+            "${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-git-${GIT_SHORT_SHA}"
+            "${IMAGE_NAME}:${DOCKER_TAG_BRANCH}-latest"
+          )
+          if [ "${GIT_BRANCH_NAME}" = "main" ]; then
+            TAGS+=("${IMAGE_NAME}:latest")
+          fi
+
           SOURCES=()
           EXPECTED_PLATFORMS=""
           for architecture in ${ARCHITECTURES}; do
-            # Run-specific staging tags cannot resolve to an image from an
-            # earlier workflow run, while failed-job reruns can reuse the
-            # successful architectures from the same run.
             SOURCES+=("${IMAGE_NAME}:staging-${GITHUB_RUN_ID}-${architecture}")
             EXPECTED_PLATFORMS+="linux/${architecture}"$'\n'
           done
           EXPECTED_PLATFORMS=$(printf '%s' "${EXPECTED_PLATFORMS}" | sort -u)
 
-          TAG_FLAGS=(--tag "${COMMIT_IMAGE}" --tag "${LATEST_IMAGE}")
-          if [ "${GIT_BRANCH_NAME}" = "main" ]; then
-            TAG_FLAGS+=(--tag "${IMAGE_NAME}:latest")
-          fi
-          docker buildx imagetools create \
-            "${TAG_FLAGS[@]}" \
-            "${SOURCES[@]}"
+          TAG_FLAGS=()
+          for tag in "${TAGS[@]}"; do
+            TAG_FLAGS+=(--tag "${tag}")
+          done
+          docker buildx imagetools create "${TAG_FLAGS[@]}" "${SOURCES[@]}"
 
-          verify_platforms "${COMMIT_IMAGE}"
-          verify_platforms "${LATEST_IMAGE}"
-          if [ "${GIT_BRANCH_NAME}" = "main" ]; then
-            verify_platforms "${IMAGE_NAME}:latest"
-          fi
+          for tag in "${TAGS[@]}"; do
+            verify_platforms "${tag}"
+            echo "Published ${tag}"
+          done
 
-      - name: Upload branch-latest deployment files
+      - name: Generate deployment Docker Compose files
+        run: |
+          python3 brev/generate-tagged-docker-composes.py \
+            --image-tag "${DOCKER_TAG_BRANCH}-latest" \
+            --output-dir artifacts/branch-latest \
+            --tutorial "${TUTORIAL_NAME}" \
+            --type all
+
+      - name: Generate CSCS EDF
+        run: |
+          brev/generate-cscs-edf.bash \
+            --output "artifacts/branch-latest/${TUTORIAL_NAME}/docker/cscs.toml" \
+            "artifacts/branch-latest/${TUTORIAL_NAME}/docker/docker-compose.yml"
+
+      - name: Upload deployment Docker Compose files
         uses: actions/upload-artifact@v4
         with:
           name: branch-latest-deployment-${{ env.TUTORIAL_NAME }}
@@ -422,42 +436,15 @@ jobs:
           retention-days: 30
           overwrite: true
 
-      - name: Create pending commit status for test
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            "/repos/${{ github.repository }}/statuses/${GIT_SHA}" \
-            -f state='pending' \
-            -f target_url="${{ github.server_url }}/${{ github.repository }}/actions/workflows/test-brev-tutorial-docker-images.yml" \
-            -f description='Test started' \
-            -f context="Test Brev Tutorial Docker Images / test-tutorial (tutorials/${TUTORIAL_NAME})"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Trigger test workflow
-        run: |
-          echo "Triggering test for tutorial: ${TUTORIAL_NAME}"
-          gh workflow run test-brev-tutorial-docker-images.yml \
-            --ref ${{ github.ref_name }} \
-            -f tutorial="${TUTORIAL_NAME}" \
-            -f git_sha="${GIT_SHA}" \
-            -f workflow_run_id=${{ github.run_id }}
-          echo "Test workflow triggered successfully"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish-deployment-files:
+  deployment-files:
     needs:
-      - discover-tutorials
-      - publish-and-test
-    # Publish deployments for successful matrix entries even when an
-    # unrelated tutorial failed to publish.
-    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' }}
+      - discover
+      - test-and-publish
+    # Publish deployment files for tutorials that passed even when another
+    # tutorial failed.
+    if: ${{ !cancelled() && needs.discover.result == 'success' }}
     runs-on: linux-amd64-cpu4
     timeout-minutes: 10
-    env:
-      GIT_BRANCH_NAME: ${{ github.ref_name }}
     permissions:
       contents: write
 
@@ -465,21 +452,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download branch-latest deployment files
+      - name: Download deployment Docker Compose files
         uses: actions/download-artifact@v4
         with:
           pattern: branch-latest-deployment-*
           path: artifacts/branch-latest
           merge-multiple: true
 
-      - name: Push branch-latest deployment files to generated branch
+      - name: Push deployment Docker Compose files to the generated branch
         run: |
           set -euo pipefail
 
           shopt -s nullglob
           tutorial_dirs=(artifacts/branch-latest/*)
           if [ "${#tutorial_dirs[@]}" -eq 0 ]; then
-            echo "No successful tutorial deployments were downloaded" >&2
+            echo "No tutorials passed, so there are no deployment files to publish" >&2
             exit 1
           fi
 
@@ -516,18 +503,17 @@ jobs:
           max_attempts=10
           for ((attempt = 1; attempt <= max_attempts; attempt++)); do
             if git push origin generated; then
-              echo "Successfully pushed to generated branch"
+              echo "Pushed to the generated branch"
               exit 0
             fi
 
             if [ "${attempt}" -eq "${max_attempts}" ]; then
-              echo "Failed to push generated branch after ${attempt} attempts" >&2
+              echo "Failed to push the generated branch after ${attempt} attempts" >&2
               exit 1
             fi
 
-            # Different branch workflows can still finish together. Back off
-            # before rebasing so their single deployment commits do not retry
-            # in lockstep.
+            # Runs for different branches can finish together. Back off before
+            # rebasing so they do not retry in lockstep.
             delay=$((attempt + RANDOM % (attempt + 3)))
             echo "Push failed (attempt ${attempt}/${max_attempts}); retrying in ${delay}s"
             sleep "${delay}"
