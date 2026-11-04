@@ -195,18 +195,20 @@ RUN gcc -O3 -fopenmp -DSTREAM_ARRAY_SIZE=50000000 /opt/benchmarks/stream.c \
 # Copy only dependency inputs first for better Docker layer caching. The
 # PyHPC kernel gets its own IPython startup directory without duplicating the
 # Python package environment.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.lock.txt /opt/requirements.lock.txt
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /opt/pyhpc-ipython/profile_default/startup/10-matplotlib-theme.py
 
-# Install the shared Accelerated Python/PyHPC/CUDA Tile package stack from the
-# hash-pinned lock (see brev/lock-requirements.bash), then
+# CUDA 13.2.1 is the newest toolkit in the stable PyTorch 2.14 build matrix.
+# Install the shared Accelerated Python/PyHPC/CUDA Tile package stack, then
 # discard the CUDA toolkit payload duplicated by Python wheels. The image
 # already contains the matching development toolkit and TileIRAs compiler;
 # only RAPIDS' newer nvJitLink is retained.
 # PyTorch's ARM64 cuSPARSELt 0.8.1 wheel is named for aarch64 but its embedded
 # tag says sbsa; normalize that tag so pip validates the installed wheel.
 RUN pip install --no-cache-dir --root-user-action=ignore \
-      --require-hashes -r /opt/requirements.lock.txt \
+      --index-url https://pypi.org/simple \
+      --extra-index-url https://download.pytorch.org/whl/cu132 \
+      "torch==2.14.0+cu132" -r /opt/requirements.txt \
  && rm -rf "/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13" \
  && pip install --no-cache-dir --root-user-action=ignore \
       --no-deps --force-reinstall "nvidia-nvjitlink==13.4.92" \
@@ -233,7 +235,7 @@ RUN pip install --no-cache-dir --root-user-action=ignore \
         "${wheel_metadata}"; \
     fi \
  && python -m pip check \
- && rm -f /opt/requirements.lock.txt
+ && rm -f /opt/requirements.txt
 
 # Install Nsight Systems and Nsight Compute, then remove everything except the
 # Nsight Compute CLI files needed to profile the native architecture. Keeping

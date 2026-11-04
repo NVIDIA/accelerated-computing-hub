@@ -85,24 +85,6 @@ These scripts are used by the pre-commit hooks and CI. You can also run them dir
 
 * **`brev/generate-tagged-docker-composes.py`** - Generates Docker Compose files with specific image tags for a given branch/commit. Used by CI to produce versioned artifacts that are pushed to the `generated` branch.
 
-* **`brev/lock-requirements.bash [--check|--upgrade] [tutorial...]`** - Generates a tutorial's `brev/requirements.lock.txt` from its `brev/requirements.txt`. See [Updating Python Packages](#updating-python-packages).
-
-## Updating Python Packages
-
-Tutorials in CI install their Python packages only from `brev/requirements.lock.txt`, which pins every package, including dependencies, with hashes. The lock is generated from `brev/requirements.txt` and is never edited by hand. Only Docker is needed:
-
-```bash
-# After editing tutorials/<tutorial>/brev/requirements.txt:
-brev/lock-requirements.bash <tutorial>
-
-# To move every package to the newest version requirements.txt allows:
-brev/lock-requirements.bash --upgrade <tutorial>
-```
-
-Commit `requirements.txt` and `requirements.lock.txt` together. CI fails, and publishes nothing, if a lock is out of date with its `requirements.txt`; run `brev/lock-requirements.bash --check <tutorial>` to see the same result locally.
-
-Pip can't verify hashes for `git+https://` dependencies, so install packages from GitHub with an archive URL for a fixed commit instead, such as `pkg @ https://github.com/<owner>/<repo>/archive/<commit>.tar.gz`.
-
 ## Pre-Commit Hooks
 
 This repository uses [pre-commit](https://pre-commit.com/) to run automated checks before commits and pushes. Install the hooks after cloning:
