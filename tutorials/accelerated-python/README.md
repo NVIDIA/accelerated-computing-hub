@@ -22,14 +22,15 @@ Brev Launchables of this tutorial should use:
 - [CUDA Tile Tutorial](./notebooks/syllabi/cutile.ipynb)
 - [PyHPC - NumPy, CuPy, & mpi4py - 4 Hours](./notebooks/syllabi/pyhpc__numpy_cupy_mpi4py__4_hours.ipynb)
 - [PyHPC - CuPy, Kernels, MPI, JAX, OMP, Interop - 2 Days](./notebooks/syllabi/pyhpc__cupy_kernels_mpi_jax_omp_interop__2_days.ipynb)
+- [SC2026 - NumPy, CuPy, JAX, cuda.compute, Numba CUDA, CppJIT, DragonHPC, cuPhoton - 8 Hours](./notebooks/syllabi/sc26__8_hours.ipynb)
 
 The two-day PyHPC syllabus and the eight-hour CUDA Python course select lessons
 from the same topic directories as every other Accelerated Python course. The
 eight-hour course contains only the CuPy and Numba CUDA kernel-authoring
 foundations followed by CUDA Tile lessons 44 through 47. Self-contained lessons
 with a Colab badge can run on Google Colab. C++ interoperability and the Shallow
-Water Equations applications require the shared tutorial image and checked-in
-source files.
+Water Equations and cosmic-web applications require the shared tutorial image
+and checked-in source files.
 
 Applications 81 through 87 form one ordered case study. They solve the same 1D
 Shallow Water Equations problem with NumPy, JAX, PyOMP, nanobind, CppJIT/CUB,
@@ -37,6 +38,13 @@ and mpi4py. Notebooks 81 through 86 write measurements to `timings.json`; run
 them before notebook 87, which compares the results. CppJIT is built from the
 course's pinned ISC 2026 branch and is available in the tutorial image rather
 than from the public alpha package.
+
+Applications 90 through 95 form a second ordered case study: the Euler
+characteristic curve of a cosmic-web density field, a 3D stencil followed by a
+histogram, implemented with CuPy, JAX, cuda.compute, Numba CUDA and a CUDA
+kernel compiled by CppJIT. Notebooks 90 through 94 each write timing files
+under `applications/cosmic-web/timings/`; run them before notebook 95, which
+compares the results.
 
 The image has one system Python environment. The `Python 3 (PyHPC)` and Nsight
 profiler kernels only select course-specific startup and MPI settings: MPICH is
@@ -118,3 +126,9 @@ that work has been backed up and verified.
 | 85 | Shallow Water Equations: CppJIT and CUB | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/shallow-water-equation/85__swe__cppjit__cub.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solutions/85__swe__cppjit__cub__SOLUTION.ipynb) |
 | 86 | Shallow Water Equations: mpi4py | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/shallow-water-equation/86__swe__mpi4py.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solutions/86__swe__mpi4py__SOLUTION.ipynb) |
 | 87 | Shallow Water Equations: Synthesis | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/shallow-water-equation/87__swe__synthesis.ipynb) | |
+| 90 | Cosmic Web: Intro | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/90__cosmic_web__intro.ipynb) | |
+| 91 | Cosmic Web: CuPy Array Model | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/91__cosmic_web__cupy__array_model.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/solutions/91__cosmic_web__cupy__array_model__SOLUTION.ipynb) |
+| 92 | Cosmic Web: JAX Fusion | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/92__cosmic_web__jax__fusion.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/solutions/92__cosmic_web__jax__fusion__SOLUTION.ipynb) |
+| 93 | Cosmic Web: cuda.compute Iterators | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/93__cosmic_web__cccl__iterators.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/solutions/93__cosmic_web__cccl__iterators__SOLUTION.ipynb) |
+| 94 | Cosmic Web: CppJIT CUDA Kernel | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/94__cosmic_web__cppjit__cuda_kernel.ipynb) | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/solutions/94__cosmic_web__cppjit__cuda_kernel__SOLUTION.ipynb) |
+| 95 | Cosmic Web: Synthesis | [![](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/NVIDIA/accelerated-computing-hub/blob/main/tutorials/accelerated-python/notebooks/applications/cosmic-web/95__cosmic_web__synthesis.ipynb) | |

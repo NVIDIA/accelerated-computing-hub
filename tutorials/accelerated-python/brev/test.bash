@@ -3,7 +3,7 @@
 # Run tests for the accelerated-python tutorial.
 #
 # When called with no arguments, runs all package tests, the independent
-# solution notebooks, and the ordered SWE application sequence.
+# solution notebooks, and the ordered SWE and cosmic-web application sequences.
 # When called with arguments:
 #   - Bare words (e.g. "06") are treated as a pytest -k filter for notebook tests.
 #   - One Python test file, supplied first, is forwarded to pytest directly.
@@ -105,16 +105,18 @@ if [ $# -gt 0 ]; then
             "${TUTORIAL_ROOT}/test/test_pyhpc_packages.py" \
             "${TUTORIAL_ROOT}/test/test_notebooks.py" \
             "${TUTORIAL_ROOT}/test/test_swe_notebooks.py" \
+            "${TUTORIAL_ROOT}/test/test_cosmic_web_notebooks.py" \
             "$@"
         EXIT_CODE=$?
     elif [[ "$1" == */* ]] || [[ "$1" == *.py ]]; then
         echo "Error: test target not found: $1" >&2
         EXIT_CODE=2
     else
-        echo "Running independent and ordered SWE notebook tests with -k \"$*\""
+        echo "Running independent and ordered application notebook tests with -k \"$*\""
         pytest \
             "${TUTORIAL_ROOT}/test/test_notebooks.py" \
             "${TUTORIAL_ROOT}/test/test_swe_notebooks.py" \
+            "${TUTORIAL_ROOT}/test/test_cosmic_web_notebooks.py" \
             -k "$*"
         EXIT_CODE=$?
     fi
@@ -127,10 +129,11 @@ else
     EXIT_CODE_PACKAGES=$?
 
     echo ""
-    echo "Running independent and ordered SWE application notebook tests..."
+    echo "Running independent and ordered application notebook tests..."
     pytest \
         "${TUTORIAL_ROOT}/test/test_notebooks.py" \
-        "${TUTORIAL_ROOT}/test/test_swe_notebooks.py"
+        "${TUTORIAL_ROOT}/test/test_swe_notebooks.py" \
+        "${TUTORIAL_ROOT}/test/test_cosmic_web_notebooks.py"
     EXIT_CODE_NOTEBOOKS=$?
 
     EXIT_CODE=$((EXIT_CODE_PACKAGES || EXIT_CODE_NOTEBOOKS))
