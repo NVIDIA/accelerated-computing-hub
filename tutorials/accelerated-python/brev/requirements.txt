@@ -1,3 +1,8 @@
+# PyTorch built for CUDA 13.2, from PyTorch's own package index. CUDA 13.2.1 is
+# the newest toolkit in the stable PyTorch 2.14 build matrix.
+--extra-index-url https://download.pytorch.org/whl/cu132
+torch == 2.14.0+cu132
+
 # Arrays
 # PyOMP 0.5 requires Numba 0.63, which supports NumPy versions below 2.4.
 numpy == 2.3.5
@@ -55,7 +60,7 @@ memory_profiler == 0.61.0
 
 # NVIDIA developer tools
 nvtx == 0.2.16
-nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@a41989403430168e02ac3cfdc4060bca4ebb8040
+nsightful[notebook] @ https://github.com/brycelelbach/nsightful/archive/a41989403430168e02ac3cfdc4060bca4ebb8040.tar.gz
 
 # Distributed computing. The manylinux wheel contains both OpenMPI and MPICH
 # extension modules; the PyHPC kernels select MPICH through MPI4PY_MPIABI.

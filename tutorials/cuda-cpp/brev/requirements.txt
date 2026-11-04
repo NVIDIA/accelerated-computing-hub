@@ -10,4 +10,4 @@ jupyter-server-proxy
 jupyterlab-execute-time
 
 # NVIDIA devtools
-nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git
+nsightful[notebook] @ https://github.com/brycelelbach/nsightful/archive/cbe425a4d8de4fee91d656ce6446da94f7f0f741.tar.gz

@@ -155,6 +155,18 @@ jobs:
           echo "Found tutorials: ${tutorials}"
           echo "Build matrix: ${build_matrix}"
 
+  check-locks:
+    runs-on: linux-amd64-cpu4
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check requirements.lock.txt files are up to date
+        run: brev/lock-requirements.bash --check ${CI_TUTORIALS}
+
   build-and-push:
     needs: discover-tutorials
     runs-on: ${{ matrix.runner }}
@@ -302,11 +314,12 @@ jobs:
   publish-and-test:
     needs:
       - discover-tutorials
+      - check-locks
       - build-and-push
     # Publish tutorials whose platform images succeeded even if an unrelated
     # tutorial in the build matrix failed. Missing source tags fail only that
-    # tutorial's publish matrix entry.
-    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' }}
+    # tutorial's publish matrix entry. Nothing is published if a lock is stale.
+    if: ${{ !cancelled() && needs.discover-tutorials.result == 'success' && needs.check-locks.result == 'success' }}
     runs-on: linux-amd64-cpu4
     timeout-minutes: 30
     env:

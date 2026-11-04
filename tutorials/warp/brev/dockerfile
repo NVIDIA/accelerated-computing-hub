@@ -42,12 +42,12 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Copy only requirements.txt first for better Docker layer caching.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+# Copy only the lock first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/brev/requirements.lock.txt /opt/requirements.lock.txt
 
-# Install Python packages.
-RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
- && rm -f /opt/requirements.txt
+# Install Python packages from the hash-pinned lock (see brev/lock-requirements.bash).
+RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes -r /opt/requirements.lock.txt \
+ && rm -f /opt/requirements.lock.txt
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
