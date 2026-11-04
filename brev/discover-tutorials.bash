@@ -8,10 +8,10 @@ set -eu
 SCRIPT_PATH=$(cd $(dirname ${0}); pwd -P)
 REPO_ROOT=$(cd ${SCRIPT_PATH}/..; pwd -P)
 
-# Find all directories under tutorials/ at depth 1 that have brev/docker-compose.yml
+# Find all directories under tutorials/ at depth 1 that have docker/docker-compose.yml
 cd "${REPO_ROOT}"
 for dir in tutorials/*/; do
-    if [ -f "${dir}brev/docker-compose.yml" ]; then
+    if [ -f "${dir}docker/docker-compose.yml" ]; then
         echo "${dir%/}"
     fi
 done | sort

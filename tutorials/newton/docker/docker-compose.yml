@@ -1,18 +1,16 @@
-name: &tutorial-name accelerated-python
+name: &tutorial-name newton
 
 x-config:
-  dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/accelerated-python-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
-  large: &large true
-  architectures: [amd64, arm64]
-  default-jupyter-url: &default-jupyter-url
+  dockerfile: &dockerfile tutorials/newton/docker/dockerfile
+  image: &image ghcr.io/nvidia/newton-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/newton/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/newton/notebooks/newton/part3/01__newton_fundamentals.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/newton/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
       memlock: -1
       stack: 67108864
-    shm_size: 1g
+    shm_size: 4g
     deploy:
       resources:
         reservations:
@@ -21,8 +19,9 @@ x-config:
               count: all
               capabilities: [gpu]
   common-env: &common-env
-    BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
+    PXR_WORK_THREAD_LIMIT: "1"
+    NEWTON_NOTEBOOKS_INCLUDE_FINAL: ${NEWTON_NOTEBOOKS_INCLUDE_FINAL:-0}
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
     ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
     ACH_RESTART_COMPOSE_SERVICES: "1"
@@ -57,32 +56,8 @@ services:
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
     command: *default-jupyter-url
-    environment:
-      <<: *common-env
-      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8081"
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
-  nsys:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
-  ncu:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2026.2.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    environment:
-      <<: *common-env
-      HTTP_PORT: "8081"
-      TURN_PORT: "3479"
-    ports:
-      - "0.0.0.0:8081:8081" # HTTP
-      - "0.0.0.0:3479:3479" # TURN
 
 volumes:
   accelerated-computing-hub:
-    # PyHPC moved into this tutorial, so initialize a new repository snapshot
-    # without deleting either tutorial's existing student-work volume.
-    name: ${ACH_VOLUME_NAME:-accelerated-python_accelerated-computing-hub-v2}

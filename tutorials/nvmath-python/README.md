@@ -10,7 +10,7 @@ nvmath-python is designed to provide high-performance mathematical operations th
 
 These notebooks can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 
-There are [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/nvmath-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+There are [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/nvmath-python-tutorial) and [Docker Compose files](./docker/docker-compose.yml) for creating Brev Launchables or running locally.
 
 Brev Launchables of this tutorial should use:
 - 4xL4, 2xL4, 2xL40S, or 1x L40S instances.

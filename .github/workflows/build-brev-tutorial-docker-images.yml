@@ -57,7 +57,7 @@ jobs:
           set -euo pipefail
 
           # Dependabot must watch exactly the tutorials CI builds.
-          watched=$(grep -oP '^\s*- /tutorials/\K[^/]+(?=/brev$)' .github/dependabot.yml | sort)
+          watched=$(grep -oP '^\s*- /tutorials/\K[^/]+(?=/docker$)' .github/dependabot.yml | sort)
           listed=$(printf '%s\n' ${CI_TUTORIALS} | sort)
           if [ "${watched}" != "${listed}" ]; then
             echo "::error::.github/dependabot.yml directories do not match CI_TUTORIALS" >&2
@@ -67,7 +67,7 @@ jobs:
 
           # Every tutorial must build from the same CUDA version.
           for tutorial in ${CI_TUTORIALS}; do
-            grep -oP '^FROM nvcr\.io/nvidia/cuda:\K[0-9.]+' "tutorials/${tutorial}/brev/dockerfile" \
+            grep -oP '^FROM nvcr\.io/nvidia/cuda:\K[0-9.]+' "tutorials/${tutorial}/docker/dockerfile" \
               | sed "s|^|${tutorial} |"
           done | sort -u > cuda-versions.txt
           cat cuda-versions.txt
@@ -77,7 +77,7 @@ jobs:
           fi
           for tutorial in ${CI_TUTORIALS}; do
             if ! grep -q "^${tutorial} " cuda-versions.txt; then
-              echo "::error::tutorials/${tutorial}/brev/dockerfile does not build FROM nvcr.io/nvidia/cuda" >&2
+              echo "::error::tutorials/${tutorial}/docker/dockerfile does not build FROM nvcr.io/nvidia/cuda" >&2
               exit 1
             fi
           done
@@ -88,8 +88,8 @@ jobs:
           set -euo pipefail
 
           for tutorial in ${CI_TUTORIALS}; do
-            if [ ! -f "tutorials/${tutorial}/brev/docker-compose.yml" ]; then
-              echo "CI_TUTORIALS: tutorials/${tutorial}/brev/docker-compose.yml not found" >&2
+            if [ ! -f "tutorials/${tutorial}/docker/docker-compose.yml" ]; then
+              echo "CI_TUTORIALS: tutorials/${tutorial}/docker/docker-compose.yml not found" >&2
               exit 1
             fi
           done
@@ -98,7 +98,7 @@ jobs:
           build_entries=$(
             while IFS= read -r tutorial; do
               compose_config=$(docker compose \
-                -f "${tutorial}/brev/docker-compose.yml" \
+                -f "${tutorial}/docker/docker-compose.yml" \
                 config --format json)
               tutorial_name=$(basename "${tutorial}")
               image_name=$(jq -r '."x-config".image | sub(":[^/:]+$"; "")' \
@@ -195,7 +195,7 @@ jobs:
 
       - name: Check for HPCCM recipe
         run: |
-          if [ -f "${TUTORIAL_DIR}/brev/docker-recipe.py" ]; then
+          if [ -f "${TUTORIAL_DIR}/docker/docker-recipe.py" ]; then
             HAS_HPCCM=true
           else
             HAS_HPCCM=false
@@ -217,7 +217,7 @@ jobs:
       - name: Generate Dockerfile from HPCCM recipe
         if: env.HAS_HPCCM == 'true'
         run: |
-          hpccm --recipe "${TUTORIAL_DIR}/brev/docker-recipe.py" --format docker > "${TUTORIAL_DIR}/brev/dockerfile"
+          hpccm --recipe "${TUTORIAL_DIR}/docker/docker-recipe.py" --format docker > "${TUTORIAL_DIR}/docker/dockerfile"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -248,7 +248,7 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 30
           command: |
-            cd "${TUTORIAL_DIR}/brev"
+            cd "${TUTORIAL_DIR}/docker"
 
             # Show buildx version and check for cache images
             docker buildx version
@@ -345,8 +345,8 @@ jobs:
       - name: Generate CSCS EDF
         run: |
           brev/generate-cscs-edf.bash \
-            --output "artifacts/branch-latest/${TUTORIAL_NAME}/brev/cscs.toml" \
-            "artifacts/branch-latest/${TUTORIAL_NAME}/brev/docker-compose.yml"
+            --output "artifacts/branch-latest/${TUTORIAL_NAME}/docker/cscs.toml" \
+            "artifacts/branch-latest/${TUTORIAL_NAME}/docker/docker-compose.yml"
 
       - name: Upload commit-specific Docker Compose artifacts
         uses: actions/upload-artifact@v4

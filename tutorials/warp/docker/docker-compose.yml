@@ -1,9 +1,10 @@
-name: &tutorial-name cuda-cpp
+name: &tutorial-name warp
 
 x-config:
-  dockerfile: &dockerfile tutorials/cuda-cpp/brev/dockerfile
-  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
+  dockerfile: &dockerfile tutorials/warp/docker/dockerfile
+  image: &image ghcr.io/nvidia/warp-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/warp/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/warp/notebooks/01__intro_to_warp.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/warp/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -52,28 +53,9 @@ services:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
-    environment:
-      <<: *common-env
-      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
+    command: *default-jupyter-url
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
-  nsys:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
-  ncu:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    environment:
-      <<: *common-env
-      TURN_PORT: "3479"
-    ports:
-      - "0.0.0.0:8081:8080" # HTTP
-      - "0.0.0.0:3479:3479" # TURN
 
 volumes:
   accelerated-computing-hub:

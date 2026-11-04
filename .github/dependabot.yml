@@ -6,10 +6,10 @@ updates:
     # Keep this list in sync with CI_TUTORIALS in
     # .github/workflows/build-brev-tutorial-docker-images.yml.
     directories:
-      - /tutorials/accelerated-python/brev
-      - /tutorials/cuda-cpp/brev
-      - /tutorials/nvmath-python/brev
-      - /tutorials/warp/brev
+      - /tutorials/accelerated-python/docker
+      - /tutorials/cuda-cpp/docker
+      - /tutorials/nvmath-python/docker
+      - /tutorials/warp/docker
     schedule:
       interval: weekly
     groups:

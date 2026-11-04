@@ -39,7 +39,7 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements.txt first for better Docker layer caching.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/docker/requirements.txt /opt/requirements.txt
 
 # Install Python packages.
 RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \

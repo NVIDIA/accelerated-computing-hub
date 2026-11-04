@@ -1,16 +1,16 @@
-name: &tutorial-name newton
+name: &tutorial-name nvmath-python
 
 x-config:
-  dockerfile: &dockerfile tutorials/newton/brev/dockerfile
-  image: &image ghcr.io/nvidia/newton-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/newton/notebooks
-  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/newton/notebooks/newton/part3/01__newton_fundamentals.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/newton/notebooks"]
+  dockerfile: &dockerfile tutorials/nvmath-python/docker/dockerfile
+  image: &image ghcr.io/nvidia/nvmath-python-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/nvmath-python/notebooks
+  large: &large true
   gpu-config: &gpu-config
     privileged: true
     ulimits:
       memlock: -1
       stack: 67108864
-    shm_size: 4g
+    shm_size: 1g
     deploy:
       resources:
         reservations:
@@ -20,8 +20,6 @@ x-config:
               capabilities: [gpu]
   common-env: &common-env
     ACH_TUTORIAL: *tutorial-name
-    PXR_WORK_THREAD_LIMIT: "1"
-    NEWTON_NOTEBOOKS_INCLUDE_FINAL: ${NEWTON_NOTEBOOKS_INCLUDE_FINAL:-0}
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
     ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
     ACH_RESTART_COMPOSE_SERVICES: "1"
@@ -55,9 +53,28 @@ services:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
-    command: *default-jupyter-url
+    environment:
+      <<: *common-env
+      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
+  nsys:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    ports:
+      - "0.0.0.0:8080:8080" # HTTP
+      - "0.0.0.0:3478:3478" # TURN
+  ncu:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    environment:
+      <<: *common-env
+      TURN_PORT: "3479"
+    ports:
+      - "0.0.0.0:8081:8080" # HTTP
+      - "0.0.0.0:3479:3479" # TURN
 
 volumes:
   accelerated-computing-hub:

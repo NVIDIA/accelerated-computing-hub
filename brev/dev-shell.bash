@@ -8,7 +8,7 @@
 # Examples:
 #   ./brev/dev-shell.bash accelerated-python base            # bind-mounts local repo (default)
 #   ./brev/dev-shell.bash --no-mount accelerated-python base # uses image content only
-#   ./brev/dev-shell.bash tutorials/accelerated-python/brev/docker-compose.yml jupyter
+#   ./brev/dev-shell.bash tutorials/accelerated-python/docker/docker-compose.yml jupyter
 
 set -eu
 
@@ -43,7 +43,7 @@ Arguments:
 Examples:
   $(basename "$0") accelerated-python base
   $(basename "$0") --no-mount accelerated-python base
-  $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml jupyter
+  $(basename "$0") tutorials/accelerated-python/docker/docker-compose.yml jupyter
 
 Requirements:
   - Docker Compose or Podman Compose must be installed
@@ -92,7 +92,7 @@ else
         exit 1
     fi
 
-    COMPOSE_FILE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
+    COMPOSE_FILE="${ACH_TUTORIAL_PATH}/docker/docker-compose.yml"
 fi
 
 # Validate docker-compose file exists

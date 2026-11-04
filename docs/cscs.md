@@ -26,7 +26,7 @@ export ACH_REPO="$(git rev-parse --show-toplevel)"
 export ACH_BRANCH="main"
 export CSCS_EDF="${SCRATCH}/pyhpc-${ACH_BRANCH//\//-}.toml"
 curl -fsSL \
-  "https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_BRANCH}/tutorials/accelerated-python/brev/cscs.toml" \
+  "https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/generated/${ACH_BRANCH}/tutorials/accelerated-python/docker/cscs.toml" \
   --output "${CSCS_EDF}"
 ```
 
@@ -97,7 +97,7 @@ compatible sibling for both the course materials and runtime scripts.
 From the workstation, start and connect with one command:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/main/tutorials/accelerated-python/brev/cscs-run-tutorial.bash | bash
+curl -fsSL https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/main/tutorials/accelerated-python/docker/cscs-run-tutorial.bash | bash
 ```
 
 The helper downloads the three small helper scripts to a temporary directory;
@@ -144,7 +144,7 @@ To launch on a Daint login node without the end-to-end helper, copy or download
 After it reports a node, run the workstation-side connection helper:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/main/tutorials/accelerated-python/brev/cscs-connect-tutorial.bash
+curl -fsSLO https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/main/tutorials/accelerated-python/docker/cscs-connect-tutorial.bash
 chmod +x cscs-connect-tutorial.bash
 ./cscs-connect-tutorial.bash nidXXXXXX
 ```
@@ -198,7 +198,7 @@ resources.
 cd "${ACH_REPO}"
 CSCS_ACCOUNT="${CSCS_ACCOUNT}" \
 CSCS_EDF="${CSCS_EDF}" \
-  tutorials/accelerated-python/brev/test-cscs.bash
+  tutorials/accelerated-python/docker/test-cscs.bash
 ```
 
 The driver runs:

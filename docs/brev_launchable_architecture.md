@@ -69,9 +69,9 @@ Tutorials may contain syllabi. A syllabus is a subset of a tutorial's notebooks 
 
 ## Tests
 
-Each tutorial has a `test/` directory containing [pytest](https://docs.pytest.org/) test modules and a `brev/test.bash` script that serves as the test entrypoint inside Docker. At minimum, tutorials should have a `test_notebooks.py` that discovers and executes all solution notebooks end-to-end. Tutorials may add additional test modules for package validation or other checks as needed.
+Each tutorial has a `test/` directory containing [pytest](https://docs.pytest.org/) test modules and a `docker/test.bash` script that serves as the test entrypoint inside Docker. At minimum, tutorials should have a `test_notebooks.py` that discovers and executes all solution notebooks end-to-end. Tutorials may add additional test modules for package validation or other checks as needed.
 
-The `brev/test.bash` script is the single entrypoint that CI calls. It should support running all test suites when invoked with no arguments and forwarding arguments to pytest for targeted runs:
+The `docker/test.bash` script is the single entrypoint that CI calls. It should support running all test suites when invoked with no arguments and forwarding arguments to pytest for targeted runs:
 
 ```bash
 ./test.bash                          # Run all suites
@@ -84,7 +84,7 @@ Tests are invoked by CI via `brev/test-docker-compose.bash` (see [CONTRIBUTING.m
 
 ## Docker Compose Files
 
-Each tutorial defines its own Docker Compose file in `tutorials/<tutorial-name>/brev/docker-compose.yml`.
+Each tutorial defines its own Docker Compose file in `tutorials/<tutorial-name>/docker/docker-compose.yml`.
 
 For each syllabus, a Docker Compose file is automatically generated on the [`generated` branch](https://github.com/NVIDIA/accelerated-computing-hub/tree/generated) in `<source-branch>/tutorials/<tutorial-name>/notebooks/syllabi/<syllabus-name>__docker_compose.yml`.
 
@@ -99,7 +99,7 @@ For each syllabus, a Docker Compose file is automatically generated on the [`gen
 
 ## Docker Images
 
-- Tutorial: A tutorial-specific image built and published by the ACH CI. The image is defined by `tutorials/<tutorial-name>/brev/dockerfile` or `tutorials/<tutorial-name>/brev/docker-recipe.py`.
+- Tutorial: A tutorial-specific image built and published by the ACH CI. The image is defined by `tutorials/<tutorial-name>/docker/dockerfile` or `tutorials/<tutorial-name>/docker/docker-recipe.py`.
 - [NVIDIA Nsight Streamer (nsys)](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-nsys): A pre-built image that serves the Nsight Systems GUI over WebRTC.
 - [NVIDIA Nsight Streamer (ncu)](https://catalog.ngc.nvidia.com/orgs/nvidia/teams/devtools/containers/nsight-streamer-ncu): A pre-built image that serves the Nsight Compute GUI over WebRTC.
 

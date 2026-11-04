@@ -1,12 +1,14 @@
 FROM nvcr.io/nvidia/cuda:13.2.1-devel-ubuntu22.04
 
-ENV ACH_TUTORIAL=warp \
+ENV ACH_TUTORIAL=cuda-cpp \
     PYTHON_VERSION=3.12 \
+    ACH_NSYS_PATH=/usr/local/cuda/bin/nsys \
+    ACH_NCU_PATH=/usr/local/cuda/bin/ncu \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+    PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -17,10 +19,11 @@ RUN apt-get update -y \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release \
     gosu \
     libglib2.0-0 \
+    socat \
     sudo \
+    ffmpeg \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -35,6 +38,7 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION} \
     python${PYTHON_VERSION}-dev \
+    python${PYTHON_VERSION}-venv \
  && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
  && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
  && ln -sf /usr/bin/python3 /usr/bin/python \
@@ -43,7 +47,7 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -rf /var/lib/apt/lists/*
 
 # Copy only requirements.txt first for better Docker layer caching.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/docker/requirements.txt /opt/requirements.txt
 
 # Install Python packages.
 RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \

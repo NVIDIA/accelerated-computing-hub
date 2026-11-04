@@ -131,7 +131,7 @@ jobs:
 
       - name: Pre-pull Docker images
         run: |
-          COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
+          COMPOSE_FILE="artifacts/commit-specific/${{ inputs.tutorial }}/docker/docker-compose.yml"
 
           mapfile -t IMAGES < <(
             docker compose -f "$COMPOSE_FILE" config --images | sort -u
@@ -151,7 +151,7 @@ jobs:
       - name: Test Docker Compose
         id: test
         run: |
-          ./brev/test-docker-compose.bash "artifacts/commit-specific/${{ inputs.tutorial }}/brev/docker-compose.yml"
+          ./brev/test-docker-compose.bash "artifacts/commit-specific/${{ inputs.tutorial }}/docker/docker-compose.yml"
 
       - name: Update commit status to success
         if: success()

@@ -36,7 +36,7 @@ fi
 
 # Run per-tutorial start tests if they exist.
 if [ -n "${ACH_TUTORIAL:-}" ] && [ -n "${ACH_RUN_TESTS:-}" ]; then
-  TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/brev/test.bash"
+  TEST_SCRIPT="/accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/docker/test.bash"
   LOG_DIR="/accelerated-computing-hub/logs"
   LOG_FILE="${LOG_DIR}/test.log"
 
