@@ -60,11 +60,16 @@ nsightful[notebook] @ git+https://github.com/brycelelbach/nsightful.git@a4198940
 # Distributed computing. The manylinux wheel contains both OpenMPI and MPICH
 # extension modules; the PyHPC kernels select MPICH through MPI4PY_MPIABI.
 mpi4py == 4.1.2
+dragonhpc == 0.14.2
 
 # Runtime and notebook execution utilities
 psutil == 7.2.2
 nbformat == 5.11.1
 nbconvert == 7.17.2
+
+# Astronomy imaging. cuPhoton has no PyPI release. Its io extra requires KvikIO 26.6
+# and nvCOMP 5.2, which RAPIDS 26.8 does not allow.
+cuphoton[photometry,viz] @ git+https://github.com/NVIDIA/cuPhoton.git@v0.1.3
 
 # Testing
 pytest == 9.1.1

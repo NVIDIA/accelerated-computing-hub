@@ -23,6 +23,8 @@ tutorials/<tutorial-name>/
 └── slides/                    # Presentation materials (optional)
 ```
 
+A module may group a multi-notebook application in `<module>/<application>/`, with its own `solutions/`, `assets/`, support sources and `.gitignore`; `applications/shallow-water-equation/` is the first.
+
 ## Notebooks
 
 ### Naming Convention
@@ -50,6 +52,8 @@ distributed/
   60__mpi4py.ipynb
   61__dask.ipynb
 ```
+
+An application subfolder keeps its module's numbering: its numbers stay unique within the module, and the format gate, test discovery and syllabus links recurse into it.
 
 Each module starts at a different tens digit (`00`-`09` for fundamentals, `20`-`29` for libraries, `40`-`49` for kernels, `60`-`69` for distributed), so notebooks have a globally unique ordering across the entire tutorial.
 
