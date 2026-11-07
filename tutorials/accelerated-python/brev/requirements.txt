@@ -6,6 +6,7 @@ numpy == 2.3.5
 # CuPy 14.2 supports SciPy versions below 1.18.
 scipy == 1.17.1
 matplotlib == 3.11.2
+scikit-image == 0.26.0
 opencv-python-headless == 5.0.0.93
 
 # Dark mode detection
