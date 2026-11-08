@@ -76,6 +76,10 @@ tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solut
 !tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solutions/swe_cub_solver.cpp
 !tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solutions/swe_raw_cuda_solver.cpp
 !tutorials/accelerated-python/notebooks/applications/shallow-water-equation/solutions/swe_step.cpp
+tutorials/accelerated-python/notebooks/applications/cosmic-web/timings
+tutorials/accelerated-python/notebooks/applications/cosmic-web/machine.json
+tutorials/accelerated-python/notebooks/applications/cosmic-web/data
+tutorials/accelerated-python/notebooks/applications/cosmic-web/*.py
 
 # Newton runtime outputs, model caches and learner backups are not image content.
 tutorials/newton/**/.generated

@@ -367,6 +367,11 @@ assert p=='${CPPJIT}', p; \
 assert os.path.exists(p+'/cppyy_backend/lib/libclangCppInterOp.so'), 'CppInterOp .so missing'; \
 print('cppjit layer OK at', p)"
 
+# The Quijote particle positions of the cosmic-web mini-app, so that no instance downloads them at the session.
+RUN mkdir -p /opt/cosmic-web/data
+ADD --chmod=0444 --checksum=sha256:dea0cc8ac6be0c6758da305e40f34ec334bf6ad7ef9e6caa56c108a9664a28e7 https://github.com/aaronj0/accelerated-computing-hub/releases/download/sc26-data/quijote_fiducial_0_z0_positions.npy /opt/cosmic-web/data/
+ENV COSMIC_WEB_DATA=/opt/cosmic-web/data
+
 COPY --chmod=0777 . /accelerated-computing-hub
 
 WORKDIR /accelerated-computing-hub/tutorials/${ACH_TUTORIAL}/notebooks
