@@ -25,6 +25,7 @@ nvmath-python[sysctk13] == 1.0.0
 cupy-cuda13x == 14.2.0
 cuda-cccl[test-sysctk13] == 1.1.1
 numba-cuda == 0.30.4
+numba-cuda-mlir == 0.6.0
 # The TileIRAs extra resolves against the CUDA Toolkit 13.2.1 pin below. The
 # image uses the matching system compiler and removes the duplicate wheel
 # payload with the rest of the Python CUDA toolkit files.
