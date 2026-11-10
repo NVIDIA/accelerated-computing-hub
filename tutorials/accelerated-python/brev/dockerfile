@@ -2,8 +2,8 @@
 ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
 FROM ${CUDA_BASE_IMAGE} AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
-ARG LLVM_TAG=isc2026
-ARG LLVM_COMMIT=4ff26eab5ce99a62e385fdd81f3a761daeec6013
+ARG LLVM_TAG=sc26
+ARG LLVM_COMMIT=f697ebdc1ea5148e1a8febec297ba27397b6daa4
 ENV DEBIAN_FRONTEND=noninteractive
 RUN sed -i 's|http://ports.ubuntu.com/ubuntu-ports|https://ports.ubuntu.com/ubuntu-ports|g' /etc/apt/sources.list \
  && printf 'Acquire::Retries "5";\nAcquire::https::Timeout "30";\nAcquire::http::Timeout "30";\n' > /etc/apt/apt.conf.d/80-ach-retries \
@@ -306,8 +306,8 @@ RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:annou
 
 # LLVM, CppInterOP, CppJIT
 ARG CPPJIT_REPO=https://github.com/aaronj0/cppjit-compres.git
-ARG CPPJIT_TAG=isc2026
-ARG CPPJIT_COMMIT=9fa5620dcf79a2804ed3e96bd58ce38e7de2a769
+ARG CPPJIT_TAG=sc26
+ARG CPPJIT_COMMIT=7ed6fc638172ebb5d42b4907ca048470550f4491
 ENV CUDA=/usr/local/cuda-13.2 \
     CPPJIT=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/cppjit
 
@@ -332,8 +332,10 @@ RUN --mount=type=bind,from=llvm-builder,source=/opt/llvm,target=/opt/llvm,readon
  && pip install --no-cache-dir --root-user-action=ignore /opt/cppjit-src \
       --config-settings=cmake.define.LLVM_DIR=/opt/llvm/lib/cmake/llvm \
       --config-settings=cmake.define.Clang_DIR=/opt/llvm/lib/cmake/clang \
- && rm -f "${CPPJIT}/cppyy_backend/lib/libclangCppInterOp.so.21.1" \
- && strip --strip-unneeded "${CPPJIT}/cppyy_backend/lib/libclangCppInterOp.so" \
+ && so="${CPPJIT}/interop/lib/libclangCppInterOp.so" \
+ && test -f "${so}" && test ! -L "${so}" \
+ && find "${CPPJIT}/interop/lib" -maxdepth 1 -name 'libclangCppInterOp.so.*' -delete \
+ && strip --strip-unneeded "${so}" \
  && rm -rf /opt/cppjit-src
 
 # CppJIT embeds Clang and only needs its resource headers at runtime. Mounting
@@ -341,31 +343,22 @@ RUN --mount=type=bind,from=llvm-builder,source=/opt/llvm,target=/opt/llvm,readon
 # compiler toolchain in the final image.
 COPY --from=llvm-builder /opt/llvm/lib/clang /opt/llvm/lib/clang
 
-# Backport LLVM ab048ac so Clang's CUDA wrapper defines the macro introduced by
-# CUDA 13.2 before it includes math_functions.hpp. This keeps CppJIT compatible
-# with both Ubuntu 22.04 and glibc 2.42 or newer.
-COPY tutorials/${ACH_TUTORIAL}/brev/clang-cuda-13.2-rsqrt.inc /tmp/clang-cuda-13.2-rsqrt.inc
-RUN wrapper=$(find /opt/llvm/lib/clang -name __clang_cuda_runtime_wrapper.h -print -quit) \
- && test -n "${wrapper}" \
- && sed -i \
-      -e '0,/#undef __CUDACC__/{' \
-      -e '/#undef __CUDACC__/r /tmp/clang-cuda-13.2-rsqrt.inc' \
-      -e '}' \
-      "${wrapper}" \
- && grep -q '#define _NV_RSQRT_SPECIFIER' "${wrapper}" \
- && rm -f /tmp/clang-cuda-13.2-rsqrt.inc
-
 ENV CPPJIT_ENABLE_CUDA=1
-ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/cppyy_backend/include:${CUDA}/include:${CUDA}/targets/native-linux/include/cccl:${CUDA}/targets/native-linux/include
-ENV LD_LIBRARY_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13/lib:${CUDA}/lib64:${CUDA}/targets/native-linux/lib:${CPPJIT}/cppyy_backend/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
+ENV CPLUS_INCLUDE_PATH=/usr/include/python${PYTHON_VERSION}:${CPPJIT}/interop/include:${CUDA}/include:${CUDA}/targets/native-linux/include/cccl:${CUDA}/targets/native-linux/include
+ENV LD_LIBRARY_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/nvidia/cu13/lib:${CUDA}/lib64:${CUDA}/targets/native-linux/lib:${CPPJIT}/interop/lib:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:${LD_LIBRARY_PATH}
 
 # Build-time sanity check
 RUN test -f ${CUDA}/nvvm/libdevice/libdevice.10.bc \
  && test -d /opt/llvm/lib/clang \
  && CPPJIT_OFFLOAD_ARCH=sm_80 python -c "import cppjit, os; assert cppjit.CUDA_ENABLED; p=os.path.dirname(cppjit.__file__); \
 assert p=='${CPPJIT}', p; \
-assert os.path.exists(p+'/cppyy_backend/lib/libclangCppInterOp.so'), 'CppInterOp .so missing'; \
+assert os.path.exists(p+'/interop/lib/libclangCppInterOp.so'), 'CppInterOp .so missing'; \
 print('cppjit layer OK at', p)"
+
+# The Quijote particle positions of the cosmic-web mini-app, so that no instance downloads them at the session.
+RUN mkdir -p /opt/cosmic-web/data
+ADD --chmod=0444 --checksum=sha256:dea0cc8ac6be0c6758da305e40f34ec334bf6ad7ef9e6caa56c108a9664a28e7 https://github.com/aaronj0/accelerated-computing-hub/releases/download/sc26-data/quijote_fiducial_0_z0_positions.npy /opt/cosmic-web/data/
+ENV COSMIC_WEB_DATA=/opt/cosmic-web/data
 
 COPY --chmod=0777 . /accelerated-computing-hub
 

@@ -17,7 +17,7 @@ from nbclient import NotebookClient
 from nbclient.exceptions import CellExecutionError
 
 NOTEBOOKS_DIR = Path(__file__).resolve().parent.parent / "notebooks"
-APPLICATIONS_DIR = NOTEBOOKS_DIR / "applications"
+APPLICATIONS_DIR = NOTEBOOKS_DIR / "applications" / "shallow-water-equation"
 
 
 def _runnable_notebook(stem):
