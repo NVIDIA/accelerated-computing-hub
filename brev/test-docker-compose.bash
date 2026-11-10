@@ -12,7 +12,7 @@
 #   ./brev/test-docker-compose.bash accelerated-python
 #   ./brev/test-docker-compose.bash accelerated-python test/test_notebooks.py -k "01__numpy"
 #   ./brev/test-docker-compose.bash --mount accelerated-python
-#   ./brev/test-docker-compose.bash tutorials/accelerated-python/brev/docker-compose.yml
+#   ./brev/test-docker-compose.bash tutorials/accelerated-python/docker/docker-compose.yml
 
 set -eu
 
@@ -47,7 +47,7 @@ Examples:
   $(basename "$0") accelerated-python
   $(basename "$0") accelerated-python test/test_notebooks.py -k "01__numpy"
   $(basename "$0") --mount accelerated-python
-  $(basename "$0") tutorials/accelerated-python/brev/docker-compose.yml
+  $(basename "$0") tutorials/accelerated-python/docker/docker-compose.yml
 
 Requirements:
   - Docker Compose or Podman Compose must be installed
@@ -96,7 +96,7 @@ else
         exit 1
     fi
 
-    COMPOSE_FILE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
+    COMPOSE_FILE="${ACH_TUTORIAL_PATH}/docker/docker-compose.yml"
 fi
 
 # Validate docker-compose file exists

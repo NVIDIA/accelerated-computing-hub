@@ -1,6 +1,5 @@
 # Stage 1: LLVM builder
-ARG CUDA_BASE_IMAGE=nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
-FROM ${CUDA_BASE_IMAGE} AS llvm-builder
+FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04 AS llvm-builder
 ARG LLVM_REPO=https://github.com/aaronj0/llvm-project.git
 ARG LLVM_TAG=isc2026
 ARG LLVM_COMMIT=4ff26eab5ce99a62e385fdd81f3a761daeec6013
@@ -36,7 +35,7 @@ RUN case "$(dpkg --print-architecture)" in \
  && rm -rf /src/llvm /src/llvm-build
 
 # Stage 2: Tutorial image
-FROM ${CUDA_BASE_IMAGE}
+FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
 
 # Match the development packages and exported build environment from NVIDIA's
 # CUDA 13.2.1 devel image. Starting from the runtime image lets us install and
@@ -181,7 +180,7 @@ RUN apt-get update -y \
 # Standard memory-bandwidth benchmarks: STREAM (McCalpin) for the CPU and
 # BabelStream v5.0 (CUDA model) for the GPU. Used to record the machine's
 # practical ceilings in machine.json for the SWE tutorial.
-COPY tutorials/${ACH_TUTORIAL}/brev/benchmarks/stream.c /opt/benchmarks/stream.c
+COPY tutorials/${ACH_TUTORIAL}/docker/benchmarks/stream.c /opt/benchmarks/stream.c
 RUN gcc -O3 -fopenmp -DSTREAM_ARRAY_SIZE=50000000 /opt/benchmarks/stream.c \
       -o /usr/local/bin/stream_c \
  && git clone --depth 1 --branch v5.0 https://github.com/UoB-HPC/BabelStream \
@@ -196,8 +195,8 @@ RUN gcc -O3 -fopenmp -DSTREAM_ARRAY_SIZE=50000000 /opt/benchmarks/stream.c \
 # Copy only dependency inputs first for better Docker layer caching. The
 # PyHPC kernel gets its own IPython startup directory without duplicating the
 # Python package environment.
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
-COPY tutorials/${ACH_TUTORIAL}/brev/ipython-startup-matplotlib-theme.py /opt/pyhpc-ipython/profile_default/startup/10-matplotlib-theme.py
+COPY tutorials/${ACH_TUTORIAL}/docker/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/docker/ipython-startup-matplotlib-theme.py /opt/pyhpc-ipython/profile_default/startup/10-matplotlib-theme.py
 
 # CUDA 13.2.1 is the newest toolkit in the stable PyTorch 2.14 build matrix.
 # Install the shared Accelerated Python/PyHPC/CUDA Tile package stack, then
@@ -344,7 +343,7 @@ COPY --from=llvm-builder /opt/llvm/lib/clang /opt/llvm/lib/clang
 # Backport LLVM ab048ac so Clang's CUDA wrapper defines the macro introduced by
 # CUDA 13.2 before it includes math_functions.hpp. This keeps CppJIT compatible
 # with both Ubuntu 22.04 and glibc 2.42 or newer.
-COPY tutorials/${ACH_TUTORIAL}/brev/clang-cuda-13.2-rsqrt.inc /tmp/clang-cuda-13.2-rsqrt.inc
+COPY tutorials/${ACH_TUTORIAL}/docker/clang-cuda-13.2-rsqrt.inc /tmp/clang-cuda-13.2-rsqrt.inc
 RUN wrapper=$(find /opt/llvm/lib/clang -name __clang_cuda_runtime_wrapper.h -print -quit) \
  && test -n "${wrapper}" \
  && sed -i \

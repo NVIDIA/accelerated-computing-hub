@@ -94,7 +94,7 @@ Stage0 += copy(src='tutorials/stdpar/include/ranges', dest=f'/usr/include/c++/{g
 Stage0 += cmake(eula=True, version=cmake_ver)
 
 # Copy only requirements.txt first for better Docker layer caching.
-Stage0 += copy(src=f'tutorials/{tutorial}/brev/requirements.txt', dest='/opt/requirements.txt')
+Stage0 += copy(src=f'tutorials/{tutorial}/docker/requirements.txt', dest='/opt/requirements.txt')
 
 Stage0 += shell(commands=[
   'set -ex',  # Exit on first error and debug output

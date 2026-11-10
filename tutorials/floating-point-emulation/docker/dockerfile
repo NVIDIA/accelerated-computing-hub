@@ -44,7 +44,7 @@ ENV CUDA_PATH=/usr/local/cuda-13.1 \
     PATH="/opt/venv/bin:$PATH" \
     LD_LIBRARY_PATH="/opt/nvidia/libmathdx/lib:$LD_LIBRARY_PATH"
 
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+COPY tutorials/${ACH_TUTORIAL}/docker/requirements.txt /opt/requirements.txt
 
 RUN set -ex \
  && `# Install Python packages` \

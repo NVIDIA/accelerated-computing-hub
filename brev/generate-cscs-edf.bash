@@ -17,7 +17,7 @@ Usage: $(basename "$0") [options] <tutorial-name|tutorial-dir|docker-compose-fil
 Options:
   --image IMAGE       Container image URI (default: image from docker-compose.yml)
   --tag TAG           Replace the image tag before writing the EDF
-  --output FILE       EDF output path (default: <tutorial>/brev/cscs.toml)
+  --output FILE       EDF output path (default: <tutorial>/docker/cscs.toml)
   --mount             Bind-mount this repository at /accelerated-computing-hub
   --no-mount          Do not bind-mount this repository (default)
   --workdir DIR       Working directory inside the container (default: compose working_dir)
@@ -90,7 +90,7 @@ if [[ "${ARG}" == *"/"* ]]; then
     [[ "${ARG_PATH}" == /* ]] || ARG_PATH="${REPO_ROOT}/${ARG_PATH}"
     if [ -d "${ARG_PATH}" ]; then
         TUTORIAL_DIR="${ARG_PATH}"
-        COMPOSE_FILE="${TUTORIAL_DIR}/brev/docker-compose.yml"
+        COMPOSE_FILE="${TUTORIAL_DIR}/docker/docker-compose.yml"
     else
         COMPOSE_FILE="${ARG_PATH}"
         TUTORIAL_DIR=$(dirname "$(dirname "${COMPOSE_FILE}")")
@@ -99,7 +99,7 @@ if [[ "${ARG}" == *"/"* ]]; then
 else
     ACH_TUTORIAL="${ARG}"
     TUTORIAL_DIR="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
-    COMPOSE_FILE="${TUTORIAL_DIR}/brev/docker-compose.yml"
+    COMPOSE_FILE="${TUTORIAL_DIR}/docker/docker-compose.yml"
 fi
 
 if [ ! -f "${COMPOSE_FILE}" ]; then
@@ -107,7 +107,7 @@ if [ ! -f "${COMPOSE_FILE}" ]; then
     exit 1
 fi
 
-# Generated syllabus Compose files are nested below a tutorial's brev/
+# Generated syllabus Compose files are nested below a tutorial's docker/
 # directory, so dirname alone cannot identify the tutorial. Read the
 # repository's tutorial-name anchor even when --image and --workdir let this
 # command run without Docker Compose.
@@ -164,7 +164,7 @@ if [ -z "${WORKDIR}" ]; then
     WORKDIR=$(jq -r '."x-config"."working-dir" // empty' <<< "${COMPOSE_CONFIG}")
 fi
 if [ -z "${OUTPUT}" ]; then
-    OUTPUT="${TUTORIAL_DIR}/brev/cscs.toml"
+    OUTPUT="${TUTORIAL_DIR}/docker/cscs.toml"
 fi
 
 mkdir -p "$(dirname "${OUTPUT}")"

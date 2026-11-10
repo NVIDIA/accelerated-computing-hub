@@ -145,4 +145,4 @@ logs/
 .turn-credentials
 
 # HPCCM generated Dockerfiles
-stdpar-tutorial/brev/dockerfile
+tutorials/stdpar/docker/dockerfile

@@ -42,7 +42,7 @@ fi
 
 ACH_TUTORIAL=$1
 ACH_TUTORIAL_PATH="${REPO_ROOT}/tutorials/${ACH_TUTORIAL}"
-DOCKER_COMPOSE="${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
+DOCKER_COMPOSE="${ACH_TUTORIAL_PATH}/docker/docker-compose.yml"
 DOCKER_COMPOSE_DEV="/tmp/docker-compose.${ACH_TUTORIAL}.dev.yml"
 
 # Validate tutorial exists

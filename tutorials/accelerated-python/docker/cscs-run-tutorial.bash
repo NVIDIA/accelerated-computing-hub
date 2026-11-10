@@ -48,7 +48,7 @@ fi
 
 bootstrap_streamed_helpers() {
     local branch=${ACH_BRANCH:-main}
-    local base_url=${ACH_CSCS_HELPER_BASE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/tutorials/accelerated-python/brev}
+    local base_url=${ACH_CSCS_HELPER_BASE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/tutorials/accelerated-python/docker}
     local prepare_url=${ACH_CSCS_PREPARE_URL:-https://raw.githubusercontent.com/NVIDIA/accelerated-computing-hub/${branch}/brev/prepare-podman-compose.py}
     local helper_dir
     helper_dir=$(mktemp -d "${TMPDIR:-/tmp}/ach-cscs-helpers.XXXXXX")

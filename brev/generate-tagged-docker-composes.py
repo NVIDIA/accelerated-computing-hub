@@ -87,7 +87,7 @@ def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path)
     Returns:
         Number of files generated
     """
-    docker_compose_src = tutorial_dir / 'brev' / 'docker-compose.yml'
+    docker_compose_src = tutorial_dir / 'docker' / 'docker-compose.yml'
     if not docker_compose_src.exists():
         print(f"⚠️  Warning: No docker-compose.yml found for {tutorial_dir.name}")
         return 0
@@ -100,7 +100,7 @@ def generate_base_composes(tutorial_dir: Path, image_tag: str, output_dir: Path)
 
     # Create output directory structure
     tutorial_name = tutorial_dir.name
-    output_tutorial_dir = output_dir / tutorial_name / 'brev'
+    output_tutorial_dir = output_dir / tutorial_name / 'docker'
     output_tutorial_dir.mkdir(parents=True, exist_ok=True)
 
     # Write modified docker-compose file
@@ -134,7 +134,7 @@ def generate_syllabi_composes(
         return 0
 
     # Check for docker-compose.yml
-    docker_compose_src = tutorial_dir / 'brev' / 'docker-compose.yml'
+    docker_compose_src = tutorial_dir / 'docker' / 'docker-compose.yml'
     if not docker_compose_src.exists():
         print(f"⚠️  Warning: No docker-compose.yml found for {tutorial_dir.name}")
         return 0

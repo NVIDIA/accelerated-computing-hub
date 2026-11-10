@@ -81,7 +81,7 @@ These scripts are used by the pre-commit hooks and CI. You can also run them dir
 
 ### Other Utility Scripts
 
-* **`brev/discover-tutorials.bash`** - Prints one line per tutorial directory (relative to repo root) for every tutorial that has a `brev/docker-compose.yml`. Used by `dev-build.bash` and CI.
+* **`brev/discover-tutorials.bash`** - Prints one line per tutorial directory (relative to repo root) for every tutorial that has a `docker/docker-compose.yml`. Used by `dev-build.bash` and CI.
 
 * **`brev/generate-tagged-docker-composes.py`** - Generates Docker Compose files with specific image tags for a given branch/commit. Used by CI to produce versioned artifacts that are pushed to the `generated` branch.
 
@@ -125,7 +125,7 @@ These branches are created to enable CI on pull requests from forks. Because thi
 
 ### `generated`
 
-A CI-managed branch that stores generated artifacts (e.g. tagged Docker Compose files). The build workflow automatically commits updated Docker Compose files to this branch under `<source-branch>/tutorials/<tutorial-name>/` after each successful build. You should never need to commit to this branch manually.
+A CI-managed branch that stores generated artifacts (e.g. tagged Docker Compose files). The Tutorials workflow commits updated Docker Compose files to this branch under `<source-branch>/tutorials/<tutorial-name>/` after a tutorial's image passes its tests. You should never need to commit to this branch manually.
 
 ### Event branches (`YYYY-MM-<event-name>`)
 

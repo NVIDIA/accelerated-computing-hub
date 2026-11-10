@@ -41,24 +41,24 @@ build_tutorial() {
     echo "Building tutorial image: ${ACH_TUTORIAL}"
     echo "========================================"
 
-    if [ ! -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" ]; then
-        echo "Warning: No docker-compose.yml found at ${ACH_TUTORIAL_PATH}/brev/docker-compose.yml"
+    if [ ! -f "${ACH_TUTORIAL_PATH}/docker/docker-compose.yml" ]; then
+        echo "Warning: No docker-compose.yml found at ${ACH_TUTORIAL_PATH}/docker/docker-compose.yml"
         echo "Skipping..."
         return 0
     fi
 
     # Check for HPCCM recipe and generate Dockerfile if needed
-    if [ -f "${ACH_TUTORIAL_PATH}/brev/docker-recipe.py" ]; then
+    if [ -f "${ACH_TUTORIAL_PATH}/docker/docker-recipe.py" ]; then
         echo "Found HPCCM recipe, generating Dockerfile..."
         if ! command -v hpccm &> /dev/null; then
             echo "Error: hpccm not found. Please install it with: pip install hpccm"
             exit 1
         fi
-        hpccm --recipe "${ACH_TUTORIAL_PATH}/brev/docker-recipe.py" --format docker > "${ACH_TUTORIAL_PATH}/brev/dockerfile"
+        hpccm --recipe "${ACH_TUTORIAL_PATH}/docker/docker-recipe.py" --format docker > "${ACH_TUTORIAL_PATH}/docker/dockerfile"
         echo "Dockerfile generated successfully"
     fi
 
-    compose -f "${ACH_TUTORIAL_PATH}/brev/docker-compose.yml" build ${NO_CACHE}
+    compose -f "${ACH_TUTORIAL_PATH}/docker/docker-compose.yml" build ${NO_CACHE}
 
     echo "Successfully built image for ${ACH_TUTORIAL}"
     echo ""

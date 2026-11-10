@@ -1,10 +1,11 @@
-name: &tutorial-name sim2real-blogs
+name: &tutorial-name floating-point-emulation
 
 x-config:
-  dockerfile: &dockerfile tutorials/sim2real-blogs/brev/dockerfile
-  image: &image ghcr.io/nvidia/sim2real-blogs-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/sim2real-blogs/notebooks
-  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/sim2real-blogs/notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/sim2real-blogs/notebooks"]
+  dockerfile: &dockerfile tutorials/floating-point-emulation/docker/dockerfile
+  image: &image ghcr.io/nvidia/floating-point-emulation-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/floating-point-emulation/notebooks
+  large: &large true
+  default-jupyter-url: &default-jupyter-url
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -18,20 +19,18 @@ x-config:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-  common-env: &common-env
-    ACH_TUTORIAL: *tutorial-name
-    ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
-    ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
-    ACH_RESTART_COMPOSE_SERVICES: "1"
-    ACH_USER: ${ACH_USER:-ach}
-    ACH_UID: ${ACH_UID:-1000}
-    ACH_GID: ${ACH_GID:-1000}
   common-service: &common-service
     pull_policy: missing
     volumes:
       - accelerated-computing-hub:/accelerated-computing-hub
       - /var/run/docker.sock:/var/run/docker.sock
-    environment: *common-env
+    environment:
+      ACH_TUTORIAL: *tutorial-name
+      ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
+      ACH_RESTART_COMPOSE_SERVICES: "1"
+      ACH_USER: ${ACH_USER:-ach}
+      ACH_UID: ${ACH_UID:-1000}
+      ACH_GID: ${ACH_GID:-1000}
     user: root
     working_dir: *working-dir
   persistent-service: &persistent-service
@@ -56,6 +55,13 @@ services:
     command: *default-jupyter-url
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
+  nsight:
+    <<: [*gpu-config, *common-service, *persistent-service]
+    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2025.3.1
+    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
+    ports:
+      - "0.0.0.0:8080:8080" # HTTP
+      - "0.0.0.0:3478:3478" # TURN
 
 volumes:
   accelerated-computing-hub:
