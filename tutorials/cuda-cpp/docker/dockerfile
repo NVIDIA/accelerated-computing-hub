@@ -1,14 +1,14 @@
-FROM ghcr.io/nvidia/mirrors/nvidia-cuda-13.1.0-devel-ubuntu22.04
+FROM nvcr.io/nvidia/cuda:13.2.1-devel-ubuntu22.04
 
-ENV ACH_TUTORIAL=sim2real-blogs \
+ENV ACH_TUTORIAL=cuda-cpp \
     PYTHON_VERSION=3.12 \
+    ACH_NSYS_PATH=/usr/local/cuda/bin/nsys \
+    ACH_NCU_PATH=/usr/local/cuda/bin/ncu \
     PIP_ROOT_USER_ACTION=ignore \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     MPLCONFIGDIR=/tmp/matplotlib_cache \
-    MUJOCO_GL=egl \
-    NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics \
     VIRTUAL_ENV_DISABLE_PROMPT=1 \
-    PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
+    PATH=/accelerated-computing-hub/brev/wrappers:/usr/local/nvidia/bin:/usr/local/cuda/bin:${PATH}
 
 # Install system packages (needed before pip install for git-based packages)
 RUN apt-get update -y \
@@ -19,12 +19,11 @@ RUN apt-get update -y \
     ca-certificates \
     curl \
     gnupg \
-    lsb-release \
     gosu \
     libglib2.0-0 \
-    libegl1 \
-    libgl1 \
+    socat \
     sudo \
+    ffmpeg \
  && apt-get clean -y \
  && rm -rf /var/lib/apt/lists/*
 
@@ -39,6 +38,7 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     python${PYTHON_VERSION} \
     python${PYTHON_VERSION}-dev \
+    python${PYTHON_VERSION}-venv \
  && curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} \
  && ln -sf /usr/bin/python${PYTHON_VERSION} /usr/bin/python3 \
  && ln -sf /usr/bin/python3 /usr/bin/python \
@@ -46,17 +46,12 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Use the same MuJoCo 3.17 / Warp 1.18 environment as the local notebooks.
-# Historical benchmark snapshots retain their original dependency versions.
-COPY tutorials/${ACH_TUTORIAL}/notebooks/mujoco/requirements.lock.txt /opt/physics.lock.txt
-COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
+# Copy only requirements.txt first for better Docker layer caching.
+COPY tutorials/${ACH_TUTORIAL}/docker/requirements.txt /opt/requirements.txt
 
-# UI tools may add packages but cannot upgrade the locked physics dependencies.
-RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes -r /opt/physics.lock.txt \
- && pip freeze > /opt/locked-constraints.txt \
- && pip install --no-cache-dir --root-user-action=ignore -c /opt/locked-constraints.txt -r /opt/requirements.txt \
- && pip check \
- && rm -f /opt/requirements.txt /opt/physics.lock.txt /opt/locked-constraints.txt
+# Install Python packages.
+RUN pip install --no-cache-dir --root-user-action=ignore -r /opt/requirements.txt \
+ && rm -f /opt/requirements.txt
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \

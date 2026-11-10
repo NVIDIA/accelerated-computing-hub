@@ -80,7 +80,7 @@ if [[ "${ARG}" == *"/"* ]]; then
         COMPOSE_FILE="${REPO_ROOT}/${COMPOSE_FILE}"
     fi
 
-    # Extract tutorial name from path: .../tutorials/<tutorial-name>/brev/docker-compose.yml
+    # Extract tutorial name from path: .../tutorials/<tutorial-name>/docker/docker-compose.yml
     COMPOSE_DIR=$(dirname "${COMPOSE_FILE}")
     TUTORIAL_DIR=$(dirname "${COMPOSE_DIR}")
     ACH_TUTORIAL=$(basename "${TUTORIAL_DIR}")

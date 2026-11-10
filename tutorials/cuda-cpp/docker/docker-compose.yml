@@ -1,12 +1,9 @@
-name: &tutorial-name accelerated-python
+name: &tutorial-name cuda-cpp
 
 x-config:
-  dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/accelerated-python-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
-  large: &large true
-  architectures: [amd64, arm64]
-  default-jupyter-url: &default-jupyter-url
+  dockerfile: &dockerfile tutorials/cuda-cpp/docker/dockerfile
+  image: &image ghcr.io/nvidia/cuda-cpp-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/cuda-cpp/notebooks
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -21,7 +18,6 @@ x-config:
               count: all
               capabilities: [gpu]
   common-env: &common-env
-    BREV_ENV_ID: ${BREV_ENV_ID:-}
     ACH_TUTORIAL: *tutorial-name
     ACH_RUN_TESTS: ${ACH_RUN_TESTS:-}
     ACH_TEST_ARGS: ${ACH_TEST_ARGS:-}
@@ -51,17 +47,14 @@ services:
     build:
       context: ../../..
       dockerfile: *dockerfile
-      args:
-        CUDA_BASE_IMAGE: ${CUDA_BASE_IMAGE:-nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04}
     restart: "no"
   jupyter:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
-    command: *default-jupyter-url
     environment:
       <<: *common-env
-      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8081"
+      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
   nsys:
@@ -73,18 +66,14 @@ services:
       - "0.0.0.0:3478:3478" # TURN
   ncu:
     <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2026.2.1
+    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
     environment:
       <<: *common-env
-      HTTP_PORT: "8081"
       TURN_PORT: "3479"
     ports:
-      - "0.0.0.0:8081:8081" # HTTP
+      - "0.0.0.0:8081:8080" # HTTP
       - "0.0.0.0:3479:3479" # TURN
 
 volumes:
   accelerated-computing-hub:
-    # PyHPC moved into this tutorial, so initialize a new repository snapshot
-    # without deleting either tutorial's existing student-work volume.
-    name: ${ACH_VOLUME_NAME:-accelerated-python_accelerated-computing-hub-v2}

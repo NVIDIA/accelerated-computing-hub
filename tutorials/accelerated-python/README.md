@@ -5,7 +5,7 @@ This modular tutorial contains content on all things related to accelerated Pyth
 - [Notebooks](./notebooks) containing lessons and exercises organized by topic, including CUDA Tile and the PyHPC material on CuPy, CUDA kernels, MPI, JAX, PyOMP, and Python/C++ interoperability. They are intended for self-paced or instructor-led learning and can be run on [NVIDIA Brev](https://brev.nvidia.com) or [Google Colab](https://colab.research.google.com).
 - [Slides](./slides) containing the lecture content for the lessons.
 - [Syllabi](./notebooks/syllabi) that select a subset of the notebooks for a particular learning objective.
-- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./brev/docker-compose.yml) for creating Brev Launchables or running locally.
+- [Docker Images](https://github.com/NVIDIA/accelerated-computing-hub/pkgs/container/accelerated-python-tutorial) and [Docker Compose files](./docker/docker-compose.yml) for creating Brev Launchables or running locally.
 
 Brev Launchables of this tutorial should use:
 - L40S, L4, or T4 instances (for non-distributed notebooks other than CUDA Tile).

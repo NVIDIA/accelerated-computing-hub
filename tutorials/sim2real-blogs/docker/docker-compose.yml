@@ -1,10 +1,10 @@
-name: &tutorial-name nvmath-python
+name: &tutorial-name sim2real-blogs
 
 x-config:
-  dockerfile: &dockerfile tutorials/nvmath-python/brev/dockerfile
-  image: &image ghcr.io/nvidia/nvmath-python-tutorial:latest
-  working-dir: &working-dir /accelerated-computing-hub/tutorials/nvmath-python/notebooks
-  large: &large true
+  dockerfile: &dockerfile tutorials/sim2real-blogs/docker/dockerfile
+  image: &image ghcr.io/nvidia/sim2real-blogs-tutorial:latest
+  working-dir: &working-dir /accelerated-computing-hub/tutorials/sim2real-blogs/notebooks
+  default-jupyter-url: &default-jupyter-url ["/lab/tree/accelerated-computing-hub/tutorials/sim2real-blogs/notebooks/mujoco/part1/01__mujoco_fundamentals.ipynb?file-browser-path=/accelerated-computing-hub/tutorials/sim2real-blogs/notebooks"]
   gpu-config: &gpu-config
     privileged: true
     ulimits:
@@ -53,28 +53,9 @@ services:
     <<: [*gpu-config, *common-service, *persistent-service]
     image: *image
     entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "jupyter"]
-    environment:
-      <<: *common-env
-      ACH_PORT_FORWARDS: "8080:nsys:8080 8081:ncu:8080"
+    command: *default-jupyter-url
     ports:
       - "0.0.0.0:8888:8888" # JupyterLab
-  nsys:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-nsys:2026.1.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    ports:
-      - "0.0.0.0:8080:8080" # HTTP
-      - "0.0.0.0:3478:3478" # TURN
-  ncu:
-    <<: [*gpu-config, *common-service, *persistent-service]
-    image: nvcr.io/nvidia/devtools/nsight-streamer-ncu:2025.4.1
-    entrypoint: ["/accelerated-computing-hub/brev/entrypoint.bash", "nsight"]
-    environment:
-      <<: *common-env
-      TURN_PORT: "3479"
-    ports:
-      - "0.0.0.0:8081:8080" # HTTP
-      - "0.0.0.0:3479:3479" # TURN
 
 volumes:
   accelerated-computing-hub:

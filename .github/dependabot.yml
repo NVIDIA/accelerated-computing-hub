@@ -1,0 +1,19 @@
+# Open pull requests when NVIDIA publishes a newer CUDA base image.
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+version: 2
+updates:
+  - package-ecosystem: docker
+    # Keep this list in sync with CI_TUTORIALS in
+    # .github/workflows/tutorials.yml.
+    directories:
+      - /tutorials/accelerated-python/docker
+      - /tutorials/cuda-cpp/docker
+      - /tutorials/nvmath-python/docker
+      - /tutorials/warp/docker
+    schedule:
+      interval: weekly
+    groups:
+      # Bump every tutorial's base image in one pull request, so they move to
+      # a new CUDA version together.
+      cuda-base-images:
+        patterns: ["*"]

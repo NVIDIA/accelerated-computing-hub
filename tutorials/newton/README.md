@@ -101,7 +101,7 @@ its long cells show output when the run finishes.
 
 ## Docker and Brev
 
-The [container](brev/docker-compose.yml) includes the environment and JupyterLab
+The [container](docker/docker-compose.yml) includes the environment and JupyterLab
 on port 8888. Its CUDA 13.1 image needs a compatible NVIDIA driver and NVIDIA
 Container Toolkit. It reserves 4 GiB of shared memory for the CPU task histories.
 
@@ -116,7 +116,7 @@ brev/dev-test.bash newton
 The test command runs the tests and notebooks 01, 02, 04 and notebook 05's setup
 check. Set `NEWTON_NOTEBOOKS_INCLUDE_FINAL=1` before starting Compose to include
 the longer notebook 03. To run one notebook from `tutorials/newton`, use
-`bash brev/test.bash 01` through `05`.
+`bash docker/test.bash 01` through `05`.
 
 ## Compare CPU and GPU performance
 
