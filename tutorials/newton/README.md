@@ -102,7 +102,7 @@ its long cells show output when the run finishes.
 ## Docker and Brev
 
 The [container](brev/docker-compose.yml) includes the environment and JupyterLab
-on port 8888. Its CUDA 13.1 image needs a compatible NVIDIA driver and NVIDIA
+on port 8888. Its CUDA 13.2 image needs a compatible NVIDIA driver and NVIDIA
 Container Toolkit. It reserves 4 GiB of shared memory for the CPU task histories.
 
 From the Hub repository root:

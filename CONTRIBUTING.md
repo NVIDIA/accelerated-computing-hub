@@ -125,7 +125,7 @@ These branches are created to enable CI on pull requests from forks. Because thi
 
 ### `generated`
 
-A CI-managed branch that stores generated artifacts (e.g. tagged Docker Compose files). The build workflow automatically commits updated Docker Compose files to this branch under `<source-branch>/tutorials/<tutorial-name>/` after each successful build. You should never need to commit to this branch manually.
+A CI-managed branch that stores generated artifacts (e.g. tagged Docker Compose files). The Tutorials workflow commits updated Docker Compose files to this branch under `<source-branch>/tutorials/<tutorial-name>/` after a tutorial's image passes its tests. You should never need to commit to this branch manually.
 
 ### Event branches (`YYYY-MM-<event-name>`)
 
