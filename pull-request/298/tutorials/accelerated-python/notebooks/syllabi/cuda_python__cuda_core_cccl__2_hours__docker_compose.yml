@@ -1,7 +1,7 @@
 name: &tutorial-name accelerated-python
 
 x-config:
-  dockerfile: &dockerfile tutorials/accelerated-python/docker/dockerfile
+  dockerfile: &dockerfile tutorials/accelerated-python/brev/dockerfile
   image: &image ghcr.io/nvidia/accelerated-python-tutorial:pull-request-298-latest
   working-dir: &working-dir /accelerated-computing-hub/tutorials/accelerated-python/notebooks
   large: &large true
