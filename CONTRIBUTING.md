@@ -57,7 +57,7 @@ These are the primary scripts for local development. They all accept a tutorial 
 
 * **`brev/dev-build.bash [<tutorial-name>]`** - Builds Docker images. If a tutorial name is provided, builds only that tutorial; if omitted, builds all tutorials discovered by `discover-tutorials.bash`. Automatically generates Dockerfiles from HPCCM recipes if present.
 
-* **`brev/dev-start.bash [--mount|--no-mount] <tutorial-name>`** - Starts containers for a tutorial. By default (`--mount`), bind-mounts the local repository into the containers at `/accelerated-computing-hub` so edits are reflected immediately. Use `--no-mount` to run from the image content only. Rebinds ports to `0.0.0.0` for local access.
+* **`brev/dev-start.bash [--mount|--no-mount] <tutorial-name>`** - Starts containers for a tutorial. By default (`--mount`), bind-mounts the local repository into the containers at `/accelerated-computing-hub` so edits are reflected immediately. Use `--no-mount` to run from the image content only. Uses the tutorial Compose file's published port bindings directly.
 
 * **`brev/dev-stop.bash <tutorial-name>`** - Stops and tears down containers for a tutorial.
 
