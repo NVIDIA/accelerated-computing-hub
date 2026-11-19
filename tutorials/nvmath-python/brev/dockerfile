@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/cuda:13.2.1-runtime-ubuntu22.04
+FROM nvcr.io/nvidia/cuda:13.5.0-runtime-ubuntu22.04
 
 ENV ACH_TUTORIAL=nvmath-python \
     PYTHON_VERSION=3.12 \
