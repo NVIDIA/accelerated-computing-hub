@@ -1,5 +1,8 @@
-# Pin NVIDIA library versions to match PyTorch requirements from
-# pytorch:2.12.1-cuda13.2-cudnn9-runtime image.
+# PyTorch built for CUDA 13.2, from PyTorch's own package index.
+--extra-index-url https://download.pytorch.org/whl/cu132
+torch == 2.12.1
+
+# Pin NVIDIA library versions to match PyTorch's CUDA 13.2 requirements.
 cuda-toolkit[cublas,nvrtc,nvjitlink]==13.2.1
 nvidia-nvshmem-cu13==3.4.5
 
