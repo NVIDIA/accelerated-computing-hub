@@ -11,7 +11,7 @@ equipping learners with practical skills to leverage GPU acceleration effectivel
 
 ### Why Top-Down?
 
-Traditional CUDA courses typically starts with the vector add kernel, which requires introducing many concepts simultaneously: 
+Traditional CUDA courses typically start with the vector add kernel, which requires introducing many concepts simultaneously: 
 execution space, memory space, asynchrony, parallel vs. sequential computing, and the CUDA thread hierarchy. 
 This approach can overwhelm beginners and doesn't reflect modern CUDA C++ best practices.
 
@@ -322,7 +322,7 @@ The `ach::where_am_I` helper prints "Correct!" or "Wrong guess" — making succe
   ach::where_am_I("CPU");
   ```
 
-  You can find the full solution [here](Solutions/no-magic-execution-space-changes.cpp).
+  You can find the full solution [here](notebooks/01.02-Execution-Spaces/Solutions/no-magic-execution-space-changes.cpp).
 </details>
 ````
 
