@@ -1,0 +1,70 @@
+name: Update Lock Exports
+
+# Dependabot updates each tutorial's uv.lock but not the pip requirements files
+# exported from it. Regenerate those files on Dependabot's branch and commit
+# them through the GitHub API, which signs the commit.
+
+on:
+  push:
+    branches:
+      - 'dependabot/uv/**'
+
+concurrency:
+  group: ${{ github.workflow }}-from-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-lock-exports:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          # Keep in sync with test-lock-files.yml.
+          version: "0.12.0"
+
+      - name: Regenerate exported requirements files
+        run: brev/update-lock-exports.bash
+
+      - name: Commit changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -eu -o pipefail
+
+          mapfile -t changed < <(git diff --name-only)
+          if [ "${#changed[@]}" -eq 0 ]; then
+            echo "Exported requirements files are already up to date."
+            exit 0
+          fi
+
+          additions=$(for path in "${changed[@]}"; do
+            jq -n --arg path "${path}" --rawfile contents <(base64 -w0 "${path}") \
+              '{path: $path, contents: $contents}'
+          done | jq -s .)
+
+          jq -n \
+            --arg repo "${GITHUB_REPOSITORY}" \
+            --arg branch "${BRANCH}" \
+            --arg head "${GITHUB_SHA}" \
+            --argjson additions "${additions}" \
+            '{
+              query: "mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }",
+              variables: {
+                input: {
+                  branch: {repositoryNameWithOwner: $repo, branchName: $branch},
+                  expectedHeadOid: $head,
+                  message: {headline: "Update exported requirements files from uv.lock."},
+                  fileChanges: {additions: $additions}
+                }
+              }
+            }' | gh api graphql --input -

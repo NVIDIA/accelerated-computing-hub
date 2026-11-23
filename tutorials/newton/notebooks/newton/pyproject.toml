@@ -1,0 +1,42 @@
+# Python dependencies for the Newton tutorial (Python 3.12).
+#
+# Edit the dependencies here, then regenerate the lock files:
+#
+#   uv lock
+#   uv export --frozen --no-emit-project -o requirements.lock.txt
+#
+# uv.lock is the source of truth that Dependabot updates. requirements.lock.txt
+# is exported from it for anyone who installs with pip, and it is what the
+# notebooks, the setup in ../../README.md and the container image install:
+#
+#   pip install --require-hashes -r requirements.lock.txt
+
+[project]
+name = "ach-newton-tutorial"
+version = "0"
+requires-python = "==3.12.*"
+dependencies = [
+    # Version-matched physics/import/viewer stack (CPU and optional NVIDIA CUDA).
+    # The tutorial tests check these exact versions.
+    "newton[examples]==1.7.0",
+    "warp-lang==1.18.0",
+    "mujoco==3.15.0",
+    "mujoco-warp==3.15.0",
+    "newton-usd-schemas==0.5.0",
+    "usd-core==26.3",
+    "numpy==2.5.3",
+    "scipy==1.18.1",  # Bounded inverse kinematics for the mixed-material gripper task.
+
+    # Notebook kernel, checked execution and tests.
+    "nbformat==5.11.1",
+    "nbclient==0.11.0",
+    "ipykernel>=6.29,<8",
+    "ipywidgets>=8.1,<9",
+    "jupyterlab>=4.4,<5",
+    "matplotlib>=3.10,<4",
+    "pillow>=13.0.0",  # Image export; keep the security floor.
+    "pytest>=8.3,<10",
+]
+
+[tool.uv]
+package = false

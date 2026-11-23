@@ -20,9 +20,12 @@ class NewtonMigrationTests(unittest.TestCase):
     def test_dedicated_requirements_pin_the_exercised_physics_stack(self):
         import importlib.metadata
 
-        path = ROOT / 'newton' / 'requirements.txt'
+        import tomllib
+
+        path = ROOT / 'newton' / 'pyproject.toml'
         self.assertTrue(path.is_file(), 'Article 3 needs its own requirements, not an Article 2 downgrade')
-        requirements = {line.strip() for line in path.read_text().splitlines() if not line.startswith('#')}
+        dependencies = tomllib.loads(path.read_text())['project']['dependencies']
+        requirements = {dependency.split('#')[0].strip() for dependency in dependencies}
         for package, version in (('newton[examples]', '1.7.0'), ('warp-lang', '1.18.0'),
                                  ('mujoco', '3.15.0'), ('mujoco-warp', '3.15.0'),
                                  ('newton-usd-schemas', '0.5.0'), ('usd-core', '26.3')):

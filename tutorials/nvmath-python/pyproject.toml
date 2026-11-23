@@ -1,0 +1,66 @@
+# Python dependencies for the nvmath-python tutorial.
+#
+# Edit the dependencies here, then regenerate the lock files:
+#
+#   uv lock
+#   uv export --frozen --no-emit-project --emit-index-url -o requirements.txt
+#
+# uv.lock is the source of truth that Dependabot updates. requirements.txt is
+# exported from it for anyone who installs with pip:
+#
+#   pip install --require-hashes -r requirements.txt
+
+[project]
+name = "ach-nvmath-python-tutorial"
+version = "0"
+requires-python = "==3.12.*"
+dependencies = [
+    # PyTorch built for CUDA 13.2, from PyTorch's own package index (see below).
+    "torch",
+
+    # Keep the CUDA libraries on the toolkit version PyTorch is built for.
+    "cuda-toolkit[cublas,nvrtc,nvjitlink]==13.2.*",
+    "nvidia-nvshmem-cu13==3.4.5",
+
+    "mkl<2026",
+
+    # Scientific
+    "numpy",
+    "scipy",
+    "ssgetpy",
+    "cupy-cuda13x",
+
+    "nvmath-python[cu13-distributed,cu13-dx,cpu]",
+
+    # Visualization
+    "matplotlib",
+
+    # Dark mode detection
+    "jupyter-dark-detect",
+
+    # Jupyter
+    "jupyter-server-proxy",
+    "jupyterlab",
+    "jupyterlab-execute-time",
+    "ipywidgets",
+    "ipykernel",
+    "ipyparallel",
+    "nbdistributed",
+
+    # MPI
+    "openmpi",
+    "mpi4py",
+]
+
+[tool.uv]
+package = false
+# CUDA builds of PyTorch exist only for Linux.
+environments = ["sys_platform == 'linux'"]
+
+[[tool.uv.index]]
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu132" }

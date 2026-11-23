@@ -14,7 +14,6 @@ on:
   push:
     branches:
       - main
-      - "event/**"
       - "pull-request/[0-9]+"
   schedule:
     # Nightly build at midnight EST (5 AM UTC).

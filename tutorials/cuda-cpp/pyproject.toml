@@ -1,0 +1,36 @@
+# Python dependencies for the CUDA C++ tutorial.
+#
+# Edit the dependencies here, then regenerate the lock files:
+#
+#   uv lock
+#   uv export --frozen --no-emit-project -o requirements.txt
+#
+# uv.lock is the source of truth that Dependabot updates. requirements.txt is
+# exported from it for anyone who installs with pip:
+#
+#   pip install --require-hashes -r requirements.txt
+
+[project]
+name = "ach-cuda-cpp-tutorial"
+version = "0"
+requires-python = "==3.12.*"
+dependencies = [
+    # Visualization
+    "matplotlib",
+
+    # Dark mode detection
+    "jupyter-dark-detect",
+
+    # Jupyter
+    "jupyter",
+    "jupyter-server-proxy",
+    "jupyterlab-execute-time",
+
+    # NVIDIA devtools. nsightful is not on PyPI, so pin a commit archive, which
+    # pip can verify by hash (git URLs cannot be). Dependabot does not update
+    # this; bump the commit by hand.
+    "nsightful[notebook] @ https://github.com/brycelelbach/nsightful/archive/cbe425a4d8de4fee91d656ce6446da94f7f0f741.tar.gz",
+]
+
+[tool.uv]
+package = false

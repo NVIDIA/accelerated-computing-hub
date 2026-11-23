@@ -46,17 +46,14 @@ RUN curl -fsSL https://keyserver.ubuntu.com/pks/lookup?op=get\&search=0xBA693236
  && rm -f /usr/lib/python3.*/EXTERNALLY-MANAGED \
  && rm -rf /var/lib/apt/lists/*
 
-# Use the same MuJoCo 3.17 / Warp 1.18 environment as the local notebooks.
-# Historical benchmark snapshots retain their original dependency versions.
-COPY tutorials/${ACH_TUTORIAL}/notebooks/mujoco/requirements.lock.txt /opt/physics.lock.txt
+# The same MuJoCo 3.17 / Warp 1.18 environment as the local notebooks, plus the
+# notebook UI and test tools. Both are exported from one uv.lock, so the image
+# and notebooks/mujoco/requirements.lock.txt share every physics version.
 COPY tutorials/${ACH_TUTORIAL}/brev/requirements.txt /opt/requirements.txt
 
-# UI tools may add packages but cannot upgrade the locked physics dependencies.
-RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes -r /opt/physics.lock.txt \
- && pip freeze > /opt/locked-constraints.txt \
- && pip install --no-cache-dir --root-user-action=ignore -c /opt/locked-constraints.txt -r /opt/requirements.txt \
+RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes -r /opt/requirements.txt \
  && pip check \
- && rm -f /opt/requirements.txt /opt/physics.lock.txt /opt/locked-constraints.txt
+ && rm -f /opt/requirements.txt
 
 # Disable unnecessary default Jupyter extensions.
 RUN python -m jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \

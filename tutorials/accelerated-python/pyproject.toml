@@ -1,0 +1,111 @@
+# Python dependencies for the Accelerated Python tutorial.
+#
+# Edit the dependencies here, then regenerate the lock files:
+#
+#   uv lock
+#   uv export --frozen --no-emit-project --emit-index-url -o requirements.txt
+#
+# uv.lock is the source of truth that Dependabot updates. requirements.txt is
+# exported from it for anyone who installs with pip:
+#
+#   pip install --require-hashes -r requirements.txt
+
+[project]
+name = "ach-accelerated-python-tutorial"
+version = "0"
+requires-python = "==3.12.*"
+dependencies = [
+    # PyTorch built for CUDA 13.2, from PyTorch's own package index (see below).
+    # CUDA 13.2.1 is the newest toolkit in the stable PyTorch 2.14 build matrix.
+    "torch==2.14.0",
+
+    # Arrays
+    # PyOMP 0.5 requires Numba 0.63, which supports NumPy versions below 2.4.
+    "numpy==2.3.5",
+
+    # Scientific/numeric
+    # CuPy 14.2 supports SciPy versions below 1.18.
+    "scipy==1.17.1",
+    "matplotlib==3.11.2",
+    "opencv-python-headless==5.0.0.93",
+
+    # Dark mode detection
+    "jupyter-dark-detect==0.1.0",
+
+    # Jupyter
+    "jupyter==1.1.1",
+    "jupyter-server-proxy==4.5.0",
+    "jupyterlab==4.6.4",
+    "jupyterlab-execute-time==3.3.0",
+
+    # CUDA
+    "cuda-python==13.2.0",
+    "cuda-core==1.2.0",
+    "nvmath-python[sysctk13]==1.0.0",
+    "cupy-cuda13x==14.2.0",
+    "cuda-cccl[test-sysctk13]==1.1.1",
+    "numba-cuda==0.30.4",
+    # The TileIRAs extra resolves against the CUDA Toolkit 13.2.1 pin below. The
+    # image uses the matching system compiler and removes the duplicate wheel
+    # payload with the rest of the Python CUDA toolkit files.
+    "cuda-tile[tileiras]==1.4.0",
+    # Keep the CUDA toolkit metapackage on the version used by both the PyTorch
+    # build and the system image. This also documents the resolver constraint
+    # shared by PyTorch, RAPIDS, and CUDA Tile.
+    "cuda-toolkit==13.2.1",
+    # RAPIDS 26.8 requires a newer nvJitLink than CUDA 13.2 ships. CUDA libraries
+    # are minor-version compatible within a major release, so retain only this
+    # newer component from the Python CUDA wheels and use the system toolkit for
+    # the rest.
+    "nvidia-nvjitlink==13.4.92",
+
+    # RAPIDS
+    "cudf-cu13==26.8.1",
+    "cuml-cu13==26.8.0",
+
+    # PyHPC programming models and interop. RAPIDS 26.8 supports this same Numba
+    # stack, so these packages no longer need a second Python environment.
+    "jax[cuda13-local]==0.11.1",
+    "numba==0.63.1",
+    "llvmlite==0.46.0",
+    "pyomp==0.5.1",
+    "nanobind==3.0.1",
+    "pybind11==3.1.0",
+    "cffi==2.1.1",
+    "memory_profiler==0.61.0",
+
+    # NVIDIA developer tools. nsightful is not on PyPI, so pin a commit archive,
+    # which pip can verify by hash (git URLs cannot be). Dependabot does not
+    # update this; bump the commit by hand.
+    "nvtx==0.2.16",
+    "nsightful[notebook] @ https://github.com/brycelelbach/nsightful/archive/a41989403430168e02ac3cfdc4060bca4ebb8040.tar.gz",
+
+    # Distributed computing. The manylinux wheel contains both OpenMPI and MPICH
+    # extension modules; the PyHPC kernels select MPICH through MPI4PY_MPIABI.
+    "mpi4py==4.1.2",
+
+    # Runtime and notebook execution utilities
+    "psutil==7.2.2",
+    "nbformat==5.11.1",
+    "nbconvert==7.17.2",
+
+    # Testing
+    "pytest==9.1.1",
+]
+
+[tool.uv]
+package = false
+# The image is built for Linux on both x86_64 and arm64.
+environments = ["sys_platform == 'linux'"]
+required-environments = [
+    "sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "sys_platform == 'linux' and platform_machine == 'aarch64'",
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu132"
+url = "https://download.pytorch.org/whl/cu132"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu132" }

@@ -1,0 +1,43 @@
+# Python dependencies for the Warp tutorial.
+#
+# Edit the dependencies here, then regenerate the lock files:
+#
+#   uv lock
+#   uv export --frozen --no-emit-project -o requirements.txt
+#
+# uv.lock is the source of truth that Dependabot updates. requirements.txt is
+# exported from it for anyone who installs with pip:
+#
+#   pip install --require-hashes -r requirements.txt
+
+[project]
+name = "ach-warp-tutorial"
+version = "0"
+requires-python = "==3.12.*"
+dependencies = [
+    # Warp
+    "warp-lang",
+
+    # Arrays
+    "numpy",
+
+    # Scientific/numeric
+    "scipy",
+
+    # Visualization
+    "matplotlib",
+    "ipympl",
+    "Pillow",
+
+    # Dark mode detection
+    "jupyter-dark-detect",
+
+    # Jupyter
+    "jupyter",
+    "jupyter-server-proxy",
+    "jupyterlab",
+    "jupyterlab-execute-time",
+]
+
+[tool.uv]
+package = false

@@ -85,6 +85,25 @@ These scripts are used by the pre-commit hooks and CI. You can also run them dir
 
 * **`brev/generate-tagged-docker-composes.py`** - Generates Docker Compose files with specific image tags for a given branch/commit. Used by CI to produce versioned artifacts that are pushed to the `generated` branch.
 
+* **`brev/update-lock-exports.bash [--check]`** - Regenerates every tutorial's pip requirements file from its `uv.lock`. With `--check`, fails if a lock or an exported file is out of date instead. CI runs the check on every push.
+
+## Tutorial Python Dependencies
+
+Each tutorial in CI locks its Python packages:
+
+* **`pyproject.toml`** lists the direct dependencies. Edit this file.
+* **`uv.lock`** pins every package, including transitive ones, for both x86_64 and arm64. It is the source of truth.
+* **`requirements.txt`** (or `requirements.lock.txt` for Newton and Sim2Real) is exported from `uv.lock` with hashes, for anyone who installs with pip: `pip install --require-hashes -r requirements.txt`. The container images install this file too.
+
+After editing a `pyproject.toml`, regenerate the lock and exports with [uv](https://docs.astral.sh/uv/):
+
+```bash
+(cd tutorials/<tutorial> && uv lock)
+brev/update-lock-exports.bash
+```
+
+Dependabot opens one pull request per tutorial each week that updates its `uv.lock`, and the Update Lock Exports workflow then commits the regenerated requirements files to that pull request. CUDA packages (`cuda-toolkit`, `cuda-python`, `cuda-bindings` and `nvidia-*`) only receive patch updates, so they stay on the base image's CUDA version. Move them together with the base image by hand.
+
 ## Pre-Commit Hooks
 
 This repository uses [pre-commit](https://pre-commit.com/) to run automated checks before commits and pushes. Install the hooks after cloning:

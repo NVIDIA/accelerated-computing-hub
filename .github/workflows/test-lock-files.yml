@@ -1,0 +1,37 @@
+name: Test Lock Files
+
+# Fail when a tutorial's uv.lock is out of date with its pyproject.toml, or a
+# pip requirements file exported from it is out of date with the uv.lock.
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!gh-readonly-queue/**'
+  merge_group:
+
+concurrency:
+  group: ${{ github.workflow }}-on-${{ github.event_name }}-from-${{ github.ref_name }}
+  cancel-in-progress: true
+
+# Minimal permissions - only read access needed for checks
+permissions:
+  contents: read
+
+jobs:
+  test-lock-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          # Keep in sync with update-lock-exports.yml. Different uv versions
+          # can format exports differently.
+          version: "0.12.0"
+
+      - name: Check lock files
+        run: brev/update-lock-exports.bash --check

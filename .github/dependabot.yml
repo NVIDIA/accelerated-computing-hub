@@ -19,3 +19,33 @@ updates:
       # a new CUDA version together.
       cuda-base-images:
         patterns: ["*"]
+
+  # Open one pull request per tutorial per week that updates its uv.lock.
+  # The Update Lock Exports workflow then regenerates the pip requirements
+  # files exported from it.
+  - package-ecosystem: uv
+    # Keep this list in sync with CI_TUTORIALS in
+    # .github/workflows/tutorials.yml.
+    directories:
+      - /tutorials/accelerated-python
+      - /tutorials/cuda-cpp
+      - /tutorials/newton/notebooks/newton
+      - /tutorials/nvmath-python
+      - /tutorials/sim2real-blogs/notebooks/mujoco
+      - /tutorials/warp
+    schedule:
+      interval: weekly
+    groups:
+      python-packages:
+        patterns: ["*"]
+    ignore:
+      # CUDA packages must stay on the base image's CUDA minor version. Move
+      # them together with the base image by hand; take patch updates here.
+      - dependency-name: "cuda-toolkit"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "cuda-python"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "cuda-bindings"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: "nvidia-*"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
